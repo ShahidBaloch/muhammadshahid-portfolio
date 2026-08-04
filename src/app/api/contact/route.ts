@@ -59,7 +59,7 @@ export async function POST(req: Request) {
     });
 
     await transporter.sendMail({
-      from: `"Portfolio Contact" <${user}>`,
+      from: `"Portfolio Contact" <${to}>`,
       replyTo: email,
       to,
       subject: `New Portfolio Message from ${name}`,
