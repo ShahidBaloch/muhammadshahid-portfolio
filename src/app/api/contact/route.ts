@@ -42,7 +42,12 @@ export async function POST(req: Request) {
     const port = Number(process.env.SMTP_PORT || 587);
     const user = process.env.SMTP_USER;
     const pass = process.env.SMTP_PASS;
-    const to = process.env.CONTACT_TO || "info@muhammadshahid.dev";
+    // Gmail SMTP + Cloudflare Email Routing: From Gmail → info@ → same Gmail is
+    // deduped and never appears in Inbox. Deliver to the SMTP mailbox (plus-alias)
+    // so the message shows up as new mail instead of vanishing as a duplicate.
+    const configuredTo = (process.env.CONTACT_TO || user || "").trim();
+    const usingGmailSmtp = (host ?? "").toLowerCase().includes("gmail");
+    const to = usingGmailSmtp && user ? gmailPlusAlias(user, "portfolio") : configuredTo;
     // Gmail SMTP only allows From = SMTP_USER (or a verified "Send mail as" alias).
     const from = process.env.CONTACT_FROM || user;
 
@@ -82,6 +87,15 @@ export async function POST(req: Request) {
       { status: 500 },
     );
   }
+}
+
+function gmailPlusAlias(address: string, tag: string): string {
+  const at = address.lastIndexOf("@");
+  if (at <= 0) return address;
+  const local = address.slice(0, at);
+  const domain = address.slice(at + 1);
+  if (local.includes("+")) return address;
+  return `${local}+${tag}@${domain}`;
 }
 
 function escapeHtml(value: string): string {

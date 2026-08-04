@@ -47,6 +47,20 @@ export function ContactForm() {
     }
   }
 
+  if (status === "success") {
+    return (
+      <div className="space-y-4" role="status">
+        <p className="font-display text-lg font-semibold text-ink">Message sent</p>
+        <p className="text-sm text-ink-soft">
+          Thanks — I&apos;ll get back to you within one business day.
+        </p>
+        <button type="button" className="btn-primary" onClick={() => setStatus("idle")}>
+          Send another message
+        </button>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={onSubmit} className="space-y-5">
       <div className="grid gap-5 sm:grid-cols-2">
@@ -102,12 +116,6 @@ export function ContactForm() {
       <button type="submit" className="btn-primary" disabled={status === "submitting"}>
         {status === "submitting" ? "Sending…" : "Send message"}
       </button>
-
-      {status === "success" ? (
-        <p className="text-sm font-medium text-teal" role="status">
-          Thanks — your message was sent. I&apos;ll get back to you soon.
-        </p>
-      ) : null}
 
       {status === "error" ? (
         <p className="text-sm text-red-600" role="alert">
