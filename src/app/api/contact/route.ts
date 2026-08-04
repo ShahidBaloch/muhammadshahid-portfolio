@@ -43,6 +43,8 @@ export async function POST(req: Request) {
     const user = process.env.SMTP_USER;
     const pass = process.env.SMTP_PASS;
     const to = process.env.CONTACT_TO || "info@muhammadshahid.dev";
+    // Gmail SMTP only allows From = SMTP_USER (or a verified "Send mail as" alias).
+    const from = process.env.CONTACT_FROM || user;
 
     if (!host || !user || !pass || !to) {
       return Response.json(
@@ -59,7 +61,7 @@ export async function POST(req: Request) {
     });
 
     await transporter.sendMail({
-      from: `"Portfolio Contact" <${to}>`,
+      from: `"Portfolio Contact" <${from}>`,
       replyTo: email,
       to,
       subject: `New Portfolio Message from ${name}`,
