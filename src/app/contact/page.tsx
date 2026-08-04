@@ -19,6 +19,7 @@ export default function ContactPage() {
             eyebrow="Contact"
             title="Let's talk about your project."
             description="Share the problem, constraints, and timeline. I typically reply within one business day with a clear next step."
+            level={1}
           />
 
           <ul className="mt-10 space-y-5 text-ink-soft">
@@ -30,9 +31,6 @@ export default function ContactPage() {
               >
                 {siteConfig.email}
               </a>
-              <p className="mt-1 text-sm text-muted">
-                Form messages also reach {siteConfig.personalEmail}
-              </p>
             </li>
             <li>
               <p className="font-mono text-xs text-teal">WhatsApp</p>
@@ -66,7 +64,8 @@ export default function ContactPage() {
         <div className="surface rounded p-6 sm:p-8">
           <h2 className="font-display text-xl font-semibold text-[inherit]">Project inquiry</h2>
           <p className="mt-2 text-sm text-muted">
-            Messages are sent to my inbox via Gmail SMTP (same setup as my previous portfolio).
+            Prefer email or WhatsApp? Use the links on the left — I typically reply within one
+            business day.
           </p>
           <div className="mt-6">
             <ContactForm />

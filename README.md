@@ -247,14 +247,14 @@ SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=muhammadshahid6528@gmail.com
 SMTP_PASS=your_16_char_app_password
-CONTACT_TO=muhammadshahid6528@gmail.com
+CONTACT_TO=info@muhammadshahid.dev
 ```
 
 3. Restart `npm run dev`
 4. On Vercel, add the same env vars in Project → Settings → Environment Variables
 
 Public contact address on the site: `info@muhammadshahid.dev` (Cloudflare forward).  
-Form delivery inbox: `muhammadshahid6528@gmail.com` (SMTP).
+Form delivery address: `info@muhammadshahid.dev` (sent via Gmail SMTP).
 
 ---
 

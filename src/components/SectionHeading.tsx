@@ -6,6 +6,8 @@ type SectionHeadingProps = {
   title: string;
   description?: string;
   align?: "left" | "center";
+  /** Use 1 for page titles (SEO). Default 2 for in-page sections. */
+  level?: 1 | 2;
 };
 
 export function SectionHeading({
@@ -13,15 +15,21 @@ export function SectionHeading({
   title,
   description,
   align = "left",
+  level = 2,
 }: SectionHeadingProps) {
+  const titleClassName =
+    "mt-3 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl text-balance";
+
   return (
     <div className={align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}>
       {eyebrow ? (
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-teal">{eyebrow}</p>
       ) : null}
-      <h2 className="mt-3 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl text-balance">
-        {title}
-      </h2>
+      {level === 1 ? (
+        <h1 className={titleClassName}>{title}</h1>
+      ) : (
+        <h2 className={titleClassName}>{title}</h2>
+      )}
       {description ? (
         <p className="mt-4 text-lg leading-relaxed text-muted">{description}</p>
       ) : null}

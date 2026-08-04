@@ -20,6 +20,7 @@ export default function AboutPage() {
               eyebrow="About"
               title="Senior engineer with a solution mindset."
               description="I care about boundaries, security, data, and delivery — the decisions that keep products healthy after launch."
+              level={1}
             />
             <div className="mt-8 space-y-5 text-lg leading-relaxed text-muted">
               <p>
@@ -36,6 +37,20 @@ export default function AboutPage() {
               <p>
                 I use AI coding tools to move faster on implementation, while keeping architecture
                 reviews, security, and business outcomes as the source of truth.
+              </p>
+              <p>
+                This website — including the{" "}
+                <Link href="/blog" className="text-teal link-underline">
+                  blog
+                </Link>{" "}
+                — is owned and written by me, {siteConfig.name}, based in {siteConfig.location}.
+                Posts share practical lessons from client and product work on ASP.NET Core, Angular,
+                Azure, and secure delivery. They are original articles, not republished or scraped
+                material. For projects, reach me via the{" "}
+                <Link href="/contact" className="text-teal link-underline">
+                  contact page
+                </Link>
+                .
               </p>
             </div>
             <div className="mt-8 flex flex-wrap gap-3">

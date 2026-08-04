@@ -1,0 +1,6 @@
+# Google AdSense ads.txt
+# After AdSense approval, replace YOUR_PUBLISHER_ID with your pub-XXXXXXXXXXXXXXXX value.
+# Example:
+# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+#
+# Keep this file at https://muhammadshahid.dev/ads.txt (site root).

@@ -19,6 +19,7 @@ export default function WorkPage() {
             eyebrow="Work"
             title="Projects built for real product constraints."
             description="Case-style summaries: problem, solution, stack, and result — from auction microservices to healthcare operations."
+            level={1}
           />
           <div className="mt-12">
             {projects.map((project) => (

@@ -20,12 +20,13 @@ export function ContactForm() {
     const email = String(data.get("email") ?? "").trim();
     const company = String(data.get("company") ?? "").trim();
     const message = String(data.get("message") ?? "").trim();
+    const website = String(data.get("website") ?? "").trim();
 
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, company, message }),
+        body: JSON.stringify({ name, email, company, message, website }),
       });
 
       const result: { ok?: boolean; error?: string } = await response.json().catch(() => ({}));
@@ -85,10 +86,18 @@ export function ContactForm() {
           required
           name="message"
           rows={6}
+          maxLength={5000}
           className="mt-2 w-full rounded border border-slate-line bg-mist px-3 py-2.5 text-ink outline-none transition focus:border-teal"
           placeholder="Project goals, timeline, and tech stack…"
         />
       </label>
+
+      <div className="hidden" aria-hidden="true">
+        <label>
+          Website
+          <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+        </label>
+      </div>
 
       <button type="submit" className="btn-primary" disabled={status === "submitting"}>
         {status === "submitting" ? "Sending…" : "Send message"}

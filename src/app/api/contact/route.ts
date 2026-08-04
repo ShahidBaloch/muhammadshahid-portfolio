@@ -5,11 +5,18 @@ type ContactBody = {
   email?: string;
   company?: string;
   message?: string;
+  website?: string;
 };
 
 export async function POST(req: Request) {
   try {
     const body = (await req.json()) as ContactBody;
+
+    // Honeypot — bots fill hidden fields; humans leave them empty.
+    if (String(body.website ?? "").trim()) {
+      return Response.json({ ok: true });
+    }
+
     const name = String(body.name ?? "").trim();
     const email = String(body.email ?? "").trim();
     const company = String(body.company ?? "").trim();
@@ -22,6 +29,10 @@ export async function POST(req: Request) {
       );
     }
 
+    if (name.length > 120 || email.length > 200 || company.length > 200 || message.length > 5000) {
+      return Response.json({ ok: false, error: "Message is too long." }, { status: 400 });
+    }
+
     const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     if (!isEmailValid) {
       return Response.json({ ok: false, error: "Invalid email." }, { status: 400 });
@@ -31,7 +42,7 @@ export async function POST(req: Request) {
     const port = Number(process.env.SMTP_PORT || 587);
     const user = process.env.SMTP_USER;
     const pass = process.env.SMTP_PASS;
-    const to = process.env.CONTACT_TO || process.env.SMTP_USER;
+    const to = process.env.CONTACT_TO || "info@muhammadshahid.dev";
 
     if (!host || !user || !pass || !to) {
       return Response.json(

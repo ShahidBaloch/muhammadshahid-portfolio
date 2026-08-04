@@ -23,8 +23,48 @@ export const navLinks = [
   { href: "/services", label: "Services" },
   { href: "/blog", label: "Blog" },
   { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
 ] as const;
+
+export type LearningTopic = {
+  slug: string;
+  label: string;
+  title: string;
+  description: string;
+  /** Extra tags that also qualify a post for this topic hub. */
+  matchTags: string[];
+};
+
+/** Topic hubs under Blog — SEO landing pages that group related articles. */
+export const learningTopics: LearningTopic[] = [
+  {
+    slug: "design-patterns",
+    label: "C# Design Patterns",
+    title: "C# Design Patterns",
+    description:
+      "Practical C# design patterns for real ASP.NET Core products — Factory, Strategy, and patterns that reduce switch-statement sprawl without ceremony.",
+    matchTags: ["Design Patterns", "Factory Pattern", "Strategy Pattern", "Repository Pattern"],
+  },
+  {
+    slug: "dependency-injection",
+    label: "Dependency Injection",
+    title: "Dependency Injection in .NET",
+    description:
+      "ASP.NET Core DI lifetimes, registration habits, and factory delegates — how senior teams keep services testable and avoid captive dependencies.",
+    matchTags: ["Dependency Injection", "IoC", "DI"],
+  },
+  {
+    slug: "architecture",
+    label: "Architecture",
+    title: "Software Architecture",
+    description:
+      "Architecture notes for .NET + Angular systems — Clean Architecture, CQRS-lite, and boundaries that survive healthcare, SaaS, and eCommerce delivery.",
+    matchTags: ["Architecture", "Clean Architecture", "CQRS", "Microservices"],
+  },
+];
+
+export function getLearningTopic(slug: string): LearningTopic | undefined {
+  return learningTopics.find((topic) => topic.slug === slug);
+}
 
 export type Project = {
   slug: string;

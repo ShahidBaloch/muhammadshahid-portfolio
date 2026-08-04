@@ -18,6 +18,7 @@ export default function ServicesPage() {
             eyebrow="Services"
             title="How I help teams ship the right system."
             description="Engagements span discovery and architecture through implementation — for product teams that need senior .NET + Angular ownership."
+            level={1}
           />
 
           <div className="mt-14 grid gap-6 sm:grid-cols-2">

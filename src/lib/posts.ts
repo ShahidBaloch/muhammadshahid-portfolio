@@ -11,6 +11,7 @@ export type PostMeta = {
   description: string;
   date: string;
   tags: string[];
+  category?: string;
   readingTime: string;
 };
 
@@ -46,6 +47,7 @@ export function getPostBySlug(slug: string): Post {
     description: String(data.description ?? ""),
     date: String(data.date ?? ""),
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
+    category: data.category ? String(data.category) : undefined,
     readingTime: stats.text,
     content,
   };
@@ -61,8 +63,62 @@ export function getAllPosts(): PostMeta[] {
         description: post.description,
         date: post.date,
         tags: post.tags,
+        category: post.category,
         readingTime: post.readingTime,
       };
     })
     .sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
+export function getPostsByCategory(category: string): PostMeta[] {
+  return getAllPosts().filter((post) => post.category === category);
+}
+
+/** Posts for a topic hub: matching category or matching topic tags. */
+export function getPostsForTopic(topic: {
+  slug: string;
+  matchTags: readonly string[];
+}): PostMeta[] {
+  const tagSet = new Set(topic.matchTags.map((tag) => tag.toLowerCase()));
+  const seen = new Set<string>();
+
+  return getAllPosts().filter((post) => {
+    const byCategory = post.category === topic.slug;
+    const byTag = post.tags.some((tag) => tagSet.has(tag.toLowerCase()));
+    if (!byCategory && !byTag) return false;
+    if (seen.has(post.slug)) return false;
+    seen.add(post.slug);
+    return true;
+  });
+}
+
+export function getRelatedPosts(slug: string, limit = 3): PostMeta[] {
+  const current = getPostBySlug(slug);
+  const others = getAllPosts().filter((post) => post.slug !== slug);
+
+  const scored = others.map((post) => {
+    let score = 0;
+    if (current.category && post.category === current.category) {
+      score += 5;
+    }
+    const sharedTags = post.tags.filter((tag) => current.tags.includes(tag)).length;
+    score += sharedTags * 2;
+    return { post, score };
+  });
+
+  scored.sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    return a.post.date < b.post.date ? 1 : -1;
+  });
+
+  const related = scored.filter((item) => item.score > 0).slice(0, limit).map((item) => item.post);
+  if (related.length >= limit) {
+    return related;
+  }
+
+  const fillers = others
+    .filter((post) => !related.some((item) => item.slug === post.slug))
+    .slice(0, limit - related.length);
+
+  return [...related, ...fillers];
 }

@@ -80,6 +80,13 @@ export default function HomePage() {
                 See selected work
               </Link>
             </div>
+            <p className="mt-5 text-sm text-muted">
+              Read the{" "}
+              <Link href="/blog" className="font-semibold text-teal link-underline">
+                blog
+              </Link>{" "}
+              for ASP.NET Core, Angular, and architecture notes.
+            </p>
           </div>
 
           <ProfileCard className="float-y lg:justify-self-end" />

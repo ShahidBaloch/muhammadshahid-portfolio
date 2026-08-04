@@ -37,8 +37,18 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/learning" className="hover:text-teal-bright">
+                  Blog topics
+                </Link>
+              </li>
+              <li>
                 <Link href="/about" className="hover:text-teal-bright">
                   About
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-teal-bright">
+                  Contact
                 </Link>
               </li>
             </ul>
@@ -88,11 +98,22 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-2 border-t border-white/10 pt-6 text-sm text-white/50 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 text-sm text-white/50 sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {siteConfig.name}. All rights reserved.
           </p>
-          <p className="text-xs">{siteConfig.url.replace("https://", "")}</p>
+          <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs">
+            <Link href="/privacy" className="hover:text-teal-bright">
+              Privacy
+            </Link>
+            <Link href="/terms" className="hover:text-teal-bright">
+              Terms
+            </Link>
+            <Link href="/disclaimer" className="hover:text-teal-bright">
+              Disclaimer
+            </Link>
+            <span>{siteConfig.url.replace("https://", "")}</span>
+          </div>
         </div>
       </div>
     </footer>
