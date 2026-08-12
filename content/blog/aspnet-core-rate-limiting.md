@@ -19,7 +19,7 @@ Searchers want a working answer to:
 - Per-IP vs per-user limits?
 - Will this work on multiple Azure App Service instances?
 
-Those are purchase-adjacent pain questions for freelancers and product teams alike — good for SEO and AdSense quality when the article is original and complete.
+Those are the questions teams ask when APIs hit production traffic — worth answering with working code, not middleware snippets alone.
 
 ## What the built-in middleware does (and does not)
 

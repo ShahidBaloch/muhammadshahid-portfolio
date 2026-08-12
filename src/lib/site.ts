@@ -42,7 +42,13 @@ export const learningTopics: LearningTopic[] = [
     title: "C# Design Patterns",
     description:
       "Practical C# design patterns for real ASP.NET Core products — Factory, Strategy, and patterns that reduce switch-statement sprawl without ceremony.",
-    matchTags: ["Design Patterns", "Factory Pattern", "Strategy Pattern", "Repository Pattern"],
+    matchTags: [
+      "Design Patterns",
+      "Factory Pattern",
+      "Strategy Pattern",
+      "Repository Pattern",
+      "SOLID",
+    ],
   },
   {
     slug: "dependency-injection",
@@ -57,8 +63,19 @@ export const learningTopics: LearningTopic[] = [
     label: "Architecture",
     title: "Software Architecture",
     description:
-      "Architecture notes for .NET + Angular systems — Clean Architecture, CQRS-lite, and boundaries that survive healthcare, SaaS, and eCommerce delivery.",
-    matchTags: ["Architecture", "Clean Architecture", "CQRS", "Microservices"],
+      "Architecture notes for .NET + Angular systems — Clean Architecture, CQRS-lite, async patterns, Minimal APIs, and boundaries that survive healthcare, SaaS, and eCommerce delivery.",
+    matchTags: [
+      "Architecture",
+      "Clean Architecture",
+      "CQRS",
+      "Microservices",
+      "async await",
+      "Minimal APIs",
+      "Angular",
+      "Signals",
+      "AI",
+      "Interview Questions",
+    ],
   },
 ];
 

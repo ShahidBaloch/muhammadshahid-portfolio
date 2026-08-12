@@ -218,10 +218,9 @@ If your factory depends on request-scoped services, the factory itself should al
 8. Integration-test that each registered key resolves without building the full web host
 9. Review factory lifetime whenever a scoped service enters the graph
 
-## SEO note and originality
+## Related reading
 
-Searches like **factory pattern C#**, **factory pattern dependency injection**, and **ASP.NET Core factory pattern** are crowded with copy-paste GoF summaries. This post is original guidance from shipping .NET APIs — focused on DI-friendly factories that survive code review.
-
-Related reading: [Dependency Injection in ASP.NET Core](/blog/aspnet-core-dependency-injection) and [Strategy Pattern in C#](/blog/csharp-strategy-pattern).
+- [Dependency Injection in ASP.NET Core](/blog/aspnet-core-dependency-injection)
+- [Strategy Pattern in C#](/blog/csharp-strategy-pattern)
 
 If you want these patterns applied cleanly in your codebase, [contact me](/contact).

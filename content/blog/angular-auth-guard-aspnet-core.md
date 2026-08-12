@@ -173,8 +173,4 @@ Add before production:
 6. Interceptor handles 401 without login loops
 7. Manual test: expired token, wrong role, direct API call without UI
 
-## Why this ranks and still stays AdSense-safe
-
-Searchers want a working **Angular auth guard** against a real **ASP.NET Core JWT** API. Thin posts that paste one guard class without claims, expiry, or server enforcement waste everyone’s time — and thin content is exactly what AdSense reviewers dislike.
-
-This article is original guidance from shipping .NET + Angular systems, not a republished doc page. If you want the same auth story wired into your product, [contact me](/contact).
+If you want the same auth story wired into your product, [contact me](/contact).

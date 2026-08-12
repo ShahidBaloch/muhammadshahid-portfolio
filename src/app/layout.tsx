@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Source_Sans_3 } from "next/font/google";
 import { AdSense } from "@/components/AdSense";
 import { Analytics } from "@/components/Analytics";
+import { ConsentScripts } from "@/components/ConsentScripts";
+import { CookieConsent } from "@/components/CookieConsent";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { siteConfig } from "@/lib/site";
@@ -100,6 +102,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body className="min-h-screen font-body">
+        <ConsentScripts />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
@@ -107,6 +110,7 @@ export default function RootLayout({
         <Header />
         <main>{children}</main>
         <Footer />
+        <CookieConsent />
         <Analytics />
         <AdSense />
       </body>

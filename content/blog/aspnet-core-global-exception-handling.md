@@ -182,8 +182,4 @@ If you use filters for MVC-only concerns, keep them aligned with the same status
 6. Load test that forced 500s still return JSON, not HTML error pages  
 7. Support can find logs from a `traceId` shown in the UI  
 
-## Why this topic brings traffic
-
-Developers search **ASP.NET Core global exception handling** when their Angular app starts integrating real APIs. A clear, original playbook that ties server handling to SPA UX ranks better than a paste of middleware from an old Stack Overflow answer — and it meets AdSense expectations for helpful, unique content.
-
 If you want this envelope standardized across your .NET + Angular API, [contact me](/contact).

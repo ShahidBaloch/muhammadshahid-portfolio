@@ -1,9 +1,25 @@
+"use client";
+
 import Script from "next/script";
+import { useEffect, useState } from "react";
+import { getStoredConsent } from "@/lib/consent";
 
 const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 export function Analytics() {
-  if (!gaId) {
+  const [allowed, setAllowed] = useState(false);
+
+  useEffect(() => {
+    function sync() {
+      setAllowed(getStoredConsent() === "accepted");
+    }
+
+    sync();
+    window.addEventListener("cookie-consent-change", sync);
+    return () => window.removeEventListener("cookie-consent-change", sync);
+  }, []);
+
+  if (!gaId || !allowed) {
     return null;
   }
 
@@ -18,7 +34,7 @@ export function Analytics() {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${gaId}');
+          gtag('config', '${gaId}', { anonymize_ip: true });
         `}
       </Script>
     </>

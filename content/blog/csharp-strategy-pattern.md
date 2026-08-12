@@ -197,10 +197,9 @@ One integration test that resolves all registered `IPricingStrategy` implementat
 7. Use async interfaces when I/O is involved  
 8. Delete deprecated strategies — do not accumulate "legacy" variants
 
-## Why this ranks
+## Related reading
 
-Queries like **strategy pattern C#**, **strategy pattern in C# with example**, and **strategy pattern ASP.NET Core** stay popular because teams hit branching pain constantly. An original, DI-first explanation beats another copy of the Wikipedia diagram.
-
-Continue with [Factory Pattern in C#](/blog/csharp-factory-pattern) and [Dependency Injection lifetimes](/blog/aspnet-core-dependency-injection).
+- [Factory Pattern in C#](/blog/csharp-factory-pattern)
+- [Dependency Injection lifetimes](/blog/aspnet-core-dependency-injection)
 
 Want help refactoring a pricing or rules engine in your API? [Get in touch](/contact).
