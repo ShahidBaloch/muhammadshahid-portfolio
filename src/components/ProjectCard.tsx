@@ -1,15 +1,35 @@
 import Link from "next/link";
 import type { Project } from "@/lib/site";
+import { ProjectVisual } from "@/components/ProjectVisual";
 
-export function ProjectCard({ project }: { project: Project }) {
+export function ProjectCard({
+  project,
+  asPage = false,
+}: {
+  project: Project;
+  asPage?: boolean;
+}) {
   return (
     <article className="group border-b border-slate-line py-10 first:pt-0 last:border-b-0">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+      <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-2xl">
           <p className="font-mono text-xs text-teal">{project.domain}</p>
-                <h3 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">
-            {project.title}
-          </h3>
+          {asPage ? (
+            <h1 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">
+              {project.title}
+            </h1>
+          ) : (
+            <h2 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">
+              <Link href={`/work/${project.slug}`} className="hover:text-teal">
+                {project.title}
+              </Link>
+            </h2>
+          )}
+          {project.confidential ? (
+            <p className="mt-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted">
+              Client work under NDA — patterns only, no screenshots
+            </p>
+          ) : null}
           <p className="mt-3 text-lg text-muted">{project.summary}</p>
           <dl className="mt-6 space-y-4 text-sm leading-relaxed sm:text-base">
             <div>
@@ -27,28 +47,48 @@ export function ProjectCard({ project }: { project: Project }) {
           </dl>
         </div>
 
-        <div className="w-full shrink-0 lg:max-w-xs">
-          <p className="font-mono text-xs text-muted">Stack</p>
-          <ul className="mt-3 flex flex-wrap gap-2">
-            {project.stack.map((item) => (
-              <li
-                key={item}
-                className="rounded border border-slate-line bg-mist px-2.5 py-1 font-mono text-xs text-ink-soft"
+        <div className="w-full shrink-0 space-y-5 lg:max-w-xs">
+          <ProjectVisual project={project} />
+          <div>
+            <p className="font-mono text-xs text-muted">Stack</p>
+            <ul className="mt-3 flex flex-wrap gap-2">
+              {project.stack.map((item) => (
+                <li
+                  key={item}
+                  className="rounded border border-slate-line bg-paper px-2.5 py-1 font-mono text-xs text-ink-soft"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="flex flex-wrap gap-4">
+            {asPage ? null : (
+              <Link href={`/work/${project.slug}`} className="text-sm font-semibold text-teal link-underline">
+                Case notes →
+              </Link>
+            )}
+            {project.github ? (
+              <Link
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-semibold text-teal link-underline"
               >
-                {item}
-              </li>
-            ))}
-          </ul>
-          {project.github ? (
-            <Link
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-flex text-sm font-semibold text-teal link-underline"
-            >
-              View on GitHub →
-            </Link>
-          ) : null}
+                GitHub →
+              </Link>
+            ) : null}
+            {project.liveUrl ? (
+              <Link
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-semibold text-teal link-underline"
+              >
+                Live demo →
+              </Link>
+            ) : null}
+          </div>
         </div>
       </div>
     </article>

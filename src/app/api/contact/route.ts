@@ -4,6 +4,9 @@ type ContactBody = {
   name?: string;
   email?: string;
   company?: string;
+  timeline?: string;
+  budget?: string;
+  repoUrl?: string;
   message?: string;
   website?: string;
 };
@@ -20,6 +23,9 @@ export async function POST(req: Request) {
     const name = String(body.name ?? "").trim();
     const email = String(body.email ?? "").trim();
     const company = String(body.company ?? "").trim();
+    const timeline = String(body.timeline ?? "").trim();
+    const budget = String(body.budget ?? "").trim();
+    const repoUrl = String(body.repoUrl ?? "").trim();
     const message = String(body.message ?? "").trim();
 
     if (!name || !email || !message) {
@@ -29,7 +35,15 @@ export async function POST(req: Request) {
       );
     }
 
-    if (name.length > 120 || email.length > 200 || company.length > 200 || message.length > 5000) {
+    if (
+      name.length > 120 ||
+      email.length > 200 ||
+      company.length > 200 ||
+      timeline.length > 80 ||
+      budget.length > 80 ||
+      repoUrl.length > 400 ||
+      message.length > 5000
+    ) {
       return Response.json({ ok: false, error: "Message is too long." }, { status: 400 });
     }
 
@@ -75,6 +89,9 @@ export async function POST(req: Request) {
         <p><strong>Name:</strong> ${escapeHtml(name)}</p>
         <p><strong>Email:</strong> ${escapeHtml(email)}</p>
         <p><strong>Company:</strong> ${escapeHtml(company || "—")}</p>
+        <p><strong>Timeline:</strong> ${escapeHtml(timeline || "—")}</p>
+        <p><strong>Budget:</strong> ${escapeHtml(budget || "—")}</p>
+        <p><strong>Repo / URL:</strong> ${escapeHtml(repoUrl || "—")}</p>
         <p><strong>Message:</strong></p>
         <p>${escapeHtml(message).replace(/\n/g, "<br />")}</p>
       `,

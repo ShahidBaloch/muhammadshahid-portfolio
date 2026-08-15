@@ -4,7 +4,7 @@ import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: `Privacy Policy for ${siteConfig.name} (${siteConfig.url}). How personal data, cookies, and advertising are handled.`,
+  description: `Privacy Policy for ${siteConfig.name} (${siteConfig.url}). How personal data, cookies, and analytics are handled.`,
   alternates: { canonical: "/privacy" },
 };
 
@@ -12,7 +12,7 @@ export default function PrivacyPage() {
   return (
     <section className="section-pad pt-28 sm:pt-32">
       <div className="container-narrow max-w-3xl">
-        <p className="text-sm font-semibold uppercase tracking-[0.14em] text-teal">Legal</p>
+        <p className="eyebrow">Legal</p>
         <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
           Privacy Policy
         </h1>
@@ -36,8 +36,8 @@ export default function PrivacyPage() {
               type, and referral source when analytics tools are enabled.
             </li>
             <li>
-              <strong>Cookies and similar technologies</strong> — used for analytics and, if
-              enabled, advertising (including Google AdSense).
+              <strong>Cookies and similar technologies</strong> — used for analytics when you
+              accept cookies.
             </li>
           </ul>
 
@@ -46,7 +46,6 @@ export default function PrivacyPage() {
             <li>To respond to project inquiries and professional messages</li>
             <li>To operate, secure, and improve the Site</li>
             <li>To measure traffic and content performance</li>
-            <li>To display ads if Google AdSense (or similar) is enabled</li>
           </ul>
 
           <h2>Contact form</h2>
@@ -69,35 +68,10 @@ export default function PrivacyPage() {
             .
           </p>
 
-          <h2>Advertising (Google AdSense)</h2>
-          <p>
-            If AdSense is enabled on this Site, third-party vendors, including Google, use cookies
-            to serve ads based on a user&apos;s prior visits to this Site and/or other sites on the
-            Internet. Google&apos;s use of advertising cookies enables it and its partners to serve
-            ads to users based on their visit to this Site and/or other sites on the Internet.
-          </p>
-          <p>
-            Users may opt out of personalized advertising by visiting{" "}
-            <a
-              href="https://www.google.com/settings/ads"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Google Ads Settings
-            </a>
-            . Alternatively, you can opt out of a third-party vendor&apos;s use of cookies for
-            personalized advertising by visiting{" "}
-            <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer">
-              www.aboutads.info
-            </a>
-            .
-          </p>
-
           <h2>Data sharing</h2>
           <p>
             I do not sell personal information. Limited data may be processed by providers that help
-            run the Site (for example hosting, email delivery, analytics, and advertising
-            partners).
+            run the Site (for example hosting, email delivery, and analytics partners).
           </p>
 
           <h2>Data retention</h2>

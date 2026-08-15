@@ -2,7 +2,7 @@
 title: "EF Core and SQL Server Performance — Queries That Hurt in Production"
 description: "EF Core performance lessons from healthcare reporting and SaaS dashboards — N+1 queries, projections, indexes, AsNoTracking, and the SQL Server pain that only appears under real data volume."
 date: "2026-05-10"
-category: "architecture"
+category: "ef-core"
 tags: ["EF Core", "SQL Server", "Performance", "ASP.NET Core"]
 ---
 
@@ -72,6 +72,8 @@ await _db.Appointments
     .Where(a => a.ClinicId == clinicId)
     .ToListAsync(ct);
 ```
+
+N+1 vs a single `Include` vs `AsSplitQuery` is compared in [EF Core N+1 vs Include vs AsSplitQuery](/blog/ef-core-nplus1-include-vs-assplitquery). Two collection Includes multiplying JOIN rows is [cartesian explosion](/blog/ef-core-cartesian-explosion-multiple-include).
 
 **Split queries** for cartesian explosion when multiple collection includes multiply rows:
 

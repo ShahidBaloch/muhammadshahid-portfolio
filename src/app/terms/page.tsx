@@ -12,7 +12,7 @@ export default function TermsPage() {
   return (
     <section className="section-pad pt-28 sm:pt-32">
       <div className="container-narrow max-w-3xl">
-        <p className="text-sm font-semibold uppercase tracking-[0.14em] text-teal">Legal</p>
+        <p className="eyebrow">Legal</p>
         <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
           Terms of Use
         </h1>
@@ -55,8 +55,7 @@ export default function TermsPage() {
           <h2>Third-party links and ads</h2>
           <p>
             The Site may link to GitHub, LinkedIn, documentation, or other third-party sites. I am
-            not responsible for their content or policies. If advertising is enabled (for example
-            Google AdSense), ads are served by third parties under their own terms.
+            not responsible for their content or policies.
           </p>
 
           <h2>Acceptable use</h2>

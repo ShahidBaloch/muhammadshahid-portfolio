@@ -2,22 +2,23 @@
 @plugin "@tailwindcss/typography";
 
 /*
-  Color pattern inspired by arwatechnologies.com:
-  Accent #31A8D6 | Dark teal #051D1F | Soft blue #D8E2F0 | Off-white | Gray #636363
+  Live brand DNA (muhammadshahid.dev): ink #051D1F, paper #D8E2F0, accent cyan.
+  Live #31A8D6 is kept for glows and photo kinship, but text/buttons use a
+  darker stop of the same hue so small type meets WCAG AA.
 */
-
 @theme {
   --color-ink: #051d1f;
-  --color-ink-soft: #333333;
-  --color-mist: #f2f5f9;
+  --color-ink-soft: #2a3a3d;
+  --color-mist: #f4f7fb;
   --color-paper: #d8e2f0;
-  --color-slate-line: #c2cedf;
-  --color-muted: #636363;
-  --color-teal: #31a8d6;
-  --color-teal-bright: #4bb8e0;
-  --color-gold: #31a8d6;
-  --color-gold-bright: #4bb8e0;
+  --color-slate-line: #9eb1c6;
+  --color-muted: #4d5c63;
+  --color-label: #4d5c63;
+  --color-teal: #156a96;
+  --color-teal-bright: #1b7ead;
+  --color-cyan: #31a8d6;
   --color-navy: #051d1f;
+  --color-foam: #4bb8e0;
   --font-display: var(--font-space), "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-source), "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
 }
@@ -31,9 +32,10 @@
     @apply bg-paper text-ink antialiased;
     font-family: var(--font-body);
     background-image:
-      radial-gradient(ellipse 70% 45% at 100% 0%, rgba(49, 168, 214, 0.12), transparent 55%),
-      radial-gradient(ellipse 45% 35% at 0% 30%, rgba(5, 29, 31, 0.07), transparent 50%);
-    background-attachment: fixed;
+      radial-gradient(ellipse 70% 45% at 100% 0%, rgba(49, 168, 214, 0.16), transparent 55%),
+      radial-gradient(ellipse 45% 35% at 0% 28%, rgba(5, 29, 31, 0.06), transparent 50%);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
 
   h1,
@@ -46,7 +48,7 @@
   }
 
   ::selection {
-    background: color-mix(in srgb, var(--color-teal) 30%, white);
+    background: color-mix(in srgb, var(--color-cyan) 32%, white);
     color: var(--color-ink);
   }
 
@@ -82,98 +84,65 @@
     @apply mx-auto w-full max-w-6xl;
   }
 
+  .skip-link {
+    @apply absolute left-4 z-[100] rounded-lg bg-navy px-4 py-2 text-sm font-semibold text-white;
+    top: -100%;
+  }
+
+  .skip-link:focus {
+    top: calc(0.75rem + env(safe-area-inset-top));
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.16em] text-teal;
+  }
+
   .link-underline {
     @apply underline decoration-teal/40 underline-offset-4 transition hover:decoration-teal;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-teal bg-teal px-5 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-teal-bright hover:border-teal-bright hover:shadow-[0_12px_28px_-12px_rgba(49,168,214,0.65)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-teal bg-teal px-5 py-3 text-sm font-semibold text-white transition duration-200 hover:border-teal-bright hover:bg-teal-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-line bg-mist px-5 py-3 text-sm font-semibold text-ink transition duration-300 hover:-translate-y-0.5 hover:border-teal hover:text-teal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal;
-  }
-
-  .btn-ghost-light {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-line bg-mist px-5 py-3 text-sm font-semibold text-ink transition duration-300 hover:-translate-y-0.5 hover:border-teal hover:text-teal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-slate-line bg-mist px-5 py-3 text-sm font-semibold text-ink transition duration-200 hover:border-teal hover:text-teal focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal;
   }
 
   .surface {
-    @apply border border-slate-line bg-mist shadow-sm transition duration-300;
+    @apply border border-slate-line bg-mist shadow-sm;
   }
 
   .surface-hover {
-    @apply border border-slate-line bg-mist shadow-sm transition duration-300 hover:-translate-y-1 hover:border-teal/50 hover:shadow-[0_18px_40px_-24px_rgba(5,29,31,0.28)];
-  }
-
-  .text-gradient {
-    background: linear-gradient(120deg, #051d1f 5%, #31a8d6 55%, #4bb8e0 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .orb {
-    @apply pointer-events-none absolute rounded-full blur-3xl;
-    animation: orb-float 10s ease-in-out infinite;
+    @apply border border-slate-line bg-mist shadow-sm transition duration-200 hover:border-teal/50;
   }
 
   .reveal {
-    opacity: 0;
-    transform: translateY(28px);
-    transition:
-      opacity 0.7s ease,
-      transform 0.7s ease;
-  }
-
-  .reveal.is-visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 
-  .typing-cursor::after {
-    content: "";
-    display: inline-block;
-    width: 2px;
-    height: 0.9em;
-    margin-left: 4px;
-    vertical-align: -0.05em;
-    background: var(--color-teal);
-    animation: blink 0.9s step-end infinite;
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal.reveal-pending {
+      opacity: 0;
+      transform: translateY(12px);
+      transition:
+        opacity 0.5s ease,
+        transform 0.5s ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .marquee-track {
-    animation: marquee 28s linear infinite;
+    animation: marquee 36s linear infinite;
   }
 
-  .float-y {
-    animation: float-y 5s ease-in-out infinite;
-  }
-}
-
-@keyframes orb-float {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(18px, -22px) scale(1.08);
-  }
-}
-
-@keyframes float-y {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
+  .group:hover .marquee-track {
+    animation-play-state: paused;
   }
 }
 
@@ -183,5 +152,18 @@
   }
   to {
     transform: translateX(-50%);
+  }
+}
+
+@media print {
+  header,
+  footer,
+  .skip-link,
+  [role="dialog"] {
+    display: none !important;
+  }
+
+  body {
+    background: white;
   }
 }

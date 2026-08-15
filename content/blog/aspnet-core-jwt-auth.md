@@ -2,15 +2,18 @@
 title: "ASP.NET Core JWT Auth: A Practical Checklist"
 description: "A production-ready checklist for JWT authentication in ASP.NET Core APIs — token lifetimes, refresh flows, policies, and Angular client habits from real client work."
 date: "2026-06-12"
-category: "architecture"
+category: "authentication"
 tags: ["ASP.NET Core", "JWT", "Security", "Angular"]
 ---
 
-When a client says "we need JWT auth," they almost never mean "give us a token endpoint and call it a day." They mean users can sign in, stay signed in reasonably, hit protected APIs from an Angular SPA, and log out in a way that actually sticks — without security holes that show up the first time a contractor runs OWASP ZAP.
+When a client says they need JWT auth, they almost never mean a token endpoint and a 200 on `/api/me`. They mean users can sign in from Angular, stay signed in reasonably, hit protected APIs, and log out in a way that sticks — without holes that show up the first time someone runs a scanner.
 
-I have wired JWT and OAuth-style flows across marketplace microservices, eCommerce storefronts, and healthcare admin portals. CarBazaar splits identity into its own service with IdentityServer patterns. Ecom_NET10 keeps auth inside the monolith API with role-based policies. Healthcare work added stricter session and audit expectations. The libraries repeat; the threat model and UX constraints do not.
+I have wired JWT and OAuth-style flows across marketplace microservices, eCommerce storefronts, and healthcare admin portals. CarBazaar splits identity into its own service. Ecom_NET10 keeps auth inside the monolith API with role-based policies. Healthcare work added stricter session and audit expectations. The libraries repeat; the threat model does not.
 
-This post is the checklist I wish every kickoff email included — API configuration, refresh strategy, Angular handling, and the documentation that keeps clients confident after handoff.
+This article is the **API-side checklist**: issuance, lifetimes, policies, and secrets. It is not the Angular interceptor or the route guard.
+
+- SPA token attach, refresh, and 401 storms: [Angular JWT interceptors](/blog/angular-jwt-interceptors)
+- Who can open `/dashboard` vs `/admin`: [Angular auth guards](/blog/angular-auth-guard-aspnet-core)
 
 ## What "JWT auth" actually includes
 

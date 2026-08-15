@@ -1,5 +1,5 @@
 import { getAllPosts } from "@/lib/posts";
-import { learningTopics, siteConfig } from "@/lib/site";
+import { learningTopics, projects, siteConfig } from "@/lib/site";
 
 type SitemapEntry = {
   path: string;
@@ -36,24 +36,31 @@ export function getSitemapEntries(): SitemapEntry[] {
     path,
     lastModified: siteLastModified,
     changeFrequency: "monthly",
-    priority: path === "" ? 1 : 0.8,
+    priority: path === "" ? 1 : path === "/blog" || path === "/work" ? 0.8 : 0.6,
+  }));
+
+  const workRoutes: SitemapEntry[] = projects.map((project) => ({
+    path: `/work/${project.slug}`,
+    lastModified: siteLastModified,
+    changeFrequency: "monthly",
+    priority: 0.7,
   }));
 
   const learningRoutes: SitemapEntry[] = learningTopics.map((topic) => ({
     path: `/learning/${topic.slug}`,
     lastModified: siteLastModified,
     changeFrequency: "weekly",
-    priority: 0.85,
+    priority: 0.55,
   }));
 
   const postRoutes: SitemapEntry[] = posts.map((post) => ({
     path: `/blog/${post.slug}`,
     lastModified: toLastModified(post.date),
     changeFrequency: "monthly",
-    priority: 0.7,
+    priority: 0.8,
   }));
 
-  return [...staticRoutes, ...learningRoutes, ...postRoutes];
+  return [...staticRoutes, ...workRoutes, ...learningRoutes, ...postRoutes];
 }
 
 export function buildSitemapXml(): string {

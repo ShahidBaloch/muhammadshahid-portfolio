@@ -1,6 +1,6 @@
 import Script from "next/script";
 
-/** Google Consent Mode v2 defaults — must run before GA / AdSense scripts. */
+/** Google Consent Mode v2 defaults — must run before GA scripts. */
 export function ConsentScripts() {
   return (
     <Script id="consent-default" strategy="beforeInteractive">

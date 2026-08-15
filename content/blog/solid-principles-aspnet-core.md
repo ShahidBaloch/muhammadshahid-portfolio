@@ -6,11 +6,11 @@ category: "design-patterns"
 tags: ["SOLID", "C#", "ASP.NET Core", "Design Patterns", ".NET", "Architecture"]
 ---
 
-**SOLID principles in C#** remain one of the most searched software-design topics for .NET developers — and one of the easiest to get wrong in ASP.NET Core. Teams paste the five letters into Confluence, then ship god controllers, 30-method interfaces, and “DIP” that still news up `SqlConnection` in a Razor-adjacent service.
+Teams paste the five SOLID letters into Confluence, then ship god controllers, 30-method interfaces, and “DIP” that still news up `SqlConnection` in a service next to a Razor page.
 
-This guide is a **practical SOLID walkthrough for ASP.NET Core APIs** that serve Angular SPAs. Examples are drawn from healthcare, SaaS, and marketplace work (including patterns used around CarBazaar and Ecom_NET10-style systems). It is original commentary and code — not a recycled Wikipedia paraphrase.
+This is a practical walkthrough for ASP.NET Core APIs that serve Angular SPAs. Examples come from healthcare, SaaS, and marketplace work (including patterns around CarBazaar and Ecom_NET10-style systems). The point is a review lens you can use on a PR, not a Wikipedia recap.
 
-If you are preparing interviews, pair this with [ASP.NET Core scenario questions](/blog/aspnet-core-interview-questions-scenarios).
+If you are rehearsing interviews, pair this with [ASP.NET Core scenario questions](/blog/aspnet-core-interview-questions-scenarios). If you are choosing a pattern for a live change, use [Factory](/blog/csharp-factory-pattern) or [Strategy](/blog/csharp-strategy-pattern) instead of this overview.
 
 ## The five principles (working definitions)
 

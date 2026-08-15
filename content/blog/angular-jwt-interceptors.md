@@ -2,15 +2,19 @@
 title: "Angular JWT Interceptors: Bearer Tokens, Refresh, and 401 Handling That Survives Production"
 description: "How I wire Angular HTTP interceptors for JWT access tokens, refresh rotation, and 401 recovery against ASP.NET Core and IdentityServer APIs — including memory vs localStorage tradeoffs."
 date: "2026-02-22"
-category: "architecture"
+category: "authentication"
 tags: ["Angular", "JWT", "ASP.NET Core", "Security"]
 ---
 
-Every Angular app that talks to a secured ASP.NET Core API eventually needs the same plumbing: attach a bearer token, recover when it expires, and stop the user from seeing five login screens because five parallel requests all tried to refresh at once.
+Every Angular app that talks to a secured ASP.NET Core API eventually needs the same plumbing: attach a bearer token, recover when it expires, and stop five parallel requests from all trying to refresh at once.
 
-I have implemented this pattern on healthcare admin portals, CarBazaar-style marketplace backends, and catalog systems where the API issues short-lived JWTs — sometimes through custom token endpoints, sometimes through IdentityServer. The libraries change; the delivery problems do not.
+I have implemented this on healthcare admin portals, CarBazaar-style marketplace backends, and catalog systems where the API issues short-lived JWTs — sometimes through custom token endpoints, sometimes through IdentityServer. The libraries change; the delivery problems do not.
 
-This post is the interceptor setup I ship and the storage tradeoffs I explain to clients before go-live.
+This article is the **Angular HTTP interceptor**: storage, refresh, and 401 recovery. Token validation and policies live on the API. Route access lives in the guard.
+
+- API issuance, lifetimes, and policies: [ASP.NET Core JWT checklist](/blog/aspnet-core-jwt-auth)
+- Blocking routes by auth and role: [Angular auth guards](/blog/angular-auth-guard-aspnet-core)
+- Concurrent 401 stampede (queue, skip refresh URL, POST retry): [interceptor 401 refresh queue](/blog/angular-interceptor-401-refresh-queue)
 
 ## The contract between SPA and API
 

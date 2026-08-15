@@ -2,8 +2,8 @@
 title: "SignalR Real-Time Patterns in ASP.NET Core"
 description: "How I ship SignalR with ASP.NET Core for auctions, notifications, and live dashboards — authenticated hubs, group strategy, scaling with Azure SignalR, and Angular clients that reconnect honestly."
 date: "2026-06-18"
-category: "architecture"
-tags: ["SignalR", "ASP.NET Core", "Realtime", "Angular", "Azure"]
+category: "authentication"
+tags: ["SignalR", "ASP.NET Core", "Realtime", "Angular", "JWT", "Azure"]
 ---
 
 The first time I added live bidding to a marketplace product, the websocket connection worked on my laptop and failed the moment we deployed to two App Service instances. Bids appeared on one server’s connections but not the other. Sellers refreshed the page and accused us of hiding offers. That week taught me that SignalR is not “turn on hubs and broadcast.” It is a distributed systems problem with a friendly API.

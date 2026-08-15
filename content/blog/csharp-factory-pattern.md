@@ -136,7 +136,7 @@ public CheckoutService([FromKeyedServices("card")] IPaymentProcessor card)
 
 Or resolve by key at runtime through `IServiceProvider` / keyed APIs when the key arrives with the request.
 
-**Rule of thumb:** if selection is a closed set of keys with no extra logic, keyed DI is enough. If you need merchant configuration, fallbacks, or auditing on selection, keep a factory class.
+**Rule of thumb:** if selection is a closed set of keys with no extra logic, keyed DI is enough. If you need merchant configuration, fallbacks, or auditing on selection, keep a factory class. Production keyed examples (EDI vs FHIR, lifetimes): [keyed services](/blog/keyed-services-aspnet-core-fromkeyedservices).
 
 ## Factory vs Strategy vs Keyed DI vs Service Locator
 

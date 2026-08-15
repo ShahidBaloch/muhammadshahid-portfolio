@@ -15,14 +15,23 @@ export function Reveal({ children, className = "", delayMs = 0 }: RevealProps) {
     const node = ref.current;
     if (!node) return;
 
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      node.classList.add("is-visible");
+      return;
+    }
+
+    node.classList.add("reveal-pending");
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
           node.classList.add("is-visible");
+          node.classList.remove("reveal-pending");
           observer.unobserve(node);
         }
       },
-      { threshold: 0.16, rootMargin: "0px 0px -8% 0px" },
+      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
     );
 
     observer.observe(node);

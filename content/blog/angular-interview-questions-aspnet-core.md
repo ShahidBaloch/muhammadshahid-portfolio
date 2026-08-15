@@ -6,9 +6,11 @@ category: "architecture"
 tags: ["Interview Questions", "Angular", "ASP.NET Core", "TypeScript", "RxJS", "Career"]
 ---
 
-**Angular interview questions** for enterprise jobs almost always assume a backend — frequently **ASP.NET Core** with JWT, CORS, and ProblemDetails. Trivia about lifecycle hooks is cheap. Scenario fluency is not: refresh loops, fake “CORS” errors, guards that only hide buttons, and Signals adopted as a religion.
+Enterprise Angular interviews almost always assume a backend — frequently ASP.NET Core with JWT, CORS, and ProblemDetails. Trivia about lifecycle hooks is cheap. Scenario fluency is not: refresh loops, errors blamed on CORS that are not CORS, guards that only hide buttons, and Signals adopted as a religion.
 
-These **scenario-based Angular interview questions** come from real SPA + API deliveries in healthcare and SaaS. Each answer is detailed enough to rehearse aloud. Companion posts cover implementation depth; this post trains **interview narration**.
+These scenarios come from SPA + API deliveries in healthcare and SaaS. Each answer is detailed enough to rehearse aloud.
+
+This URL trains interview narration. For shipping code, use the implementation posts: [auth guards](/blog/angular-auth-guard-aspnet-core), [JWT interceptors](/blog/angular-jwt-interceptors), and [CORS](/blog/cors-angular-aspnet-core).
 
 ---
 

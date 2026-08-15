@@ -6,11 +6,11 @@ category: "architecture"
 tags: ["Interview Questions", "ASP.NET Core", ".NET", "C#", "Career", "Web API"]
 ---
 
-**ASP.NET Core interview questions** still flood Google — but most pages dump fifty one-line answers. Interviewers hiring for healthcare, SaaS, and marketplace APIs do not care if you can define middleware. They care whether you can **debug a production story** without guessing.
+Interviewers hiring for healthcare, SaaS, and marketplace APIs do not care if you can define middleware. They care whether you can debug a production story without guessing.
 
-I interview and coach .NET candidates around the same failures I fix on client systems: tenant data leaking through a singleton cache, JWTs that work in Postman but not Angular, thread pools dying under “fine looking” sync code. Below are **detailed scenario answers** — what a strong candidate says, what a weak one says, and how I verify the fix.
+I interview and coach .NET candidates around the same failures I fix on client systems: tenant data leaking through a singleton cache, JWTs that work in Postman but not Angular, thread pools dying under “fine looking” sync code. Below are scenario answers — what a strong candidate says, what a weak one says, and how I verify the fix.
 
-This article is original guidance from shipping ASP.NET Core APIs with Angular frontends. It is not a republished trivia list.
+This is interview narration. Implementation depth lives in the linked how-to posts (JWT, DI, async), not in this URL.
 
 ## How to use this guide
 

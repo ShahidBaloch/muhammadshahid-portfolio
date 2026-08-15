@@ -106,7 +106,7 @@ DI resolves types well. It does not magically know a runtime merchant id. For th
 - Or a factory delegate registration
 - Or keyed services for closed sets of implementations
 
-I cover the design-pattern angle in [Factory Pattern in C# with DI](/blog/csharp-factory-pattern).
+I cover the design-pattern angle in [Factory Pattern in C# with DI](/blog/csharp-factory-pattern). Keyed registrations (`AddKeyedScoped`, `[FromKeyedServices]`) with an EDI vs FHIR example: [keyed services in ASP.NET Core](/blog/keyed-services-aspnet-core-fromkeyedservices).
 
 ## Background services and scope: the second classic trap
 

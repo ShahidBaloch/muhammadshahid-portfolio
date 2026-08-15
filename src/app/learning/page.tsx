@@ -5,9 +5,9 @@ import { getPostsForTopic } from "@/lib/posts";
 import { learningTopics } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Blog Topics — Design Patterns, DI & Architecture",
+  title: "Blog Topics — Auth, EF Core, EDI, DI & Architecture",
   description:
-    "Topic guides for C# design patterns, ASP.NET Core dependency injection, and software architecture — curated paths into the blog.",
+    "Topic guides for ASP.NET Core + Angular authentication, identity, EF Core, healthcare EDI, CQRS, dependency injection, and architecture.",
   alternates: { canonical: "/learning" },
 };
 
@@ -28,16 +28,16 @@ export default function LearningPage() {
           />
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {learningTopics.map((topic) => {
             const count = getPostsForTopic(topic).length;
             return (
               <Link
                 key={topic.slug}
                 href={`/learning/${topic.slug}`}
-                className="surface surface-hover block rounded-2xl p-6 transition hover:border-teal/40"
+                className="surface surface-hover block rounded-xl p-6"
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal">Topic</p>
+                <p className="eyebrow">Topic</p>
                 <h2 className="mt-3 font-display text-xl font-semibold text-ink">{topic.label}</h2>
                 <p className="mt-3 text-sm leading-relaxed text-muted">{topic.description}</p>
                 <p className="mt-5 text-sm font-semibold text-teal">

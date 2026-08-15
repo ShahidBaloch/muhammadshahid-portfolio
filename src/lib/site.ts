@@ -3,7 +3,7 @@ export const siteConfig = {
   title: "Senior Full Stack Engineer (.NET + Angular)",
   description:
     "Senior .NET + Angular engineer helping teams design and ship secure healthcare, SaaS, and eCommerce systems — APIs, SPAs, Azure, identity, and clean architecture.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://muhammadshahid.dev",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.muhammadshahid.dev",
   locale: "en_US",
   email: "info@muhammadshahid.dev",
   personalEmail: "muhammadshahid6528@gmail.com",
@@ -16,7 +16,23 @@ export const siteConfig = {
   tagline:
     "I design and ship production .NET + Angular systems for healthcare, SaaS, and eCommerce teams.",
   availability: "Open for freelance & contract engagements",
+  inquiryCta: "Start a project inquiry",
 } as const;
+
+export const inquiryTimelines = [
+  "As soon as possible",
+  "This month",
+  "1–3 months",
+  "Exploring / not sure",
+] as const;
+
+export const inquiryBudgets = [
+  "Under $5k",
+  "$5k–$15k",
+  "$15k–$40k",
+  "$40k+",
+  "Hourly / not sure yet",
+] as const;
 
 export const navLinks = [
   { href: "/work", label: "Work" },
@@ -30,6 +46,7 @@ export type LearningTopic = {
   label: string;
   title: string;
   description: string;
+  intro: string;
   /** Extra tags that also qualify a post for this topic hub. */
   matchTags: string[];
 };
@@ -42,6 +59,8 @@ export const learningTopics: LearningTopic[] = [
     title: "C# Design Patterns",
     description:
       "Practical C# design patterns for real ASP.NET Core products — Factory, Strategy, and patterns that reduce switch-statement sprawl without ceremony.",
+    intro:
+      "I reach for a named design pattern when a product already has a repeating decision — pricing rules, export formats, catalog filters — and the if-else tree is about to become the feature. This hub is not a catalog of every Gang of Four name. It is the subset I actually use on ASP.NET Core APIs that Angular teams consume: Factory when construction logic keeps growing, Strategy when behavior must swap without editing callers, Repository when query shape deserves a name, and SOLID as a review lens rather than a folder religion. Each article walks a production-shaped example, then says when the pattern is ceremony. If you are studying for interviews, start with SOLID and Factory; if you are refactoring a live API, start with Strategy or Repository and skip anything that does not match a change you can point at in source control.",
     matchTags: [
       "Design Patterns",
       "Factory Pattern",
@@ -56,25 +75,74 @@ export const learningTopics: LearningTopic[] = [
     title: "Dependency Injection in .NET",
     description:
       "ASP.NET Core DI lifetimes, registration habits, and factory delegates — how senior teams keep services testable and avoid captive dependencies.",
+    intro:
+      "Dependency injection in ASP.NET Core is easy to start and easy to get wrong. Most production bugs I see are not “forgot to register a service” — they are captive dependencies (a Singleton holding a Scoped DbContext), hidden new-ups that bypass the container, or factory delegates that close over request state. This hub collects the DI notes I use on healthcare, SaaS, and marketplace APIs: lifetimes, registration habits, and how Factory-style delegates fit when a switch statement is really a composition problem. Read the lifetimes article first if you own Program.cs. Pair it with Factory or Strategy posts when the container is being asked to pick an implementation at runtime. The goal is a container graph a teammate can explain in a PR, not a clever service locator.",
     matchTags: ["Dependency Injection", "IoC", "DI"],
+  },
+  {
+    slug: "authentication",
+    label: "Auth & Tokens",
+    title: "ASP.NET Core + Angular Authentication",
+    description:
+      "JWT refresh, Angular interceptors, BFF/YARP, cookies, CORS with credentials, and the production failures that look like “flaky auth.”",
+    intro:
+      "This hub is the Angular + ASP.NET Core token lifecycle: short-lived JWTs, refresh rotation, concurrent 401s, httpOnly cookies, CORS credentials, and when a BFF is the honest answer. Start with the JWT checklist if you are issuing tokens; use the interceptor and 401-queue posts if the SPA is already logging people out; read BFF when you want tokens off the browser. CORS belongs here when the failure showed up after login, not as a generic networking topic.",
+    matchTags: ["JWT", "CORS", "YARP"],
+  },
+  {
+    slug: "identity",
+    label: "Identity",
+    title: "Identity in ASP.NET Core (2026)",
+    description:
+      "When ASP.NET Identity is enough, when you need OpenIddict or IdentityServer, and why MapIdentityApi tokens are not JWTs.",
+    intro:
+      "Identity choice is a product decision: one app versus SSO, opaque Identity API tokens versus JWT bearer, Duende licensing versus OpenIddict. This hub is for that decision — not for interceptor plumbing. Read MapIdentityApi versus JWT if Angular is sending the wrong string into AddJwtBearer. Read IdentityServer versus Identity when a second app or an external IdP is on the roadmap.",
+    matchTags: ["IdentityServer", "OIDC", "ASP.NET Core Identity", "SSO"],
+  },
+  {
+    slug: "ef-core",
+    label: "EF Core",
+    title: "EF Core and SQL Server Performance",
+    description:
+      "N+1 versus Include versus AsSplitQuery, cartesian explosion from two collection Includes, and query habits that survive real clinic and catalog data.",
+    intro:
+      "EF Core looks fine on demo data and fails when a clinic or seller catalog is real. This hub is SQL-shaped: N+1 round-trips, fat JOINs, split queries, projections, and indexes. Start with the performance pillar for the checklist. Use the N+1 versus AsSplitQuery article when you are not sure which bug you have. Use cartesian explosion when two Includes made one query huge but the JSON still looked correct.",
+    matchTags: ["EF Core", "SQL Server"],
+  },
+  {
+    slug: "cqrs",
+    label: "CQRS",
+    title: "CQRS after MediatR licensing",
+    description:
+      "CQRS-lite in ASP.NET Core — when MediatR is worth a license, when Wolverine is a real upgrade, and when a mediator is ceremony.",
+    intro:
+      "CQRS here means commands and queries as separate use cases, not event sourcing. Start with the MediatR ceremony article if you are adding a bus. Use the licensing article if the question is stay, pay, migrate to Wolverine, or delete IMediator. Do not add a second competing “what is CQRS” URL.",
+    matchTags: ["MediatR", "CQRS", "Wolverine"],
+  },
+  {
+    slug: "edi",
+    label: "Healthcare EDI",
+    title: "Healthcare EDI on .NET",
+    description:
+      "Vendor-neutral X12 intake on ASP.NET Core — envelopes, 837-shaped pipelines, and what not to log. Not a product pitch and not a compliance certificate.",
+    intro:
+      "Independent EDI write-ups are rare; vendor pages are not. This hub is architecture for X12 on .NET: intake, queues, mapping boundaries, and PHI-safe logging. The parser article is the starting point. Transaction-specific 837 / 835 / 850 pages come next only when they add a real pipeline, not a duplicate URL.",
+    matchTags: ["EDI", "X12"],
   },
   {
     slug: "architecture",
     label: "Architecture",
     title: "Software Architecture",
     description:
-      "Architecture notes for .NET + Angular systems — Clean Architecture, CQRS-lite, async patterns, Minimal APIs, and boundaries that survive healthcare, SaaS, and eCommerce delivery.",
+      "Architecture notes for .NET + Angular systems — Clean Architecture, modular monolith vs services, Minimal APIs, and boundaries that survive healthcare, SaaS, and eCommerce delivery.",
+    intro:
+      "Architecture here means the decisions that survive the first production incident: where data lives, who is allowed to change it, and how the Angular SPA talks to ASP.NET Core without a contract that rot. This hub is Clean Architecture, modular monolith vs services, and Minimal APIs — not JWT plumbing, not EF SQL, not EDI parsers. Those have their own topic pages. Start with Clean Architecture or modular monolith if you are choosing a shape. Skip a split into microservices until a boundary has a real independent deploy or scaling reason.",
     matchTags: [
       "Architecture",
       "Clean Architecture",
-      "CQRS",
       "Microservices",
-      "async await",
+      "Modular Monolith",
       "Minimal APIs",
-      "Angular",
-      "Signals",
-      "AI",
-      "Interview Questions",
     ],
   },
 ];
@@ -91,7 +159,10 @@ export type Project = {
   solution: string;
   result: string;
   stack: string[];
+  layers: string[];
   github?: string;
+  liveUrl?: string;
+  confidential?: boolean;
   domain: string;
 };
 
@@ -116,6 +187,7 @@ export const projects: Project[] = [
       "JWT / OAuth 2.0",
     ],
     github: "https://github.com/ShahidBaloch/CarBazaar",
+    layers: ["Angular SPA", "API Gateway", "Auction · Identity · Search", "RabbitMQ · Docker"],
     domain: "Marketplace architecture",
   },
   {
@@ -139,6 +211,7 @@ export const projects: Project[] = [
       "Clean Architecture",
     ],
     github: "https://github.com/ShahidBaloch/Ecom_NET10",
+    layers: ["Angular storefront", "ASP.NET Core APIs", "Domain · Application", "EF Core · SQL Server"],
     domain: "eCommerce platform",
   },
   {
@@ -161,9 +234,15 @@ export const projects: Project[] = [
       "AWS",
       "Agile",
     ],
+    confidential: true,
+    layers: ["Provider & ops portals", ".NET APIs", "SQL Server · Cosmos DB", "Azure · AWS"],
     domain: "Healthcare / SaaS",
   },
 ];
+
+export function getProject(slug: string): Project | undefined {
+  return projects.find((project) => project.slug === slug);
+}
 
 export const services = [
   {
@@ -234,7 +313,7 @@ export const experience = [
     company: "Arwa Technologies",
     period: "May 2021 – Apr 2022",
     points: [
-      "Enhanced eCommerce features on the Microsoft stack with cross-functional delivery.",
+      "Enhanced eCommerce features on the Microsoft stack with cross-functional delivery — catalog, checkout, and day-to-day storefront work.",
     ],
   },
 ] as const;

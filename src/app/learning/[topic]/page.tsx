@@ -52,6 +52,8 @@ export default async function LearningTopicPage({ params }: PageProps) {
           />
         </div>
 
+        <p className="mt-8 max-w-3xl text-lg leading-relaxed text-muted">{topic.intro}</p>
+
         <nav className="mt-8 flex flex-wrap gap-2" aria-label="Blog topics">
           {learningTopics.map((item) => (
             <Link
@@ -59,8 +61,8 @@ export default async function LearningTopicPage({ params }: PageProps) {
               href={`/learning/${item.slug}`}
               className={`rounded border px-3 py-1.5 text-sm transition ${
                 item.slug === topic.slug
-                  ? "border-teal bg-teal/10 text-teal"
-                  : "border-slate-line text-muted hover:border-teal/40 hover:text-teal"
+                  ? "border-ink bg-ink text-white"
+                  : "border-slate-line text-muted hover:border-ink hover:text-ink"
               }`}
             >
               {item.label}

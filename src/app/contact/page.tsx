@@ -24,7 +24,7 @@ export default function ContactPage() {
 
           <ul className="mt-10 space-y-5 text-ink-soft">
             <li>
-              <p className="font-mono text-xs text-teal">Email</p>
+              <p className="eyebrow">Email</p>
               <a
                 href={`mailto:${siteConfig.email}`}
                 className="mt-1 inline-block font-medium text-teal link-underline"
@@ -33,7 +33,7 @@ export default function ContactPage() {
               </a>
             </li>
             <li>
-              <p className="font-mono text-xs text-teal">WhatsApp</p>
+              <p className="eyebrow">WhatsApp</p>
               <a
                 href={siteConfig.whatsapp}
                 target="_blank"
@@ -44,7 +44,7 @@ export default function ContactPage() {
               </a>
             </li>
             <li>
-              <p className="font-mono text-xs text-teal">LinkedIn</p>
+              <p className="eyebrow">LinkedIn</p>
               <a
                 href={siteConfig.linkedin}
                 target="_blank"
@@ -55,14 +55,14 @@ export default function ContactPage() {
               </a>
             </li>
             <li>
-              <p className="font-mono text-xs text-teal">Location</p>
+              <p className="eyebrow">Location</p>
               <p className="mt-1 font-medium text-ink">{siteConfig.location}</p>
             </li>
           </ul>
         </div>
 
-        <div className="surface rounded p-6 sm:p-8">
-          <h2 className="font-display text-xl font-semibold text-[inherit]">Project inquiry</h2>
+        <div className="surface rounded-xl p-6 sm:p-8">
+          <h2 className="font-display text-xl font-semibold text-ink">Project inquiry</h2>
           <p className="mt-2 text-sm text-muted">
             Prefer email or WhatsApp? Use the links on the left — I typically reply within one
             business day.

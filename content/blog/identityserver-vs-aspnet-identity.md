@@ -2,7 +2,7 @@
 title: "IdentityServer vs ASP.NET Core Identity — When SSO Is Worth It"
 description: "A senior engineer's decision guide for IdentityServer, OIDC, and SSO versus ASP.NET Core Identity alone — multi-app, SPA, and API scenarios from real healthcare and marketplace work."
 date: "2026-05-22"
-category: "architecture"
+category: "identity"
 tags: ["IdentityServer", "OIDC", "ASP.NET Core Identity", "Security", "SSO"]
 ---
 

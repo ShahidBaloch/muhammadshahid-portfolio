@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Portrait } from "@/components/Portrait";
 import { CtaBand, SectionHeading } from "@/components/SectionHeading";
 import { experience, siteConfig, skills } from "@/lib/site";
 
@@ -54,6 +55,9 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/resume" className="btn-secondary">
+                Resume
+              </Link>
               <a
                 href={siteConfig.linkedin}
                 target="_blank"
@@ -77,6 +81,13 @@ export default function AboutPage() {
           </div>
 
           <aside className="surface space-y-8 rounded-2xl p-6 sm:p-8">
+            <div className="flex items-center gap-4 border-b border-slate-line pb-6">
+              <Portrait />
+              <div>
+                <p className="font-display text-lg font-semibold text-ink">{siteConfig.name}</p>
+                <p className="mt-1 text-sm text-muted">{siteConfig.title}</p>
+              </div>
+            </div>
             <SkillBlock title="Architecture" items={skills.architecture} />
             <SkillBlock title="Backend" items={skills.backend} />
             <SkillBlock title="Frontend" items={skills.frontend} />
@@ -94,7 +105,7 @@ export default function AboutPage() {
                 className="grid gap-3 border-b border-slate-line py-8 md:grid-cols-[1fr_1.4fr]"
               >
                 <div>
-                  <p className="text-sm text-teal">{job.period}</p>
+                  <p className="text-sm text-muted">{job.period}</p>
                   <h3 className="mt-2 font-display text-xl font-semibold text-ink">{job.role}</h3>
                   <p className="mt-1 text-muted">{job.company}</p>
                 </div>
@@ -118,7 +129,7 @@ export default function AboutPage() {
 function SkillBlock({ title, items }: { title: string; items: readonly string[] }) {
   return (
     <div>
-      <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-teal">{title}</h3>
+      <h3 className="eyebrow">{title}</h3>
       <ul className="mt-3 flex flex-wrap gap-2">
         {items.map((item) => (
           <li

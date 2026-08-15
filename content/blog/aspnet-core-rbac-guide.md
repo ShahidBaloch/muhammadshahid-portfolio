@@ -2,7 +2,7 @@
 title: "ASP.NET Core RBAC for Healthcare and Admin Portals: Policies Over Scattered Roles"
 description: "Role and policy-based authorization in ASP.NET Core for healthcare and admin portals — why I replace scattered [Authorize(Roles)] attributes with named policies clients can audit."
 date: "2026-03-08"
-category: "architecture"
+category: "authentication"
 tags: ["ASP.NET Core", "RBAC", "Security", "Healthcare"]
 ---
 

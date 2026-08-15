@@ -2,13 +2,18 @@
 title: "Angular Auth Guard with ASP.NET Core JWT: Protect Routes the Right Way"
 description: "How to implement Angular auth guards and role guards with ASP.NET Core JWT — canActivate, token expiry checks, and role claims from the API without brittle localStorage hacks."
 date: "2026-08-01"
-category: "architecture"
+category: "authentication"
 tags: ["Angular", "Auth Guard", "JWT", "ASP.NET Core", "Security"]
 ---
 
-If you search for **Angular auth guard ASP.NET Core JWT**, you will find dozens of tutorials that stop at `localStorage.getItem('token')`. That is enough for a demo. It is not enough for a healthcare portal, an admin SPA, or any product where a stale token or a forged role claim becomes a production incident.
+A route guard that only checks `localStorage.getItem('token')` is enough for a demo. It is not enough for a healthcare portal or an admin SPA, where a stale token or a forged role claim becomes an incident.
 
-I wire Angular route guards against ASP.NET Core JWT APIs on client work regularly — provider portals, marketplace admin screens, and eCommerce back offices. This post is the checklist I actually use: what the API must put in the token, how the Angular guard should decide, and where people break security without noticing.
+I wire Angular route guards against ASP.NET Core JWT APIs on client work — provider portals, marketplace admin screens, and eCommerce back offices. This article is **who may open a URL**: what the API must put in the token, how the guard should decide, and where people break security without noticing.
+
+It is not the token endpoint and not the HTTP interceptor.
+
+- API JWT configuration: [ASP.NET Core JWT checklist](/blog/aspnet-core-jwt-auth)
+- Attaching and refreshing tokens: [Angular JWT interceptors](/blog/angular-jwt-interceptors)
 
 ## What people mean when they search this
 

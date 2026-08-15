@@ -3,18 +3,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { Portrait } from "@/components/Portrait";
 import { getPostBySlug, getPostSlugs, getRelatedPosts } from "@/lib/posts";
+import { personId } from "@/lib/seo";
 import { getLearningTopic, siteConfig } from "@/lib/site";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
-};
-
-const ogImage = {
-  url: "/opengraph-image",
-  width: 1200,
-  height: 630,
-  alt: `${siteConfig.name} — ${siteConfig.title}`,
 };
 
 export function generateStaticParams() {
@@ -34,14 +29,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         title: post.title,
         description: post.description,
         publishedTime: post.date,
+        modifiedTime: post.date,
         url: `${siteConfig.url}/blog/${post.slug}`,
-        images: [ogImage],
       },
       twitter: {
         card: "summary_large_image",
         title: post.title,
         description: post.description,
-        images: [ogImage.url],
       },
     };
   } catch {
@@ -59,31 +53,25 @@ export default async function BlogPostPage({ params }: PageProps) {
   const post = getPostBySlug(slug);
   const related = getRelatedPosts(slug, 3);
   const learningTopic = post.category ? getLearningTopic(post.category) : undefined;
+  const pageUrl = `${siteConfig.url}/blog/${post.slug}`;
 
   const articleJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     headline: post.title,
     description: post.description,
     datePublished: post.date,
     dateModified: post.date,
-    url: `${siteConfig.url}/blog/${post.slug}`,
-    image: [`${siteConfig.url}/opengraph-image`],
-    author: {
-      "@type": "Person",
-      name: siteConfig.name,
-      url: siteConfig.url,
-    },
-    publisher: {
-      "@type": "Person",
-      name: siteConfig.name,
-      url: siteConfig.url,
-    },
+    url: pageUrl,
+    image: [`${siteConfig.url}/blog/${post.slug}/opengraph-image`],
+    author: { "@id": personId },
+    publisher: { "@id": personId },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `${siteConfig.url}/blog/${post.slug}`,
+      "@id": pageUrl,
     },
     keywords: post.tags.join(", "),
+    inLanguage: "en",
   };
 
   const breadcrumbItems = [
@@ -98,7 +86,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   }
   breadcrumbItems.push({
     name: post.title,
-    item: `${siteConfig.url}/blog/${post.slug}`,
+    item: pageUrl,
   });
 
   const breadcrumbJsonLd = {
@@ -183,19 +171,40 @@ export default async function BlogPostPage({ params }: PageProps) {
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
         </div>
 
-        <aside className="mt-14 rounded-2xl border border-slate-line bg-mist/60 p-6 sm:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal">About the author</p>
-          <p className="mt-3 font-display text-xl font-semibold text-ink">{siteConfig.name}</p>
-          <p className="mt-2 text-muted">
-            {siteConfig.title}. {siteConfig.tagline} Based in {siteConfig.location}.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Link href="/about" className="btn-secondary !py-2 !text-xs">
-              About
-            </Link>
-            <Link href="/contact" className="btn-primary !py-2 !text-xs">
-              Contact
-            </Link>
+        <aside className="mt-14 rounded-xl border border-slate-line bg-mist p-6 sm:p-8">
+          <p className="eyebrow">About the author</p>
+          <div className="mt-4 flex items-start gap-4">
+            <Portrait />
+            <div>
+              <p className="font-display text-xl font-semibold text-ink">{siteConfig.name}</p>
+              <p className="mt-2 text-muted">
+                {siteConfig.title}. {siteConfig.tagline} Based in {siteConfig.location}.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Link href="/about" className="btn-secondary !py-2 !text-xs">
+                  About
+                </Link>
+                <a
+                  href={siteConfig.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-secondary !py-2 !text-xs"
+                >
+                  LinkedIn
+                </a>
+                <a
+                  href={siteConfig.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-secondary !py-2 !text-xs"
+                >
+                  GitHub
+                </a>
+                <Link href="/contact" className="btn-primary !py-2 !text-xs">
+                  Contact
+                </Link>
+              </div>
+            </div>
           </div>
         </aside>
 

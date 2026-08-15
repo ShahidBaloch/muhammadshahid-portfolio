@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { BrandMark } from "@/components/BrandMark";
 import { learningTopics, navLinks } from "@/lib/site";
 
 export function Header() {
@@ -11,6 +12,8 @@ export function Header() {
   const [blogOpen, setBlogOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const blogRef = useRef<HTMLDivElement>(null);
+  const mobileRef = useRef<HTMLDivElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -31,9 +34,59 @@ export function Header() {
         setBlogOpen(false);
       }
     };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setBlogOpen(false);
+    };
     document.addEventListener("mousedown", onPointerDown);
-    return () => document.removeEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKey);
+    };
   }, [blogOpen]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const panel = mobileRef.current;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const focusables = () =>
+      panel
+        ? Array.from(
+            panel.querySelectorAll<HTMLElement>(
+              'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+            ),
+          )
+        : [];
+
+    focusables()[0]?.focus();
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        menuButtonRef.current?.focus();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const items = focusables();
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      previouslyFocused?.focus();
+    };
+  }, [open]);
 
   const blogActive =
     pathname === "/blog" ||
@@ -43,7 +96,7 @@ export function Header() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition duration-300 ${
+      className={`fixed inset-x-0 top-0 z-50 pt-[env(safe-area-inset-top)] transition duration-300 ${
         scrolled || open
           ? "border-b border-slate-line/80 bg-paper/90 backdrop-blur-md"
           : "bg-transparent"
@@ -54,9 +107,7 @@ export function Header() {
           href="/"
           className="flex items-center gap-2.5 font-display text-base font-semibold tracking-tight text-ink transition hover:text-teal sm:text-lg"
         >
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-teal text-xs font-bold text-white">
-            MS
-          </span>
+          <BrandMark size="sm" />
           Muhammad Shahid
         </Link>
 
@@ -67,11 +118,12 @@ export function Header() {
                 <div key={link.href} className="relative" ref={blogRef}>
                   <button
                     type="button"
-                    className={`relative inline-flex items-center gap-1 text-sm transition after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:bg-teal after:transition-all hover:text-teal hover:after:w-full ${
+                    className={`relative inline-flex min-h-11 items-center gap-1 text-sm transition after:absolute after:bottom-2 after:left-0 after:h-0.5 after:w-0 after:bg-teal after:transition-all hover:text-teal hover:after:w-full ${
                       blogActive ? "text-teal after:w-full" : "text-muted"
                     }`}
                     aria-expanded={blogOpen}
                     aria-haspopup="menu"
+                    aria-controls="blog-menu"
                     onClick={() => setBlogOpen((value) => !value)}
                   >
                     {link.label}
@@ -80,8 +132,8 @@ export function Header() {
                     </span>
                   </button>
                   {blogOpen ? (
-                    <div role="menu" className="absolute left-0 top-full z-50 pt-2">
-                      <div className="min-w-[230px] rounded-xl border border-slate-line bg-paper py-2 shadow-lg">
+                    <div id="blog-menu" role="menu" className="absolute left-0 top-full z-50 pt-2">
+                      <div className="min-w-[230px] rounded-xl border border-slate-line bg-mist py-2 shadow-lg">
                         <Link
                           href="/blog"
                           role="menuitem"
@@ -117,7 +169,7 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative text-sm transition after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:bg-teal after:transition-all hover:text-teal hover:after:w-full ${
+                className={`relative inline-flex min-h-11 items-center text-sm transition after:absolute after:bottom-2 after:left-0 after:h-0.5 after:w-0 after:bg-teal after:transition-all hover:text-teal hover:after:w-full ${
                   active ? "text-teal after:w-full" : "text-muted"
                 }`}
               >
@@ -125,16 +177,18 @@ export function Header() {
               </Link>
             );
           })}
-          <Link href="/contact" className="btn-secondary !py-2 !text-xs">
+          <Link href="/contact" className="btn-primary !px-4 !py-2 !text-xs">
             Hire me
           </Link>
         </nav>
 
         <button
+          ref={menuButtonRef}
           type="button"
-          className="rounded-lg border border-slate-line px-3 py-2 text-sm font-semibold text-ink lg:hidden"
+          className="min-h-11 rounded-lg border border-slate-line px-4 py-2 text-sm font-semibold text-ink lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
+          aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen((value) => !value)}
         >
           {open ? "Close" : "Menu"}
@@ -142,21 +196,25 @@ export function Header() {
       </div>
 
       {open ? (
-        <div id="mobile-nav" className="border-t border-slate-line bg-paper px-5 py-4 lg:hidden">
-          <nav className="flex flex-col gap-3" aria-label="Mobile">
+        <div
+          ref={mobileRef}
+          id="mobile-nav"
+          className="border-t border-slate-line bg-paper px-5 py-4 lg:hidden"
+        >
+          <nav className="flex flex-col gap-1" aria-label="Mobile">
             {navLinks.map((link) => {
               if (link.href === "/blog") {
                 return (
-                  <div key={link.href} className="flex flex-col gap-2">
-                    <Link href="/blog" className="py-1 text-base font-medium text-ink-soft hover:text-teal">
+                  <div key={link.href} className="flex flex-col gap-1">
+                    <Link href="/blog" className="py-2 text-base font-medium text-ink-soft hover:text-teal">
                       {link.label}
                     </Link>
-                    <div className="ml-3 flex flex-col gap-1 border-l border-slate-line pl-3">
+                    <div className="ml-3 flex flex-col border-l border-slate-line pl-3">
                       {learningTopics.map((topic) => (
                         <Link
                           key={topic.slug}
                           href={`/learning/${topic.slug}`}
-                          className="py-1 text-sm text-muted hover:text-teal"
+                          className="py-2 text-sm text-muted hover:text-teal"
                         >
                           {topic.label}
                         </Link>
@@ -170,13 +228,13 @@ export function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="py-1 text-base font-medium text-ink-soft hover:text-teal"
+                  className="py-2 text-base font-medium text-ink-soft hover:text-teal"
                 >
                   {link.label}
                 </Link>
               );
             })}
-            <Link href="/contact" className="btn-primary mt-2 w-full">
+            <Link href="/contact" className="btn-primary mt-3 w-full">
               Hire me
             </Link>
           </nav>

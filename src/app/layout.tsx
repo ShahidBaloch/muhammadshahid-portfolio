@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Source_Sans_3 } from "next/font/google";
-import { AdSense } from "@/components/AdSense";
 import { Analytics } from "@/components/Analytics";
 import { ConsentScripts } from "@/components/ConsentScripts";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { personJsonLd, websiteJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
 
@@ -79,21 +79,6 @@ export const metadata: Metadata = {
     : undefined,
 };
 
-const websiteJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: siteConfig.name,
-  url: siteConfig.url,
-  description: siteConfig.description,
-  author: {
-    "@type": "Person",
-    name: siteConfig.name,
-    url: siteConfig.url,
-    jobTitle: siteConfig.title,
-    sameAs: [siteConfig.linkedin, siteConfig.github],
-  },
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -103,16 +88,22 @@ export default function RootLayout({
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body className="min-h-screen font-body">
         <ConsentScripts />
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd()) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd()) }}
         />
         <Header />
-        <main>{children}</main>
+        <main id="main-content">{children}</main>
         <Footer />
         <CookieConsent />
         <Analytics />
-        <AdSense />
       </body>
     </html>
   );

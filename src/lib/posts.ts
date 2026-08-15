@@ -97,12 +97,11 @@ export function getRelatedPosts(slug: string, limit = 3): PostMeta[] {
   const others = getAllPosts().filter((post) => post.slug !== slug);
 
   const scored = others.map((post) => {
-    let score = 0;
-    if (current.category && post.category === current.category) {
-      score += 5;
-    }
     const sharedTags = post.tags.filter((tag) => current.tags.includes(tag)).length;
-    score += sharedTags * 2;
+    let score = sharedTags * 4;
+    if (sharedTags > 0 && current.category && post.category === current.category) {
+      score += 2;
+    }
     return { post, score };
   });
 

@@ -2,7 +2,7 @@
 title: "Fixing CORS Between Angular and ASP.NET Core (What I Actually Check on Client Projects)"
 description: "Wrong origins, credentials, preflight, reverse proxies, and Azure App Service — the CORS failures I diagnose most often when Angular SPAs call ASP.NET Core APIs."
 date: "2026-01-18"
-category: "architecture"
+category: "authentication"
 tags: ["Angular", "ASP.NET Core", "CORS", "Azure"]
 ---
 
@@ -57,6 +57,16 @@ builder.Services.AddCors(options =>
 ```
 
 Store origins in configuration so staging and production differ without code changes. On Azure App Service, I map these to application settings rather than hard-coding client domains in source.
+
+Cookie refresh tokens and `withCredentials` are the [httpOnly cookie article](/blog/refresh-token-httponly-cookie-angular-aspnet-core). Do not enable `AllowCredentials()` if Angular only sends `Authorization` and never cookies.
+
+### AllowAnyOrigin + AllowCredentials throws
+
+ASP.NET Core refuses this combination (`InvalidOperationException`). A credentialed response cannot use `Access-Control-Allow-Origin: *`. The fix is `WithOrigins(...)`, not catching the exception. Staging still needs explicit localhost entries.
+
+### Chrome says CORS; the status is 401
+
+If curl against the API origin returns 401 and the SPA console says CORS, the error response likely **omitted** CORS headers (middleware order, or an exception before CORS). Put `UseCors` where 401/403 still get `Access-Control-Allow-Origin` for that origin. Until that happens, the [401 refresh interceptor](/blog/angular-interceptor-401-refresh-queue) never sees a clean 401.
 
 ## Preflight is where infrastructure hides the problem
 

@@ -6,11 +6,11 @@ category: "architecture"
 tags: ["Interview Questions", "C#", "async await", "Asynchronous Programming", ".NET", "ASP.NET Core"]
 ---
 
-**C# async await interview questions** are among the highest-traffic topics in the .NET ecosystem — and among the most poorly answered online. Reciting “async does not create a new thread” is table stakes. Senior interviews ask you to diagnose **starvation**, **unobserved exceptions**, and **EF Core misuse** under load.
+Reciting “async does not create a new thread” is table stakes. Senior interviews ask you to diagnose starvation, unobserved exceptions, and EF Core misuse under load.
 
-This guide is a set of **scenario-based async interview questions** with detailed answers I expect from candidates who have shipped ASP.NET Core APIs (often with Angular clients). It complements the implementation guide: [C# Async and Await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).
+This is a set of scenario prompts with answers I expect from people who have shipped ASP.NET Core APIs (often with Angular clients). Every scenario is written from production debugging — not a trivia bank.
 
-Every scenario below is written from production debugging experience — not scraped from a generic Q&A bank.
+This URL is **interview rehearsal**. For the request-path checklist you would actually merge, use [C# async and await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).
 
 ---
 

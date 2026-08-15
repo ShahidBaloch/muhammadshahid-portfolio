@@ -1,9 +1,12 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { siteConfig } from "@/lib/site";
+import { inquiryBudgets, inquiryTimelines, siteConfig } from "@/lib/site";
 
 type Status = "idle" | "submitting" | "success" | "error";
+
+const fieldClass =
+  "mt-2 w-full rounded border border-slate-line bg-paper px-3 py-2.5 text-ink outline-none transition focus:border-teal";
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
@@ -16,17 +19,22 @@ export function ContactForm() {
 
     const form = event.currentTarget;
     const data = new FormData(form);
-    const name = String(data.get("name") ?? "").trim();
-    const email = String(data.get("email") ?? "").trim();
-    const company = String(data.get("company") ?? "").trim();
-    const message = String(data.get("message") ?? "").trim();
-    const website = String(data.get("website") ?? "").trim();
+    const payload = {
+      name: String(data.get("name") ?? "").trim(),
+      email: String(data.get("email") ?? "").trim(),
+      company: String(data.get("company") ?? "").trim(),
+      timeline: String(data.get("timeline") ?? "").trim(),
+      budget: String(data.get("budget") ?? "").trim(),
+      repoUrl: String(data.get("repoUrl") ?? "").trim(),
+      message: String(data.get("message") ?? "").trim(),
+      website: String(data.get("website") ?? "").trim(),
+    };
 
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, company, message, website }),
+        body: JSON.stringify(payload),
       });
 
       const result: { ok?: boolean; error?: string } = await response.json().catch(() => ({}));
@@ -66,31 +74,52 @@ export function ContactForm() {
       <div className="grid gap-5 sm:grid-cols-2">
         <label className="block text-sm font-medium text-ink">
           Name
-          <input
-            required
-            name="name"
-            autoComplete="name"
-            className="mt-2 w-full rounded border border-slate-line bg-mist px-3 py-2.5 text-ink outline-none transition focus:border-teal"
-          />
+          <input required name="name" autoComplete="name" className={fieldClass} />
         </label>
         <label className="block text-sm font-medium text-ink">
           Email
-          <input
-            required
-            type="email"
-            name="email"
-            autoComplete="email"
-            className="mt-2 w-full rounded border border-slate-line bg-mist px-3 py-2.5 text-ink outline-none transition focus:border-teal"
-          />
+          <input required type="email" name="email" autoComplete="email" className={fieldClass} />
         </label>
       </div>
 
       <label className="block text-sm font-medium text-ink">
         Company / product
+        <input name="company" autoComplete="organization" className={fieldClass} />
+      </label>
+
+      <div className="grid gap-5 sm:grid-cols-2">
+        <label className="block text-sm font-medium text-ink">
+          Timeline
+          <select name="timeline" className={fieldClass} defaultValue="">
+            <option value="">Select…</option>
+            {inquiryTimelines.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="block text-sm font-medium text-ink">
+          Budget range
+          <select name="budget" className={fieldClass} defaultValue="">
+            <option value="">Select…</option>
+            {inquiryBudgets.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      <label className="block text-sm font-medium text-ink">
+        Repo or product URL <span className="font-normal text-muted">(optional)</span>
         <input
-          name="company"
-          autoComplete="organization"
-          className="mt-2 w-full rounded border border-slate-line bg-mist px-3 py-2.5 text-ink outline-none transition focus:border-teal"
+          type="url"
+          name="repoUrl"
+          inputMode="url"
+          placeholder="https://"
+          className={fieldClass}
         />
       </label>
 
@@ -101,8 +130,8 @@ export function ContactForm() {
           name="message"
           rows={6}
           maxLength={5000}
-          className="mt-2 w-full rounded border border-slate-line bg-mist px-3 py-2.5 text-ink outline-none transition focus:border-teal"
-          placeholder="Project goals, timeline, and tech stack…"
+          className={fieldClass}
+          placeholder="Project goals, constraints, and tech stack…"
         />
       </label>
 
@@ -114,13 +143,18 @@ export function ContactForm() {
       </div>
 
       <button type="submit" className="btn-primary" disabled={status === "submitting"}>
-        {status === "submitting" ? "Sending…" : "Send message"}
+        {status === "submitting" ? "Sending — typically one business day…" : siteConfig.inquiryCta}
       </button>
 
       {status === "error" ? (
-        <p className="text-sm text-red-600" role="alert">
+        <p className="text-sm text-red-700" role="alert">
           {error}{" "}
-          <a className="font-semibold text-teal link-underline" href={siteConfig.whatsapp} target="_blank" rel="noopener noreferrer">
+          <a
+            className="font-semibold text-teal link-underline"
+            href={siteConfig.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             WhatsApp
           </a>{" "}
           or{" "}
