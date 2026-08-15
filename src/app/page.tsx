@@ -61,11 +61,11 @@ export default function HomePage() {
               {siteConfig.tagline}
             </p>
 
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Link href="/contact" className="btn-primary">
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Link href="/contact" className="btn-primary w-full sm:w-auto">
                 {siteConfig.inquiryCta}
               </Link>
-              <Link href="/work" className="btn-secondary">
+              <Link href="/work" className="btn-secondary w-full sm:w-auto">
                 See selected work
               </Link>
             </div>
@@ -97,8 +97,8 @@ export default function HomePage() {
               { label: "Reply time", value: "1 business day" },
               { label: "Availability", value: "Contract · remote" },
             ].map((item) => (
-              <div key={item.label} className="text-center sm:text-left">
-                <p className="font-display text-lg font-semibold text-ink sm:text-xl">{item.value}</p>
+              <div key={item.label} className="min-w-0 text-center sm:text-left">
+                <p className="font-display text-base font-semibold text-ink sm:text-xl">{item.value}</p>
                 <p className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-teal">
                   {item.label}
                 </p>

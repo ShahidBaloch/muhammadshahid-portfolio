@@ -10,10 +10,10 @@ export function ProfileCard({ className = "" }: ProfileCardProps) {
     <aside className={`surface relative overflow-hidden rounded-2xl p-6 sm:p-8 ${className}`}>
       <div className="pointer-events-none absolute -right-8 -top-8 h-36 w-36 rounded-full bg-cyan/20 blur-2xl" aria-hidden />
 
-      <div className="relative flex items-center gap-4">
+      <div className="relative flex min-w-0 items-center gap-3 sm:gap-4">
         <Portrait priority />
-        <div>
-          <p className="font-display text-xl font-semibold text-ink">{siteConfig.name}</p>
+        <div className="min-w-0">
+          <p className="font-display text-lg font-semibold text-ink sm:text-xl">{siteConfig.name}</p>
           <p className="mt-1 text-sm text-muted">{siteConfig.title}</p>
           <p className="mt-2 text-xs font-medium text-teal">{siteConfig.availability}</p>
         </div>

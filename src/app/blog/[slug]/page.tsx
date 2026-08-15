@@ -150,7 +150,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             <span aria-hidden> · </span>
             By {siteConfig.name}
           </p>
-          <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl text-balance">
+          <h1 className="mt-3 font-display text-[1.75rem] font-semibold leading-tight tracking-tight text-ink sm:text-4xl lg:text-5xl">
             {post.title}
           </h1>
           <p className="mt-4 text-lg text-muted">{post.description}</p>
@@ -167,7 +167,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           ) : null}
         </header>
 
-        <div className="prose prose-lg mt-10 max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:text-ink prose-p:text-muted prose-li:text-muted prose-a:text-teal prose-strong:text-ink">
+        <div className="prose mt-10 max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:text-ink prose-p:text-muted prose-li:text-muted prose-a:text-teal prose-strong:text-ink sm:prose-lg">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
         </div>
 
@@ -180,7 +180,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               <p className="mt-2 text-muted">
                 {siteConfig.title}. {siteConfig.tagline} Based in {siteConfig.location}.
               </p>
-              <div className="mt-4 flex flex-wrap gap-3">
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Link href="/about" className="btn-secondary !py-2 !text-xs">
                   About
                 </Link>

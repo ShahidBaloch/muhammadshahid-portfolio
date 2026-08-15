@@ -76,7 +76,7 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href={`mailto:${siteConfig.email}`} className="hover:text-foam">
+                <a href={`mailto:${siteConfig.email}`} className="break-all hover:text-foam">
                   {siteConfig.email}
                 </a>
               </li>

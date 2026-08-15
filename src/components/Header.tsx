@@ -10,6 +10,7 @@ export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [blogOpen, setBlogOpen] = useState(false);
+  const [topicsOpen, setTopicsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const blogRef = useRef<HTMLDivElement>(null);
   const mobileRef = useRef<HTMLDivElement>(null);
@@ -25,6 +26,7 @@ export function Header() {
   useEffect(() => {
     setOpen(false);
     setBlogOpen(false);
+    setTopicsOpen(false);
   }, [pathname]);
 
   useEffect(() => {
@@ -47,6 +49,9 @@ export function Header() {
 
   useEffect(() => {
     if (!open) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
     const panel = mobileRef.current;
     const previouslyFocused = document.activeElement as HTMLElement | null;
@@ -83,6 +88,7 @@ export function Header() {
 
     document.addEventListener("keydown", onKey);
     return () => {
+      document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", onKey);
       previouslyFocused?.focus();
     };
@@ -96,19 +102,21 @@ export function Header() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 pt-[env(safe-area-inset-top)] transition duration-300 ${
+      className={`fixed inset-x-0 top-0 z-[60] flex flex-col pt-[env(safe-area-inset-top)] transition duration-300 ${
+        open ? "h-dvh bg-paper" : ""
+      } ${
         scrolled || open
-          ? "border-b border-slate-line/80 bg-paper/90 backdrop-blur-md"
+          ? "border-b border-slate-line/80 bg-paper/95 backdrop-blur-md"
           : "bg-transparent"
       }`}
     >
-      <div className="container-narrow flex items-center justify-between gap-4 px-5 py-4 sm:px-8 lg:px-12">
+      <div className="container-narrow flex h-14 shrink-0 items-center justify-between gap-3 px-4 sm:h-16 sm:gap-4 sm:px-8 lg:px-12">
         <Link
           href="/"
-          className="flex items-center gap-2.5 font-display text-base font-semibold tracking-tight text-ink transition hover:text-teal sm:text-lg"
+          className="flex min-w-0 items-center gap-2 font-display text-[0.95rem] font-semibold tracking-tight text-ink transition hover:text-teal sm:gap-2.5 sm:text-lg"
         >
           <BrandMark size="sm" />
-          Muhammad Shahid
+          <span className="truncate">Muhammad Shahid</span>
         </Link>
 
         <nav className="hidden items-center gap-5 xl:gap-6 lg:flex" aria-label="Primary">
@@ -133,11 +141,11 @@ export function Header() {
                   </button>
                   {blogOpen ? (
                     <div id="blog-menu" role="menu" className="absolute left-0 top-full z-50 pt-2">
-                      <div className="min-w-[230px] rounded-xl border border-slate-line bg-mist py-2 shadow-lg">
+                      <div className="max-h-[min(24rem,70vh)] min-w-[230px] overflow-y-auto overscroll-contain rounded-xl border border-slate-line bg-mist py-2">
                         <Link
                           href="/blog"
                           role="menuitem"
-                          className="block px-4 py-2.5 text-sm text-ink-soft hover:bg-mist hover:text-teal"
+                          className="block px-4 py-2.5 text-sm text-ink-soft hover:bg-paper hover:text-teal"
                           onClick={() => setBlogOpen(false)}
                         >
                           All articles
@@ -151,7 +159,7 @@ export function Header() {
                             key={topic.slug}
                             href={`/learning/${topic.slug}`}
                             role="menuitem"
-                            className="block px-4 py-2.5 text-sm text-ink-soft hover:bg-mist hover:text-teal"
+                            className="block px-4 py-2.5 text-sm text-ink-soft hover:bg-paper hover:text-teal"
                             onClick={() => setBlogOpen(false)}
                           >
                             {topic.label}
@@ -185,13 +193,30 @@ export function Header() {
         <button
           ref={menuButtonRef}
           type="button"
-          className="min-h-11 rounded-lg border border-slate-line px-4 py-2 text-sm font-semibold text-ink lg:hidden"
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-slate-line bg-mist text-ink lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen((value) => !value)}
         >
-          {open ? "Close" : "Menu"}
+          <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
+          <span className="relative block h-3.5 w-4" aria-hidden>
+            <span
+              className={`absolute left-0 block h-0.5 w-4 bg-ink transition ${
+                open ? "top-1.5 rotate-45" : "top-0"
+              }`}
+            />
+            <span
+              className={`absolute left-0 top-1.5 block h-0.5 w-4 bg-ink transition ${
+                open ? "opacity-0" : "opacity-100"
+              }`}
+            />
+            <span
+              className={`absolute left-0 block h-0.5 w-4 bg-ink transition ${
+                open ? "top-1.5 -rotate-45" : "top-3"
+              }`}
+            />
+          </span>
         </button>
       </div>
 
@@ -199,42 +224,59 @@ export function Header() {
         <div
           ref={mobileRef}
           id="mobile-nav"
-          className="border-t border-slate-line bg-paper px-5 py-4 lg:hidden"
+          className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain border-t border-slate-line bg-paper px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-2 lg:hidden"
         >
-          <nav className="flex flex-col gap-1" aria-label="Mobile">
+          <nav className="flex flex-col" aria-label="Mobile">
             {navLinks.map((link) => {
               if (link.href === "/blog") {
                 return (
-                  <div key={link.href} className="flex flex-col gap-1">
-                    <Link href="/blog" className="py-2 text-base font-medium text-ink-soft hover:text-teal">
+                  <div key={link.href} className="border-b border-slate-line/70">
+                    <Link
+                      href="/blog"
+                      className="flex min-h-12 items-center text-base font-medium text-ink hover:text-teal"
+                    >
                       {link.label}
                     </Link>
-                    <div className="ml-3 flex flex-col border-l border-slate-line pl-3">
-                      {learningTopics.map((topic) => (
-                        <Link
-                          key={topic.slug}
-                          href={`/learning/${topic.slug}`}
-                          className="py-2 text-sm text-muted hover:text-teal"
-                        >
-                          {topic.label}
-                        </Link>
-                      ))}
-                    </div>
+                    <button
+                      type="button"
+                      className="flex min-h-11 w-full items-center justify-between text-sm font-medium text-muted"
+                      aria-expanded={topicsOpen}
+                      onClick={() => setTopicsOpen((value) => !value)}
+                    >
+                      Topics
+                      <span aria-hidden>{topicsOpen ? "–" : "+"}</span>
+                    </button>
+                    {topicsOpen ? (
+                      <div className="mb-3 flex flex-col border-l border-slate-line pl-3">
+                        {learningTopics.map((topic) => (
+                          <Link
+                            key={topic.slug}
+                            href={`/learning/${topic.slug}`}
+                            className="flex min-h-11 items-center text-sm text-muted hover:text-teal"
+                          >
+                            {topic.label}
+                          </Link>
+                        ))}
+                      </div>
+                    ) : null}
                   </div>
                 );
               }
 
+              const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="py-2 text-base font-medium text-ink-soft hover:text-teal"
+                  className={`flex min-h-12 items-center border-b border-slate-line/70 text-base font-medium hover:text-teal ${
+                    active ? "text-teal" : "text-ink"
+                  }`}
                 >
                   {link.label}
                 </Link>
               );
             })}
-            <Link href="/contact" className="btn-primary mt-3 w-full">
+            <Link href="/contact" className="btn-primary mt-6 w-full">
               Hire me
             </Link>
           </nav>

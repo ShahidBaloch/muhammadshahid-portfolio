@@ -18,7 +18,7 @@ export function SectionHeading({
   level = 2,
 }: SectionHeadingProps) {
   const titleClassName =
-    "mt-3 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl text-balance";
+    "mt-3 font-display text-[1.75rem] font-semibold tracking-tight text-ink sm:text-4xl text-balance";
 
   return (
     <div className={align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}>
@@ -48,15 +48,15 @@ export function CtaBand() {
             Share the problem, constraints, and timeline. I&apos;ll come back with a clear
             technical approach and next step — usually within one business day.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/contact" className="btn-primary">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Link href="/contact" className="btn-primary w-full sm:w-auto">
               {siteConfig.inquiryCta}
             </Link>
             <a
               href={siteConfig.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/45 px-5 py-3 text-sm font-semibold text-white transition hover:border-foam hover:text-foam"
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-white/45 px-5 py-3 text-sm font-semibold text-white transition hover:border-foam hover:text-foam sm:w-auto"
             >
               WhatsApp
             </a>

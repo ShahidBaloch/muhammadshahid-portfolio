@@ -6,7 +6,7 @@ import { inquiryBudgets, inquiryTimelines, siteConfig } from "@/lib/site";
 type Status = "idle" | "submitting" | "success" | "error";
 
 const fieldClass =
-  "mt-2 w-full rounded border border-slate-line bg-paper px-3 py-2.5 text-ink outline-none transition focus:border-teal";
+  "mt-2 w-full min-h-11 rounded border border-slate-line bg-paper px-3 py-2.5 text-base text-ink outline-none transition focus:border-teal";
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");

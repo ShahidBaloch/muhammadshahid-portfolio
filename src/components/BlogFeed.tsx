@@ -34,7 +34,7 @@ export function BlogFeed({ posts }: { posts: PostMeta[] }) {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search titles and summaries"
-            className="mt-2 w-full rounded border border-slate-line bg-mist px-3 py-2.5 text-ink outline-none focus:border-teal"
+            className="mt-2 w-full rounded border border-slate-line bg-mist px-3 py-2.5 text-base text-ink outline-none focus:border-teal"
           />
         </label>
         <label className="block text-sm font-medium text-ink">
@@ -42,7 +42,7 @@ export function BlogFeed({ posts }: { posts: PostMeta[] }) {
           <select
             value={tag}
             onChange={(event) => setTag(event.target.value)}
-            className="mt-2 w-full rounded border border-slate-line bg-mist px-3 py-2.5 text-ink outline-none focus:border-teal"
+            className="mt-2 w-full rounded border border-slate-line bg-mist px-3 py-2.5 text-base text-ink outline-none focus:border-teal"
           >
             <option value="">All tags</option>
             {tags.map((item) => (

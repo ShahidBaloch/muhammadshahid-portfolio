@@ -41,7 +41,7 @@ export function CookieConsent() {
 
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-line bg-mist/95 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[0_-8px_32px_-12px_rgba(5,29,31,0.25)] backdrop-blur-sm sm:p-5"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-line bg-mist/95 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:p-5"
       role="dialog"
       aria-modal="false"
       aria-labelledby="cookie-consent-title"
@@ -59,11 +59,11 @@ export function CookieConsent() {
             .
           </p>
         </div>
-        <div className="flex shrink-0 flex-wrap gap-3">
-          <button type="button" className="btn-secondary !py-2.5 !text-sm" onClick={() => applyChoice("rejected")}>
+        <div className="flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap">
+          <button type="button" className="btn-secondary w-full !py-2.5 !text-sm sm:w-auto" onClick={() => applyChoice("rejected")}>
             Reject
           </button>
-          <button type="button" className="btn-primary !py-2.5 !text-sm" onClick={() => applyChoice("accepted")}>
+          <button type="button" className="btn-primary w-full !py-2.5 !text-sm sm:w-auto" onClick={() => applyChoice("accepted")}>
             Accept
           </button>
         </div>

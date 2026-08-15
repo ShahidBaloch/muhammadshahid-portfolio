@@ -54,15 +54,15 @@ export default function AboutPage() {
                 .
               </p>
             </div>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/resume" className="btn-secondary">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Link href="/resume" className="btn-secondary w-full sm:w-auto">
                 Resume
               </Link>
               <a
                 href={siteConfig.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-secondary"
+                className="btn-secondary w-full sm:w-auto"
               >
                 LinkedIn
               </a>
@@ -70,11 +70,11 @@ export default function AboutPage() {
                 href={siteConfig.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-secondary"
+                className="btn-secondary w-full sm:w-auto"
               >
                 GitHub
               </a>
-              <Link href="/contact" className="btn-primary">
+              <Link href="/contact" className="btn-primary w-full sm:w-auto">
                 Contact
               </Link>
             </div>

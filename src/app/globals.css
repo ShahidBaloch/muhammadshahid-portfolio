@@ -26,11 +26,13 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-paper text-ink antialiased;
     font-family: var(--font-body);
+    overflow-x: hidden;
     background-image:
       radial-gradient(ellipse 70% 45% at 100% 0%, rgba(49, 168, 214, 0.16), transparent 55%),
       radial-gradient(ellipse 45% 35% at 0% 28%, rgba(5, 29, 31, 0.06), transparent 50%);

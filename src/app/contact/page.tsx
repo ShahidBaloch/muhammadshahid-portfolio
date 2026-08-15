@@ -27,7 +27,7 @@ export default function ContactPage() {
               <p className="eyebrow">Email</p>
               <a
                 href={`mailto:${siteConfig.email}`}
-                className="mt-1 inline-block font-medium text-teal link-underline"
+                className="mt-1 inline-block break-all font-medium text-teal link-underline"
               >
                 {siteConfig.email}
               </a>
