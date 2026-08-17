@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        // Keep in sync with siteConfig.url — sitemap/canonicals use www.
         source: "/:path*",
         has: [{ type: "host", value: "muhammadshahid.dev" }],
         destination: "https://www.muhammadshahid.dev/:path*",

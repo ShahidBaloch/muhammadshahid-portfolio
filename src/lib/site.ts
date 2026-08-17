@@ -1,9 +1,25 @@
+const CANONICAL_SITE_ORIGIN = "https://www.muhammadshahid.dev";
+
+/** Apex host 308s to www in next.config — sitemap/canonicals must use the same origin. */
+function resolveSiteUrl(): string {
+  const raw = process.env.NEXT_PUBLIC_SITE_URL ?? CANONICAL_SITE_ORIGIN;
+  try {
+    const url = new URL(raw);
+    if (url.hostname === "muhammadshahid.dev") {
+      url.hostname = "www.muhammadshahid.dev";
+    }
+    return url.origin;
+  } catch {
+    return CANONICAL_SITE_ORIGIN;
+  }
+}
+
 export const siteConfig = {
   name: "Muhammad Shahid",
   title: "Senior Full Stack Engineer (.NET + Angular)",
   description:
     "Senior .NET + Angular engineer helping teams design and ship secure healthcare, SaaS, and eCommerce systems — APIs, SPAs, Azure, identity, and clean architecture.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.muhammadshahid.dev",
+  url: resolveSiteUrl(),
   locale: "en_US",
   email: "info@muhammadshahid.dev",
   personalEmail: "muhammadshahid6528@gmail.com",
