@@ -1,7 +1,16 @@
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { FlatCompat } from "@eslint/eslintrc";
+
+const compat = new FlatCompat({
+  baseDirectory: dirname(fileURLToPath(import.meta.url)),
+});
+
 /** @type {import("eslint").Linter.Config[]} */
 const config = [
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
-    ignores: [".next/**", "node_modules/**", "out/**"],
+    ignores: [".next/**", "node_modules/**", "out/**", "build/**", "next-env.d.ts"],
   },
 ];
 
