@@ -124,6 +124,8 @@ Change tracking costs CPU and memory on read-only handlers. Healthcare reports, 
 
 I use tracked queries only when the same `DbContext` instance will update entities in the same request. For MediatR query handlers that return DTOs, tracking is almost never needed.
 
+If you still return an **entity graph** and the same `Patient` becomes two CLR instances, that is [AsNoTracking vs AsNoTrackingWithIdentityResolution](/blog/ef-core-asnotracking-vs-identity-resolution) — not an index problem. If one clinic is fast and the hub clinic times out on the same LINQ, read [parameter sniffing](/blog/ef-core-sql-server-parameter-sniffing) after you have a plan in Query Store.
+
 ```csharp
 builder.Services.AddDbContext<AppDbContext>(options =>
 {

@@ -1,7 +1,7 @@
 ---
 title: "Clean API Validation and Error Envelopes in ASP.NET Core"
-description: "How I structure validation and consistent error responses in ASP.NET Core APIs so Angular forms, toasts, and interceptors can display failures predictably across healthcare and eCommerce apps."
-date: "2026-07-20"
+description: "ASP.NET Core API validation with ProblemDetails: FluentValidation without the deprecated AspNetCore package, one error envelope, and Angular form mapping."
+date: "2026-08-17"
 category: "architecture"
 tags: ["ASP.NET Core", "Validation", "Problem Details", "Angular", "API Design"]
 ---
@@ -10,7 +10,7 @@ Nothing erodes trust in an API faster than three different error shapes for the 
 
 I standardize validation and error responses early on every .NET + Angular project — healthcare patient intake forms, marketplace seller listings, admin bulk imports. The investment pays off when you add a fourth client or turn on global exception handling without breaking the SPA.
 
-This post walks through the stack I use: data annotations and FluentValidation, `ProblemDetails`, a consistent validation envelope, and Angular consumption patterns that stay boring in a good way.
+This post walks through the stack I use: FluentValidation **without** the deprecated `FluentValidation.AspNetCore` MVC package, `ProblemDetails`, a consistent validation envelope, and Angular consumption patterns that stay boring in a good way.
 
 ## One envelope for the Angular client
 
@@ -58,7 +58,21 @@ public class CreateListingValidator : AbstractValidator<CreateListingCommand>
 }
 ```
 
-Register validators in DI and run them in a MediatR pipeline behavior or a filter — pick one front door, not both silently.
+Register validators in DI (`AddValidatorsFromAssembly...` from the **FluentValidation** package, not the old AspNetCore integration). Run them in **one** front door: a MediatR pipeline behavior, an endpoint filter, or an `IActionFilter`. Not two of those silently, and not automatic MVC validation from `FluentValidation.AspNetCore`.
+
+### FluentValidation.AspNetCore is the wrong package now
+
+Jeremy Skinner deprecated **FluentValidation.AspNetCore** (the package that hooked automatic validation into ASP.NET Core MVC). The library authors want you to call `IValidator<T>` yourself. Automatic integration fought model binding, `ProblemDetails`, and endpoint routing in ways that produced two error shapes for one request.
+
+What I do in 2026:
+
+- Reference **FluentValidation** (and the DI extension package if you want assembly scanning)
+- Do **not** `AddFluentValidationAutoValidation()` / `AddFluentValidationClientsideAdapters()` from the deprecated package
+- Validate in a behavior or filter and map failures to the same `errors` dictionary as model binding (below)
+
+If an old template still calls `services.AddFluentValidation()`, treat that as tech debt in the same PR as the envelope work. Data annotations can stay on DTOs for simple `[Required]` if you want; I still prefer FluentValidation for anything with collection rules or async checks (unique NPI in a clinic, SKU exists).
+
+Pick one front door, not both silently.
 
 ```csharp
 public class ValidationBehavior<TRequest, TResponse>

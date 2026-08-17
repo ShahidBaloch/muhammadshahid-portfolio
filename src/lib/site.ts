@@ -102,7 +102,7 @@ export const learningTopics: LearningTopic[] = [
     description:
       "JWT refresh, Angular interceptors, BFF/YARP, cookies, CORS with credentials, and the production failures that look like “flaky auth.”",
     intro:
-      "This hub is the Angular + ASP.NET Core token lifecycle: short-lived JWTs, refresh rotation, concurrent 401s, httpOnly cookies, CORS credentials, and when a BFF is the honest answer. Start with the JWT checklist if you are issuing tokens; use the interceptor and 401-queue posts if the SPA is already logging people out; read BFF when you want tokens off the browser. CORS belongs here when the failure showed up after login, not as a generic networking topic.",
+      "This hub is the Angular + ASP.NET Core token lifecycle: short-lived JWTs, refresh rotation, concurrent 401s, httpOnly cookies, CORS credentials, and when a BFF is the honest answer. Start with the JWT checklist if you are issuing tokens; use the interceptor and 401-queue posts if the SPA is already logging people out; read BFF when you want tokens off the browser; read Duende BFF versus custom YARP when the architecture is already decided and the remaining question is buy versus build. CORS belongs here when the failure showed up after login, not as a generic networking topic.",
     matchTags: ["JWT", "CORS", "YARP"],
   },
   {
@@ -112,17 +112,17 @@ export const learningTopics: LearningTopic[] = [
     description:
       "When ASP.NET Identity is enough, when you need OpenIddict or IdentityServer, and why MapIdentityApi tokens are not JWTs.",
     intro:
-      "Identity choice is a product decision: one app versus SSO, opaque Identity API tokens versus JWT bearer, Duende licensing versus OpenIddict. This hub is for that decision — not for interceptor plumbing. Read MapIdentityApi versus JWT if Angular is sending the wrong string into AddJwtBearer. Read IdentityServer versus Identity when a second app or an external IdP is on the roadmap.",
-    matchTags: ["IdentityServer", "OIDC", "ASP.NET Core Identity", "SSO"],
+      "Identity choice is a product decision: one app versus SSO, opaque Identity API tokens versus JWT bearer, Duende licensing versus OpenIddict. This hub is for that decision — not for interceptor plumbing. Read MapIdentityApi versus JWT if Angular is sending the wrong string into AddJwtBearer. Read IdentityServer versus Identity when a second app or an external IdP is on the roadmap. Read the IdentityServer4 to OpenIddict checklist only if you are leaving a dead IS4 host — not as a greenfield default.",
+    matchTags: ["IdentityServer", "OpenIddict", "OIDC", "ASP.NET Core Identity", "SSO"],
   },
   {
     slug: "ef-core",
     label: "EF Core",
     title: "EF Core and SQL Server Performance",
     description:
-      "N+1 versus Include versus AsSplitQuery, cartesian explosion from two collection Includes, and query habits that survive real clinic and catalog data.",
+      "N+1 versus Include versus AsSplitQuery, cartesian explosion, AsNoTracking identity, parameter sniffing, and query habits that survive real clinic and catalog data.",
     intro:
-      "EF Core looks fine on demo data and fails when a clinic or seller catalog is real. This hub is SQL-shaped: N+1 round-trips, fat JOINs, split queries, projections, and indexes. Start with the performance pillar for the checklist. Use the N+1 versus AsSplitQuery article when you are not sure which bug you have. Use cartesian explosion when two Includes made one query huge but the JSON still looked correct.",
+      "EF Core looks fine on demo data and fails when a clinic or seller catalog is real. This hub is SQL-shaped: N+1 round-trips, fat JOINs, split queries, projections, tracking, and sniffed plans. Start with the performance pillar for the checklist. Use the N+1 versus AsSplitQuery article when you are not sure which bug you have. Use cartesian explosion when two Includes made one query huge but the JSON still looked correct. Use AsNoTracking versus identity resolution when the same Patient is two objects. Use parameter sniffing when one tenant is fast and another times out on the same LINQ.",
     matchTags: ["EF Core", "SQL Server"],
   },
   {
@@ -142,8 +142,8 @@ export const learningTopics: LearningTopic[] = [
     description:
       "Vendor-neutral X12 intake on ASP.NET Core — envelopes, 837-shaped pipelines, and what not to log. Not a product pitch and not a compliance certificate.",
     intro:
-      "Independent EDI write-ups are rare; vendor pages are not. This hub is architecture for X12 on .NET: intake, queues, mapping boundaries, and PHI-safe logging. The parser article is the starting point. Transaction-specific 837 / 835 / 850 pages come next only when they add a real pipeline, not a duplicate URL.",
-    matchTags: ["EDI", "X12"],
+      "Independent EDI write-ups are rare; vendor pages are not. This hub is architecture for X12 on .NET: intake, queues, mapping boundaries, and PHI-safe logging. The parser article is the starting point. The Serilog PII article is what not to put in App Insights. Transaction-specific 837 / 835 / 850 pages come next only when they add a real pipeline, not a duplicate URL.",
+    matchTags: ["EDI", "X12", "Serilog"],
   },
   {
     slug: "architecture",

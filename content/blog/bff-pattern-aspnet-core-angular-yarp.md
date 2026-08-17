@@ -145,12 +145,7 @@ If you currently use [MapIdentityApi](/blog/mapidentityapi-opaque-token-vs-jwt) 
 
 ## Duende BFF vs custom YARP
 
-Duende’s BFF package is a known, supported way to do this, with licensing. A custom YARP BFF is more work and more ways to get cookie flags wrong. I choose:
-
-- **Duende BFF** (or another maintained BFF library) when the client already pays for Duende or wants a supported session protocol
-- **Custom YARP** when we already have a gateway, the identity story is ASP.NET Identity + our own tokens, and the team can own cookie + CSRF tests
-
-There is no moral victory in reinventing session middleware. There is a cost in depending on a commercial package. Pick with the [identity decision](/blog/identityserver-vs-aspnet-identity), not from a Twitter thread.
+The architecture is this page. The **buy vs build** decision — license, CSRF conventions, when custom YARP is honest — is [Duende BFF vs custom YARP](/blog/duende-bff-vs-yarp-custom-bff). Pick with the [identity decision](/blog/identityserver-vs-aspnet-identity), not from a Twitter thread.
 
 ## Failure modes I have actually debugged
 

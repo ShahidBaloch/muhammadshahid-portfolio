@@ -1,9 +1,9 @@
 ---
 title: "IdentityServer vs ASP.NET Core Identity — When SSO Is Worth It"
-description: "A senior engineer's decision guide for IdentityServer, OIDC, and SSO versus ASP.NET Core Identity alone — multi-app, SPA, and API scenarios from real healthcare and marketplace work."
-date: "2026-05-22"
+description: "When ASP.NET Identity is enough, when OpenIddict or IdentityServer earns SSO, and how MapIdentityApi fits — without treating IdentityServer4 as a current option."
+date: "2026-08-17"
 category: "identity"
-tags: ["IdentityServer", "OIDC", "ASP.NET Core Identity", "Security", "SSO"]
+tags: ["IdentityServer", "OpenIddict", "OIDC", "ASP.NET Core Identity", "Security", "SSO"]
 ---
 
 Clients often ask for "single sign-on" before they can name the apps that need to share a login. That is a recipe for shipping Duende IdentityServer (or another OIDC provider) when ASP.NET Core Identity with a well-designed JWT setup would have been enough for the first year.
@@ -11,6 +11,8 @@ Clients often ask for "single sign-on" before they can name the apps that need t
 I have built both. A healthcare SaaS platform with a clinician admin portal, a patient-facing Angular app, and a partner API. A marketplace with buyer and seller surfaces plus an internal ops console. In each case, the identity decision shaped hosting cost, release cadence, and how painful it was to onboard a third application six months later.
 
 This post is not a feature comparison chart copied from documentation. It is how I decide when OIDC and an identity server earn their keep — and when Identity alone is the right call.
+
+**IdentityServer4 is end of life.** Do not start a new IS4 host. If you are stuck on it, the migration checklist is [IdentityServer4 to OpenIddict](/blog/identityserver4-openiddict-migration-checklist) (or Duende if you are buying the continuation). Opaque Identity API tokens vs JWT is [MapIdentityApi vs JWT](/blog/mapidentityapi-opaque-token-vs-jwt).
 
 ## What ASP.NET Core Identity actually gives you
 
@@ -27,9 +29,24 @@ I have shipped production systems this way for years. The operational surface is
 
 Where Identity alone starts to strain is not "we need OAuth2 buzzwords." It is when **multiple independent applications** need the same user session, **third parties** need delegated access, or **token semantics** must be standardized across teams that do not share a codebase.
 
+## OpenIddict vs Duende vs Identity (the 2026 menu)
+
+Three products get conflated in Slack:
+
+| Option | What it is | When I reach for it |
+| --- | --- | --- |
+| **ASP.NET Core Identity** | User store, passwords, 2FA hooks | One app, one team, no partner OIDC |
+| **MapIdentityApi** | HTTP endpoints on Identity; **opaque** tokens by default | First-party SPA talking to **this** host only |
+| **OpenIddict** | OSS OAuth/OIDC server on ASP.NET Core | You need standards (code+PKCE, client credentials) and will own SQL + keys |
+| **Duende IdentityServer** | Commercial authorization server (IS4’s line) | You want that operational model and will pay |
+
+OpenIddict is **not** “free IdentityServer.” Endpoints, grants, and key material are a different implementation. Duende is **not** IdentityServer4 with a NuGet bump — read current licenses. Identity alone is still the correct default for a single Angular + API product.
+
+If Angular is sending a MapIdentityApi string into `AddJwtBearer`, that is a token-type bug, not an SSO decision. Fix it with the [opaque vs JWT post](/blog/mapidentityapi-opaque-token-vs-jwt).
+
 ## What IdentityServer / OIDC adds on top
 
-Duende IdentityServer (and similar OIDC providers) sit in front of your applications as a **token issuer**. Clients redirect users to a login UI, receive authorization codes or tokens, and validate them against a well-known issuer URL.
+Duende IdentityServer, OpenIddict, and similar OIDC providers sit in front of your applications as a **token issuer**. Clients redirect users to a login UI, receive authorization codes or tokens, and validate them against a well-known issuer URL.
 
 You gain:
 
@@ -114,7 +131,7 @@ With Identity alone, Angular posts to `/api/auth/login` and stores the JWT. With
 
 Use **ASP.NET Core Identity alone** when you have one product surface, one team, and no near-term federation or third-party client requirements. It is fast, understandable, and production-proven.
 
-Reach for **IdentityServer / OIDC** when multiple apps must share login, external clients need standard token flows, or enterprise federation is on the roadmap from day one — and you are willing to operate an identity service properly.
+Reach for **OpenIddict or Duende / OIDC** when multiple apps must share login, external clients need standard token flows, or enterprise federation is on the roadmap from day one — and you are willing to operate an identity service properly. If you are leaving IdentityServer4, use the [OpenIddict migration checklist](/blog/identityserver4-openiddict-migration-checklist), not a rename.
 
 The wrong choice is not "Identity without OIDC." The wrong choice is **OIDC before you have the problem it solves**, or **Identity alone long after three apps and a partner API have made auth the bottleneck**.
 

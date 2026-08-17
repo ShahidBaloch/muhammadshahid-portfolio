@@ -106,6 +106,8 @@ Raw X12 often contains names, identifiers, and clinical or financial data. I tre
 - Do not put the payload in Application Insights dependency traces
 - Restrict who can download the original blob
 
+How I keep Serilog and App Insights from becoming a second copy of the file: [PII redaction for healthcare APIs](/blog/serilog-pii-redaction-healthcare-aspnet-core).
+
 If you need a “show me the file” debug tool, put it behind an admin policy and an audit row. Do not paste samples into Slack.
 
 ## ASP.NET Core intake checklist
