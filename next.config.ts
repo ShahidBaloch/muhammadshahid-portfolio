@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
         destination: "https://www.muhammadshahid.dev/:path*",
         permanent: true,
       },
+      { source: "/sitemap", destination: "/sitemap.xml", permanent: true },
+      { source: "/rss", destination: "/rss.xml", permanent: true },
+      { source: "/feed", destination: "/rss.xml", permanent: true },
     ];
   },
 };

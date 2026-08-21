@@ -9,6 +9,8 @@ type PageProps = {
   params: Promise<{ topic: string }>;
 };
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return learningTopics.map((topic) => ({ topic: topic.slug }));
 }

@@ -12,6 +12,9 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
+/** Unknown slugs must 404 at the edge — not 200 with not-found HTML (soft 404). */
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return getPostSlugs().map((slug) => ({ slug }));
 }
