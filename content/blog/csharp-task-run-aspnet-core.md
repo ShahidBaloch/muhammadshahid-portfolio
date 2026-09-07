@@ -123,7 +123,7 @@ _Comparison: Task.Run versus await versus new Thread._
 
 ## What this is not
 
-Idle-CPU 504s: [thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async). Per-request notify: [Channel](/blog/csharp-channel-producer-consumer). Topic map: [async & threading hub](/learning/async-concurrency).
+Idle-CPU 504s: [thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async). Per-request notify: [Channel](/blog/csharp-channel-producer-consumer) plus a [BackgroundService](/blog/csharp-backgroundservice-hosted-service-async). Topic map: [async & threading hub](/learning/async-concurrency).
 
 ## If an interviewer asks
 

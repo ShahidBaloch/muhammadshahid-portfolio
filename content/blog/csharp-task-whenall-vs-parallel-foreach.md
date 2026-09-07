@@ -1,6 +1,6 @@
 ---
-title: "C# Task.WhenAll vs Task.WaitAll vs Parallel.ForEach"
-description: "Task.WhenAll waits for many I/O tasks without blocking a thread. WaitAll blocks the pool. Cap 10,000 HTTP calls, never WhenAll two queries on one DbContext, Parallel.ForEach is for CPU."
+title: "C# Task.WhenAll vs WaitAll vs Parallel.ForEachAsync"
+description: "Task.WhenAll waits for many I/O tasks without blocking a thread. WaitAll blocks the pool. Cap 10,000 HTTP calls, never WhenAll two queries on one DbContext, Parallel.ForEachAsync is for CPU or throttled I/O."
 date: "2026-09-07"
 updated: "2026-09-07"
 category: "async-concurrency"
@@ -16,13 +16,13 @@ faq:
     a: "WhenAll returns a Task you await — the worker goes back to the pool during I/O. WaitAll blocks that worker until every child finishes. On ASP.NET Core, WaitAll is the same class of bug as .Result. Use WhenAll."
   - q: "Is Task.WaitAll faster than Task.WhenAll?"
     a: "No. Clock time for three 2-second HTTP calls is about 2 seconds either way. WaitAll only adds a blocked ThreadPool thread."
-  - q: "Can Task.WhenAll share one EF Core DbContext?"
-    a: "No. DbContext is not thread-safe. Sequential awaits, two scopes, or one SQL shape. Never WhenAll two queries on the same instance."
+  - q: "Why does WhenAll of two EF queries on one DbContext crash?"
+    a: "DbContext is not thread-safe. Two in-flight queries on the same instance race the change tracker. Sequential awaits, two scopes, or one SQL shape — not WhenAll on one context."
 ---
 
 `Task.WhenAll` takes several `Task`s and returns **one** `Task` that completes when the last child finishes. That is **I/O concurrency** (many waits in flight). `Parallel.ForEach` is **CPU parallelism** (use the cores). `Task.WaitAll` is WhenAll’s blocking cousin — same clock time, a parked ThreadPool worker.
 
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [cap of 50](#whenall-with-a-cap-of-50) · [if an interviewer asks](#if-an-interviewer-asks).
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [cap of 50](#whenall-with-a-cap-of-50) · [Parallel.ForEachAsync](#parallel-foreachasync) · [if an interviewer asks](#if-an-interviewer-asks).
 
 **Terms used here:** **429** = HTTP Too Many Requests (partner throttled you). **rps** = requests per second. **`AggregateException`** = wrapper WhenAll uses when more than one child faulted; `await` usually unwraps to the first. **`Parallel.ForEachAsync`** = .NET 6+.
 
@@ -123,6 +123,8 @@ public async Task<IReadOnlyList<NpiResult>> EnrichAsync(
 ```
 
 `Select` still creates 10,000 task state machines. The **gate** keeps 50 HTTP calls in flight. I still prefer WhenAll when I need **results in input order**. `ConcurrentBag` does not.
+
+## Parallel.ForEachAsync
 
 ```csharp
 await Parallel.ForEachAsync(

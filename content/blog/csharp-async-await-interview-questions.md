@@ -12,10 +12,10 @@ related:
 faq:
   - q: "What C# async await interview questions actually get asked?"
     a: "Senior interviews ask you to diagnose .Result as thread pool starvation (not a Framework-style deadlock), async void, Task.WhenAll on one EF Core DbContext, CancellationToken that actually reaches SQL, fire-and-forget after checkout, ConfigureAwait(false) as a library rule, and ValueTask vs Task. They do not ask trivia about whether async creates a thread. Recite the production failure, then the fix."
-  - q: "Does .Result deadlock in ASP.NET Core?"
-    a: "Classic SynchronizationContext deadlock is a UI or old ASP.NET story. ASP.NET Core has no request SynchronizationContext, so that hang is rare. .Result still occupies a ThreadPool worker until the Task finishes. Under Monday clinic load that is starvation: idle CPU, rising queue, 504s. Name both worlds in the interview."
-  - q: "Can Task.WhenAll share one EF Core DbContext?"
-    a: "No. DbContext is not thread-safe. WhenAll of two queries on the same instance is a race in production and a fail in interview. Sequential awaits, two scopes, or one query. Clock-time overlap is not worth a corrupted context."
+  - q: "How do I answer .Result deadlock versus starvation in an interview?"
+    a: "Name both worlds. Classic deadlock is a UI or old ASP.NET SynchronizationContext story. ASP.NET Core has no request context, so .Result occupies a pool worker until I/O finishes — idle CPU, rising queue, 504s. Recite the failure, then point at the starvation how-to."
+  - q: "What do interviewers want on Task.WhenAll and one DbContext?"
+    a: "That you refuse it. DbContext is not thread-safe. Say sequential awaits, two scopes, or one query — not clock-time overlap on a corrupted context. The WhenAll how-to is the merge checklist; this page is the oral version."
   - q: "Does ConfigureAwait(false) matter on ASP.NET Core APIs?"
     a: "Almost never on the request path. ASP.NET Core has no custom SynchronizationContext, so false is noise in controllers. Use it in libraries that may run on WPF, WinForms, or MAUI. It is not a .Result amnesty and it does not make the API faster."
 ---

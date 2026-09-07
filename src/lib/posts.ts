@@ -118,9 +118,11 @@ export function getPostsForTopic(topic: {
   matchTags: readonly string[];
   pinSlugs?: readonly string[];
   categoryOnly?: boolean;
+  tracks?: readonly { slugs: readonly string[] }[];
 }): PostMeta[] {
   const tagSet = new Set(topic.matchTags.map((tag) => tag.toLowerCase()));
   const all = getAllPosts();
+  const bySlug = new Map(all.map((post) => [post.slug, post]));
 
   const posts = all.filter((post) => {
     if (post.category === topic.slug) return true;
@@ -134,15 +136,21 @@ export function getPostsForTopic(topic: {
   });
 
   const pinSlugs = topic.pinSlugs ?? [];
-  if (pinSlugs.length === 0) return posts;
-
-  const bySlug = new Map(all.map((post) => [post.slug, post]));
   const pinned = pinSlugs
     .map((slug) => bySlug.get(slug))
     .filter((post): post is PostMeta => Boolean(post));
   const pinnedSet = new Set(pinned.map((post) => post.slug));
   const rest = posts.filter((post) => !pinnedSet.has(post.slug));
-  return [...pinned, ...rest];
+  const ordered = [...pinned, ...rest];
+
+  const have = new Set(ordered.map((post) => post.slug));
+  const extras = (topic.tracks ?? [])
+    .flatMap((track) => track.slugs)
+    .filter((slug) => !have.has(slug))
+    .map((slug) => bySlug.get(slug))
+    .filter((post): post is PostMeta => Boolean(post));
+
+  return [...ordered, ...extras];
 }
 
 export function getRelatedPosts(slug: string, limit = 5): PostMeta[] {

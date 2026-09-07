@@ -182,4 +182,4 @@ A carefully configured singleton/`SocketsHttpHandler` with `PooledConnectionLife
 
 **IHttpClientFactory** exists because `HttpClient` lifetime is easy to get wrong and expensive in production. Use named/typed clients, keep handlers pooled, set auth carefully, and treat outbound HTTP as a first-class reliability concern.
 
-If you want a quick review of outbound integrations in your .NET API, [contact me](/contact).
+Outbound fan-out and async: [SemaphoreSlim](/blog/csharp-semaphore-slim-async-lock) and the [async & threading hub](/learning/async-concurrency). If you want a quick review of outbound integrations in your .NET API, [contact me](/contact).

@@ -138,7 +138,7 @@ public sealed class NightlyReportWorker : BackgroundService
 }
 ```
 
-Correct approach: inject `IServiceScopeFactory`, create a scope inside `ExecuteAsync`, resolve scoped services from that scope, dispose when done. Same rule applies to fire-and-forget `Task.Run` inside controllers — never capture scoped services in a thread that outlives the request.
+Correct approach: inject `IServiceScopeFactory`, create a scope inside `ExecuteAsync`, resolve scoped services from that scope, dispose when done. The worker loop, `stoppingToken`, and why `Task.Run` after `Ok()` is not a hosted service: [BackgroundService](/blog/csharp-backgroundservice-hosted-service-async). Same rule applies to fire-and-forget `Task.Run` inside controllers — never capture scoped services in a thread that outlives the request.
 
 ## What not to do
 

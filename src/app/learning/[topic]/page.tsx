@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PostDate } from "@/components/PostDate";
 import { SectionHeading } from "@/components/SectionHeading";
+import { MarkdownContent } from "@/components/MarkdownContent";
 import { slugifyHeading } from "@/lib/headings";
 import { getPostsForTopic } from "@/lib/posts";
 import { pageSocial, personId } from "@/lib/seo";
@@ -38,6 +39,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       path,
     }),
   };
+}
+
+function faqAnswerPlainText(markdown: string): string {
+  return markdown
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/\*\*([^*]+)\*\*/g, "$1");
 }
 
 function newestPostDate(posts: { date: string; updated?: string }[]): string | undefined {
@@ -117,7 +125,7 @@ export default async function LearningTopicPage({ params }: PageProps) {
             name: item.q,
             acceptedAnswer: {
               "@type": "Answer",
-              text: item.a,
+              text: faqAnswerPlainText(item.a),
             },
           })),
         }
@@ -179,7 +187,9 @@ export default async function LearningTopicPage({ params }: PageProps) {
           />
         </div>
 
-        <p className="mt-8 max-w-3xl text-lg leading-relaxed text-muted">{topic.intro}</p>
+        <div className="prose-site mt-8 max-w-3xl text-lg leading-relaxed text-muted">
+          <MarkdownContent content={topic.intro} />
+        </div>
 
         {relatedTopics.length > 0 ? (
           <p className="mt-4 max-w-3xl text-muted">
@@ -204,7 +214,9 @@ export default async function LearningTopicPage({ params }: PageProps) {
               {topic.faq.map((item) => (
                 <div key={item.q}>
                   <dt className="font-semibold text-ink">{item.q}</dt>
-                  <dd className="mt-1 text-muted">{item.a}</dd>
+                  <dd className="prose-site mt-1 text-muted">
+                    <MarkdownContent content={item.a} />
+                  </dd>
                 </div>
               ))}
             </dl>

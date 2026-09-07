@@ -171,7 +171,7 @@ while (await timer.WaitForNextTickAsync(stoppingToken))
 
 ## What this is not
 
-Request-path async: [async await in ASP.NET Core](/blog/csharp-async-await-aspnet-core). Topic map: [async & threading hub](/learning/async-concurrency).
+Request-path async: [async await in ASP.NET Core](/blog/csharp-async-await-aspnet-core). Hosted jobs: [BackgroundService](/blog/csharp-backgroundservice-hosted-service-async) — pass `stoppingToken`, not `RequestAborted`. Topic map: [async & threading hub](/learning/async-concurrency).
 
 ## If an interviewer asks
 

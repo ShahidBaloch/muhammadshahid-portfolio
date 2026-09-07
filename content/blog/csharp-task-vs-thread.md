@@ -82,7 +82,7 @@ I/O-bound: database, HTTP, disk, most ASP.NET work → `async`/`await`, no `Task
 
 CPU-bound: hashing, image encode, heavy CPU parse → `Task.Run` or `Parallel`, **not** on unlimited Kestrel requests. That split is [Task.Run vs await](/blog/csharp-task-run-aspnet-core).
 
-## Wrong vs right
+## Thread.Sleep vs Task.Delay: Wrong vs right
 
 I would reject a PR that pauses an API with `Thread.Sleep` “just for 2 seconds.”
 

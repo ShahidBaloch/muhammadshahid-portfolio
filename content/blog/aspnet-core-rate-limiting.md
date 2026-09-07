@@ -197,6 +197,6 @@ Rate limiting is not a substitute for correct auth refresh logic ([Angular JWT i
 
 **ASP.NET Core rate limiting** is one of the highest-leverage protections you can add in an afternoon — if you tune partitions and avoid treating in-memory limits as global farm guarantees. Protect login and heavy endpoints first, teach Angular to respect 429, and escalate to distributed/edge limits when horizontal scale demands it.
 
-Related: [IHttpClientFactory](/blog/ihttpclientfactory-aspnet-core) for outbound resilience, [SemaphoreSlim outbound throttle](/blog/csharp-semaphore-slim-async-lock) when you are the client hitting a partner cap, [JWT auth checklist](/blog/aspnet-core-jwt-auth) for login surfaces worth protecting.
+Related: [IHttpClientFactory](/blog/ihttpclientfactory-aspnet-core) for outbound resilience, [SemaphoreSlim outbound throttle](/blog/csharp-semaphore-slim-async-lock) when you are the client hitting a partner cap, [JWT auth checklist](/blog/aspnet-core-jwt-auth) for login surfaces worth protecting. Inbound 429s are this page — not an async lock. Topic map: [async & threading hub](/learning/async-concurrency).
 
 Need help hardening a .NET + Angular API? [Contact me](/contact).

@@ -14,8 +14,8 @@ faq:
     a: "Await I/O end to end: EF Core, HttpClient, blobs, and anything else that returns a Task. Do not block with .Result or .Wait(). Pass the action CancellationToken all the way to ToListAsync and SendAsync. That keeps ThreadPool workers free for other Angular clients. Async does not make SQL faster; it stops the lobby from backing up."
   - q: "Does async make a SQL query faster?"
     a: "No. Query time is still indexing, the plan, and EF. Async only frees the ThreadPool worker during the wait. A 2-second query stays 2 seconds. What changes is that 5,000 concurrent waits do not pin 5,000 workers."
-  - q: "Can Task.WhenAll share one DbContext?"
-    a: "No. DbContext is not thread-safe. WhenAll of two queries on the same instance is a race and a production crash, not a speedup. Use sequential awaits, two scopes, or one SQL shape."
+  - q: "Should an ASP.NET Core action WhenAll two queries on one DbContext?"
+    a: "No. DbContext is not thread-safe. Two ToListAsync calls on the same instance in WhenAll is a race, not a speedup. Sequential awaits, two scopes, or one SQL shape. The WhenAll article covers caps and Parallel.ForEachAsync."
 ---
 
 `async`/`await` let a method wait for slow work (database, HTTP, blobs) **without holding a thread**. The ThreadPool worker goes back to the pool and serves other requests. The query is not faster. The API can take more concurrent clients.
@@ -194,7 +194,7 @@ Let your [global exception handler](/blog/aspnet-core-global-exception-handling)
 
 `ConfigureAwait` does not forgive `.Result`.
 
-## Async void — where it belongs
+## Async void vs async Task: Where it belongs
 
 Only UI event handlers historically needed `async void`. In ASP.NET Core middleware, controllers, Minimal APIs, and background services: return `Task`.
 
@@ -208,7 +208,7 @@ public async Task ProcessWebhookAsync(WebhookDto dto, CancellationToken ct) { ..
 
 ## Background work after the HTTP response
 
-Fire-and-forget (`_ = SendEmailAsync()`) after `SaveChangesAsync` risks disposed scopes and lost exceptions. Prefer queues, outbox patterns, or a bounded in-process [Channel](/blog/csharp-channel-producer-consumer) hosted service for work that must survive the request — especially checkout notify.
+Fire-and-forget (`_ = SendEmailAsync()`) after `SaveChangesAsync` risks disposed scopes and lost exceptions. Prefer a [BackgroundService](/blog/csharp-backgroundservice-hosted-service-async) reading a bounded [Channel](/blog/csharp-channel-producer-consumer), or an outbox if recycle cannot drop the message.
 
 ## Failure story: sync service layer in a clinic portal
 

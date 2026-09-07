@@ -1,5 +1,5 @@
 ---
-title: "C# ThreadPool Starvation: Why .Result Causes 504s"
+title: "C# ThreadPool Starvation: Sync-Over-Async .Result Causes 504s"
 description: "Thread pool starvation is queued work with no free workers. C# .Result and .Wait on ASP.NET Core cause idle-CPU 504s — diagnose with dotnet-counters, then make the call chain async."
 date: "2026-09-07"
 updated: "2026-09-07"
@@ -12,8 +12,8 @@ related:
 faq:
   - q: "What is C# thread pool starvation from sync-over-async?"
     a: "Thread pool starvation is when Kestrel has work (new requests and async continuations) but every ThreadPool worker is blocked. The usual cause is sync-over-async: .Result, .Wait(), or GetAwaiter().GetResult() on a Task that still needs a worker to finish. Queue length climbs, CPU stays low, and Angular gets 504s. It is a queueing problem, not slow SQL."
-  - q: "Does .Result deadlock in ASP.NET Core?"
-    a: "Classic deadlock needs a SynchronizationContext: the UI or old ASP.NET request thread blocks on .Result while the continuation needs that same thread. ASP.NET Core does not install a SynchronizationContext, so that deadlock usually does not happen. .Result is still wrong. It occupies a pool thread until I/O completes, which starves the pool under load. Same smell, different failure mode."
+  - q: "Is .Result a deadlock or starvation on ASP.NET Core?"
+    a: "On ASP.NET Core it is starvation, not the classic UI deadlock. Core has no request SynchronizationContext, so the hang is queued work and idle CPU, then 504s. Diagnose that here. The interview page asks you to name both worlds."
   - q: "How do you diagnose thread pool starvation?"
     a: "Do not scale the App Service first. Run dotnet-counters and watch threadpool-queue-length rise while CPU stays idle. Collect a dump and look on Parallel Stacks for Wait, Result, or Monitor.Enter. .NET 9 emits WaitHandleWait for the same blocks. Search helpers, FluentValidation, and AutoMapper — controllers that are already async Task often hide the .Result one layer down."
   - q: "Can I wrap .Result in Task.Run as a last resort?"
@@ -64,7 +64,7 @@ public async Task<ActionResult<OrderDto>> GetAsync(Guid id, CancellationToken ct
 
 Under one user in staging, `.Result` “works.” Under Monday morning traffic you run out of workers. SQL is not the bottleneck.
 
-## Starvation is not a classic deadlock
+## Sync-over-async: Starvation is not a classic deadlock
 
 ASP.NET Core does **not** install a request `SynchronizationContext`. Classic UI deadlock (continuation needs the same blocked thread) usually does not happen. `.Result` is still wrong — it occupies a pool thread until I/O completes.
 

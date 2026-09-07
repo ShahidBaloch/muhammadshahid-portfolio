@@ -6,9 +6,9 @@ updated: "2026-09-07"
 category: "async-concurrency"
 tags: ["Asynchronous Programming", "Concurrency", "Threading", "C#", ".NET", "ASP.NET Core"]
 related:
+  - csharp-backgroundservice-hosted-service-async
   - csharp-task-run-aspnet-core
   - csharp-threadpool-starvation-sync-over-async
-  - csharp-task-whenall-vs-parallel-foreach
 faq:
   - q: "Why is Channel<T> better than BlockingCollection for producer-consumer in C#?"
     a: "BlockingCollection.Take parks a ThreadPool worker until an item arrives. Channel.ReadAsync yields that worker and resumes as a continuation. Bounded channels also give FullMode backpressure without a dedicated OS thread."
@@ -158,7 +158,7 @@ _Comparison: Channel versus BlockingCollection versus a durable message bus._
 
 ## What this is not
 
-Per-request `Task.Run`: [Task.Run vs await](/blog/csharp-task-run-aspnet-core). Fan-out cap: [WhenAll](/blog/csharp-task-whenall-vs-parallel-foreach). Topic map: [async & threading hub](/learning/async-concurrency).
+The hosted worker itself: [BackgroundService](/blog/csharp-backgroundservice-hosted-service-async). Per-request `Task.Run`: [Task.Run vs await](/blog/csharp-task-run-aspnet-core). Fan-out cap: [WhenAll](/blog/csharp-task-whenall-vs-parallel-foreach). Topic map: [async & threading hub](/learning/async-concurrency).
 
 ## If an interviewer asks
 
