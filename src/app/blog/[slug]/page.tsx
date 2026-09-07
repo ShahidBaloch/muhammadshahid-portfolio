@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Portrait } from "@/components/Portrait";
+import { PostDate } from "@/components/PostDate";
 import { getPostBySlug, getPostSlugs, getRelatedPosts } from "@/lib/posts";
 import { personId } from "@/lib/seo";
 import { getLearningTopic, siteConfig } from "@/lib/site";
@@ -141,19 +142,12 @@ export default async function BlogPostPage({ params }: PageProps) {
           </ol>
         </nav>
         <header className="mt-6 border-b border-slate-line pb-8">
-          <p className="text-sm text-muted">
-            <time dateTime={post.date}>
-              {new Date(post.date).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </time>
-            <span aria-hidden> · </span>
-            {post.readingTime}
-            <span aria-hidden> · </span>
-            By {siteConfig.name}
-          </p>
+          <PostDate
+            date={post.date}
+            updated={post.updated}
+            readingTime={post.readingTime}
+            byline={`By ${siteConfig.name}`}
+          />
           <h1 className="mt-3 font-display text-[1.75rem] font-semibold leading-tight tracking-tight text-ink sm:text-4xl lg:text-5xl">
             {post.title}
           </h1>

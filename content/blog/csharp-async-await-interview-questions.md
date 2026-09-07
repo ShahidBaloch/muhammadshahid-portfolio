@@ -5,6 +5,10 @@ date: "2026-08-12"
 updated: "2026-09-07"
 category: "interview-questions"
 tags: ["Interview Questions", "C#", "async await", "Asynchronous Programming", ".NET", "ASP.NET Core"]
+related:
+  - csharp-expert-interview-questions
+  - aspnet-core-interview-questions-scenarios
+  - ef-core-interview-questions
 ---
 
 Reciting “async does not create a new thread” is table stakes. Senior interviews ask you to diagnose starvation, unobserved exceptions, and EF Core misuse under load.

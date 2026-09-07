@@ -2,13 +2,21 @@
 title: "ASP.NET Core Config File Guide: appsettings.json vs localappsettings.json"
 description: "What the ASP.NET Core config file actually is — appsettings.json, appsettings.Development.json, user secrets, local.settings.json, and why localappsettings.json is usually the wrong name."
 date: "2026-09-03"
+updated: "2026-09-07"
 category: "architecture"
 tags: ["ASP.NET Core", "Configuration", "appsettings", "Azure", ".NET"]
+related:
+  - aspnet-core-ioptions-snapshot-monitor
+  - azure-app-service-aspnet-core
 ---
 
 People search **config file**, **appsettings.json**, and **localappsettings.json** when a setting works on one laptop and dies in Azure. The file name in the search box is often wrong. ASP.NET Core does not load a file called `localappsettings.json` unless you add it yourself.
 
 This is the config map I use on healthcare, SaaS, and eCommerce APIs: which files exist, which ones you invent, and where secrets actually belong. Deploy-slot and portal overlays are in [Azure App Service](/blog/azure-app-service-aspnet-core). How C# consumes those values is [IOptions vs IOptionsSnapshot vs IOptionsMonitor](/blog/aspnet-core-ioptions-snapshot-monitor). This page is the files on disk.
+
+## What “config file” means in ASP.NET Core
+
+When people search **config file**, they usually mean `appsettings.json` plus its environment overlay — not `web.config`, not a desktop JSON file, and not `local.appsettings.json` spelled from memory. The host only reads files you put on the configuration pipeline. A JSON file in the project folder does nothing until `CreateBuilder` (or `AddJsonFile`) loads it.
 
 ## There is no default `localappsettings.json`
 

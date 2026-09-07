@@ -65,6 +65,8 @@ export type LearningTopic = {
   intro: string;
   /** Extra tags that also qualify a post for this topic hub. */
   matchTags: string[];
+  /** Hub order: Search Console winners and pillar URLs before newest dumps. */
+  pinSlugs?: string[];
 };
 
 /** Topic hubs under Blog — SEO landing pages that group related articles.
@@ -79,6 +81,13 @@ export const learningTopics: LearningTopic[] = [
     intro:
       "Interview posts here are rehearsal, not implementation manuals. Each URL is a different loop: async traps, expert C# runtime, ASP.NET Core API judgment, Angular + JWT with a .NET backend, and EF Core change-tracker / concurrency questions. If you want the merge checklist, follow the how-to article linked from that scenario. Start with async await if that is the prompt you keep failing; use the ASP.NET Core scenarios page for middleware and JWT storytelling; use the EF Core interview page for SaveChanges, query filters, and concurrency — not for N+1 SQL, which has its own hub.",
     matchTags: ["Interview Questions"],
+    pinSlugs: [
+      "csharp-async-await-interview-questions",
+      "csharp-expert-interview-questions",
+      "aspnet-core-interview-questions-scenarios",
+      "ef-core-interview-questions",
+      "angular-interview-questions-aspnet-core",
+    ],
   },
   {
     slug: "design-patterns",
@@ -105,6 +114,11 @@ export const learningTopics: LearningTopic[] = [
     intro:
       "Dependency injection in ASP.NET Core is easy to start and easy to get wrong. Most production bugs I see are not “forgot to register a service” — they are captive dependencies (a Singleton holding a Scoped DbContext), hidden new-ups that bypass the container, or factory delegates that close over request state. This hub collects the DI notes I use on healthcare, SaaS, and marketplace APIs: lifetimes, registration habits, and how Factory-style delegates fit when a switch statement is really a composition problem. Read the lifetimes article first if you own Program.cs. If the exception is Unable to resolve service for type, use that troubleshooting post instead of rereading lifetimes. Pair with Factory or Strategy posts when the container is being asked to pick an implementation at runtime. The goal is a container graph a teammate can explain in a PR, not a clever service locator.",
     matchTags: ["Dependency Injection", "IoC", "DI"],
+    pinSlugs: [
+      "aspnet-core-dependency-injection",
+      "aspnet-core-unable-to-resolve-service",
+      "aspnet-core-ioptions-snapshot-monitor",
+    ],
   },
   {
     slug: "authentication",
@@ -115,6 +129,11 @@ export const learningTopics: LearningTopic[] = [
     intro:
       "This hub is the Angular + ASP.NET Core token lifecycle: short-lived JWTs, refresh rotation, concurrent 401s, httpOnly cookies, CORS credentials, and when a BFF is the honest answer. Start with the JWT checklist if you are issuing tokens; use the interceptor and 401-queue posts if the SPA is already logging people out; read BFF when you want tokens off the browser; read Duende BFF versus custom YARP when the architecture is already decided and the remaining question is buy versus build. CORS belongs here when the failure showed up after login, not as a generic networking topic.",
     matchTags: ["JWT", "CORS", "YARP"],
+    pinSlugs: [
+      "aspnet-core-jwt-auth",
+      "aspnet-core-idx10503-jwt-signature",
+      "angular-jwt-interceptors",
+    ],
   },
   {
     slug: "identity",
@@ -125,6 +144,12 @@ export const learningTopics: LearningTopic[] = [
     intro:
       "Identity choice is a product decision: one app versus SSO, opaque Identity API tokens versus JWT bearer, Duende licensing versus OpenIddict. This hub is for that decision — not for interceptor plumbing. Read MapIdentityApi versus JWT if Angular is sending the wrong string into AddJwtBearer. Read IdentityServer versus Identity when a second app or an external IdP is on the roadmap. Read the IdentityServer4 to OpenIddict checklist only if you are leaving a dead IS4 host — not as a greenfield default. Login loops and redirect_uri mismatch live in the redirect URI article, not in the SSO essay.",
     matchTags: ["IdentityServer", "OpenIddict", "OIDC", "ASP.NET Core Identity", "SSO"],
+    pinSlugs: [
+      "identityserver-vs-aspnet-identity",
+      "identityserver-redirect-uri-login-loop",
+      "identityserver4-openiddict-migration-checklist",
+      "mapidentityapi-opaque-token-vs-jwt",
+    ],
   },
   {
     slug: "ef-core",
@@ -135,6 +160,12 @@ export const learningTopics: LearningTopic[] = [
     intro:
       "EF Core looks fine on demo data and fails when a clinic or seller catalog is real. This hub is SQL-shaped: N+1 round-trips, fat JOINs, split queries, projections, tracking, and sniffed plans. Start with the performance pillar for the checklist. Use the N+1 versus AsSplitQuery article when you are not sure which bug you have. Use cartesian explosion when two Includes made one query huge but the JSON still looked correct. Use AsNoTracking versus identity resolution when the same Patient is two objects. Use parameter sniffing when one tenant is fast and another times out on the same LINQ. Interview narration — concurrency tokens, global query filters, ExecuteUpdate — is the EF Core interview questions post, not a second SQL tutorial.",
     matchTags: ["EF Core", "SQL Server"],
+    pinSlugs: [
+      "ef-core-sql-performance",
+      "ef-core-nplus1-include-vs-assplitquery",
+      "ef-core-cartesian-explosion-multiple-include",
+      "ef-core-interview-questions",
+    ],
   },
   {
     slug: "cqrs",

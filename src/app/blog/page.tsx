@@ -9,7 +9,7 @@ import { learningTopics } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Practical articles on ASP.NET Core, Angular, Azure, C# design patterns, dependency injection, and architecture by Muhammad Shahid.",
+    "Original C# interview questions, IdentityServer, EF Core, and ASP.NET Core notes from production healthcare and SaaS work.",
   alternates: { canonical: "/blog" },
 };
 

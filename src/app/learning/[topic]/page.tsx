@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PostDate } from "@/components/PostDate";
 import { SectionHeading } from "@/components/SectionHeading";
 import { getPostsForTopic } from "@/lib/posts";
 import { personId } from "@/lib/seo";
@@ -58,6 +59,7 @@ export default async function LearningTopicPage({ params }: PageProps) {
       description: post.description,
       url: `${siteConfig.url}/blog/${post.slug}`,
       datePublished: post.date,
+      dateModified: post.updated ?? post.date,
       author: { "@id": personId },
     })),
   };
@@ -121,17 +123,7 @@ export default async function LearningTopicPage({ params }: PageProps) {
           ) : (
             posts.map((post) => (
               <article key={post.slug} className="py-8">
-                <p className="text-sm text-muted">
-                  <time dateTime={post.date}>
-                    {new Date(post.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </time>
-                  <span aria-hidden> · </span>
-                  {post.readingTime}
-                </p>
+                <PostDate date={post.date} updated={post.updated} readingTime={post.readingTime} />
                 <h2 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">
                   <Link href={`/blog/${post.slug}`} className="hover:text-teal">
                     {post.title}

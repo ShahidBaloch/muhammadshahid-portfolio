@@ -4,6 +4,7 @@ import { ProfileCard } from "@/components/ProfileCard";
 import { ProjectVisual } from "@/components/ProjectVisual";
 import { Reveal } from "@/components/Reveal";
 import { CtaBand } from "@/components/SectionHeading";
+import { PostDate } from "@/components/PostDate";
 import { getHomepagePosts } from "@/lib/posts";
 import { principles, projects, siteConfig } from "@/lib/site";
 
@@ -204,17 +205,7 @@ export default function HomePage() {
           <div className="mt-10 divide-y divide-slate-line border-y border-slate-line">
             {homepagePosts.map((post) => (
               <article key={post.slug} className="py-6">
-                <p className="text-sm text-muted">
-                  <time dateTime={post.date}>
-                    {new Date(post.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </time>
-                  <span aria-hidden> · </span>
-                  {post.readingTime}
-                </p>
+                <PostDate date={post.date} updated={post.updated} readingTime={post.readingTime} />
                 <h3 className="mt-2 font-display text-xl font-semibold text-ink sm:text-2xl">
                   <Link href={`/blog/${post.slug}`} className="hover:text-teal">
                     {post.title}

@@ -18,6 +18,7 @@ export type PostMeta = {
 
 export type Post = PostMeta & {
   content: string;
+  related?: string[];
 };
 
 function ensurePostsDirectory(): void {
@@ -51,6 +52,7 @@ export function getPostBySlug(slug: string): Post {
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
     category: data.category ? String(data.category) : undefined,
     readingTime: stats.text,
+    related: Array.isArray(data.related) ? data.related.map(String) : undefined,
     content,
   };
 }
@@ -87,11 +89,12 @@ export function getPostsByCategory(category: string): PostMeta[] {
 export function getPostsForTopic(topic: {
   slug: string;
   matchTags: readonly string[];
+  pinSlugs?: readonly string[];
 }): PostMeta[] {
   const tagSet = new Set(topic.matchTags.map((tag) => tag.toLowerCase()));
   const seen = new Set<string>();
 
-  return getAllPosts().filter((post) => {
+  const posts = getAllPosts().filter((post) => {
     const byCategory = post.category === topic.slug;
     const byTag = post.tags.some((tag) => tagSet.has(tag.toLowerCase()));
     if (!byCategory && !byTag) return false;
@@ -99,13 +102,30 @@ export function getPostsForTopic(topic: {
     seen.add(post.slug);
     return true;
   });
+
+  const pinSlugs = topic.pinSlugs ?? [];
+  if (pinSlugs.length === 0) return posts;
+
+  const bySlug = new Map(posts.map((post) => [post.slug, post]));
+  const pinned = pinSlugs
+    .map((slug) => bySlug.get(slug))
+    .filter((post): post is PostMeta => Boolean(post));
+  const pinnedSet = new Set(pinned.map((post) => post.slug));
+  const rest = posts.filter((post) => !pinnedSet.has(post.slug));
+  return [...pinned, ...rest];
 }
 
 export function getRelatedPosts(slug: string, limit = 3): PostMeta[] {
   const current = getPostBySlug(slug);
   const others = getAllPosts().filter((post) => post.slug !== slug);
+  const bySlug = new Map(others.map((post) => [post.slug, post]));
+  const pinned = (current.related ?? [])
+    .map((relatedSlug) => bySlug.get(relatedSlug))
+    .filter((post): post is PostMeta => Boolean(post));
+  const pinnedSet = new Set(pinned.map((post) => post.slug));
+  const remaining = others.filter((post) => !pinnedSet.has(post.slug));
 
-  const scored = others.map((post) => {
+  const scored = remaining.map((post) => {
     const sharedTags = post.tags.filter((tag) => current.tags.includes(tag)).length;
     let score = sharedTags * 4;
     if (sharedTags > 0 && current.category && post.category === current.category) {
@@ -119,16 +139,12 @@ export function getRelatedPosts(slug: string, limit = 3): PostMeta[] {
     return a.post.date < b.post.date ? 1 : -1;
   });
 
-  const related = scored.filter((item) => item.score > 0).slice(0, limit).map((item) => item.post);
-  if (related.length >= limit) {
-    return related;
-  }
+  const related = scored.filter((item) => item.score > 0).map((item) => item.post);
+  const fillers = remaining.filter(
+    (post) => !related.some((item) => item.slug === post.slug),
+  );
 
-  const fillers = others
-    .filter((post) => !related.some((item) => item.slug === post.slug))
-    .slice(0, limit - related.length);
-
-  return [...related, ...fillers];
+  return [...pinned, ...related, ...fillers].slice(0, limit);
 }
 
 /**
@@ -138,6 +154,7 @@ export function getRelatedPosts(slug: string, limit = 3): PostMeta[] {
 const homepageFeaturedSlugs = [
   "csharp-async-await-interview-questions",
   "identityserver-vs-aspnet-identity",
+  "aspnet-core-appsettings-localappsettings",
 ] as const;
 
 export function getHomepagePosts(limit = 4): PostMeta[] {

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { PostDate } from "@/components/PostDate";
 import type { PostMeta } from "@/lib/posts";
 
 export function BlogFeed({ posts }: { posts: PostMeta[] }) {
@@ -67,17 +68,7 @@ export function BlogFeed({ posts }: { posts: PostMeta[] }) {
         ) : (
           filtered.map((post) => (
             <article key={post.slug} className="py-8">
-              <p className="text-sm text-muted">
-                <time dateTime={post.date}>
-                  {new Date(post.date).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </time>
-                <span aria-hidden> · </span>
-                {post.readingTime}
-              </p>
+              <PostDate date={post.date} updated={post.updated} readingTime={post.readingTime} />
               <h3 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">
                 <Link href={`/blog/${post.slug}`} className="hover:text-teal">
                   {post.title}
