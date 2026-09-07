@@ -1,16 +1,16 @@
 ---
-title: "IdentityServer vs ASP.NET Core Identity — When SSO Is Worth It"
-description: "When ASP.NET Identity is enough, when OpenIddict or IdentityServer earns SSO, and how MapIdentityApi fits — without treating IdentityServer4 as a current option."
+title: "What Is IdentityServer in ASP.NET Core? vs Identity and SSO"
+description: "IdentityServer explained for ASP.NET Core: what it is, when ASP.NET Identity is enough, and when OpenIddict or Duende is worth SSO — not a feature-chart copy."
 date: "2026-08-17"
 category: "identity"
 tags: ["IdentityServer", "OpenIddict", "OIDC", "ASP.NET Core Identity", "Security", "SSO"]
 ---
 
-Clients often ask for "single sign-on" before they can name the apps that need to share a login. That is a recipe for shipping Duende IdentityServer (or another OIDC provider) when ASP.NET Core Identity with a well-designed JWT setup would have been enough for the first year.
+**IdentityServer** is an OpenID Connect / OAuth 2.0 authorization server for ASP.NET Core — today that usually means Duende IdentityServer or OpenIddict, not the retired IdentityServer4 product. Clients often ask for "single sign-on" before they can name the apps that need to share a login. That is a recipe for shipping an identity server when ASP.NET Core Identity with a well-designed JWT setup would have been enough for the first year.
 
 I have built both. A healthcare SaaS platform with a clinician admin portal, a patient-facing Angular app, and a partner API. A marketplace with buyer and seller surfaces plus an internal ops console. In each case, the identity decision shaped hosting cost, release cadence, and how painful it was to onboard a third application six months later.
 
-This post is not a feature comparison chart copied from documentation. It is how I decide when OIDC and an identity server earn their keep — and when Identity alone is the right call.
+This post is not a feature comparison chart copied from documentation. It is how I decide when OIDC and an identity server earn their keep — and when Identity alone is the right call. If login already loops on `/connect/authorize`, use [IdentityServer redirect URI and Angular login loops](/blog/identityserver-redirect-uri-login-loop).
 
 **IdentityServer4 is end of life.** Do not start a new IS4 host. If you are stuck on it, the migration checklist is [IdentityServer4 to OpenIddict](/blog/identityserver4-openiddict-migration-checklist) (or Duende if you are buying the continuation). Opaque Identity API tokens vs JWT is [MapIdentityApi vs JWT](/blog/mapidentityapi-opaque-token-vs-jwt).
 

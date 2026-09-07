@@ -4,6 +4,7 @@ import { ProfileCard } from "@/components/ProfileCard";
 import { ProjectVisual } from "@/components/ProjectVisual";
 import { Reveal } from "@/components/Reveal";
 import { CtaBand } from "@/components/SectionHeading";
+import { getAllPosts } from "@/lib/posts";
 import { principles, projects, siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -46,6 +47,7 @@ const techMarquee = [
 
 export default function HomePage() {
   const featured = projects.slice(0, 3);
+  const latestPosts = getAllPosts().slice(0, 4);
 
   return (
     <>
@@ -168,6 +170,52 @@ export default function HomePage() {
                   </article>
                 </Link>
               </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-pad !pt-0">
+        <div className="container-narrow">
+          <Reveal>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="eyebrow">Blog</p>
+                <h2 className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl">
+                  Original .NET and Angular notes from production.
+                </h2>
+                <p className="mt-3 max-w-2xl text-muted">
+                  Practical articles on ASP.NET Core, IdentityServer, EF Core, and C# interviews —
+                  written from healthcare, SaaS, and marketplace work.
+                </p>
+              </div>
+              <Link href="/blog" className="font-semibold text-teal link-underline">
+                All articles →
+              </Link>
+            </div>
+          </Reveal>
+
+          <div className="mt-10 divide-y divide-slate-line border-y border-slate-line">
+            {latestPosts.map((post) => (
+              <article key={post.slug} className="py-6">
+                <p className="text-sm text-muted">
+                  <time dateTime={post.date}>
+                    {new Date(post.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
+                  <span aria-hidden> · </span>
+                  {post.readingTime}
+                </p>
+                <h3 className="mt-2 font-display text-xl font-semibold text-ink sm:text-2xl">
+                  <Link href={`/blog/${post.slug}`} className="hover:text-teal">
+                    {post.title}
+                  </Link>
+                </h3>
+                <p className="mt-2 max-w-2xl text-muted">{post.description}</p>
+              </article>
             ))}
           </div>
         </div>

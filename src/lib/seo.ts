@@ -40,3 +40,17 @@ export function websiteJsonLd() {
     inLanguage: "en",
   };
 }
+
+export function blogJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: `${siteConfig.name} Blog`,
+    url: `${siteConfig.url}/blog`,
+    description:
+      "Original articles on ASP.NET Core, Angular, Azure, IdentityServer, EF Core, and C# from production healthcare, SaaS, and marketplace work.",
+    author: { "@id": personId },
+    publisher: { "@id": personId },
+    inLanguage: "en",
+  };
+}

@@ -1,6 +1,6 @@
 ---
-title: "IdentityServer4 to OpenIddict Migration Checklist for ASP.NET Core"
-description: "A production checklist for leaving IdentityServer4: what actually moves to OpenIddict, what stays in ASP.NET Identity, and the Angular OIDC breaks I still see on healthcare and SaaS apps."
+title: "IdentityServer4 End of Life: OpenIddict Migration Checklist"
+description: "Leaving IdentityServer / IdentityServer4 for OpenIddict on ASP.NET Core — client inventory, keys, Angular OIDC breaks, and a cutover checklist from healthcare and SaaS work."
 date: "2026-08-17"
 category: "identity"
 tags: ["IdentityServer", "OpenIddict", "OIDC", "ASP.NET Core Identity", "SSO"]

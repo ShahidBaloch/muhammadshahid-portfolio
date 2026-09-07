@@ -4,7 +4,7 @@ import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: `Privacy Policy for ${siteConfig.name} (${siteConfig.url}). How personal data, cookies, and analytics are handled.`,
+  description: `Privacy Policy for ${siteConfig.name} (${siteConfig.url}). How personal data, cookies, analytics, and advertising are handled.`,
   alternates: { canonical: "/privacy" },
 };
 
@@ -16,7 +16,7 @@ export default function PrivacyPage() {
         <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
           Privacy Policy
         </h1>
-        <p className="mt-4 text-muted">Last updated: August 4, 2026</p>
+        <p className="mt-4 text-muted">Last updated: September 7, 2026</p>
 
         <div className="prose prose-lg mt-10 max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:text-ink prose-p:text-muted prose-li:text-muted prose-a:text-teal prose-strong:text-ink">
           <p>
@@ -36,8 +36,8 @@ export default function PrivacyPage() {
               type, and referral source when analytics tools are enabled.
             </li>
             <li>
-              <strong>Cookies and similar technologies</strong> — used for analytics when you
-              accept cookies.
+              <strong>Cookies and similar technologies</strong> — used for analytics and, when
+              ads are enabled, for advertising after you accept cookies.
             </li>
           </ul>
 
@@ -46,6 +46,7 @@ export default function PrivacyPage() {
             <li>To respond to project inquiries and professional messages</li>
             <li>To operate, secure, and improve the Site</li>
             <li>To measure traffic and content performance</li>
+            <li>To show relevant advertising if Google AdSense or similar partners are enabled</li>
           </ul>
 
           <h2>Contact form</h2>
@@ -68,10 +69,52 @@ export default function PrivacyPage() {
             .
           </p>
 
+          <h2>Advertising</h2>
+          <p>
+            The Site may use Google AdSense and related Google advertising services to display ads.
+            Third-party vendors, including Google, use cookies and similar technologies to serve ads
+            based on your prior visits to this Site or other sites. Google&apos;s use of advertising
+            cookies enables it and its partners to serve ads based on your visit to this Site and/or
+            other sites on the Internet.
+          </p>
+          <p>
+            Advertising partners may collect or receive information such as cookie identifiers,
+            approximate location, browser and device type, and pages viewed. This can include
+            personalized ads when consent is granted, or non-personalized ads when it is not.
+          </p>
+          <p>
+            You can learn how Google uses data from partner sites in{" "}
+            <a
+              href="https://policies.google.com/technologies/partner-sites"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              How Google uses information from sites or apps that use our services
+            </a>
+            . You can opt out of personalized advertising by visiting{" "}
+            <a
+              href="https://www.google.com/settings/ads"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Google Ads Settings
+            </a>{" "}
+            or{" "}
+            <a
+              href="https://www.aboutads.info/choices/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              aboutads.info/choices
+            </a>
+            .
+          </p>
+
           <h2>Data sharing</h2>
           <p>
             I do not sell personal information. Limited data may be processed by providers that help
-            run the Site (for example hosting, email delivery, and analytics partners).
+            run the Site (for example hosting, email delivery, analytics, and advertising partners
+            such as Google).
           </p>
 
           <h2>Data retention</h2>
@@ -83,8 +126,9 @@ export default function PrivacyPage() {
           <h2>Your choices</h2>
           <p>
             You may request access to or deletion of personal information you sent me by emailing{" "}
-            <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>. You can also block
-            cookies in your browser settings.
+            <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>. You can reject analytics
+            and advertising cookies on the cookie banner, change your mind by clearing site data,
+            or block cookies in your browser settings.
           </p>
 
           <h2>Children&apos;s privacy</h2>

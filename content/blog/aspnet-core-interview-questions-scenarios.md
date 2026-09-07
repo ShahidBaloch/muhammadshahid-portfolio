@@ -170,7 +170,7 @@ A practical order many apps use:
 6. Authorization
 7. Endpoints
 
-**Senior nuance:** endpoint routing changes historically confused teams — speak in terms of “auth must populate the user before authorize runs,” not memorized lore alone.
+**Senior nuance:** endpoint routing changes historically confused teams — speak in terms of “auth must populate the user before authorize runs,” not memorized lore alone. The full `Program.cs` sequence (forwarded headers, rate limit, exception CORS) is [middleware order](/blog/aspnet-core-middleware-order) — do not expand that list in the interview unless they ask.
 
 ---
 
@@ -257,6 +257,7 @@ Partition thoughtfully: per-user or per-username on login after identity is know
 
 ## Related reading
 
+- [C# Expert-Level Interview Questions](/blog/csharp-expert-interview-questions)
 - [C# Async Await Interview Questions](/blog/csharp-async-await-interview-questions)
 - [Angular Interview Questions with ASP.NET Core](/blog/angular-interview-questions-aspnet-core)
 - [SOLID Principles in C# and ASP.NET Core](/blog/solid-principles-aspnet-core)

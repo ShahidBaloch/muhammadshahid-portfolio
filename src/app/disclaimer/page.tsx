@@ -16,7 +16,7 @@ export default function DisclaimerPage() {
         <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
           Disclaimer
         </h1>
-        <p className="mt-4 text-muted">Last updated: August 4, 2026</p>
+        <p className="mt-4 text-muted">Last updated: September 7, 2026</p>
 
         <div className="prose prose-lg mt-10 max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:text-ink prose-p:text-muted prose-li:text-muted prose-a:text-teal prose-strong:text-ink">
           <p>
@@ -44,6 +44,14 @@ export default function DisclaimerPage() {
             Links to GitHub repositories, documentation, or other websites are provided for
             convenience. I am not responsible for the content, availability, or policies of
             external sites.
+          </p>
+
+          <h2>Advertising</h2>
+          <p>
+            The Site may show third-party ads (including Google AdSense). Advertisements are
+            selected by those partners. I do not endorse every advertised product or service.
+            Cookie and data practices for ads are described in the{" "}
+            <Link href="/privacy">Privacy Policy</Link>.
           </p>
 
           <h2>Earnings and results</h2>

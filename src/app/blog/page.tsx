@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BlogFeed } from "@/components/BlogFeed";
 import { SectionHeading } from "@/components/SectionHeading";
 import { getAllPosts, getPostsForTopic } from "@/lib/posts";
+import { blogJsonLd } from "@/lib/seo";
 import { learningTopics } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -17,6 +18,10 @@ export default function BlogPage() {
 
   return (
     <section className="section-pad pt-28 sm:pt-32">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd()) }}
+      />
       <div className="container-narrow">
         <SectionHeading
           eyebrow="Blog"

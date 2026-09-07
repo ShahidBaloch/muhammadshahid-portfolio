@@ -6,7 +6,7 @@ category: "authentication"
 tags: ["Angular", "ASP.NET Core", "CORS", "Azure"]
 ---
 
-CORS is the kind of problem that makes a senior engineer look junior for twenty minutes. The API returns 200 in Swagger. Postman is fine. The Angular app in Chrome shows a red console error about `Access-Control-Allow-Origin`, and someone on the call asks whether the backend is down.
+If Chrome says CORS and the real bug is middleware order (auth or exceptions before `UseCors`), start with [ASP.NET Core middleware order](/blog/aspnet-core-middleware-order). CORS is the kind of problem that makes a senior engineer look junior for twenty minutes. The API returns 200 in Swagger. Postman is fine. The Angular app in Chrome shows a red console error about `Access-Control-Allow-Origin`, and someone on the call asks whether the backend is down.
 
 It is not down. The browser is doing its job.
 

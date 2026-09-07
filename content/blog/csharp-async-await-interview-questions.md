@@ -258,6 +258,7 @@ No. One sync-over-async helper on a hot path reintroduces blocking. Interviewers
 
 ## Related reading
 
+- [C# Expert-Level Interview Questions](/blog/csharp-expert-interview-questions)
 - [C# Async and Await in ASP.NET Core](/blog/csharp-async-await-aspnet-core)
 - [ASP.NET Core Interview Questions (Scenarios)](/blog/aspnet-core-interview-questions-scenarios)
 - [IHttpClientFactory](/blog/ihttpclientfactory-aspnet-core)

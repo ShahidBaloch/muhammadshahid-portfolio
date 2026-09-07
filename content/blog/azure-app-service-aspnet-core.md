@@ -14,7 +14,7 @@ This post is not a portal click-through. It is what I watch for when a team move
 
 The most expensive App Service incidents I have cleaned up were not code bugs. They were configuration drift.
 
-App Service merges settings from several layers: `appsettings.json`, environment-specific files, Application settings in the portal, Key Vault references, and slot-specific overrides. ASP.NET Core reads them in a predictable order, but humans do not always write them in a predictable order. A staging slot that inherits production connection strings because someone checked "slot setting" wrong will ruin your weekend faster than any NullReferenceException.
+App Service merges settings from several layers: `appsettings.json`, environment-specific files, Application settings in the portal, Key Vault references, and slot-specific overrides. ASP.NET Core reads them in a predictable order, but humans do not always write them in a predictable order. A staging slot that inherits production connection strings because someone checked "slot setting" wrong will ruin your weekend faster than any NullReferenceException. The files on disk — including why `localappsettings.json` is usually the wrong name — are in the [ASP.NET Core config file guide](/blog/aspnet-core-appsettings-localappsettings).
 
 My baseline for any API:
 

@@ -96,7 +96,7 @@ public sealed class EmailSender(IOptions<SmtpOptions> options)
 }
 ```
 
-Use `IOptionsMonitor<T>` when values can reload; `IOptions<T>` for simple snapshots.
+Use **`IOptionsMonitor<T>`** when values can reload; **`IOptions<T>`** for startup-only snapshots. The three-way choice (including scoped `IOptionsSnapshot<T>` and named options) is [IOptions vs Snapshot vs Monitor](/blog/aspnet-core-ioptions-snapshot-monitor) — do not inject snapshot into a singleton.
 
 ## Factory delegates and runtime parameters
 

@@ -108,9 +108,9 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "identity",
     label: "Identity",
-    title: "Identity in ASP.NET Core (2026)",
+    title: "IdentityServer and ASP.NET Core Identity (2026)",
     description:
-      "When ASP.NET Identity is enough, when you need OpenIddict or IdentityServer, and why MapIdentityApi tokens are not JWTs.",
+      "What IdentityServer is, when ASP.NET Identity is enough, when you need OpenIddict or Duende, and why MapIdentityApi tokens are not JWTs.",
     intro:
       "Identity choice is a product decision: one app versus SSO, opaque Identity API tokens versus JWT bearer, Duende licensing versus OpenIddict. This hub is for that decision — not for interceptor plumbing. Read MapIdentityApi versus JWT if Angular is sending the wrong string into AddJwtBearer. Read IdentityServer versus Identity when a second app or an external IdP is on the roadmap. Read the IdentityServer4 to OpenIddict checklist only if you are leaving a dead IS4 host — not as a greenfield default.",
     matchTags: ["IdentityServer", "OpenIddict", "OIDC", "ASP.NET Core Identity", "SSO"],

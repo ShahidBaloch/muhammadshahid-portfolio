@@ -16,7 +16,7 @@ export default function TermsPage() {
         <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
           Terms of Use
         </h1>
-        <p className="mt-4 text-muted">Last updated: August 4, 2026</p>
+        <p className="mt-4 text-muted">Last updated: September 7, 2026</p>
 
         <div className="prose prose-lg mt-10 max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:text-ink prose-p:text-muted prose-li:text-muted prose-a:text-teal prose-strong:text-ink">
           <p>
@@ -52,10 +52,19 @@ export default function TermsPage() {
             scope, fees, and timelines are agreed separately.
           </p>
 
-          <h2>Third-party links and ads</h2>
+          <h2>Third-party links</h2>
           <p>
             The Site may link to GitHub, LinkedIn, documentation, or other third-party sites. I am
             not responsible for their content or policies.
+          </p>
+
+          <h2>Advertising</h2>
+          <p>
+            The Site may display third-party advertisements, including Google AdSense. Advertisers
+            and their partners may use cookies and similar technologies as described in the{" "}
+            <Link href="/privacy">Privacy Policy</Link>. Ads are provided by third parties; I do
+            not control every ad you see and I am not responsible for advertiser websites or
+            offers.
           </p>
 
           <h2>Acceptable use</h2>
