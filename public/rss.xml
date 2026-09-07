@@ -113,11 +113,11 @@
       <description><![CDATA[Leaving IdentityServer / IdentityServer4 for OpenIddict on ASP.NET Core — client inventory, keys, Angular OIDC breaks, and a cutover checklist from healthcare and SaaS work.]]></description>
     </item>
     <item>
-      <title><![CDATA[What is IdentityServer in ASP.NET Core?]]></title>
+      <title><![CDATA[What is an identity server in ASP.NET Core?]]></title>
       <link>https://www.muhammadshahid.dev/blog/identityserver-vs-aspnet-identity</link>
       <guid>https://www.muhammadshahid.dev/blog/identityserver-vs-aspnet-identity</guid>
       <pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[What is IdentityServer in ASP.NET Core? When ASP.NET Identity is enough, and when OpenIddict or Duende is the SSO answer — not a feature-chart copy.]]></description>
+      <description><![CDATA[What is an identity server in ASP.NET Core? When ASP.NET Identity is enough, and when OpenIddict or Duende IdentityServer is the SSO answer — not a feature-chart copy.]]></description>
     </item>
     <item>
       <title><![CDATA[SQL Server Parameter Sniffing with EF Core — When the Plan Fits the Wrong Clinic]]></title>

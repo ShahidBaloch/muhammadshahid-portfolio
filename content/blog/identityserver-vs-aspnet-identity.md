@@ -1,6 +1,6 @@
 ---
-title: "What is IdentityServer in ASP.NET Core?"
-description: "What is IdentityServer in ASP.NET Core? When ASP.NET Identity is enough, and when OpenIddict or Duende is the SSO answer — not a feature-chart copy."
+title: "What is an identity server in ASP.NET Core?"
+description: "What is an identity server in ASP.NET Core? When ASP.NET Identity is enough, and when OpenIddict or Duende IdentityServer is the SSO answer — not a feature-chart copy."
 date: "2026-08-17"
 updated: "2026-09-07"
 category: "identity"
@@ -10,8 +10,8 @@ related:
   - identityserver4-openiddict-migration-checklist
   - mapidentityapi-opaque-token-vs-jwt
 faq:
-  - q: "What is IdentityServer in ASP.NET Core?"
-    a: "IdentityServer is an OpenID Connect / OAuth 2.0 authorization server for ASP.NET Core. In 2026 that usually means Duende IdentityServer or OpenIddict — not the retired IdentityServer4 product, and not ASP.NET Core Identity."
+  - q: "What is an identity server in ASP.NET Core?"
+    a: "An identity server is an OpenID Connect / OAuth 2.0 authorization server. On ASP.NET Core in 2026 that usually means Duende IdentityServer or OpenIddict — not the retired IdentityServer4 product, and not ASP.NET Core Identity."
   - q: "Is IdentityServer the same as ASP.NET Core Identity?"
     a: "No. Identity is the membership store — who the user is in your app. IdentityServer / OIDC is the protocol layer — which applications may issue and accept tokens for that user."
   - q: "Do I need IdentityServer for one Angular app and one API?"
@@ -26,9 +26,9 @@ This post is not a feature comparison chart copied from documentation. It is how
 
 **IdentityServer4 is end of life.** Do not start a new IS4 host. If you are stuck on it, the migration checklist is [IdentityServer4 to OpenIddict](/blog/identityserver4-openiddict-migration-checklist) (or Duende if you are buying the continuation). Opaque Identity API tokens vs JWT is [MapIdentityApi vs JWT](/blog/mapidentityapi-opaque-token-vs-jwt).
 
-## What is IdentityServer in ASP.NET Core?
+## What is an identity server in ASP.NET Core?
 
-**IdentityServer** is the name teams still search when they mean an OpenID Connect / OAuth 2.0 **authorization server** on ASP.NET Core. In 2026 that product is Duende IdentityServer or, if you want OSS, OpenIddict. It is not ASP.NET Core Identity.
+**IdentityServer** is the product name teams still type when they search **identity server** and mean an OpenID Connect / OAuth 2.0 **authorization server** on ASP.NET Core. In 2026 that product is Duende IdentityServer or, if you want OSS, OpenIddict. It is not ASP.NET Core Identity.
 
 Identity (the membership library) answers “who is this user in my app.” IdentityServer / OIDC answers “which applications may issue and accept tokens for this user, and under which protocol.” If you have one API and one Angular SPA, you usually need Identity plus JWTs — not an identity server. If you have two products, a partner, or a real SSO requirement, you need the protocol layer.
 

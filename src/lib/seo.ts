@@ -51,7 +51,7 @@ export function blogJsonLd() {
     name: `${siteConfig.name} Blog`,
     url: `${siteConfig.url}/blog`,
     description:
-      "C# async await interview questions, what IdentityServer is in ASP.NET Core, the ASP.NET Core config file, and original notes from production healthcare and SaaS work.",
+      "C# async await interview questions, what an identity server is in ASP.NET Core, the ASP.NET Core config file, and original notes from production healthcare and SaaS work.",
     author: { "@id": personId },
     publisher: { "@id": personId },
     inLanguage: "en",
