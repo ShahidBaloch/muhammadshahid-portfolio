@@ -274,7 +274,7 @@ export const projects: Project[] = [
     related: [
       {
         href: "/blog/identityserver-vs-aspnet-identity",
-        title: "What is IdentityServer in ASP.NET Core?",
+        title: "What is an identity server in ASP.NET Core?",
       },
       {
         href: "/blog/bff-pattern-aspnet-core-angular-yarp",
@@ -321,7 +321,7 @@ export const projects: Project[] = [
       },
       {
         href: "/blog/identityserver-vs-aspnet-identity",
-        title: "IdentityServer vs ASP.NET Identity for a single storefront",
+        title: "What is an identity server in ASP.NET Core?",
       },
       {
         href: "/blog/ef-core-sql-performance",

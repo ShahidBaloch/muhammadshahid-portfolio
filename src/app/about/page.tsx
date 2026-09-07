@@ -63,7 +63,7 @@ export default function AboutPage() {
                   href="/blog/identityserver-vs-aspnet-identity"
                   className="text-teal link-underline"
                 >
-                  what IdentityServer is
+                  what an identity server is
                 </Link>
                 , or the{" "}
                 <Link

@@ -59,6 +59,9 @@ function toLastModified(date) {
     return "2026-01-01T00:00:00.000Z";
   }
   const now = new Date();
+  if (parsed.getTime() > now.getTime()) {
+    return now.toISOString();
+  }
   if (parsed.toISOString().slice(0, 10) === now.toISOString().slice(0, 10)) {
     return now.toISOString();
   }

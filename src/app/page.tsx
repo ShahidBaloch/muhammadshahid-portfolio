@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     absolute: `${siteConfig.name} | ${siteConfig.title}`,
   },
   description:
-    "Senior .NET + Angular engineer. Original ASP.NET Core, IdentityServer, EF Core, and C# interview articles from healthcare and SaaS production work.",
+    "Senior .NET + Angular engineer. Original ASP.NET Core, identity server, EF Core, and C# interview articles from healthcare and SaaS production work.",
   alternates: { canonical: "/" },
 };
 
