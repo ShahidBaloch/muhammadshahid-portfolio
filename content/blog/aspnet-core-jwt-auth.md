@@ -2,6 +2,7 @@
 title: "ASP.NET Core JWT Auth: A Practical Checklist"
 description: "A production-ready checklist for JWT authentication in ASP.NET Core APIs — token lifetimes, refresh flows, policies, and Angular client habits from real client work."
 date: "2026-06-12"
+updated: "2026-09-07"
 category: "authentication"
 tags: ["ASP.NET Core", "JWT", "Security", "Angular"]
 ---
@@ -131,7 +132,7 @@ Run through this with the client's name on each line:
 - [ ] Every sensitive endpoint has policy or resource check — spot-check with a lower-privilege test user
 - [ ] CORS allows only known SPA origins — no wildcard with credentials
 - [ ] JWT claims do not carry PHI or PII the SPA does not need
-- [ ] Auth failures return consistent error shapes (401 vs 403 distinguishable)
+- [ ] Auth failures return consistent error shapes ([401 vs 403 distinguishable](/blog/aspnet-core-401-vs-403))
 - [ ] Logs never print bearer tokens or refresh tokens
 - [ ] Password reset and lockout flows tested end to end
 - [ ] Secret rotation procedure written (even if rotation is manual at first)

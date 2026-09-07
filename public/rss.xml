@@ -43,6 +43,13 @@
       <description><![CDATA[IDX10503: Signature validation failed — what it actually means in ASP.NET Core JWT bearer auth: kid vs symmetric keys, disposed RSA, Identity opaque tokens, and the checks that are not this error.]]></description>
     </item>
     <item>
+      <title><![CDATA[ASP.NET Core 401 vs 403: Challenge vs Forbid for Angular APIs]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-401-vs-403</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-401-vs-403</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[ASP.NET Core 401 vs 403 — Challenge vs Forbid, JWT bearer with no token vs a failed policy, and why Angular interceptors that treat every 403 as logout are wrong.]]></description>
+    </item>
+    <item>
       <title><![CDATA[ASP.NET Core Middleware Order: The Pipeline That Breaks Auth and CORS]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-middleware-order</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-middleware-order</guid>

@@ -127,10 +127,11 @@ export const learningTopics: LearningTopic[] = [
     description:
       "JWT refresh, Angular interceptors, BFF/YARP, cookies, CORS with credentials, and the production failures that look like “flaky auth.”",
     intro:
-      "This hub is the Angular + ASP.NET Core token lifecycle: short-lived JWTs, refresh rotation, concurrent 401s, httpOnly cookies, CORS credentials, and when a BFF is the honest answer. Start with the JWT checklist if you are issuing tokens; use the interceptor and 401-queue posts if the SPA is already logging people out; read BFF when you want tokens off the browser; read Duende BFF versus custom YARP when the architecture is already decided and the remaining question is buy versus build. CORS belongs here when the failure showed up after login, not as a generic networking topic.",
+      "This hub is the Angular + ASP.NET Core token lifecycle: short-lived JWTs, refresh rotation, concurrent 401s, httpOnly cookies, CORS credentials, and when a BFF is the honest answer. Start with the JWT checklist if you are issuing tokens; use 401 vs 403 if the SPA logs people out on a permission miss; use the interceptor and 401-queue posts if refresh is racing; read BFF when you want tokens off the browser; read Duende BFF versus custom YARP when the architecture is already decided and the remaining question is buy versus build. CORS belongs here when the failure showed up after login, not as a generic networking topic.",
     matchTags: ["JWT", "CORS", "YARP"],
     pinSlugs: [
       "aspnet-core-jwt-auth",
+      "aspnet-core-401-vs-403",
       "aspnet-core-idx10503-jwt-signature",
       "angular-jwt-interceptors",
     ],

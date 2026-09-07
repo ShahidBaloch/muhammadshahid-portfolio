@@ -2,6 +2,7 @@
 title: "Angular Interceptor: Queue Concurrent 401s So Refresh Runs Once"
 description: "The concurrent 401 stampede against ASP.NET Core JWT refresh: why shareReplay still double-rotates, how I queue retries in RxJS, and what to skip so you do not log the user out."
 date: "2026-08-16"
+updated: "2026-09-07"
 category: "authentication"
 tags: ["Angular", "JWT", "ASP.NET Core", "Security", "RxJS"]
 ---
@@ -40,7 +41,7 @@ Do **not** refresh when:
 
 | Condition | Why |
 | --- | --- |
-| Status is **403** | Authenticated, not allowed. Refresh will not change the role. |
+| Status is **403** | Authenticated, not allowed. Refresh will not change the role. Status-code contract: [401 vs 403](/blog/aspnet-core-401-vs-403). |
 | Request URL is the **refresh** (or login) endpoint | You would recurse. |
 | Request already has a **retry marker** | One retry. Not three. |
 | You already **logged out** this session | Waiters should error, not mint a new session. |

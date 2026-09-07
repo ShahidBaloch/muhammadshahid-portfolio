@@ -163,6 +163,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.muhammadshahid.dev/blog/aspnet-core-401-vs-403</loc>
+    <lastmod>2026-09-07T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.muhammadshahid.dev/blog/aspnet-core-middleware-order</loc>
     <lastmod>2026-09-06T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
@@ -254,7 +260,7 @@
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/angular-interceptor-401-refresh-queue</loc>
-    <lastmod>2026-08-16T00:00:00.000Z</lastmod>
+    <lastmod>2026-09-07T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -416,7 +422,7 @@
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/aspnet-core-jwt-auth</loc>
-    <lastmod>2026-06-12T00:00:00.000Z</lastmod>
+    <lastmod>2026-09-07T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
