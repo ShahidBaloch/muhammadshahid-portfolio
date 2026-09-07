@@ -1,3 +1,4 @@
+import { getHomepagePosts } from "@/lib/posts";
 import { siteConfig } from "@/lib/site";
 
 export const personId = `${siteConfig.url}/#person`;
@@ -43,15 +44,24 @@ export function websiteJsonLd() {
 }
 
 export function blogJsonLd() {
+  const featured = getHomepagePosts(3);
   return {
     "@context": "https://schema.org",
     "@type": "Blog",
     name: `${siteConfig.name} Blog`,
     url: `${siteConfig.url}/blog`,
     description:
-      "Original articles on ASP.NET Core, Angular, Azure, IdentityServer, EF Core, and C# interview questions from production healthcare, SaaS, and marketplace work.",
+      "C# async await interview questions, what IdentityServer is in ASP.NET Core, the ASP.NET Core config file, and original notes from production healthcare and SaaS work.",
     author: { "@id": personId },
     publisher: { "@id": personId },
     inLanguage: "en",
+    blogPost: featured.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.title,
+      description: post.description,
+      url: `${siteConfig.url}/blog/${post.slug}`,
+      datePublished: post.date,
+      dateModified: post.updated ?? post.date,
+    })),
   };
 }

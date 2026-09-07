@@ -9,7 +9,7 @@ import { learningTopics } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Original C# interview questions, IdentityServer, EF Core, and ASP.NET Core notes from production healthcare and SaaS work.",
+    "C# async await interview questions, what IdentityServer is in ASP.NET Core, the ASP.NET Core config file, and original notes from production healthcare and SaaS work.",
   alternates: { canonical: "/blog" },
 };
 
@@ -37,8 +37,8 @@ export default function BlogPage() {
             Pages people already find in Google
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-muted">
-            Interview rehearsal, IdentityServer vs Identity, and the ASP.NET Core config file —
-            the queries this site already ranks for.
+            C# async/await interview questions, what IdentityServer is in ASP.NET Core, and the
+            ASP.NET Core config file — the queries this site already ranks for.
           </p>
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
             {startHere.map((post) => (

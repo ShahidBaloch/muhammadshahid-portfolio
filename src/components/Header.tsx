@@ -224,7 +224,7 @@ export function Header() {
         <div
           ref={mobileRef}
           id="mobile-nav"
-          className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain border-t border-slate-line bg-paper px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-2 lg:hidden"
+          className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain border-t border-slate-line bg-paper px-4 pb-[max(1.25rem,env(safe-area-inset-bottom),var(--cookie-banner-space,0px))] pt-2 lg:hidden"
         >
           <nav className="flex flex-col" aria-label="Mobile">
             {navLinks.map((link) => {
