@@ -3,7 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SectionHeading } from "@/components/SectionHeading";
 import { getPostsForTopic } from "@/lib/posts";
-import { getLearningTopic, learningTopics } from "@/lib/site";
+import { personId } from "@/lib/seo";
+import { getLearningTopic, learningTopics, siteConfig } from "@/lib/site";
 
 type PageProps = {
   params: Promise<{ topic: string }>;
@@ -37,9 +38,51 @@ export default async function LearningTopicPage({ params }: PageProps) {
   }
 
   const posts = getPostsForTopic(topic);
+  const pageUrl = `${siteConfig.url}/learning/${topic.slug}`;
+  const collectionJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: topic.title,
+    description: topic.description,
+    url: pageUrl,
+    isPartOf: {
+      "@type": "Blog",
+      "@id": `${siteConfig.url}/blog`,
+      name: `${siteConfig.name} Blog`,
+    },
+    publisher: { "@id": personId },
+    inLanguage: "en",
+    hasPart: posts.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.title,
+      description: post.description,
+      url: `${siteConfig.url}/blog/${post.slug}`,
+      datePublished: post.date,
+      author: { "@id": personId },
+    })),
+  };
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: topic.title,
+    itemListElement: posts.map((post, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${siteConfig.url}/blog/${post.slug}`,
+      name: post.title,
+    })),
+  };
 
   return (
     <section className="section-pad pt-28 sm:pt-32">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
       <div className="container-narrow">
         <Link href="/blog" className="text-sm font-semibold text-teal link-underline">
           ← All articles

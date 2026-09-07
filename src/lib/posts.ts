@@ -121,3 +121,22 @@ export function getRelatedPosts(slug: string, limit = 3): PostMeta[] {
 
   return [...related, ...fillers];
 }
+
+/**
+ * Homepage mix: pages that already earn Search Console impressions, then the
+ * newest unique posts. Keeps the click-winning interview URL above a same-week dump.
+ */
+const homepageFeaturedSlugs = [
+  "csharp-async-await-interview-questions",
+  "identityserver-vs-aspnet-identity",
+] as const;
+
+export function getHomepagePosts(limit = 4): PostMeta[] {
+  const all = getAllPosts();
+  const featured = homepageFeaturedSlugs
+    .map((slug) => all.find((post) => post.slug === slug))
+    .filter((post): post is PostMeta => Boolean(post));
+  const featuredSet = new Set<string>(homepageFeaturedSlugs);
+  const rest = all.filter((post) => !featuredSet.has(post.slug));
+  return [...featured, ...rest].slice(0, limit);
+}

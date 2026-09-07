@@ -4,14 +4,15 @@ import { ProfileCard } from "@/components/ProfileCard";
 import { ProjectVisual } from "@/components/ProjectVisual";
 import { Reveal } from "@/components/Reveal";
 import { CtaBand } from "@/components/SectionHeading";
-import { getAllPosts } from "@/lib/posts";
+import { getHomepagePosts } from "@/lib/posts";
 import { principles, projects, siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: {
     absolute: `${siteConfig.name} | ${siteConfig.title}`,
   },
-  description: siteConfig.description,
+  description:
+    "Senior .NET + Angular engineer. Original ASP.NET Core, IdentityServer, EF Core, and C# interview articles from healthcare and SaaS production work.",
   alternates: { canonical: "/" },
 };
 
@@ -47,7 +48,7 @@ const techMarquee = [
 
 export default function HomePage() {
   const featured = projects.slice(0, 3);
-  const latestPosts = getAllPosts().slice(0, 4);
+  const homepagePosts = getHomepagePosts(4);
 
   return (
     <>
@@ -189,14 +190,19 @@ export default function HomePage() {
                   written from healthcare, SaaS, and marketplace work.
                 </p>
               </div>
-              <Link href="/blog" className="font-semibold text-teal link-underline">
-                All articles →
-              </Link>
+              <div className="flex flex-col gap-2 sm:items-end">
+                <Link href="/learning/interview-questions" className="font-semibold text-teal link-underline">
+                  Interview questions →
+                </Link>
+                <Link href="/blog" className="font-semibold text-teal link-underline">
+                  All articles →
+                </Link>
+              </div>
             </div>
           </Reveal>
 
           <div className="mt-10 divide-y divide-slate-line border-y border-slate-line">
-            {latestPosts.map((post) => (
+            {homepagePosts.map((post) => (
               <article key={post.slug} className="py-6">
                 <p className="text-sm text-muted">
                   <time dateTime={post.date}>

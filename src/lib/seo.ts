@@ -23,7 +23,8 @@ export function personJsonLd() {
       "Angular",
       ".NET",
       "Azure",
-      "Clean Architecture",
+      "C# interview questions",
+      "EF Core",
       "Identity and access management",
     ],
   };
