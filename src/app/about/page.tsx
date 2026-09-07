@@ -58,12 +58,19 @@ export default function AboutPage() {
                 >
                   async/await interviews
                 </Link>
-                , or{" "}
+                ,{" "}
                 <Link
                   href="/blog/identityserver-vs-aspnet-identity"
                   className="text-teal link-underline"
                 >
                   what IdentityServer is
+                </Link>
+                , or the{" "}
+                <Link
+                  href="/blog/aspnet-core-appsettings-localappsettings"
+                  className="text-teal link-underline"
+                >
+                  ASP.NET Core config file
                 </Link>
                 . For projects, reach me via the{" "}
                 <Link href="/contact" className="text-teal link-underline">

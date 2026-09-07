@@ -16,9 +16,15 @@ export type PostMeta = {
   readingTime: string;
 };
 
+export type PostFaq = {
+  q: string;
+  a: string;
+};
+
 export type Post = PostMeta & {
   content: string;
   related?: string[];
+  faq?: PostFaq[];
 };
 
 function ensurePostsDirectory(): void {
@@ -53,8 +59,21 @@ export function getPostBySlug(slug: string): Post {
     category: data.category ? String(data.category) : undefined,
     readingTime: stats.text,
     related: Array.isArray(data.related) ? data.related.map(String) : undefined,
+    faq: readFaq(data.faq),
     content,
   };
+}
+
+function readFaq(value: unknown): PostFaq[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const items = value.flatMap((entry) => {
+    if (!entry || typeof entry !== "object") return [];
+    const record = entry as { q?: unknown; a?: unknown };
+    const q = String(record.q ?? "").trim();
+    const a = String(record.a ?? "").trim();
+    return q && a ? [{ q, a }] : [];
+  });
+  return items.length > 0 ? items : undefined;
 }
 
 export function getAllPosts(): PostMeta[] {
@@ -151,7 +170,8 @@ export function getRelatedPosts(slug: string, limit = 3): PostMeta[] {
  * Homepage mix: pages that already earn Search Console impressions, then the
  * newest unique posts. Keeps the click-winning interview URL above a same-week dump.
  */
-const homepageFeaturedSlugs = [
+/** Pages that already earn Search Console impressions — pin these above newest dumps. */
+export const searchWinnerSlugs = [
   "csharp-async-await-interview-questions",
   "identityserver-vs-aspnet-identity",
   "aspnet-core-appsettings-localappsettings",
@@ -159,10 +179,10 @@ const homepageFeaturedSlugs = [
 
 export function getHomepagePosts(limit = 4): PostMeta[] {
   const all = getAllPosts();
-  const featured = homepageFeaturedSlugs
+  const featured = searchWinnerSlugs
     .map((slug) => all.find((post) => post.slug === slug))
     .filter((post): post is PostMeta => Boolean(post));
-  const featuredSet = new Set<string>(homepageFeaturedSlugs);
+  const featuredSet = new Set<string>(searchWinnerSlugs);
   const rest = all.filter((post) => !featuredSet.has(post.slug));
   return [...featured, ...rest].slice(0, limit);
 }

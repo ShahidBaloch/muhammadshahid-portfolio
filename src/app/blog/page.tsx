@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BlogFeed } from "@/components/BlogFeed";
 import { SectionHeading } from "@/components/SectionHeading";
-import { getAllPosts, getPostsForTopic } from "@/lib/posts";
+import { getAllPosts, getHomepagePosts, getPostsForTopic } from "@/lib/posts";
 import { blogJsonLd } from "@/lib/seo";
 import { learningTopics } from "@/lib/site";
 
@@ -15,6 +15,7 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   const posts = getAllPosts();
+  const startHere = getHomepagePosts(3);
 
   return (
     <section className="section-pad pt-28 sm:pt-32">
@@ -29,6 +30,29 @@ export default function BlogPage() {
           description="Original articles from production work. Browse by topic when you want a guided path — or filter the feed below."
           level={1}
         />
+
+        <div className="mt-10">
+          <p className="eyebrow">Start here</p>
+          <h2 className="mt-3 font-display text-2xl font-semibold text-ink">
+            Pages people already find in Google
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm text-muted">
+            Interview rehearsal, IdentityServer vs Identity, and the ASP.NET Core config file —
+            the queries this site already ranks for.
+          </p>
+          <div className="mt-4 grid gap-4 sm:grid-cols-3">
+            {startHere.map((post) => (
+              <Link
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                className="surface surface-hover rounded-xl p-5 transition hover:border-ink"
+              >
+                <h3 className="font-display text-lg font-semibold text-ink">{post.title}</h3>
+                <p className="mt-2 line-clamp-3 text-sm text-muted">{post.description}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
 
         <div className="mt-10">
           <p className="eyebrow">Browse by topic</p>

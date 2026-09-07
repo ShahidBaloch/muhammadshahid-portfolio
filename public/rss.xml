@@ -71,7 +71,7 @@
       <description><![CDATA[C# expert level interview questions with production answers — IAsyncEnumerable exports, cancellation across MediatR, ConcurrentDictionary caches, Span parsers, and bounded Channels.]]></description>
     </item>
     <item>
-      <title><![CDATA[ASP.NET Core Config File Guide: appsettings.json vs localappsettings.json]]></title>
+      <title><![CDATA[What is the ASP.NET Core config file? (not localappsettings.json)]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-appsettings-localappsettings</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-appsettings-localappsettings</guid>
       <pubDate>Thu, 03 Sep 2026 00:00:00 GMT</pubDate>
@@ -92,7 +92,7 @@
       <description><![CDATA[Leaving IdentityServer / IdentityServer4 for OpenIddict on ASP.NET Core — client inventory, keys, Angular OIDC breaks, and a cutover checklist from healthcare and SaaS work.]]></description>
     </item>
     <item>
-      <title><![CDATA[IdentityServer in ASP.NET Core: What It Is vs Identity and SSO]]></title>
+      <title><![CDATA[What is IdentityServer in ASP.NET Core?]]></title>
       <link>https://www.muhammadshahid.dev/blog/identityserver-vs-aspnet-identity</link>
       <guid>https://www.muhammadshahid.dev/blog/identityserver-vs-aspnet-identity</guid>
       <pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate>

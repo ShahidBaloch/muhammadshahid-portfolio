@@ -2,8 +2,13 @@
 title: "C# Async and Await in ASP.NET Core: Stop Blocking Your API"
 description: "C# async await explained for ASP.NET Core APIs — Task vs async void, CancellationToken, .Result starvation, WhenAll, HttpClient, Minimal APIs, and how Angular clients behave under load."
 date: "2026-08-12"
+updated: "2026-09-07"
 category: "architecture"
 tags: ["C#", "async await", "Asynchronous Programming", "ASP.NET Core", ".NET", "Performance"]
+related:
+  - csharp-async-await-interview-questions
+  - csharp-expert-interview-questions
+  - ihttpclientfactory-aspnet-core
 ---
 
 Async does not make a single SQL query finish sooner. It keeps the thread pool free while your API waits on databases, HTTP, or blob storage so other Angular clients are not stuck behind blocked workers.

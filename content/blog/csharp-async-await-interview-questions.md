@@ -9,6 +9,13 @@ related:
   - csharp-expert-interview-questions
   - aspnet-core-interview-questions-scenarios
   - ef-core-interview-questions
+faq:
+  - q: "What C# async await interview questions actually get asked?"
+    a: "Senior loops ask .Result deadlocks and thread-pool starvation, async void, Task.WhenAll on one EF Core DbContext, CancellationToken, fire-and-forget, ConfigureAwait(false), and ValueTask vs Task — not trivia about whether async creates a thread."
+  - q: "Does .Result deadlock in ASP.NET Core?"
+    a: "Classic sync-context deadlock is a UI story. On ASP.NET Core, .Result still occupies a thread-pool worker until the task finishes, which starves the app under load."
+  - q: "Can Task.WhenAll share one EF Core DbContext?"
+    a: "No. DbContext is not thread-safe. WhenAll against one context is both an interview fail and a production race."
 ---
 
 Reciting “async does not create a new thread” is table stakes. Senior interviews ask you to diagnose starvation, unobserved exceptions, and EF Core misuse under load.

@@ -1,5 +1,5 @@
 ---
-title: "ASP.NET Core Config File Guide: appsettings.json vs localappsettings.json"
+title: "What is the ASP.NET Core config file? (not localappsettings.json)"
 description: "What the ASP.NET Core config file actually is — appsettings.json, appsettings.Development.json, user secrets, local.settings.json, and why localappsettings.json is usually the wrong name."
 date: "2026-09-03"
 updated: "2026-09-07"
@@ -8,6 +8,13 @@ tags: ["ASP.NET Core", "Configuration", "appsettings", "Azure", ".NET"]
 related:
   - aspnet-core-ioptions-snapshot-monitor
   - azure-app-service-aspnet-core
+faq:
+  - q: "What is the ASP.NET Core config file?"
+    a: "The host loads appsettings.json, then appsettings.{Environment}.json, then user secrets in Development, then environment variables. Last source wins. A JSON file in the project does nothing until CreateBuilder or AddJsonFile loads it."
+  - q: "Is localappsettings.json a real ASP.NET Core file?"
+    a: "No. ASP.NET Core does not load localappsettings.json unless you add it yourself. Teams usually mean appsettings.Development.json, user secrets, a gitignored appsettings.Local.json, or Azure Functions local.settings.json."
+  - q: "Where should local secrets go?"
+    a: "User secrets in Development, or a gitignored appsettings.Local.json that you actually register with AddJsonFile. Do not commit production connection strings in any JSON file."
 ---
 
 People search **config file**, **appsettings.json**, and **localappsettings.json** when a setting works on one laptop and dies in Azure. The file name in the search box is often wrong. ASP.NET Core does not load a file called `localappsettings.json` unless you add it yourself.

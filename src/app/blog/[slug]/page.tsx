@@ -90,6 +90,22 @@ export default async function BlogPostPage({ params }: PageProps) {
       : {}),
   };
 
+  const faqJsonLd =
+    post.faq && post.faq.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: post.faq.map((item) => ({
+            "@type": "Question",
+            name: item.q,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: item.a,
+            },
+          })),
+        }
+      : null;
+
   const breadcrumbItems = [
     { name: "Home", item: siteConfig.url },
     { name: "Blog", item: `${siteConfig.url}/blog` },
@@ -126,6 +142,12 @@ export default async function BlogPostPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {faqJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      ) : null}
       <div className="container-narrow max-w-3xl">
         <nav className="text-sm text-muted" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
@@ -175,6 +197,20 @@ export default async function BlogPostPage({ params }: PageProps) {
             </p>
           ) : null}
         </header>
+
+        {post.faq && post.faq.length > 0 ? (
+          <section className="mt-8 rounded-xl border border-slate-line bg-mist p-5 sm:p-6" aria-label="Quick answers">
+            <h2 className="font-display text-xl font-semibold text-ink">Quick answers</h2>
+            <dl className="mt-4 space-y-4">
+              {post.faq.map((item) => (
+                <div key={item.q}>
+                  <dt className="font-semibold text-ink">{item.q}</dt>
+                  <dd className="mt-1 text-muted">{item.a}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        ) : null}
 
         <OnThisPage headings={headings} />
 

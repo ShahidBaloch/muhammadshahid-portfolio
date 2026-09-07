@@ -193,15 +193,21 @@ export const learningTopics: LearningTopic[] = [
     label: "Architecture",
     title: "Software Architecture",
     description:
-      "Architecture notes for .NET + Angular systems — Clean Architecture, modular monolith vs services, Minimal APIs, and boundaries that survive healthcare, SaaS, and eCommerce delivery.",
+      "Architecture notes for .NET + Angular systems — config files, Clean Architecture, modular monolith vs services, Minimal APIs, and boundaries that survive healthcare, SaaS, and eCommerce delivery.",
     intro:
-      "Architecture here means the decisions that survive the first production incident: where data lives, who is allowed to change it, and how the Angular SPA talks to ASP.NET Core without a contract that rot. This hub is Clean Architecture, modular monolith vs services, Minimal APIs, and the JSON contract failures that look like “the API 500s on detail pages.” Cycle exceptions are the object-cycle article — not an EF N+1 tutorial. JWT plumbing, EF SQL, and EDI parsers have their own topic pages. Start with Clean Architecture or modular monolith if you are choosing a shape. Skip a split into microservices until a boundary has a real independent deploy or scaling reason.",
+      "Architecture here means the decisions that survive the first production incident: where data lives, who is allowed to change it, and how the Angular SPA talks to ASP.NET Core without a contract that rot. Start with the config-file article if the search was appsettings or localappsettings.json. This hub is also Clean Architecture, modular monolith vs services, Minimal APIs, and the JSON contract failures that look like “the API 500s on detail pages.” Cycle exceptions are the object-cycle article — not an EF N+1 tutorial. JWT plumbing, EF SQL, and EDI parsers have their own topic pages. Skip a split into microservices until a boundary has a real independent deploy or scaling reason.",
     matchTags: [
       "Architecture",
       "Clean Architecture",
       "Microservices",
       "Modular Monolith",
       "Minimal APIs",
+    ],
+    pinSlugs: [
+      "aspnet-core-appsettings-localappsettings",
+      "clean-architecture-aspnet-core",
+      "aspnet-core-json-object-cycle",
+      "aspnet-core-middleware-order",
     ],
   },
 ];
@@ -265,7 +271,7 @@ export const projects: Project[] = [
     related: [
       {
         href: "/blog/identityserver-vs-aspnet-identity",
-        title: "IdentityServer in ASP.NET Core: what it is vs Identity",
+        title: "What is IdentityServer in ASP.NET Core?",
       },
       {
         href: "/blog/bff-pattern-aspnet-core-angular-yarp",

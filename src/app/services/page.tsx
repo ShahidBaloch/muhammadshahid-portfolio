@@ -71,7 +71,7 @@ const serviceWriting = [
   },
   {
     href: "/blog/identityserver-vs-aspnet-identity",
-    title: "IdentityServer in ASP.NET Core",
+    title: "What is IdentityServer in ASP.NET Core?",
     note: "When Identity is enough, and when OpenIddict or Duende is the SSO answer.",
   },
   {
