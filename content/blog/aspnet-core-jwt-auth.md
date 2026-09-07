@@ -162,7 +162,7 @@ Handoff quality matters on freelance engagements. I deliver:
 
 Clients trust the system when they can **verify** it without reading `Program.cs`. That trust is what gets you phase two.
 
-If the log is **IDX10503: Signature validation failed** (often with a misleading “no kid”), that is [the IDX10503 article](/blog/aspnet-core-idx10503-jwt-signature) — not a missing `[Authorize]` attribute.
+If the log is **IDX10503: Signature validation failed** (often with a misleading “no kid”), that is [the IDX10503 article](/blog/aspnet-core-idx10503-jwt-signature) — not a missing `[Authorize]` attribute. If it is **IDX10501: Unable to match key**, the `kid` is missing from JWKS: [IDX10501](/blog/aspnet-core-idx10501-jwt-kid).
 
 ## When to reach for IdentityServer / OpenIddict
 

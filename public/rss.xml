@@ -8,6 +8,13 @@
     <atom:link href="https://www.muhammadshahid.dev/rss.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title><![CDATA[IDX10501 Unable to Match Key (kid) in ASP.NET Core JWT]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-idx10501-jwt-kid</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-idx10501-jwt-kid</guid>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[IDX10501: Signature validation failed. Unable to match key — the token kid is not in JWKS or TokenValidationParameters. Not IDX10503, not a metadata download failure.]]></description>
+    </item>
+    <item>
       <title><![CDATA[IdentityServer Redirect URI Mismatch and Angular Login Loops]]></title>
       <link>https://www.muhammadshahid.dev/blog/identityserver-redirect-uri-login-loop</link>
       <guid>https://www.muhammadshahid.dev/blog/identityserver-redirect-uri-login-loop</guid>

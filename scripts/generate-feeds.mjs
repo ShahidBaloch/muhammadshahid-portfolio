@@ -209,6 +209,7 @@ const indexNowUrls = [
   `${BASE_URL}/blog/aspnet-core-appsettings-localappsettings`,
   `${BASE_URL}/blog/aspnet-core-headers-readonly-response-started`,
   `${BASE_URL}/blog/aspnet-core-data-protection-xml-encryptor`,
+  `${BASE_URL}/blog/aspnet-core-idx10501-jwt-kid`,
   `${BASE_URL}/learning/interview-questions`,
   `${BASE_URL}/learning/identity`,
   `${BASE_URL}/learning/architecture`,

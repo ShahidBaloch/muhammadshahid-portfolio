@@ -4,11 +4,15 @@ description: "IDX10503: Signature validation failed — what it actually means i
 date: "2026-09-07"
 category: "authentication"
 tags: ["JWT", "ASP.NET Core", "Security", "Angular", "Identity"]
+related:
+  - aspnet-core-idx10501-jwt-kid
+  - aspnet-core-jwt-auth
+  - mapidentityapi-opaque-token-vs-jwt
 ---
 
 **IDX10503: Signature validation failed** is IdentityModel saying: none of the keys you configured could verify this token’s signature. The rest of the sentence is often a lie. “Token does not have a kid” shows up on **symmetric HS256** APIs that never used a `kid`. Developers paste the whole line into Google. This URL is that paste.
 
-Issuing JWTs, lifetimes, and policies stay in [the JWT checklist](/blog/aspnet-core-jwt-auth). Opaque Identity API tokens vs JWT is [MapIdentityApi vs JWT](/blog/mapidentityapi-opaque-token-vs-jwt). Refresh rotation is [refresh token rotation](/blog/aspnet-core-jwt-refresh-token-rotation). I will not retell those. Here I only decode **signature** failures on `AddJwtBearer`.
+Issuing JWTs, lifetimes, and policies stay in [the JWT checklist](/blog/aspnet-core-jwt-auth). Opaque Identity API tokens vs JWT is [MapIdentityApi vs JWT](/blog/mapidentityapi-opaque-token-vs-jwt). Refresh rotation is [refresh token rotation](/blog/aspnet-core-jwt-refresh-token-rotation). A `kid` that is missing from JWKS is [IDX10501](/blog/aspnet-core-idx10501-jwt-kid), not this page. I will not retell those. Here I only decode **signature** failures on `AddJwtBearer`.
 
 ## Read the line before you add a `kid`
 
@@ -80,6 +84,7 @@ Fix the Angular attach path: [JWT interceptors](/blog/angular-jwt-interceptors).
 
 | Log / status | Look here instead |
 | --- | --- |
+| IDX10501 / unable to match key | Token `kid` not in JWKS — [IDX10501](/blog/aspnet-core-idx10501-jwt-kid) |
 | IDX10223 / lifetime | Clock skew, expired access token, refresh flow |
 | IDX10214 / audience | `ValidAudience` vs `aud` claim |
 | IDX10204 / issuer | `ValidIssuer` vs `iss` |
@@ -99,6 +104,7 @@ Audience and issuer failures are **not** signature failures. Do not rotate the s
 ## Related reading
 
 - [ASP.NET Core JWT auth checklist](/blog/aspnet-core-jwt-auth)
+- [IDX10501 unable to match key](/blog/aspnet-core-idx10501-jwt-kid)
 - [MapIdentityApi opaque tokens vs JWT](/blog/mapidentityapi-opaque-token-vs-jwt)
 - [Angular JWT interceptors](/blog/angular-jwt-interceptors)
 - [JWT refresh token rotation](/blog/aspnet-core-jwt-refresh-token-rotation)

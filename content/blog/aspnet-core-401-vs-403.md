@@ -67,7 +67,7 @@ With `AddJwtBearer` the mapping I expect on healthcare and SaaS APIs:
 | Valid token, `[Authorize(Policy = "CanViewFees")]` fails | **403** Forbid |
 | Valid token, resource-based check fails inside the action | **403** (`Forbid()` or `Results.Forbid()`) |
 
-IDX10503 and signature/`kid` failures are still **401** — the credential never became a `User`. Diagnose those in [IDX10503](/blog/aspnet-core-idx10503-jwt-signature), not here.
+IDX10503 signature failures and IDX10501 `kid` mismatches are still **401** — the credential never became a `User`. Diagnose those in [IDX10503](/blog/aspnet-core-idx10503-jwt-signature) and [IDX10501](/blog/aspnet-core-idx10501-jwt-kid), not here.
 
 A common “bug” that is actually correct: Swagger “Authorize” forgotten → 401. Policy too tight → 403. Teams swap the numbers in Angular because both look like “auth failed” in the Network tab.
 
@@ -138,6 +138,7 @@ Weak answer: “Make everything 401 so the interceptor is simpler.” Strong ans
 - [Angular interceptor: queue concurrent 401s](/blog/angular-interceptor-401-refresh-queue)
 - [ASP.NET Core RBAC](/blog/aspnet-core-rbac-guide)
 - [IDX10503 JWT signature](/blog/aspnet-core-idx10503-jwt-signature)
+- [IDX10501 JWT kid match](/blog/aspnet-core-idx10501-jwt-kid)
 - [Auth & tokens hub](/learning/authentication)
 
 If an Angular portal is logging people out on 403s and you want the API contract reviewed, [get in touch](/contact).

@@ -181,7 +181,7 @@ Machine clients (EDI jobs, Azure Functions) need **client credentials** re-regis
 ## Data and keys
 
 - Migrate **users** with Identity. Do not copy IS4 `PersistedGrant` rows and hope.
-- Plan a **signing key** that survives swaps (shared Data Protection or a cert). If the log is **No XML encryptor found**, that is the [Data Protection key ring](/blog/aspnet-core-data-protection-xml-encryptor), not this migration list.
+- Plan a **signing key** that survives swaps (shared Data Protection or a cert). If the log is **No XML encryptor found**, that is the [Data Protection key ring](/blog/aspnet-core-data-protection-xml-encryptor), not this migration list. If resource APIs log **IDX10501** after cutover, leftover IS4 tokens do not match OpenIddict JWKS — [IDX10501 kid match](/blog/aspnet-core-idx10501-jwt-kid).
 - Shorten access token lifetime for the first week so a bad claim set dies quickly.
 - Keep IS4 running in read-only / redirect mode only if you must — I prefer DNS cutover plus a maintenance page.
 
