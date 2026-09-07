@@ -47,7 +47,25 @@ export default function AboutPage() {
                 — is owned and written by me, {siteConfig.name}, based in {siteConfig.location}.
                 Posts share practical lessons from client and product work on ASP.NET Core, Angular,
                 Azure, and secure delivery. They are original articles, not republished or scraped
-                material. For projects, reach me via the{" "}
+                material. Start with{" "}
+                <Link href="/learning/interview-questions" className="text-teal link-underline">
+                  C# interview questions
+                </Link>
+                ,{" "}
+                <Link
+                  href="/blog/csharp-async-await-interview-questions"
+                  className="text-teal link-underline"
+                >
+                  async/await interviews
+                </Link>
+                , or{" "}
+                <Link
+                  href="/blog/identityserver-vs-aspnet-identity"
+                  className="text-teal link-underline"
+                >
+                  what IdentityServer is
+                </Link>
+                . For projects, reach me via the{" "}
                 <Link href="/contact" className="text-teal link-underline">
                   contact page
                 </Link>
