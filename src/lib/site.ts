@@ -67,7 +67,8 @@ export type LearningTopic = {
   matchTags: string[];
 };
 
-/** Topic hubs under Blog — SEO landing pages that group related articles. */
+/** Topic hubs under Blog — SEO landing pages that group related articles.
+ *  If you add a topic slug, also add it to LEARNING_SLUGS in scripts/generate-feeds.mjs. */
 export const learningTopics: LearningTopic[] = [
   {
     slug: "interview-questions",
@@ -192,6 +193,7 @@ export type Project = {
   domain: string;
 };
 
+/** If you add a project slug, also add it to PROJECT_SLUGS in scripts/generate-feeds.mjs. */
 export const projects: Project[] = [
   {
     slug: "carbazaar",

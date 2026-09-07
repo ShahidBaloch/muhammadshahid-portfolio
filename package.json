@@ -4,6 +4,9 @@
   "private": true,
   "description": "Portfolio website for Muhammad Shahid — Full Stack .NET + Angular developer",
   "scripts": {
+    "generate:feeds": "node scripts/generate-feeds.mjs",
+    "predev": "node scripts/generate-feeds.mjs",
+    "prebuild": "node scripts/generate-feeds.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

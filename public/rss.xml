@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Muhammad Shahid Blog</title>
+    <link>https://www.muhammadshahid.dev/blog</link>
+    <description>Senior .NET + Angular engineer helping teams design and ship secure healthcare, SaaS, and eCommerce systems — APIs, SPAs, Azure, identity, and clean architecture.</description>
+    <language>en-us</language>
+    <atom:link href="https://www.muhammadshahid.dev/rss.xml" rel="self" type="application/rss+xml"/>
+    
+    <item>
+      <title><![CDATA[IdentityServer Redirect URI Mismatch and Angular Login Loops]]></title>
+      <link>https://www.muhammadshahid.dev/blog/identityserver-redirect-uri-login-loop</link>
+      <guid>https://www.muhammadshahid.dev/blog/identityserver-redirect-uri-login-loop</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[IdentityServer login loops and redirect_uri mismatch — Duende / OpenIddict client URIs, Angular redirectUrl, post_logout, and PathBase. Not the Identity vs SSO decision.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[EF Core Interview Questions (Concurrency, Filters, SaveChanges)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/ef-core-interview-questions</link>
+      <guid>https://www.muhammadshahid.dev/blog/ef-core-interview-questions</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[EF Core interview questions with production answers — RowVersion concurrency, global query filters, ExecuteUpdate vs SaveChanges, DbContext in tests, and tenant leaks. Not an N+1 tutorial.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Unable to Resolve Service for Type in ASP.NET Core DI]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-unable-to-resolve-service</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-unable-to-resolve-service</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How to read ASP.NET Core’s Unable to resolve service for type exception — missing registration, IOptions vs T, hosted services, keyed services, and WebApplicationFactory — not a lifetimes essay.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[A Possible Object Cycle Was Detected in ASP.NET Core JSON]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-json-object-cycle</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-json-object-cycle</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Fix System.Text.Json’s possible object cycle was detected in ASP.NET Core — why EF navigation graphs explode, why ReferenceHandler.Preserve breaks Angular, and the DTO projection that actually ships.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[IDX10503 Signature Validation Failed in ASP.NET Core JWT]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-idx10503-jwt-signature</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-idx10503-jwt-signature</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[IDX10503: Signature validation failed — what it actually means in ASP.NET Core JWT bearer auth: kid vs symmetric keys, disposed RSA, Identity opaque tokens, and the checks that are not this error.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[ASP.NET Core Middleware Order: The Pipeline That Breaks Auth and CORS]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-middleware-order</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-middleware-order</guid>
+      <pubDate>Sun, 06 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Full ASP.NET Core middleware order I ship — forwarded headers, exception handler, CORS, auth before authorization, rate limits, and Swagger — not a CORS policy tutorial.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[IOptions vs IOptionsSnapshot vs IOptionsMonitor in ASP.NET Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-ioptions-snapshot-monitor</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-ioptions-snapshot-monitor</guid>
+      <pubDate>Sat, 05 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[When to inject IOptions, IOptionsSnapshot, or IOptionsMonitor — lifetimes, reload, named options, and the production bugs I see when teams pick the wrong one.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# Expert-Level Interview Questions (Senior / Staff Scenarios)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-expert-interview-questions</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-expert-interview-questions</guid>
+      <pubDate>Fri, 04 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[C# expert level interview questions with production answers — IAsyncEnumerable exports, cancellation across MediatR, ConcurrentDictionary caches, Span parsers, and bounded Channels.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[ASP.NET Core Config File Guide: appsettings.json vs localappsettings.json]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-appsettings-localappsettings</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-appsettings-localappsettings</guid>
+      <pubDate>Thu, 03 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[What the ASP.NET Core config file actually is — appsettings.json, appsettings.Development.json, user secrets, local.settings.json, and why localappsettings.json is usually the wrong name.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Serilog PII Redaction for Healthcare ASP.NET Core APIs]]></title>
+      <link>https://www.muhammadshahid.dev/blog/serilog-pii-redaction-healthcare-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/serilog-pii-redaction-healthcare-aspnet-core</guid>
+      <pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How I log ASP.NET Core healthcare APIs with Serilog without putting names, member ids, or raw X12 in Application Insights — destructuring, request logging, and what still belongs in an audit table.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[IdentityServer4 End of Life: OpenIddict Migration Checklist]]></title>
+      <link>https://www.muhammadshahid.dev/blog/identityserver4-openiddict-migration-checklist</link>
+      <guid>https://www.muhammadshahid.dev/blog/identityserver4-openiddict-migration-checklist</guid>
+      <pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Leaving IdentityServer / IdentityServer4 for OpenIddict on ASP.NET Core — client inventory, keys, Angular OIDC breaks, and a cutover checklist from healthcare and SaaS work.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[What Is IdentityServer in ASP.NET Core? vs Identity and SSO]]></title>
+      <link>https://www.muhammadshahid.dev/blog/identityserver-vs-aspnet-identity</link>
+      <guid>https://www.muhammadshahid.dev/blog/identityserver-vs-aspnet-identity</guid>
+      <pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[IdentityServer explained for ASP.NET Core: what it is, when ASP.NET Identity is enough, and when OpenIddict or Duende is worth SSO — not a feature-chart copy.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[SQL Server Parameter Sniffing with EF Core — When the Plan Fits the Wrong Clinic]]></title>
+      <link>https://www.muhammadshahid.dev/blog/ef-core-sql-server-parameter-sniffing</link>
+      <guid>https://www.muhammadshahid.dev/blog/ef-core-sql-server-parameter-sniffing</guid>
+      <pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How EF Core parameterized SQL meets SQL Server parameter sniffing: why one clinic is fast and another times out, what I change first, and the workarounds I refuse as a default.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[EF Core AsNoTracking vs AsNoTrackingWithIdentityResolution]]></title>
+      <link>https://www.muhammadshahid.dev/blog/ef-core-asnotracking-vs-identity-resolution</link>
+      <guid>https://www.muhammadshahid.dev/blog/ef-core-asnotracking-vs-identity-resolution</guid>
+      <pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[When no-tracking queries return duplicate Patient instances on one graph, why AsNoTrackingWithIdentityResolution exists, and when I still project DTOs instead in ASP.NET Core + SQL Server.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Duende BFF vs Custom YARP BFF for Angular and ASP.NET Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/duende-bff-vs-yarp-custom-bff</link>
+      <guid>https://www.muhammadshahid.dev/blog/duende-bff-vs-yarp-custom-bff</guid>
+      <pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[When I pay for Duende BFF versus owning a YARP cookie gateway: session, CSRF, OIDC login, licensing, and the failure modes that are not in the architecture diagram.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Clean API Validation and Error Envelopes in ASP.NET Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-api-validation</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-api-validation</guid>
+      <pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[ASP.NET Core API validation with ProblemDetails: FluentValidation without the deprecated AspNetCore package, one error envelope, and Angular form mapping.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Store the Refresh Token in an HttpOnly Cookie (Angular + ASP.NET Core)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/refresh-token-httponly-cookie-angular-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/refresh-token-httponly-cookie-angular-aspnet-core</guid>
+      <pubDate>Sun, 16 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[HttpOnly cookie vs localStorage vs memory vs BFF for refresh tokens: CSRF, CORS credentials, cookie flags, and the Angular withCredentials contract I use with ASP.NET Core.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Keyed Services in ASP.NET Core (FromKeyedServices) — When Keys Beat a Factory]]></title>
+      <link>https://www.muhammadshahid.dev/blog/keyed-services-aspnet-core-fromkeyedservices</link>
+      <guid>https://www.muhammadshahid.dev/blog/keyed-services-aspnet-core-fromkeyedservices</guid>
+      <pubDate>Sun, 16 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How I use AddKeyedScoped and FromKeyedServices in ASP.NET Core for closed sets of implementations — EDI vs FHIR clients, tenant notifiers — and when a factory is still the honest design.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[EF Core N+1 vs Include vs AsSplitQuery — Pick the SQL You Meant]]></title>
+      <link>https://www.muhammadshahid.dev/blog/ef-core-nplus1-include-vs-assplitquery</link>
+      <guid>https://www.muhammadshahid.dev/blog/ef-core-nplus1-include-vs-assplitquery</guid>
+      <pubDate>Sun, 16 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How I tell lazy-load N+1 from a single fat Include JOIN, when AsSplitQuery helps in ASP.NET Core + SQL Server, and why two collection Includes are a different bug (cartesian explosion).]]></description>
+    </item>
+    <item>
+      <title><![CDATA[EF Core Cartesian Explosion: Two Collection Includes, One Ugly JOIN]]></title>
+      <link>https://www.muhammadshahid.dev/blog/ef-core-cartesian-explosion-multiple-include</link>
+      <guid>https://www.muhammadshahid.dev/blog/ef-core-cartesian-explosion-multiple-include</guid>
+      <pubDate>Sun, 16 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Why Include(A).Include(B) on two collections multiplies SQL rows in EF Core, how to see it in SQL Server, and the fixes I use on ASP.NET Core APIs (AsSplitQuery, two queries, or stop including).]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Angular Interceptor: Queue Concurrent 401s So Refresh Runs Once]]></title>
+      <link>https://www.muhammadshahid.dev/blog/angular-interceptor-401-refresh-queue</link>
+      <guid>https://www.muhammadshahid.dev/blog/angular-interceptor-401-refresh-queue</guid>
+      <pubDate>Sun, 16 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[The concurrent 401 stampede against ASP.NET Core JWT refresh: why shareReplay still double-rotates, how I queue retries in RxJS, and what to skip so you do not log the user out.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[MediatR Commercial License vs Wolverine (and When to Stay)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/mediatr-license-wolverine-alternative</link>
+      <guid>https://www.muhammadshahid.dev/blog/mediatr-license-wolverine-alternative</guid>
+      <pubDate>Sat, 15 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[A practical ASP.NET Core decision guide after MediatR’s commercial licensing: when I stay on MediatR, when I migrate to Wolverine, and when CQRS does not need a mediator at all.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[MapIdentityApi Opaque Tokens vs JWT in ASP.NET Core — Pick Deliberately]]></title>
+      <link>https://www.muhammadshahid.dev/blog/mapidentityapi-opaque-token-vs-jwt</link>
+      <guid>https://www.muhammadshahid.dev/blog/mapidentityapi-opaque-token-vs-jwt</guid>
+      <pubDate>Sat, 15 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[ASP.NET Core Identity’s MapIdentityApi issues opaque access tokens by default — not JWTs. When that is enough, when you still need JWT bearer auth for Angular, and how to stop mixing the two by accident.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[EDI X12 Parsers in C# and .NET — How I Choose Architecture (Not a Vendor)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/edi-x12-parser-csharp-dotnet</link>
+      <guid>https://www.muhammadshahid.dev/blog/edi-x12-parser-csharp-dotnet</guid>
+      <pubDate>Sat, 15 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Independent notes on parsing X12 in C# for healthcare and supply-chain APIs: envelope vs transaction, 837-shaped pipelines, what libraries actually do, and how ASP.NET Core should host this work.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[BFF Pattern with ASP.NET Core, Angular, and YARP — Keep Tokens Off the SPA]]></title>
+      <link>https://www.muhammadshahid.dev/blog/bff-pattern-aspnet-core-angular-yarp</link>
+      <guid>https://www.muhammadshahid.dev/blog/bff-pattern-aspnet-core-angular-yarp</guid>
+      <pubDate>Sat, 15 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[When a Backend-for-Frontend (BFF) with YARP is the right auth shape for Angular + ASP.NET Core: cookie sessions, token attachment at the edge, CSRF, and how this differs from SPA-held JWTs.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[ASP.NET Core JWT Refresh Token Rotation (and How to Detect Theft)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-jwt-refresh-token-rotation</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-jwt-refresh-token-rotation</guid>
+      <pubDate>Sat, 15 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[A production guide to JWT refresh token rotation in ASP.NET Core: hashed storage, family revocation, reuse detection, and the Angular contract that keeps short-lived access tokens usable.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[AI in .NET with Semantic Kernel: Practical Patterns for ASP.NET Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/dotnet-ai-semantic-kernel-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/dotnet-ai-semantic-kernel-aspnet-core</guid>
+      <pubDate>Wed, 12 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Use Semantic Kernel and LLMs in ASP.NET Core — prompts, plugins, safety, caching, and how Angular clients call AI features without leaking secrets or burning tokens.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# Async Await Interview Questions (Scenario-Based)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-async-await-interview-questions</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-async-await-interview-questions</guid>
+      <pubDate>Wed, 12 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[C# async await interview questions with full scenario answers — .Result deadlocks, async void, Task.WhenAll with EF Core, CancellationToken, fire-and-forget, and ValueTask.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# Async and Await in ASP.NET Core: Stop Blocking Your API]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-async-await-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-async-await-aspnet-core</guid>
+      <pubDate>Wed, 12 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[C# async await explained for ASP.NET Core APIs — Task vs async void, CancellationToken, .Result starvation, WhenAll, HttpClient, Minimal APIs, and how Angular clients behave under load.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[ASP.NET Core Interview Questions: Scenario-Based Answers That Hold Up]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-interview-questions-scenarios</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-interview-questions-scenarios</guid>
+      <pubDate>Wed, 12 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[ASP.NET Core interview questions with detailed scenario answers — DI captive dependencies, JWT with Angular, middleware order, async starvation, EF Core slowness, and production tradeoffs.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[SOLID Principles in C# and ASP.NET Core (With Real API Examples)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/solid-principles-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/solid-principles-aspnet-core</guid>
+      <pubDate>Tue, 11 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[SOLID principles in C# for ASP.NET Core — detailed SRP, OCP, LSP, ISP, DIP examples with DI, Angular-facing APIs, anti-patterns, and refactor checklists from production systems.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Angular Interview Questions with ASP.NET Core: Scenario Answers]]></title>
+      <link>https://www.muhammadshahid.dev/blog/angular-interview-questions-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/angular-interview-questions-aspnet-core</guid>
+      <pubDate>Tue, 11 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Angular interview questions for ASP.NET Core teams — detailed scenario answers on auth guards, JWT interceptors, Signals vs RxJS, CORS myths, RBAC, and SPA performance.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[ASP.NET Core Minimal APIs: When to Use Them (and When Not To)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-minimal-apis</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-minimal-apis</guid>
+      <pubDate>Mon, 10 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[ASP.NET Core Minimal APIs for production — MapGet/MapPost, DI, validation, OpenAPI, auth, and when controllers still win for Angular-backed products.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Angular Signals with ASP.NET Core APIs: State Without Subscription Sprawl]]></title>
+      <link>https://www.muhammadshahid.dev/blog/angular-signals-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/angular-signals-aspnet-core</guid>
+      <pubDate>Sun, 09 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Angular Signals for API-driven apps — load state from ASP.NET Core, computed UI flags, RxJS interop, and when Signals beat BehaviorSubject for SPA state.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[ASP.NET Core Rate Limiting: Protect APIs Without Killing Real Users]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-rate-limiting</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-rate-limiting</guid>
+      <pubDate>Tue, 04 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Implement ASP.NET Core rate limiting middleware for Web APIs — fixed/sliding windows, per-user policies, 429 responses for Angular clients, and multi-instance pitfalls.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[ASP.NET Core Global Exception Handling for Angular APIs]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-global-exception-handling</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-global-exception-handling</guid>
+      <pubDate>Tue, 04 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Set up ASP.NET Core global exception handling with ProblemDetails so Angular forms show consistent errors — middleware vs IExceptionHandler, 400 vs 500, and what not to leak.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[IHttpClientFactory in ASP.NET Core: Stop Socket Exhaustion the Right Way]]></title>
+      <link>https://www.muhammadshahid.dev/blog/ihttpclientfactory-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/ihttpclientfactory-aspnet-core</guid>
+      <pubDate>Mon, 03 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Use IHttpClientFactory in ASP.NET Core to avoid HttpClient socket exhaustion and stale DNS — named clients, typed clients, Polly retries, and mistakes that still break production APIs.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Redis Caching in ASP.NET Core: When It Speeds Up APIs (and When It Lies)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/redis-caching-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/redis-caching-aspnet-core</guid>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Practical Redis caching in ASP.NET Core for Angular SPAs — IDistributedCache, cache keys, stampede control, invalidation, and the mistakes that make dashboards show stale data.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Modular Monolith vs Microservices in .NET: Choose Boundaries, Not Hype]]></title>
+      <link>https://www.muhammadshahid.dev/blog/modular-monolith-vs-microservices-dotnet</link>
+      <guid>https://www.muhammadshahid.dev/blog/modular-monolith-vs-microservices-dotnet</guid>
+      <pubDate>Sun, 02 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Modular monolith vs microservices for ASP.NET Core teams — when to split services, how to draw module boundaries, and how Angular frontends stay stable either way.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Strategy Pattern in C#: Replace If-Else With Clean Behavior Swaps]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-strategy-pattern</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-strategy-pattern</guid>
+      <pubDate>Sat, 01 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Strategy Pattern in C# for ASP.NET Core — swap pricing, validation, or export algorithms without giant if-else blocks, and register strategies with dependency injection.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Angular Auth Guard with ASP.NET Core JWT: Protect Routes the Right Way]]></title>
+      <link>https://www.muhammadshahid.dev/blog/angular-auth-guard-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/angular-auth-guard-aspnet-core</guid>
+      <pubDate>Sat, 01 Aug 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How to implement Angular auth guards and role guards with ASP.NET Core JWT — canActivate, token expiry checks, and role claims from the API without brittle localStorage hacks.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Dependency Injection in ASP.NET Core: Lifetimes Done Right]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-dependency-injection</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-dependency-injection</guid>
+      <pubDate>Fri, 31 Jul 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[ASP.NET Core dependency injection explained for real apps — Singleton vs Scoped vs Transient, captive dependencies, factory registration, and habits that keep .NET APIs testable.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Factory Pattern in C# with ASP.NET Core Dependency Injection]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-factory-pattern</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-factory-pattern</guid>
+      <pubDate>Thu, 30 Jul 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How to use the Factory Pattern in C# with ASP.NET Core DI — replace brittle switch statements, use factory delegates and keyed services, and know when a real factory class is worth it.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Freelance .NET + Angular Project Checklist Before You Start]]></title>
+      <link>https://www.muhammadshahid.dev/blog/freelance-dotnet-project-checklist</link>
+      <guid>https://www.muhammadshahid.dev/blog/freelance-dotnet-project-checklist</guid>
+      <pubDate>Tue, 28 Jul 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[A discovery-to-acceptance checklist for freelance ASP.NET Core and Angular client engagements — scope, auth, hosting, and handoff criteria that prevent costly surprises.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Repository Pattern in .NET — Useful vs Overkill]]></title>
+      <link>https://www.muhammadshahid.dev/blog/repository-pattern-dotnet</link>
+      <guid>https://www.muhammadshahid.dev/blog/repository-pattern-dotnet</guid>
+      <pubDate>Sun, 05 Jul 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[When the repository pattern earns its place in .NET with EF Core, when it becomes ceremony, and how I structure data access on healthcare SaaS and eCommerce products without lying about LINQ.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Azure Blob Storage with ASP.NET Core File Uploads]]></title>
+      <link>https://www.muhammadshahid.dev/blog/azure-blob-aspnet-core-uploads</link>
+      <guid>https://www.muhammadshahid.dev/blog/azure-blob-aspnet-core-uploads</guid>
+      <pubDate>Sat, 20 Jun 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Practical ASP.NET Core patterns for uploading files to Azure Blob Storage — validation, private containers, SAS, metadata, and Angular-friendly APIs.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[SignalR Real-Time Patterns in ASP.NET Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/signalr-aspnet-core-realtime</link>
+      <guid>https://www.muhammadshahid.dev/blog/signalr-aspnet-core-realtime</guid>
+      <pubDate>Thu, 18 Jun 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How I ship SignalR with ASP.NET Core for auctions, notifications, and live dashboards — authenticated hubs, group strategy, scaling with Azure SignalR, and Angular clients that reconnect honestly.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[ASP.NET Core JWT Auth: A Practical Checklist]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-jwt-auth</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-jwt-auth</guid>
+      <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[A production-ready checklist for JWT authentication in ASP.NET Core APIs — token lifetimes, refresh flows, policies, and Angular client habits from real client work.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Clean Architecture in ASP.NET Core Without Over-Engineering]]></title>
+      <link>https://www.muhammadshahid.dev/blog/clean-architecture-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/clean-architecture-aspnet-core</guid>
+      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[A senior engineer's guide to pragmatic Clean Architecture in ASP.NET Core — useful boundaries for eCommerce and SaaS without ceremony that slows delivery.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[EF Core and SQL Server Performance — Queries That Hurt in Production]]></title>
+      <link>https://www.muhammadshahid.dev/blog/ef-core-sql-performance</link>
+      <guid>https://www.muhammadshahid.dev/blog/ef-core-sql-performance</guid>
+      <pubDate>Sun, 10 May 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[EF Core performance lessons from healthcare reporting and SaaS dashboards — N+1 queries, projections, indexes, AsNoTracking, and the SQL Server pain that only appears under real data volume.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[MediatR and CQRS-Lite in ASP.NET Core — Ceremony vs Delivery]]></title>
+      <link>https://www.muhammadshahid.dev/blog/mediatr-cqrs-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/mediatr-cqrs-aspnet-core</guid>
+      <pubDate>Tue, 28 Apr 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[When MediatR and a CQRS-lite structure help a product team ship faster in ASP.NET Core — and when extra handlers, behaviors, and folders slow healthcare and SaaS delivery down.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Angular + .NET: Integration Habits That Reduce Rework]]></title>
+      <link>https://www.muhammadshahid.dev/blog/angular-dotnet-integration</link>
+      <guid>https://www.muhammadshahid.dev/blog/angular-dotnet-integration</guid>
+      <pubDate>Mon, 20 Apr 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Contract-first habits for Angular and ASP.NET Core teams — DTO shaping, error envelopes, pagination, and delivery patterns from healthcare SaaS and eCommerce work.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Dockerizing .NET API and Angular for Reproducible Local Dev]]></title>
+      <link>https://www.muhammadshahid.dev/blog/docker-dotnet-angular-local</link>
+      <guid>https://www.muhammadshahid.dev/blog/docker-dotnet-angular-local</guid>
+      <pubDate>Thu, 02 Apr 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How I Docker Compose a .NET API, Angular SPA, and SQL Server for marketplace and eCommerce stacks — reproducible local environments without the 'works on my machine' tax.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Deploying ASP.NET Core APIs to Azure App Service — What Actually Breaks]]></title>
+      <link>https://www.muhammadshahid.dev/blog/azure-app-service-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/azure-app-service-aspnet-core</guid>
+      <pubDate>Fri, 20 Mar 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Lessons from shipping ASP.NET Core APIs to Azure App Service in healthcare and SaaS — configuration, deployment slots, secrets, health checks, and the failures that only show up after go-live.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[ASP.NET Core RBAC for Healthcare and Admin Portals: Policies Over Scattered Roles]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-rbac-guide</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-rbac-guide</guid>
+      <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Role and policy-based authorization in ASP.NET Core for healthcare and admin portals — why I replace scattered [Authorize(Roles)] attributes with named policies clients can audit.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Angular JWT Interceptors: Bearer Tokens, Refresh, and 401 Handling That Survives Production]]></title>
+      <link>https://www.muhammadshahid.dev/blog/angular-jwt-interceptors</link>
+      <guid>https://www.muhammadshahid.dev/blog/angular-jwt-interceptors</guid>
+      <pubDate>Sun, 22 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How I wire Angular HTTP interceptors for JWT access tokens, refresh rotation, and 401 recovery against ASP.NET Core and IdentityServer APIs — including memory vs localStorage tradeoffs.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[EF Core Specification Pattern for Catalog Queries (Filters, Paging, and When to Skip It)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/ef-core-specification-pattern</link>
+      <guid>https://www.muhammadshahid.dev/blog/ef-core-specification-pattern</guid>
+      <pubDate>Thu, 05 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How I use specifications and repositories for eCommerce-style catalog filters and paging in ASP.NET Core — and the cases where the pattern is not worth the ceremony.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Fixing CORS Between Angular and ASP.NET Core (What I Actually Check on Client Projects)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/cors-angular-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/cors-angular-aspnet-core</guid>
+      <pubDate>Sun, 18 Jan 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Wrong origins, credentials, preflight, reverse proxies, and Azure App Service — the CORS failures I diagnose most often when Angular SPAs call ASP.NET Core APIs.]]></description>
+    </item>
+  </channel>
+</rss>

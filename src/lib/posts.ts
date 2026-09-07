@@ -57,18 +57,24 @@ export function getPostBySlug(slug: string): Post {
 
 export function getAllPosts(): PostMeta[] {
   return getPostSlugs()
-    .map((slug) => {
-      const post = getPostBySlug(slug);
-      return {
-        slug: post.slug,
-        title: post.title,
-        description: post.description,
-        date: post.date,
-        updated: post.updated,
-        tags: post.tags,
-        category: post.category,
-        readingTime: post.readingTime,
-      };
+    .flatMap((slug) => {
+      try {
+        const post = getPostBySlug(slug);
+        return [
+          {
+            slug: post.slug,
+            title: post.title,
+            description: post.description,
+            date: post.date,
+            updated: post.updated,
+            tags: post.tags,
+            category: post.category,
+            readingTime: post.readingTime,
+          },
+        ];
+      } catch {
+        return [];
+      }
     })
     .sort((a, b) => (a.date < b.date ? 1 : -1));
 }

@@ -2,16 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  // Markdown posts are read with fs at runtime. Include them in the Vercel
-  // serverless trace so sitemap/rss/blog do not 500 on a cold start.
+  // Markdown posts are read with fs at build. Include them in every trace so
+  // blog/learning pages cannot 500 if a function ever reads content at runtime.
+  // sitemap.xml and rss.xml are static files generated in prebuild.
   outputFileTracingIncludes: {
-    "/sitemap.xml": ["./content/blog/**/*"],
-    "/rss.xml": ["./content/blog/**/*"],
-    "/blog": ["./content/blog/**/*"],
-    "/blog/*": ["./content/blog/**/*"],
-    "/learning": ["./content/blog/**/*"],
-    "/learning/*": ["./content/blog/**/*"],
-    "/": ["./content/blog/**/*"],
+    "*": ["./content/blog/**/*"],
   },
   async redirects() {
     return [
