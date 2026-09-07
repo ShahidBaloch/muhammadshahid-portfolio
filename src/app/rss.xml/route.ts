@@ -4,7 +4,12 @@ import { siteConfig } from "@/lib/site";
 export const dynamic = "force-static";
 
 export async function GET() {
-  const posts = getAllPosts();
+  let posts: ReturnType<typeof getAllPosts> = [];
+  try {
+    posts = getAllPosts();
+  } catch {
+    posts = [];
+  }
   const items = posts
     .map(
       (post) => `

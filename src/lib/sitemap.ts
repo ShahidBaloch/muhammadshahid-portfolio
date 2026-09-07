@@ -1,4 +1,4 @@
-import { getAllPosts } from "@/lib/posts";
+import { getAllPosts, type PostMeta } from "@/lib/posts";
 import { learningTopics, projects, siteConfig } from "@/lib/site";
 
 type SitemapEntry = {
@@ -17,7 +17,12 @@ function toLastModified(date: string): string {
 }
 
 export function getSitemapEntries(): SitemapEntry[] {
-  const posts = getAllPosts();
+  let posts: PostMeta[] = [];
+  try {
+    posts = getAllPosts();
+  } catch {
+    posts = [];
+  }
   const latestContentDate = posts[0]?.date ?? "2026-08-04";
   const siteLastModified = toLastModified(latestContentDate);
 
