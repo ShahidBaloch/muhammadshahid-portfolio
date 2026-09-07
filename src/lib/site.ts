@@ -209,6 +209,11 @@ export function getLearningTopic(slug: string): LearningTopic | undefined {
   return learningTopics.find((topic) => topic.slug === slug);
 }
 
+export type ProjectRelated = {
+  href: string;
+  title: string;
+};
+
 export type Project = {
   slug: string;
   title: string;
@@ -222,6 +227,9 @@ export type Project = {
   liveUrl?: string;
   confidential?: boolean;
   domain: string;
+  /** Extra case-page copy so /work/[slug] is not a thin duplicate of the listing card. */
+  caseNotes: string[];
+  related: ProjectRelated[];
 };
 
 /** If you add a project slug, also add it to PROJECT_SLUGS in scripts/generate-feeds.mjs. */
@@ -248,6 +256,25 @@ export const projects: Project[] = [
     github: "https://github.com/ShahidBaloch/CarBazaar",
     layers: ["Angular SPA", "API Gateway", "Auction · Identity · Search", "RabbitMQ · Docker"],
     domain: "Marketplace architecture",
+    caseNotes: [
+      "The identity split was the decision that paid off. Buyer, seller, and ops surfaces needed one login without copying user tables into Auction and Search. IdentityServer sat behind the gateway as the token issuer; the other services validated JWTs and never saw passwords. That is the SSO shape I describe in the IdentityServer vs Identity article — not Identity bolted onto every microservice.",
+      "Bidding and search change at different rates. Putting both in one ASP.NET Core host would have made a catalog index deploy wait on an auction bugfix. RabbitMQ carried bid events so Search could stay eventually consistent instead of joining live bids on every query. Docker made the four-process local story repeatable; the pain was redirect URIs and CORS across those hosts, not the container files.",
+      "If I rebuilt it today I would still keep identity off the SPA, but I would evaluate a BFF so browser tokens never sit in localStorage. The auction and search APIs would keep the same contracts. The GitHub repo is the architecture reference — not a live marketplace with real vehicles.",
+    ],
+    related: [
+      {
+        href: "/blog/identityserver-vs-aspnet-identity",
+        title: "IdentityServer in ASP.NET Core: what it is vs Identity",
+      },
+      {
+        href: "/blog/bff-pattern-aspnet-core-angular-yarp",
+        title: "BFF with ASP.NET Core, Angular, and YARP",
+      },
+      {
+        href: "/blog/identityserver-redirect-uri-login-loop",
+        title: "IdentityServer redirect URI mismatch and login loops",
+      },
+    ],
   },
   {
     slug: "ecom-net10",
@@ -272,6 +299,25 @@ export const projects: Project[] = [
     github: "https://github.com/ShahidBaloch/Ecom_NET10",
     layers: ["Angular storefront", "ASP.NET Core APIs", "Domain · Application", "EF Core · SQL Server"],
     domain: "eCommerce platform",
+    caseNotes: [
+      "The storefront is one Angular app and one API product. That is why I did not start with IdentityServer. ASP.NET Core Identity plus JWT and RBAC is the right default until a second app or a partner shows up. Catalog, cart, and orders share a user table; SSO ceremony would have been inventory I was not ready to operate.",
+      "Catalog filters are where storefronts rot. Specification objects keep EF Core queries named and testable instead of stuffing every merchant rule into a controller. When the catalog grows, the failure is usually SQL — N+1, fat Includes, sniffed plans — not the Angular grid. The Clean Architecture folders only help if the query stays in Infrastructure and the UI gets a DTO, not an entity graph.",
+      "The GitHub repo is a .NET 10-shaped foundation I use in conversations with eCommerce teams. It is not a hosted shop. If you are choosing Identity vs an authorization server for a single storefront, start with the IdentityServer article; if the product already 500s on a product-detail page, start with EF Core performance, not another layer.",
+    ],
+    related: [
+      {
+        href: "/blog/clean-architecture-aspnet-core",
+        title: "Clean Architecture in ASP.NET Core without over-engineering",
+      },
+      {
+        href: "/blog/identityserver-vs-aspnet-identity",
+        title: "IdentityServer vs ASP.NET Identity for a single storefront",
+      },
+      {
+        href: "/blog/ef-core-sql-performance",
+        title: "EF Core and SQL Server performance",
+      },
+    ],
   },
   {
     slug: "healthcare-saas",
@@ -296,6 +342,25 @@ export const projects: Project[] = [
     confidential: true,
     layers: ["Provider & ops portals", ".NET APIs", "SQL Server · Cosmos DB", "Azure · AWS"],
     domain: "Healthcare / SaaS",
+    caseNotes: [
+      "This page stays at the pattern level because the delivery was under NDA. I will not name product screens, tenants, or PHI examples. What I can say: provider registration and fee schedules are write-heavy operational workflows. The Angular/MVC surfaces were only as good as the SQL behind them — a fee lookup that is fine on demo data times out when a real schedule and a real clinic load share a sniffed plan.",
+      "Onboarding and document flows used Azure storage; some reference data lived in Cosmos where the access pattern was key-lookup, not reporting. EDI conversion sat next to those APIs as a pipeline, not as log-the-payload convenience. Healthcare logging is a product decision: if Serilog writes a member ID into App Insights, you have a compliance incident, not a debugging win.",
+      "The useful public writing from this work is the SQL and EDI material, not a screenshot tour. If you are hiring for a similar healthcare or SaaS slice, the contact form is the right next step — I will not paste internals into a case study to make the URL look longer.",
+    ],
+    related: [
+      {
+        href: "/blog/ef-core-sql-performance",
+        title: "EF Core and SQL Server performance",
+      },
+      {
+        href: "/blog/edi-x12-parser-csharp-dotnet",
+        title: "EDI X12 parsers in C# and .NET",
+      },
+      {
+        href: "/blog/serilog-pii-redaction-healthcare-aspnet-core",
+        title: "Serilog PII redaction for healthcare APIs",
+      },
+    ],
   },
 ];
 
