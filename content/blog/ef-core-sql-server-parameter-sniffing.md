@@ -1,136 +1,101 @@
 ---
-title: "SQL Server Parameter Sniffing with EF Core — When the Plan Fits the Wrong Clinic"
-description: "How EF Core parameterized SQL meets SQL Server parameter sniffing: why one clinic is fast and another times out, what I change first, and the workarounds I refuse as a default."
-date: "2026-08-17"
+title: "Fix SQL Server Parameter Sniffing in EF Core"
+description: "EF Core query is fast for one clinic and times out for another. How I confirm SQL Server parameter sniffing and what I change — without trusting SSMS."
+date: "2026-09-07"
 category: "ef-core"
-tags: ["EF Core", "SQL Server", "Performance", "ASP.NET Core"]
+tags: ["EF Core", "SQL Server", "Performance", "Diagnostics"]
+related:
+  - ef-core-sql-performance
+  - sql-server-tempdb-contention
+  - ef-core-nplus1-include-vs-assplitquery
+faq:
+  - q: "Why is the same EF Core query fast for one tenant and slow for another?"
+    a: "SQL Server cached a plan from the first parameter it saw. A tiny clinic got a nested loop. The hub clinic reuses that plan and scans forever. That is parameter sniffing, not a different LINQ file."
+  - q: "Why does it run instantly in SSMS but timeout in ASP.NET Core?"
+    a: "SSMS uses different SET options, so you often get a new plan. That is not proof the app is “fine.” Compare Query Store for the app’s session settings."
+  - q: "Does TagWith add OPTION (RECOMPILE)?"
+    a: "No. TagWith only writes a SQL comment. A DbCommandInterceptor (or Query Store) has to append the real hint."
 ---
 
-The appointment search is fine for clinic A (200 visits a week). Clinic B (a regional hub) times out the same endpoint. Same ASP.NET Core code. Same EF query. SQL Server cached a plan that was cheap for A’s parameters and catastrophic for B’s.
+![Two clinics sharing one sniffed SQL Server plan: small clinic 50ms, hub clinic 30s timeout](/images/blog/ef-core-parameter-sniffing.png)
 
-That is **parameter sniffing**. It is a SQL Server behavior. EF Core did not invent it. EF Core **does** send parameterized SQL by default, which is how sniffing gets a value to sniff.
+The appointments endpoint was **50ms** for clinic A and a **30 second timeout** for clinic B. Same LINQ. Same index. SSMS for clinic B was instant. That combination is almost always **parameter sniffing** (parameter-sensitive plan): SQL Server compiled a plan for the first `@clinicId` it saw and reused it for a tenant with a wildly different row count.
 
-This is not [N+1](/blog/ef-core-nplus1-include-vs-assplitquery) and not “add an index and walk away.” Indexes still matter. Sniffing is why a **good** index still serves a **bad** plan. Broader query habits: [EF Core performance](/blog/ef-core-sql-performance).
+This is not [N+1](/blog/ef-core-nplus1-include-vs-assplitquery). Command count is one. The plan is wrong for the sniff. If waits are `PAGELATCH_UP` on database id 2, that is [TempDB contention](/blog/sql-server-tempdb-contention), not this page.
 
-Numbers below are **illustrative**. Do not quote them as a benchmark.
+## Confirm in Query Store, not SSMS
 
-## What sniffing is (in this stack)
+1. Find the query in **Query Store** (or `sys.dm_exec_query_stats`) using the EF shape, not the SSMS ad-hoc text.
+2. Look at **avg duration vs last**, and at the sniffed parameter in the plan XML.
+3. Note the app’s `SET` options. SSMS defaults (`ARITHABORT` and friends) often compile a **different** plan. Instant SSMS proves almost nothing.
 
-SQL Server compiles a plan using the **first** parameter values it sees (or a sniffed value at compile). That plan is reused for later calls.
+I do not run `DBCC FREEPROCCACHE` on a shared healthcare database to “see if it helps.” That is a production incident. Use Query Store’s “force plan” / “unpin” tools, or a staging copy.
 
-EF generates something like:
+## What the bad plan looks like
+
+Clinic A has twelve encounters this week. SQL Server picks a nested loop keyed on `ClinicId`. Clinic B is the regional hub: millions of rows, same predicate. The cached nested loop becomes a timeout. Swap the order of first execution and the **other** clinic becomes the victim.
+
+EF parameterized the `clinicId`. That is correct. You wanted a reusable plan. You got a plan that only fits one cardinality.
+
+## Fixes I actually ship
+
+### 1. Make the query honest (often enough)
+
+Unbounded `OrderBy` + `Take` without a date window on a hub clinic is a sniff waiting to happen. Require `from`/`to` the way the [performance pillar](/blog/ef-core-sql-performance) already says. A plan for “twelve months of the hub” should not be the plan for “today at a satellite clinic.”
+
+### 2. SQL Server 2022+ PSP optimization
 
 ```sql
-SELECT ... FROM Visits v
-WHERE v.ClinicId = @__clinicId_0
-  AND v.StartUtc >= @__from_1
-  AND v.StartUtc < @__to_2
-ORDER BY v.StartUtc
-OFFSET @__p_3 ROWS FETCH NEXT @__p_4 ROWS ONLY
+ALTER DATABASE SCOPED CONFIGURATION
+SET PARAMETER_SENSITIVE_PLAN_OPTIMIZATION = ON;
 ```
 
-Clinic A: `@__clinicId_0` is a small tenant. Nested loop + seek is perfect.  
-Clinic B: millions of rows for that `ClinicId`. The cached nested loop reads like a table scan with extra steps.
+SQL Server 2022 can cache **multiple** plans for the same statement when it detects parameter-sensitive cardinality. Azure SQL often has this on. On-prem 2019 does not. Do not set `PARAMETER_SNIFFING = ON` and call it a day — sniffing is already the default.
 
-Angular sees “the API is slow on big clinics.” App Insights shows SQL duration. The code review finds nothing because the LINQ is reasonable.
+### 3. Recompile or OPTIMIZE FOR UNKNOWN on one hot query
 
-## Confirm it before you sprinkle hints
-
-I want **Query Store** (or an actual plan) for the slow call:
-
-- Same query hash, wildly different duration by clinic
-- Plan shows a join type that makes sense for a tiny estimate and not for the actual rows
-- `SET STATISTICS IO` on a replay with B’s parameters vs A’s
-
-If every clinic is slow, you probably have a missing index, a [cartesian Include](/blog/ef-core-cartesian-explosion-multiple-include), or a projection that loads entities. Fix that first. Sniffing is the diagnosis when **data distribution** is the difference.
-
-Do not log parameter values that are patient identifiers in production traces. Use clinic id and date range in a controlled replay with a masked database.
-
-## What I change first (application)
-
-**1. The query shape Angular actually needs**
-
-Unbounded `from`/`to` on clinic B is a scan waiting to happen. Require a max window. Hub clinics search a week, not “all history,” unless they hit a report connection with a timeout.
-
-**2. Projection, not Include**
-
-A sniffed bad plan plus `Include` of collections is how you timeout and then blame sniffing only. Project columns. [AsNoTracking vs identity resolution](/blog/ef-core-asnotracking-vs-identity-resolution) if you still materialize graphs.
-
-**3. Indexes that match the filter you sniff**
-
-`(ClinicId, StartUtc)` INCLUDE list columns is the usual seek. If the first sniffed plan used a different index because A’s `StartUtc` range was tiny, B still needs a supporting index so **a** good plan exists.
-
-Sniffing on a heap with no tenant+date index is not sniffing. It is a missing index wearing a costume.
-
-## What I change in SQL Server (carefully)
-
-When the LINQ is already honest and Query Store shows a sniffed nested loop:
-
-**Update statistics** on the big tables after a data load. Stale stats + sniffing is a popular pairing.
-
-**Query Store force plan** for a known-good plan — operations-owned, not a developer folklore hint in LINQ. I use this when one query id is a fire and we need the site up.
-
-I am slow to put **RECOMPILE** on every EF query. It “fixes” sniffing by compiling every time. CPU goes up. Tiny clinics pay for hub clinics. I will use `Option (Recompile)` on a **single** report stored procedure, not as a global EF interceptor.
-
-`OPTIMIZE FOR UNKNOWN` (local variable pattern / `OPTIMIZE FOR UNKNOWN`) can produce a generic plan. Sometimes that generic plan is mediocre for everyone instead of excellent for A and deadly for B. Measure both tenants.
-
-I do **not** tell EF to concatenate SQL to avoid parameters. That is injection and plan-cache pollution. Parameterization stays.
-
-## EF Core levers that are real
-
-**Split the hot query** so the sniffed parameter is less lethal: filter `ClinicId` in a cheap seek, then date page. Two round-trips can beat one disaster plan. That is an engineering trade, not a purity loss.
-
-**`EF.Constant` (where it exists in your EF version)** for a value that should not be a parameter — use rarely. A boolean feature flag is a candidate. `ClinicId` is not. If you constant-fold tenant ids you explode the plan cache.
-
-**Raw SQL for the one report** that Query Store hates, with parameters you control:
+`TagWith("OPTION (RECOMPILE)")` does **not** add a hint. It adds a comment. I use a small interceptor that looks for a tag and appends the hint:
 
 ```csharp
-var rows = await db.Database
-    .SqlQuery<VisitRowDto>($"""
-        SELECT v.Id, v.StartUtc, p.DisplayName
-        FROM Visits v
-        INNER JOIN Patients p ON p.Id = v.PatientId
-        WHERE v.ClinicId = {clinicId}
-          AND v.StartUtc >= {from}
-          AND v.StartUtc < {to}
-        ORDER BY v.StartUtc
-        OFFSET {skip} ROWS FETCH NEXT {take} ROWS ONLY
-        """)
+public sealed class RecompileHintInterceptor : DbCommandInterceptor
+{
+    public override InterceptionResult<DbDataReader> ReaderExecuting(
+        DbCommand command,
+        CommandEventData eventData,
+        InterceptionResult<DbDataReader> result)
+    {
+        if (command.CommandText.Contains("-- recompile-hint", StringComparison.Ordinal))
+        {
+            command.CommandText += " OPTION (RECOMPILE)";
+        }
+
+        return result;
+    }
+}
+```
+
+```csharp
+var rows = await db.Encounters
+    .AsNoTracking()
+    .TagWith("recompile-hint")
+    .Where(e => e.ClinicId == clinicId && e.ServiceDate >= from && e.ServiceDate < to)
+    .Select(e => new EncounterRowDto(e.Id, e.Status, e.ServiceDate))
     .ToListAsync(ct);
 ```
 
-EF still parameterizes interpolated SQL in current versions when used correctly — verify the log. The point of raw SQL here is **hints you will not hang on LINQ**, e.g. a well-reviewed `OPTION (RECOMPILE)` on a report only:
+`OPTION (RECOMPILE)` costs compile CPU. I put it on **one** tenant-skewed endpoint, not on every LINQ query in the solution. `OPTION (OPTIMIZE FOR UNKNOWN)` is the other hint I try when a “middle” density plan is acceptable.
 
-```sql
-OPTION (RECOMPILE)
-```
+### 4. Do not sprinkle EF.Constant everywhere
 
-I keep that in a stored procedure named for the report, not sprinkled through the app. Healthcare reporting already wants a stable contract.
+Embedding the clinic id as a literal (`EF.Constant`) can force a fresh plan per tenant. It also explodes plan cache if you have thousands of clinics. I treat it as a last resort for a handful of ids, not a multi-tenant default.
 
-**Dapper for the ugly report** is allowed. A single Dapper method in the reporting project is not a betrayal of EF. Hybrid EF + Dapper in one host is a later cluster post — do not invent a second ORM story until this query has a plan you can explain.
+## When it is not sniffing
 
-## Application patterns that make sniffing worse
+- Fifty extra commands: N+1
+- One command, row count is a product: cartesian explosion
+- Same plan, missing index: Query Store will show scans regardless of tenant
+- Instant after you added RCSI, then TempDB waits: different article
 
-- **One mega-search** with optional filters (`if (q.ProviderId is not null)`) that change the SQL shape. EF may generate multiple query caches anyway; optional filters also change estimates. Prefer a small set of dedicated queries over a 40-branch IQueryable.
-- **`Contains` on a huge id list** from Angular. Sniffing plus a table-valued parameter would be a different article; start by capping the list.
-- **Global filters** (`HasQueryFilter` for soft delete) that interact with the sniffed seek. Check the plan includes `IsDeleted = 0` efficiently.
+Interview “one tenant fast, one slow” is allowed to point here. Correctness questions (filters, rowversion) stay on [EF Core interview questions](/blog/ef-core-interview-questions).
 
-## Checklist I use on a “big tenant is slow” ticket
-
-- [ ] Reproduce with clinic B parameters on a masked copy
-- [ ] Query Store: plan vs duration vs tenant
-- [ ] Index on tenant + date (or the actual filter)
-- [ ] LINQ projects; no double collection Include
-- [ ] Date range bounded
-- [ ] Stats current
-- [ ] Only then: Query Store force, isolated RECOMPILE, or a report procedure
-
-If you skip to `RECOMPILE` in an interceptor, you will ship a CPU incident and still have a missing index.
-
-## What I tell product
-
-Parameter sniffing is not an EF bug. Multi-tenant healthcare data is **skewed**. The API has to assume one clinic is not like another. Timeouts on hub clinics are a capacity and plan problem, not “SQL Server being random.”
-
----
-
-If one tenant crawls and others do not on the same EF query, [contact me](/contact). Bring Query Store for that query id and a redacted plan; we can tell sniffing from a missing index in one sitting.
+If one ASP.NET Core clinic times out and the satellite clinics do not, [contact me](/contact). A Query Store screenshot of the sniffed parameter is enough to choose recompile vs PSP vs a tighter date window.

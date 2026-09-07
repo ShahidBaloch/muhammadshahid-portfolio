@@ -4,6 +4,17 @@ description: "ASP.NET Core dependency injection explained for real apps — Sing
 date: "2026-07-31"
 category: "dependency-injection"
 tags: ["Dependency Injection", "ASP.NET Core", "C#", ".NET", "IoC"]
+related:
+  - aspnet-core-unable-to-resolve-service
+  - keyed-services-aspnet-core-fromkeyedservices
+  - aspnet-core-ioptions-snapshot-monitor
+faq:
+  - q: "What are ASP.NET Core DI lifetimes?"
+    a: "Transient is new every resolve. Scoped lasts the request. Singleton lasts the process. Mixing them wrong creates captive dependencies."
+  - q: "What is a captive dependency?"
+    a: "A Singleton that holds a Scoped service, often DbContext. The first request’s instance lives for the process and can leak tenant data."
+  - q: "Should I inject IServiceProvider everywhere?"
+    a: "No. That is a service locator. Register the service. If the container cannot find it, that miss is the Unable to resolve article, not this lifetimes page."
 ---
 
 **Dependency injection in ASP.NET Core** is built into the framework — which means every team uses it, and many teams misuse lifetimes until a subtle production bug appears. Captive dependencies, accidental singletons holding `DbContext`, and "just inject `IServiceProvider` everywhere" are still common in otherwise solid codebases.

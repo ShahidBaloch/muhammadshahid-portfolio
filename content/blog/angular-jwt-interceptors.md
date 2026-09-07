@@ -1,9 +1,16 @@
 ---
-title: "Angular JWT Interceptors: Bearer Tokens, Refresh, and 401 Handling That Survives Production"
+title: "Angular JWT Interceptors for ASP.NET Core APIs"
 description: "How I wire Angular HTTP interceptors for JWT access tokens, refresh rotation, and 401 recovery against ASP.NET Core and IdentityServer APIs — including memory vs localStorage tradeoffs."
 date: "2026-02-22"
 category: "authentication"
 tags: ["Angular", "JWT", "ASP.NET Core", "Security"]
+faq:
+  - q: "How do Angular JWT interceptors attach a bearer token?"
+    a: "An HttpInterceptor clones each request to the API and sets Authorization: Bearer plus the access token from memory. Guards do not do this; they only block routes."
+  - q: "Should I keep the access JWT in localStorage?"
+    a: "Prefer memory for the access token. localStorage survives XSS. Refresh storage is a different decision — cookie, rotation, or BFF — not this interceptor overview."
+  - q: "Do interceptors replace Angular auth guards?"
+    a: "No. Guards decide whether a URL may open. Interceptors attach tokens and recover 401s. You need both, plus API authorization that does not trust the SPA."
 ---
 
 Every Angular app that talks to a secured ASP.NET Core API eventually needs the same plumbing: attach a bearer token, recover when it expires, and stop five parallel requests from all trying to refresh at once.

@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: `${topic.title} | Blog Topics`,
+    title: topic.title,
     description: topic.description,
     alternates: { canonical: `/learning/${topic.slug}` },
   };

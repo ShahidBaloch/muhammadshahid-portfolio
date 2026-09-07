@@ -8,6 +8,13 @@ related:
   - aspnet-core-idx10501-jwt-kid
   - aspnet-core-jwt-auth
   - mapidentityapi-opaque-token-vs-jwt
+faq:
+  - q: "What is IDX10503 in ASP.NET Core JWT?"
+    a: "IDX10503 means IdentityModel picked keys and the signature still failed: wrong symmetric secret, disposed RSA, or an opaque Identity token treated as a JWT."
+  - q: "Is IDX10503 the same as IDX10501?"
+    a: "No. IDX10501 is “the kid is not in the key set.” IDX10503 is “I tried keys and none verified the signature.” Fix the matching error, not both articles at once."
+  - q: "Can I disable ValidateIssuerSigningKey to silence IDX10503?"
+    a: "No. That accepts forged tokens. Fix the signing credential, key lifetime, or stop sending MapIdentityApi opaque tokens to JwtBearer."
 ---
 
 **IDX10503: Signature validation failed** is IdentityModel saying: none of the keys you configured could verify this token’s signature. The rest of the sentence is often a lie. “Token does not have a kid” shows up on **symmetric HS256** APIs that never used a `kid`. Developers paste the whole line into Google. This URL is that paste.

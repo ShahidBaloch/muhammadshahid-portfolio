@@ -4,6 +4,13 @@ description: "IdentityServer login loops and redirect_uri mismatch — Duende / 
 date: "2026-09-07"
 category: "identity"
 tags: ["IdentityServer", "OpenIddict", "OIDC", "Angular", "ASP.NET Core"]
+faq:
+  - q: "Why does IdentityServer loop Angular login?"
+    a: "Most often redirect_uri is not an exact registered match: http vs https, www, PathBase, or a trailing slash. The authorize endpoint rejects the URI and the SPA retries."
+  - q: "Is a login loop always a redirect URI mismatch?"
+    a: "No. Cookie SameSite, silent renew, and a guard that redirects on every 401 also loop. Check the IdentityServer log for redirect_uri is not valid before rewriting Angular."
+  - q: "Do post_logout_redirect_uri values need registering too?"
+    a: "Yes. Logout loops are the same class of bug with a different client field. Register both login and logout URIs per environment."
 ---
 
 People search **IdentityServer** when Angular bounces between `/connect/authorize` and the app origin and nobody is logged in. Logs say `redirect_uri is not valid`, or they say nothing. Swagger’s password flow still works.

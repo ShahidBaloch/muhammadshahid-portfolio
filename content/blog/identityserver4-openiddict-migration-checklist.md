@@ -1,10 +1,17 @@
 ---
-title: "IdentityServer4 End of Life: OpenIddict Migration Checklist"
+title: "IdentityServer4 to OpenIddict Migration Checklist"
 description: "Leaving IdentityServer / IdentityServer4 for OpenIddict on ASP.NET Core — client inventory, keys, Angular OIDC breaks, and a cutover checklist from healthcare and SaaS work."
 date: "2026-08-17"
 updated: "2026-09-07"
 category: "identity"
 tags: ["IdentityServer", "OpenIddict", "OIDC", "ASP.NET Core Identity", "SSO"]
+faq:
+  - q: "How do I migrate IdentityServer4 to OpenIddict?"
+    a: "Inventory clients, redirect URIs, signing keys, and scopes first. Then cut over discovery and JWKS. It is a checklist, not a drop-in binary swap."
+  - q: "Do Angular OIDC clients break when leaving IdentityServer4?"
+    a: "Usually yes if authority, client_id, or redirect URIs change. Keep the same public client contract on day one, then tidy scopes after login works."
+  - q: "Should I replace IdentityServer with ASP.NET Identity instead?"
+    a: "Only if you no longer need OIDC for multiple apps or partners. That product choice is the IdentityServer vs ASP.NET Identity article, not this cutover list."
 ---
 
 IdentityServer4 is end of life. Teams still run it because login works, Angular still redirects, and nobody wants to touch certificates in production. Then a CVE, a .NET upgrade, or a security questionnaire makes the conversation unavoidable.

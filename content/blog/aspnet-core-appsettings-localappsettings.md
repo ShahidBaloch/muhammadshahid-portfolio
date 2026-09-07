@@ -1,6 +1,6 @@
 ---
-title: "What is the ASP.NET Core config file? (not localappsettings.json)"
-description: "What the ASP.NET Core config file actually is — appsettings.json, appsettings.Development.json, user secrets, local.settings.json, and why localappsettings.json is usually the wrong name."
+title: "What is the ASP.NET Core config file?"
+description: "What the ASP.NET Core config file actually is — appsettings.json, user secrets, environment variables — and why localappsettings.json is usually the wrong name."
 date: "2026-09-03"
 updated: "2026-09-07"
 category: "architecture"
@@ -141,4 +141,4 @@ The ASP.NET Core **config file** is `appsettings.json` plus `appsettings.{Enviro
 
 If a setting works on your machine and vanishes after deploy, the host is reading a different source — not a misspelled JSON filename. Bring the environment name and the App Service application-settings list; I will tell you which layer won.
 
-If you want a second pair of eyes on configuration for an ASP.NET Core API before it hits a staging slot, [contact me](/contact).
+If you want a second pair of eyes on configuration for an ASP.NET Core API before it hits a staging slot, [contact me](/contact). Related architecture notes: [architecture hub](/learning/architecture).

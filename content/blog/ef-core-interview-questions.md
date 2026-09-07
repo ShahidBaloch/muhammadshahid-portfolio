@@ -1,9 +1,16 @@
 ---
-title: "EF Core Interview Questions (Concurrency, Filters, SaveChanges)"
-description: "EF Core interview questions with production answers — RowVersion concurrency, global query filters, ExecuteUpdate vs SaveChanges, DbContext in tests, and tenant leaks. Not an N+1 tutorial."
+title: "EF Core Interview Questions"
+description: "EF Core interview questions with production answers — RowVersion concurrency, global query filters, ExecuteUpdate vs SaveChanges, and tenant leaks. Not an N+1 tutorial."
 date: "2026-09-07"
 category: "interview-questions"
 tags: ["Interview Questions", "EF Core", "SQL Server", "ASP.NET Core", ".NET", "Career"]
+faq:
+  - q: "What EF Core interview questions get asked at senior level?"
+    a: "Correctness, not Include trivia: two users saving the same row, a global query filter that leaked a tenant, SaveChanges in a foreach, two tracked instances of one key, and a singleton holding a DbContext."
+  - q: "How do you stop last-write-wins on an encounter?"
+    a: "Map SQL Server rowversion as a concurrency token. GET returns it, PUT sends it back, second save throws DbUpdateConcurrencyException. Map that to 409, not 500. The how-to is the RowVersion article."
+  - q: "Are query filters a security boundary?"
+    a: "No. IgnoreQueryFilters, raw SQL, and a job DbContext with the wrong tenant still leak. Filters are a seatbelt. The wiring post is the query-filters article."
 ---
 
 **EF Core interview questions** at senior level are not “what is `Include`.” Interviewers ask whether you can keep a clinic or marketplace database correct when two users save the same row, when a tenant filter is missing, and when a background job shares a `DbContext`.
@@ -185,6 +192,9 @@ Pending model changes at runtime means someone edited entities and skipped `dotn
 - **[N+1 vs Include vs AsSplitQuery](/blog/ef-core-nplus1-include-vs-assplitquery):** which SQL you meant
 - **[Cartesian explosion](/blog/ef-core-cartesian-explosion-multiple-include):** two collection Includes
 - **[Parameter sniffing](/blog/ef-core-sql-server-parameter-sniffing):** one tenant fast, another slow
+- **[RowVersion](/blog/ef-core-optimistic-concurrency-token):** how to map the token and return 409
+- **[Query filters](/blog/ef-core-global-query-filters-soft-delete):** how to wire `HasQueryFilter` without a leak
+- **[ExecuteUpdate](/blog/ef-core-bulk-update-executeupdate):** set-based UPDATE when interceptors must not run
 
 ## Related reading
 

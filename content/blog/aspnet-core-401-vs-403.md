@@ -8,6 +8,13 @@ related:
   - aspnet-core-jwt-auth
   - angular-interceptor-401-refresh-queue
   - aspnet-core-rbac-guide
+faq:
+  - q: "What is the difference between 401 and 403 in ASP.NET Core?"
+    a: "401 Challenge means the request is unauthenticated (missing or invalid JWT). 403 Forbid means the user is authenticated and failed a policy. They are not interchangeable."
+  - q: "Should Angular log out on every 403?"
+    a: "No. 403 is “you are signed in and not allowed.” Logging out trains users to think the session died. Only 401 should start refresh or login."
+  - q: "When does JWT bearer return Challenge vs Forbid?"
+    a: "No token or a failed token is Challenge (401). A valid token that misses a role or policy is Forbid (403). Misconfigured schemes make both look like 401."
 ---
 
 Angular logs a clinician out because a fee-schedule endpoint returned **403**. The access JWT was valid. The user was signed in. The interceptor treated **every** non-2xx auth failure as “session dead.” That is a **401 vs 403** bug, not a refresh-token bug.

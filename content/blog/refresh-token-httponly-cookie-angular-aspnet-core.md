@@ -1,9 +1,16 @@
 ---
-title: "Store the Refresh Token in an HttpOnly Cookie (Angular + ASP.NET Core)"
+title: "HttpOnly Cookie for Angular Refresh Tokens"
 description: "HttpOnly cookie vs localStorage vs memory vs BFF for refresh tokens: CSRF, CORS credentials, cookie flags, and the Angular withCredentials contract I use with ASP.NET Core."
 date: "2026-08-16"
 category: "authentication"
 tags: ["ASP.NET Core", "Angular", "JWT", "Security", "CORS"]
+faq:
+  - q: "Should I store the refresh token in an HttpOnly cookie?"
+    a: "Yes when you want JavaScript unable to read it. The browser will still send it on matching requests, so you must set cookie flags and CSRF protection."
+  - q: "Is an HttpOnly cookie automatically safer than localStorage?"
+    a: "It blocks XSS from reading the refresh token. It does not block CSRF. Wildcard CORS plus AllowCredentials makes the cookie worse than localStorage."
+  - q: "Does Angular need withCredentials for cookie refresh?"
+    a: "Yes. Cross-origin cookie refresh fails silently without withCredentials and a precise CORS origin. Same-site BFF setups do not need this SPA cookie dance."
 ---
 
 People search “store refresh token httpOnly cookie Angular ASP.NET Core” when they have already been burned by `localStorage`. The cookie is not automatically safer. It **moves** the problem: JavaScript cannot read the token, but the browser **will send it** on matching requests — which is CSRF if you are sloppy, and a CORS mess if `AllowCredentials` meets a wildcard origin.

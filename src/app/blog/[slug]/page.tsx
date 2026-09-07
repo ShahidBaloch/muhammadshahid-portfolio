@@ -29,6 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title: post.title,
       description: post.description,
+      authors: [{ name: siteConfig.name, url: siteConfig.url }],
       alternates: { canonical: `/blog/${post.slug}` },
       openGraph: {
         type: "article",
@@ -37,11 +38,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         publishedTime: post.date,
         modifiedTime: modified,
         url: `${siteConfig.url}/blog/${post.slug}`,
+        images: [
+          {
+            url: `/blog/${post.slug}/opengraph-image`,
+            width: 1200,
+            height: 630,
+            alt: post.title,
+          },
+        ],
       },
       twitter: {
         card: "summary_large_image",
         title: post.title,
         description: post.description,
+        images: [`/blog/${post.slug}/opengraph-image`],
       },
     };
   } catch {

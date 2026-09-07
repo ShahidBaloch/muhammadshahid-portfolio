@@ -1,9 +1,16 @@
 ---
-title: "ASP.NET Core Interview Questions: Scenario-Based Answers That Hold Up"
+title: "ASP.NET Core Interview Questions: Scenarios"
 description: "ASP.NET Core interview questions with detailed scenario answers — DI captive dependencies, JWT with Angular, middleware order, async starvation, EF Core slowness, and production tradeoffs."
 date: "2026-08-12"
 category: "interview-questions"
 tags: ["Interview Questions", "ASP.NET Core", ".NET", "C#", "Career", "Web API"]
+faq:
+  - q: "What ASP.NET Core interview questions are scenario-based?"
+    a: "Hiring loops for healthcare and SaaS APIs ask production stories: captive DI, JWT that works in Postman but not Angular, middleware order, thread-pool starvation, and EF slowness — not definitions of IServiceCollection."
+  - q: "What is a captive dependency in ASP.NET Core?"
+    a: "A singleton that captures a scoped service (often DbContext). The first request’s instance lives for the process. In a multi-tenant API that is a data leak, not a trivia answer."
+  - q: "Should I answer EF Core N+1 in the ASP.NET Core interview?"
+    a: "Name it, then point to Include vs AsSplitQuery. This page is framework scenarios. Dedicated EF rehearsal lives on the EF Core interview questions URL."
 ---
 
 Interviewers hiring for healthcare, SaaS, and marketplace APIs do not care if you can define middleware. They care whether you can debug a production story without guessing.

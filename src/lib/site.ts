@@ -140,9 +140,9 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "identity",
     label: "Identity",
-    title: "What is an identity server in ASP.NET Core?",
+    title: "Identity articles for ASP.NET Core",
     description:
-      "What an identity server is in ASP.NET Core, when ASP.NET Identity is enough, when you need OpenIddict or Duende, and why MapIdentityApi tokens are not JWTs.",
+      "IdentityServer, OpenIddict, ASP.NET Identity, and MapIdentityApi notes — the product choice, not interceptor plumbing.",
     intro:
       "Identity choice is a product decision: one app versus SSO, opaque Identity API tokens versus JWT bearer, Duende licensing versus OpenIddict. This hub is for that decision — not for interceptor plumbing. Start with what an identity server is if you are choosing Identity versus an authorization server. Read MapIdentityApi versus JWT if Angular is sending the wrong string into AddJwtBearer. Read the IdentityServer4 to OpenIddict checklist only if you are leaving a dead IS4 host — not as a greenfield default. Login loops and redirect_uri mismatch live in the redirect URI article, not in the SSO essay.",
     matchTags: ["IdentityServer", "OpenIddict", "OIDC", "ASP.NET Core Identity", "SSO"],
@@ -156,7 +156,7 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "ef-core",
     label: "EF Core",
-    title: "EF Core and SQL Server Performance",
+    title: "EF Core and SQL Server articles",
     description:
       "N+1 versus Include versus AsSplitQuery, cartesian explosion, AsNoTracking identity, parameter sniffing, and query habits that survive real clinic and catalog data.",
     intro:

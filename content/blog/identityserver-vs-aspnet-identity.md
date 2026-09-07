@@ -1,6 +1,6 @@
 ---
 title: "What is an identity server in ASP.NET Core?"
-description: "What is an identity server in ASP.NET Core? When ASP.NET Identity is enough, and when OpenIddict or Duende IdentityServer is the SSO answer — not a feature-chart copy."
+description: "What is an identity server in ASP.NET Core? When Identity plus JWT is enough, and when OpenIddict or Duende is the SSO answer."
 date: "2026-08-17"
 updated: "2026-09-07"
 category: "identity"
@@ -155,4 +155,4 @@ Reach for **OpenIddict or Duende / OIDC** when multiple apps must share login, e
 
 The wrong choice is not "Identity without OIDC." The wrong choice is **OIDC before you have the problem it solves**, or **Identity alone long after three apps and a partner API have made auth the bottleneck**.
 
-If you are planning auth for a multi-app .NET and Angular platform and want a second opinion before you commit to IdentityServer or stay lean with Identity, [reach out](/contact).
+If you are planning auth for a multi-app .NET and Angular platform and want a second opinion before you commit to IdentityServer or stay lean with Identity, [reach out](/contact). More identity posts: [Identity hub](/learning/identity).

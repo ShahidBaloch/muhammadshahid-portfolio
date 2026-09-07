@@ -1,9 +1,16 @@
 ---
-title: "BFF Pattern with ASP.NET Core, Angular, and YARP — Keep Tokens Off the SPA"
+title: "BFF Pattern with ASP.NET Core, Angular, and YARP"
 description: "When a Backend-for-Frontend (BFF) with YARP is the right auth shape for Angular + ASP.NET Core: cookie sessions, token attachment at the edge, CSRF, and how this differs from SPA-held JWTs."
 date: "2026-08-15"
 category: "authentication"
 tags: ["ASP.NET Core", "Angular", "YARP", "Security", "JWT"]
+faq:
+  - q: "What is the BFF pattern for Angular and ASP.NET Core?"
+    a: "A Backend-for-Frontend keeps tokens on the server. Angular sends same-origin cookies to the BFF; YARP or the BFF attaches bearer tokens to APIs."
+  - q: "Should every Angular SPA use a BFF?"
+    a: "No. Use it when the SPA is internet-facing and XSS is in the threat model. An internal ten-user tool on a VPN can keep SPA JWTs if refresh is done honestly."
+  - q: "Does a BFF replace JWT refresh in the SPA?"
+    a: "Yes for the browser. The SPA should not store or rotate refresh tokens. Session and CSRF live on the BFF. Duende vs custom YARP is a separate buy-vs-build page."
 ---
 
 Most Angular + ASP.NET Core tutorials put access tokens in the browser. That works until XSS, a chatty interceptor, and a refresh token in `localStorage` share a page with a third-party script. The **Backend-for-Frontend (BFF)** pattern moves the token lifecycle to a server the SPA already trusts: Angular sends cookies to the BFF; the BFF attaches bearer tokens to downstream APIs.

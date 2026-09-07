@@ -1,10 +1,17 @@
 ---
-title: "Angular Interceptor: Queue Concurrent 401s So Refresh Runs Once"
+title: "Angular Interceptor: Queue Concurrent 401s"
 description: "The concurrent 401 stampede against ASP.NET Core JWT refresh: why shareReplay still double-rotates, how I queue retries in RxJS, and what to skip so you do not log the user out."
 date: "2026-08-16"
 updated: "2026-09-07"
 category: "authentication"
 tags: ["Angular", "JWT", "ASP.NET Core", "Security", "RxJS"]
+faq:
+  - q: "Why do concurrent 401s break JWT refresh in Angular?"
+    a: "Six widgets expire together, six interceptors call refresh, and rotation treats the second refresh as reuse. The session dies. Queue so refresh runs once and retries wait."
+  - q: "Does shareReplay stop a double refresh?"
+    a: "Not by itself. A new inner observable per 401 still fires two POSTs. You need one in-flight refresh shared across subscribers, then replay the original requests."
+  - q: "Should the interceptor refresh on 403?"
+    a: "No. 403 means the user is authenticated and forbidden. Refreshing a valid token will not grant a missing policy. Only 401 should enter the queue."
 ---
 
 The dashboard loads six widgets. The access JWT expired thirty seconds ago. Six HTTP calls return **401** in the same tick. Six interceptors call `/auth/refresh`. If the API [rotates refresh tokens](/blog/aspnet-core-jwt-refresh-token-rotation), the second caller presents a token the first caller already consumed. The server may treat that as **reuse** and kill the session. The user did nothing wrong.

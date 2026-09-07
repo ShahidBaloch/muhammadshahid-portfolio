@@ -4,6 +4,17 @@ description: "When MediatR and a CQRS-lite structure help a product team ship fa
 date: "2026-04-28"
 category: "cqrs"
 tags: ["MediatR", "CQRS", "ASP.NET Core", ".NET"]
+related:
+  - mediatr-license-wolverine-alternative
+  - clean-architecture-aspnet-core
+  - csharp-factory-pattern
+faq:
+  - q: "When should I use MediatR in ASP.NET Core?"
+    a: "When you have real cross-cutting behaviors and many use cases. Skip it when the team spends more time naming folders than shipping checkout."
+  - q: "Is CQRS-lite the same as event sourcing?"
+    a: "No. CQRS-lite is commands and queries as separate requests. Event sourcing is a different bet. This page is the first, not the second."
+  - q: "Do I need a handler per controller action?"
+    a: "Not by law. One handler per use case is the usual shape. License vs Wolverine is a separate URL."
 ---
 
 I have introduced MediatR on greenfield SaaS APIs, inherited it on healthcare platforms with forty handlers per bounded context, and removed it from a eCommerce checkout service where the team spent more time naming folders than fixing bugs. MediatR is not good or bad. **CQRS-lite** — commands and queries as separate request types with thin controllers — is a delivery tool. It helps or hurts depending on team size, product churn, and how much cross-cutting behavior you actually need.

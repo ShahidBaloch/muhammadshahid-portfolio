@@ -30,6 +30,22 @@ export function MarkdownContent({ content }: { content: string }) {
             </h2>
           );
         },
+        img: ({ src, alt }) => {
+          const url = typeof src === "string" ? src : "";
+          if (!url) return null;
+          return (
+            // width/height reserve space (CLS). next/image inside react-markdown
+            // broke the blog server bundle in this App Router setup.
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={url}
+              alt={alt ?? ""}
+              width={1200}
+              height={675}
+              className="h-auto w-full rounded-xl border border-slate-line"
+            />
+          );
+        },
       }}
     >
       {content}

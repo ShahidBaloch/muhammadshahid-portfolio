@@ -4,6 +4,17 @@ description: "Modular monolith vs microservices for ASP.NET Core teams — when 
 date: "2026-08-02"
 category: "architecture"
 tags: ["Architecture", "Microservices", "Modular Monolith", ".NET", "ASP.NET Core"]
+related:
+  - clean-architecture-aspnet-core
+  - docker-dotnet-angular-local
+  - aspnet-core-jwt-auth
+faq:
+  - q: "When should I choose a modular monolith over microservices in .NET?"
+    a: "Until a module has an independent deploy or scale reason. Splitting before that is an ops tax Angular users never asked for."
+  - q: "Does a module need its own database?"
+    a: "Not at first. Separate schemas or tables can wait. Separate SQL servers when the team and the data already fail independently."
+  - q: "Will Angular care which shape I pick?"
+    a: "Only if the HTTP contract churns. Stable DTOs matter more than how many .csproj files sit behind the gateway."
 ---
 
 **Modular monolith vs microservices** is a high-intent architecture search — and a frequent source of expensive rewrites. Teams hear "microservices" and split a .NET codebase before they have clear module boundaries, independent deploy needs, or operational maturity.

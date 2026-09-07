@@ -4,6 +4,17 @@ description: "How to read ASP.NET Core’s Unable to resolve service for type ex
 date: "2026-09-07"
 category: "dependency-injection"
 tags: ["Dependency Injection", "ASP.NET Core", ".NET", "IoC", "C#"]
+related:
+  - aspnet-core-dependency-injection
+  - keyed-services-aspnet-core-fromkeyedservices
+  - aspnet-core-ioptions-snapshot-monitor
+faq:
+  - q: "What does Unable to resolve service for type mean?"
+    a: "The constructor asked for a type that was never registered, or was registered with a different generic or keyed identity. The container never had a match."
+  - q: "Is Unable to resolve a captive dependency?"
+    a: "No. Captive dependencies resolve, then leak or throw disposed. This exception is a registration miss. Lifetimes stay on the DI guide."
+  - q: "Why does a test host fail to resolve a service that works in Program?"
+    a: "WebApplicationFactory often skips a registration the real host adds. Register it in the test host or the constructor will fail only in tests."
 ---
 
 **Unable to resolve service for type** is the exception people paste into Google when `Program.cs` and a constructor disagree. It is not a captive-dependency bug. Captive dependencies *resolve* and then leak tenant data or throw **disposed**. This URL is the **registration miss**: the container never had a matching service.

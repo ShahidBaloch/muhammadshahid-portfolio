@@ -4,6 +4,13 @@ description: "A production guide to JWT refresh token rotation in ASP.NET Core: 
 date: "2026-08-15"
 category: "authentication"
 tags: ["ASP.NET Core", "JWT", "Security", "Angular"]
+faq:
+  - q: "What is JWT refresh token rotation in ASP.NET Core?"
+    a: "Each refresh issues a new refresh token and invalidates the previous one. Reuse of an old token is treated as theft and the family is revoked."
+  - q: "How do I detect a stolen refresh token?"
+    a: "Store only a hash. If a client presents a token that is not the current family tip, revoke the family. That is reuse detection, not a login lockout."
+  - q: "Should refresh tokens be stored as plaintext in SQL?"
+    a: "No. Hash them like passwords. A database dump should not mint sessions. Angular storage of the refresh value is a separate cookie vs localStorage decision."
 ---
 
 A login endpoint that returns a JWT is not an auth system. The first production incident I still remember from a marketplace API was quieter than a breach headline: a refresh token lived for 30 days in `localStorage`, never rotated, and was never hashed in SQL. When one seller laptop was compromised, we could not tell which sessions were legitimate. We could only wipe every refresh row and force a global re-login.

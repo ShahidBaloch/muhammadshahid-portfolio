@@ -1,9 +1,16 @@
 ---
-title: "Angular Interview Questions with ASP.NET Core: Scenario Answers"
+title: "Angular Interview Questions with ASP.NET Core"
 description: "Angular interview questions for ASP.NET Core teams — detailed scenario answers on auth guards, JWT interceptors, Signals vs RxJS, CORS myths, RBAC, and SPA performance."
 date: "2026-08-11"
 category: "interview-questions"
 tags: ["Interview Questions", "Angular", "ASP.NET Core", "TypeScript", "RxJS", "Career"]
+faq:
+  - q: "What Angular interview questions do ASP.NET Core teams ask?"
+    a: "Scenario fluency: auth guards vs interceptors, 401 refresh loops, CORS myths, RBAC that only hides buttons, and Signals vs RxJS — not lifecycle-hook trivia."
+  - q: "Is a CORS error in Angular always a CORS bug?"
+    a: "No. Chrome labels many failed preflights and 401s as CORS. Interviewers want you to check the network tab status before rewriting AllowAnyOrigin."
+  - q: "Do Angular Signals replace RxJS in an ASP.NET Core SPA interview?"
+    a: "No. Signals are fine for local UI state. HTTP, refresh queues, and websocket streams are still RxJS. Treating Signals as a religion is a weak answer."
 ---
 
 Enterprise Angular interviews almost always assume a backend — frequently ASP.NET Core with JWT, CORS, and ProblemDetails. Trivia about lifecycle hooks is cheap. Scenario fluency is not: refresh loops, errors blamed on CORS that are not CORS, guards that only hide buttons, and Signals adopted as a religion.

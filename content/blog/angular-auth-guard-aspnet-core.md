@@ -4,6 +4,13 @@ description: "How to implement Angular auth guards and role guards with ASP.NET 
 date: "2026-08-01"
 category: "authentication"
 tags: ["Angular", "Auth Guard", "JWT", "ASP.NET Core", "Security"]
+faq:
+  - q: "How do Angular auth guards work with ASP.NET Core JWT?"
+    a: "The guard decides whether a route may open using token presence, expiry, and role claims. The API must still authorize. A guard is UX, not a security boundary."
+  - q: "Is localStorage.getItem('token') enough for an auth guard?"
+    a: "No. A string in storage can be stale or forged. Check expiry, and map roles from claims the API issued — not a role key the SPA wrote itself."
+  - q: "Do auth guards replace HTTP interceptors?"
+    a: "No. Guards block navigation. Interceptors attach Bearer tokens and handle 401. Role UI hiding is also not authorization — policies on the API are."
 ---
 
 A route guard that only checks `localStorage.getItem('token')` is enough for a demo. It is not enough for a healthcare portal or an admin SPA, where a stale token or a forged role claim becomes an incident.

@@ -1,9 +1,16 @@
 ---
-title: "ASP.NET Core RBAC for Healthcare and Admin Portals: Policies Over Scattered Roles"
+title: "ASP.NET Core RBAC: Policies Over Scattered Roles"
 description: "Role and policy-based authorization in ASP.NET Core for healthcare and admin portals — why I replace scattered [Authorize(Roles)] attributes with named policies clients can audit."
 date: "2026-03-08"
 category: "authentication"
 tags: ["ASP.NET Core", "RBAC", "Security", "Healthcare"]
+faq:
+  - q: "What is RBAC in ASP.NET Core?"
+    a: "Role-based authorization: the user is authenticated, then a role or named policy decides whether the action runs. Authentication (JWT) is a different layer."
+  - q: "Should I use Authorize Roles or policies?"
+    a: "Named policies. Scattered [Authorize(Roles)] strings are un-auditable in a clinic portal. Policies map SupportAgent vs ReadOnlyAuditor in one place."
+  - q: "Does hiding an Angular button enforce RBAC?"
+    a: "No. UI hiding is courtesy. The API must Forbid 403 on the same policy. Otherwise a forged request still hits clinical notes."
 ---
 
 Healthcare admin portals and marketplace back offices rarely stay at two roles. You start with Admin and User. Then compliance wants ReadOnlyAuditor. Operations needs SupportAgent who can reset passwords but not view clinical notes. A billing partner gets access to invoices for one tenant only.

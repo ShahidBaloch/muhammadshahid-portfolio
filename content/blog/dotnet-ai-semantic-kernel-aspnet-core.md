@@ -4,6 +4,17 @@ description: "Use Semantic Kernel and LLMs in ASP.NET Core — prompts, plugins,
 date: "2026-08-12"
 category: "architecture"
 tags: ["AI", "Semantic Kernel", ".NET", "ASP.NET Core", "LLM", "C#"]
+related:
+  - aspnet-core-jwt-auth
+  - redis-caching-aspnet-core
+  - ihttpclientfactory-aspnet-core
+faq:
+  - q: "How do I use Semantic Kernel in ASP.NET Core?"
+    a: "Treat the LLM like outbound HTTP: secrets in config, timeouts, user-scoped auth, and plugins that cannot dump PHI. Angular calls your API, not the model."
+  - q: "Should Angular call the LLM directly?"
+    a: "No. That leaks keys and skips audit. The SPA posts a prompt to ASP.NET Core; the API owns the kernel and the bill."
+  - q: "Is prompt caching the same as Redis API caching?"
+    a: "No. Token caches are model-vendor features. Redis for clinic list endpoints is the Redis article. Do not mix the two keys."
 ---
 
 **AI in .NET** is no longer a demo slide. Product teams want chat assistants, document Q&A, and drafting helpers behind Angular SPAs — with the same auth, logging, and cost controls as any other ASP.NET Core feature.

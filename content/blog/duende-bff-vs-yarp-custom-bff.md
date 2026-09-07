@@ -4,6 +4,13 @@ description: "When I pay for Duende BFF versus owning a YARP cookie gateway: ses
 date: "2026-08-17"
 category: "authentication"
 tags: ["YARP", "JWT", "Angular", "ASP.NET Core", "Security"]
+faq:
+  - q: "Should I use Duende BFF or a custom YARP BFF?"
+    a: "Pay for Duende when you want OIDC login, session, and CSRF packaged. Build YARP when you already own the gateway and can maintain cookie auth yourself."
+  - q: "Is Duende BFF required for the BFF pattern?"
+    a: "No. The pattern is cookies on the SPA origin and tokens off JavaScript. Duende is one implementation. Custom YARP is the other."
+  - q: "What does a custom YARP BFF still have to implement?"
+    a: "Login correlation, session cookie flags, CSRF, token storage, and logout. YARP only proxies. Missing any of those is why 2 a.m. pages exist."
 ---
 
 The [BFF + YARP architecture post](/blog/bff-pattern-aspnet-core-angular-yarp) is the shape: Angular talks same-origin cookies; the gateway attaches bearer tokens to APIs. This page is only the **buy vs build** decision for that shape — Duende’s BFF package versus a custom YARP host you maintain.

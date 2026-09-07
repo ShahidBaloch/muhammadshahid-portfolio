@@ -4,6 +4,17 @@ description: "A discovery-to-acceptance checklist for freelance ASP.NET Core and
 date: "2026-07-28"
 category: "architecture"
 tags: ["Freelance", ".NET", "Angular", "Delivery"]
+related:
+  - angular-dotnet-integration
+  - aspnet-core-jwt-auth
+  - azure-app-service-aspnet-core
+faq:
+  - q: "What should I check before a freelance .NET + Angular project?"
+    a: "Scope, auth, hosting, environments, and acceptance. Azure AD, audit logs, and a pipeline that nobody mentioned are the expensive surprises."
+  - q: "When do I lock auth and hosting in the SOW?"
+    a: "Before the first sprint. Identity and App Service are not polish. The JWT and App Service articles are how; this page is whether they are in scope."
+  - q: "Is this a Clean Architecture guide?"
+    a: "No. It is discovery and handoff. Boundaries and folders live on the Clean Architecture URL."
 ---
 
 The cheapest hour on a freelance .NET + Angular project is the hour you spend clarifying scope before writing code. The most expensive week is the one where you discover — after building half the admin portal — that the client expected Azure AD login, HIPAA-friendly audit logs, and a deployment pipeline nobody mentioned in the kickoff call.

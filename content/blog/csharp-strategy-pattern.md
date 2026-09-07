@@ -4,6 +4,17 @@ description: "Strategy Pattern in C# for ASP.NET Core — swap pricing, validati
 date: "2026-08-01"
 category: "design-patterns"
 tags: ["Strategy Pattern", "C#", "Design Patterns", "ASP.NET Core", "SOLID"]
+related:
+  - csharp-factory-pattern
+  - solid-principles-aspnet-core
+  - keyed-services-aspnet-core-fromkeyedservices
+faq:
+  - q: "How is Strategy different from Factory in C#?"
+    a: "Factory creates the object. Strategy selects a behavior you already have and runs it through one interface — pricing, eligibility, export."
+  - q: "Should I register strategies in DI?"
+    a: "Yes. Inject IEnumerable<IFeeStrategy> or a keyed set. A 200-line if/else in the service is the thing Strategy replaces."
+  - q: "Is Strategy just a switch statement?"
+    a: "A switch that picks an implementation can be the inside of a factory. Strategy is the shared interface the caller depends on, not the switch itself."
 ---
 
 The **Strategy Pattern in C#** shows up in search results whenever a pricing, validation, or export feature becomes an `if/else` tower. Unlike Factory (which focuses on **creating** objects), Strategy focuses on **selecting a behavior** you already have and running it through a common interface.

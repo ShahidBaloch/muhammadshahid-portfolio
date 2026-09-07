@@ -1,134 +1,133 @@
 ---
-title: "EF Core N+1 vs Include vs AsSplitQuery — Pick the SQL You Meant"
-description: "How I tell lazy-load N+1 from a single fat Include JOIN, when AsSplitQuery helps in ASP.NET Core + SQL Server, and why two collection Includes are a different bug (cartesian explosion)."
-date: "2026-08-16"
+title: "EF Core N+1 vs Include vs AsSplitQuery"
+description: "EF Core N+1 is extra round-trips in a loop. Include fixes that. AsSplitQuery is for a different bug. How I tell them apart on ASP.NET Core APIs."
+date: "2026-08-15"
+updated: "2026-09-07"
 category: "ef-core"
 tags: ["EF Core", "SQL Server", "Performance", "ASP.NET Core"]
+related:
+  - ef-core-cartesian-explosion-multiple-include
+  - ef-core-sql-performance
+  - ef-core-asnotracking-vs-identity-resolution
+faq:
+  - q: "What is the EF Core N+1 problem?"
+    a: "You run one query for a list, then one query per row when you touch a navigation in a loop. Fifty appointments become fifty-one SQL round-trips. The JSON still looks right."
+  - q: "Does Include fix N+1?"
+    a: "Yes for a reference or one collection you actually need. It does not mean Include two collections on the same query. That is cartesian explosion."
+  - q: "When do I use AsSplitQuery?"
+    a: "When you truly need two collection Includes. Split query is not the N+1 fix. N+1 is too many queries. Cartesian explosion is one query that multiplied rows."
 ---
 
-Teams say “we have an N+1” for three different SQL shapes. The fix for one makes another worse. This article is the **comparison**: lazy N+1, eager `Include` (one JOIN query), and `AsSplitQuery`. The broader EF/SQL Server checklist is [EF Core performance](/blog/ef-core-sql-performance). Cartesian explosion — two collection Includes multiplying rows — is [its own post](/blog/ef-core-cartesian-explosion-multiple-include).
+![EF Core N+1 vs Include: one list query plus a query per row, versus a single Include or projection](/images/blog/ef-core-nplus1-roundtrips.png)
 
-I use appointment and order graphs from healthcare and eCommerce APIs. Numbers below are **illustrative**, not a benchmark you should quote as fact.
+The Angular schedule loaded fifty appointments. SQL Server showed **fifty-one** commands. That is **N+1**: one query for the list, then one query per row when the handler touches `appointment.Patient`.
 
-## Three shapes, three symptoms
+This page is that bug. It is **not** [cartesian explosion](/blog/ef-core-cartesian-explosion-multiple-include). Cartesian is one fat JOIN when you `Include` two collections. N+1 is **too many round-trips**. If the dashboard is “generally slow,” start at the [EF Core SQL performance](/blog/ef-core-sql-performance) checklist.
 
-| Shape | What SQL Server sees | Typical Angular symptom |
-| --- | --- | --- |
-| **N+1** | 1 query for the list + 1 per row for a navigation | Dashboard “pops in” slowly; App Insights shows dozens of SQL deps |
-| **Single `Include` (reference)** | One query, JOIN to a **many-to-one** | Usually fine for lists if you project |
-| **`Include` two **collections**** | One query, JOIN that **multiplies rows** | One endpoint, huge payload, high logical reads |
-| **`AsSplitQuery`** | One query per included collection (plus the root) | More round-trips, no multiplied rows |
-
-N+1 is **too many round-trips**. Cartesian explosion is **too many rows in one round-trip**. `AsSplitQuery` trades the second for a few extra round-trips. It is not a magic “make Include fast” switch.
-
-## N+1: you asked for a list, then touched a navigation
-
-Classic pattern in a query handler that returns entities:
+## How N+1 shows up
 
 ```csharp
-var visits = await db.Visits
-    .Where(v => v.ClinicId == clinicId)
-    .OrderByDescending(v => v.StartUtc)
+var appointments = await db.Appointments
+    .Where(a => a.ClinicId == clinicId && a.Start >= from && a.Start < to)
+    .OrderBy(a => a.Start)
     .Take(50)
     .ToListAsync(ct);
 
-foreach (var v in visits)
+foreach (var row in appointments)
 {
-    dto.Add(ToRow(v.Patient.DisplayName, v.StartUtc)); // Patient not loaded
+    dto.Add(new AppointmentRow(row.Id, row.Patient.FullName, row.Start));
 }
 ```
 
-If lazy loading is on, that is **1 + 50** SQL calls. If lazy loading is off, it is a null reference — which is nicer, because it fails in staging.
+Demo data: two patients, nobody notices. Production: fifty lazy loads (or fifty explicit loads) while Angular waits. Application Insights shows SQL dependency count, not one slow statement.
 
-**Fix I prefer for list APIs:** do not `Include` the whole `Patient`. Project:
+I see the same shape on order lists that touch `Seller`, claim lists that touch `Provider`, and marketplace search that hydrates `Category` in a loop after `ToList`.
+
+## Confirm it before you Include the world
+
+1. Log commands in Development (`RelationalEventId.CommandExecuted`).
+2. Count statements for **one** HTTP request — not duration of the first `SELECT`.
+3. If count ≈ `1 + pageSize`, you have N+1.
+
+If count is **one** and SSMS row count is `lines × events`, stop. That is cartesian explosion. Do not “fix” it by adding another `Include`.
+
+## Fix 1: project the screen (usually the right fix)
+
+List endpoints should not return entity graphs.
 
 ```csharp
-var rows = await db.Visits
+var rows = await db.Appointments
     .AsNoTracking()
-    .Where(v => v.ClinicId == clinicId)
-    .OrderByDescending(v => v.StartUtc)
+    .Where(a => a.ClinicId == clinicId && a.Start >= from && a.Start < to)
+    .OrderBy(a => a.Start)
+    .Select(a => new AppointmentRowDto(
+        a.Id,
+        a.Patient.FullName,
+        a.Start,
+        a.Status))
     .Take(50)
-    .Select(v => new VisitRowDto(v.Id, v.Patient.DisplayName, v.StartUtc))
     .ToListAsync(ct);
 ```
 
-SQL becomes one query with a JOIN to `Patients` for the columns you need. That JOIN is **not** cartesian explosion: `Patient` is a **reference** (many visits, one patient). Row count stays 50.
+One SQL statement. SQL Server joins `Patient` once. Angular gets four fields. No tracker. This is what I merge for grids.
 
-`Include(v => v.Patient)` on the same filter is acceptable when you truly need the entity graph in a command. For an Angular grid, it is usually wasted columns and tracking.
+## Fix 2: Include when you truly need the graph
 
-## Include one collection: still usually one query
+Detail pages, or a handler that must mutate `Patient` in the same request:
 
 ```csharp
-var order = await db.Orders
-    .Include(o => o.Lines)
+var appointments = await db.Appointments
+    .Include(a => a.Patient)
     .AsNoTracking()
-    .SingleAsync(o => o.Id == id, ct);
+    .Where(a => a.ClinicId == clinicId)
+    .Take(50)
+    .ToListAsync(ct);
 ```
 
-SQL Server runs **one** SELECT with a JOIN from `Orders` to `OrderLines`. If the order has 12 lines, you get 12 rows in the raw result and EF **stitches** them into one `Order` with 12 `Lines`. That stitching is normal. Reads scale with line count, not with a second collection.
+`Include` a **reference** (`Patient`) is a JOIN, not N+1. `Include` **one** collection (`Lines`) is also not cartesian explosion. Cartesian starts at **two collection** Includes on the same query.
 
-This is the case `Include` was designed for. Do not reach for `AsSplitQuery` yet.
+Do not `Include` six navigations “so N+1 cannot happen.” You will trade round-trips for a JOIN product. That failure lives on the [cartesian explosion](/blog/ef-core-cartesian-explosion-multiple-include) URL.
 
-## AsSplitQuery: when one JOIN is the wrong tool
+## Fix 3: AsSplitQuery is not the N+1 hammer
 
-`AsSplitQuery()` tells EF to load the root, then load each included collection with a **separate** query (same `DbContext`, typically same transaction).
-
-Use it when:
-
-- You already `Include` **more than one collection**, or
-- A **wide** collection Include + a huge root select is cheaper as two queries than as one JOIN (measure; do not assume)
+`AsSplitQuery` tells EF to load collections in **separate** SELECTs instead of one multiplied JOIN. Use it when you already decided two collections belong on one request:
 
 ```csharp
-var order = await db.Orders
+var claim = await db.Claims
     .AsSplitQuery()
-    .Include(o => o.Lines)
-    .Include(o => o.Payments)
+    .Include(c => c.ServiceLines)
+    .Include(c => c.StatusEvents)
     .AsNoTracking()
-    .SingleAsync(o => o.Id == id, ct);
+    .SingleAsync(c => c.Id == claimId, ct);
 ```
 
-Without split: JOIN lines **and** payments in one statement → row count ≈ lines × payments. That is the cartesian article.
+That is three round-trips **on purpose**. It is the opposite of “I had N+1 and I wanted fewer queries.” If you only needed patient names on a list, split query is ceremony. Prefer the projection.
 
-With split: query 1 loads the order; query 2 loads lines; query 3 loads payments. Three round-trips. Row counts stay honest.
+Split queries can see a consistency window between statements. On SQL Server I rely on [read committed snapshot](/blog/sql-server-deadlocks-snapshot-isolation) or wrap the split in a transaction when the two collections must match one snapshot.
 
-**Cost:** extra network hops and a consistency window (data can change between queries unless you wrap in a transaction / snapshot). For a read model on SQL Server, I often wrap the three queries in a `ReadCommitted` transaction for the request — still cheaper than a 50,000-row JOIN.
+## When I leave a loop in place
 
-**Do not** `AsSplitQuery()` a list endpoint that already projects DTOs. Split query exists for **graphs**, not for `Select`.
-
-## How I tell them apart in logs
-
-Turn on command logging in Development:
+Rare: a follow-up query that cannot be expressed as a JOIN (a different database, an HTTP call). Then I batch IDs:
 
 ```csharp
-options
-    .EnableSensitiveDataLogging(false)
-    .LogTo(Console.WriteLine, new[] { RelationalEventId.CommandExecuted });
+var patientIds = appointments.Select(a => a.PatientId).Distinct().ToArray();
+var patients = await db.Patients
+    .AsNoTracking()
+    .Where(p => patientIds.Contains(p.Id))
+    .ToDictionaryAsync(p => p.Id, ct);
 ```
 
-- **N+1:** many similar `SELECT` statements with a changing `PatientId` parameter.
-- **Healthy Include (reference or one collection):** one `SELECT` with a JOIN; result row count ≈ parents (or ≈ child rows for one collection).
-- **Cartesian:** one `SELECT` with two collection JOINs; result row count ≈ product of collection sizes. EF still returns one object graph, so **the API looks correct** while SQL Server does the damage.
-- **Split:** several `SELECT`s in one request, different `FROM` tables, same parent key.
+Two queries, not `1 + N`. Still not `Include` of two collections.
 
-I copy the SQL into SSMS, include the actual plan, and look at **number of rows read**, not whether the C# object graph looks right. The graph almost always looks right.
+## Quick map
 
-## Decision I write in the PR
+| What you see | Name | This URL? |
+|---|---|---|
+| `1 + pageSize` SQL commands | N+1 | Yes |
+| One command, row count ≈ `A × B` | Cartesian explosion | [Other post](/blog/ef-core-cartesian-explosion-multiple-include) |
+| One clinic fast, hub clinic times out | Parameter sniffing | [Sniffing post](/blog/ef-core-sql-server-parameter-sniffing) |
+| Same `Patient` is two CLR objects on a read | Identity resolution | [AsNoTracking post](/blog/ef-core-asnotracking-vs-identity-resolution) |
 
-1. List/grid JSON → **projection**, `AsNoTracking`, no `Include` unless proven.
-2. Need one child collection on a detail screen → **`Include` that collection** (or a second query you own).
-3. Need two child collections → **do not** one-query `Include` both; **`AsSplitQuery` or two explicit queries**, and read [cartesian explosion](/blog/ef-core-cartesian-explosion-multiple-include).
-4. Still slow → indexes and Query Store, not another Include flag. See the [performance pillar](/blog/ef-core-sql-performance).
+Interview narration for concurrency tokens and query filters is [EF Core interview questions](/blog/ef-core-interview-questions), not this page.
 
-Enable `MultipleCollectionIncludeWarning` in Development so EF yells before production does.
-
-## What I do not do
-
-I do not disable lazy loading in Production only. If the app relies on it, you will ship N+1 the first time someone adds a `foreach`.
-
-I do not `AsSplitQuery` globally in `OnConfiguring` without measuring. Some graphs get slower.
-
-I do not cache the wrong query in Redis to hide a cartesian JOIN. Cache after the SQL is honest.
-
----
-
-If an ASP.NET Core endpoint is “fine in demo data” and dies on a real clinic or seller catalog, [contact me](/contact). Send the generated SQL and the Include list — that pair is usually enough to choose projection vs split vs a different bug.
+If an ASP.NET Core list endpoint is issuing one SQL command per grid row, [contact me](/contact). A command count from Application Insights plus the handler is enough to choose projection vs Include.

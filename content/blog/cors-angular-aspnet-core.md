@@ -1,9 +1,16 @@
 ---
-title: "Fixing CORS Between Angular and ASP.NET Core (What I Actually Check on Client Projects)"
+title: "Fix CORS Between Angular and ASP.NET Core"
 description: "Wrong origins, credentials, preflight, reverse proxies, and Azure App Service — the CORS failures I diagnose most often when Angular SPAs call ASP.NET Core APIs."
 date: "2026-01-18"
 category: "authentication"
 tags: ["Angular", "ASP.NET Core", "CORS", "Azure"]
+faq:
+  - q: "How do I fix CORS between Angular and ASP.NET Core?"
+    a: "Allow the exact SPA origin, place UseCors before auth, and match headers the preflight asks for. Swagger and Postman never prove the browser path."
+  - q: "Why does CORS fail with credentials and a wildcard origin?"
+    a: "The browser forbids Access-Control-Allow-Origin: * when credentials are true. Name the Angular origin. This is the usual cookie-refresh failure."
+  - q: "Is a failed Angular call always CORS?"
+    a: "No. Chrome reports CORS when the preflight or the response has no ACAO header — including 401s from JWT middleware that ran before UseCors."
 ---
 
 If Chrome says CORS and the real bug is middleware order (auth or exceptions before `UseCors`), start with [ASP.NET Core middleware order](/blog/aspnet-core-middleware-order). CORS is the kind of problem that makes a senior engineer look junior for twenty minutes. The API returns 200 in Swagger. Postman is fine. The Angular app in Chrome shows a red console error about `Access-Control-Allow-Origin`, and someone on the call asks whether the backend is down.

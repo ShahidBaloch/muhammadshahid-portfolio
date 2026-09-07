@@ -1,9 +1,17 @@
 ---
-title: "EF Core and SQL Server Performance — Queries That Hurt in Production"
-description: "EF Core performance lessons from healthcare reporting and SaaS dashboards — N+1 queries, projections, indexes, AsNoTracking, and the SQL Server pain that only appears under real data volume."
+title: "EF Core and SQL Server Performance"
+description: "EF Core and SQL Server performance from healthcare reporting and SaaS dashboards — N+1, projections, indexes, AsNoTracking, and pain that only shows under real data volume."
 date: "2026-05-10"
+updated: "2026-09-07"
 category: "ef-core"
 tags: ["EF Core", "SQL Server", "Performance", "ASP.NET Core"]
+faq:
+  - q: "Why is my EF Core query fast in demo data and slow in production?"
+    a: "Demo data hides N+1, fat Includes, missing indexes, and tracking on read-only reports. Measure command count and Query Store before you rewrite the stack."
+  - q: "Should I start with Redis when the dashboard times out?"
+    a: "No. Fix projection, N+1, and indexes first. Most cache requests disappear once SQL is honest."
+  - q: "Where do I go for N+1 vs cartesian explosion?"
+    a: "N+1 is extra round-trips. Cartesian explosion is one JOIN that multiplied rows. This page is the checklist; those two articles are the failure modes."
 ---
 
 The Angular dashboard looked fine in demo data. Then a clinic turned on twelve months of appointment history, a marketplace seller exported four thousand orders, and the API started timing out at thirty seconds. Nothing changed in the controller signature. EF Core was doing exactly what we asked — we just asked for too much, too many times, with tracking enabled on a read-only report.

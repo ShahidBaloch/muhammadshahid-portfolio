@@ -4,6 +4,17 @@ description: "Implement ASP.NET Core rate limiting middleware for Web APIs — f
 date: "2026-08-04"
 category: "architecture"
 tags: ["Rate Limiting", "ASP.NET Core", "API Security", ".NET", "Performance"]
+related:
+  - aspnet-core-middleware-order
+  - aspnet-core-jwt-auth
+  - redis-caching-aspnet-core
+faq:
+  - q: "How do I add rate limiting in ASP.NET Core?"
+    a: "Use the built-in middleware with named policies on login, search, and export. Return 429 with a body Angular can show. Place it after auth so you can limit per user."
+  - q: "Does in-memory rate limiting work on multiple App Service instances?"
+    a: "No. Each instance has its own counters. Use a distributed store or accept that limits are per instance."
+  - q: "Should login and search share one limiter?"
+    a: "No. Auth is abuse-shaped. Search is expensive SQL. Separate partitions so a catalog crawl does not lock clinicians out of login."
 ---
 
 **ASP.NET Core rate limiting** is a high-intent topic because it sits at the intersection of security, cost control, and uptime. Bots hammer login endpoints. A buggy Angular retry loop fans out hundreds of calls. One tenant floods a shared SaaS API. Without limits, you pay in CPU, SQL, and support tickets.

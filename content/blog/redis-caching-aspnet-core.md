@@ -4,6 +4,17 @@ description: "Practical Redis caching in ASP.NET Core for Angular SPAs — IDist
 date: "2026-08-02"
 category: "architecture"
 tags: ["Redis", "ASP.NET Core", "Caching", "Performance", "Azure"]
+related:
+  - ef-core-sql-performance
+  - aspnet-core-rate-limiting
+  - azure-app-service-aspnet-core
+faq:
+  - q: "When should I add Redis caching in ASP.NET Core?"
+    a: "When a hot read is cheaper stale than live SQL — catalog lists, feature flags. Not for per-user clinical records keyed only by URL."
+  - q: "Why does Redis show stale dashboard data?"
+    a: "Missing invalidation or a key that ignores tenant. Caching is a freshness trade. Stampede control is not a substitute for a tenant in the key."
+  - q: "Is Redis the same as SQL performance tuning?"
+    a: "No. Redis hides a slow query until the cache misses. N+1 and sniffed plans still need the EF SQL articles."
 ---
 
 **Redis caching ASP.NET Core** is one of the most searched performance topics in the .NET ecosystem — and one of the easiest ways to ship a subtle production bug. Caching is not “add Redis and enjoy faster APIs.” It is a deliberate trade: freshness for latency.

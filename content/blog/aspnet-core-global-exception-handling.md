@@ -5,6 +5,17 @@ date: "2026-08-04"
 updated: "2026-09-07"
 category: "architecture"
 tags: ["ASP.NET Core", "Exception Handling", "ProblemDetails", "Angular", "APIs"]
+related:
+  - aspnet-core-api-validation
+  - aspnet-core-headers-readonly-response-started
+  - aspnet-core-json-object-cycle
+faq:
+  - q: "How do I set up global exception handling in ASP.NET Core?"
+    a: "Use IExceptionHandler or exception middleware that writes one ProblemDetails shape. Angular should parse that envelope for 500s — not a different JSON per controller."
+  - q: "Should every controller action use try/catch?"
+    a: "No. Catch at the edge. Per-action try/catch duplicates envelopes and leaks stack traces when someone forgets the production check."
+  - q: "Do 400 validation errors belong in exception middleware?"
+    a: "No. 400s are expected ModelState or FluentValidation failures. Global handling is for unhandled exceptions. Mixing them makes Angular treat typos as outages."
 ---
 
 Search traffic for **ASP.NET Core global exception handling** stays high because every Angular + API team hits the same pain: one endpoint returns a string, another returns a nested validation object, a third returns an HTML error page in production. The SPA then needs special cases forever.

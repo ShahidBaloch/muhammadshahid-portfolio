@@ -9,6 +9,13 @@ related:
   - csharp-async-await-interview-questions
   - csharp-expert-interview-questions
   - ihttpclientfactory-aspnet-core
+faq:
+  - q: "How should I use async and await in ASP.NET Core?"
+    a: "Await I/O end to end: SQL, HttpClient, blobs. Do not block with .Result. Pass CancellationToken. That keeps the thread pool free for other Angular clients."
+  - q: "Does async make a SQL query faster?"
+    a: "No. It frees the worker while you wait. Query time is indexing and EF. This page is the request-path checklist, not the interview rehearsal URL."
+  - q: "Can Task.WhenAll share one DbContext?"
+    a: "No. DbContext is not thread-safe. WhenAll on one context is a race. That trap is also in the async interview article; here it is the merge rule."
 ---
 
 Async does not make a single SQL query finish sooner. It keeps the thread pool free while your API waits on databases, HTTP, or blob storage so other Angular clients are not stuck behind blocked workers.

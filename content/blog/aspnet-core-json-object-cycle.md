@@ -4,6 +4,17 @@ description: "Fix System.Text.Json’s possible object cycle was detected in ASP
 date: "2026-09-07"
 category: "architecture"
 tags: ["ASP.NET Core", "System.Text.Json", "JSON", "Angular", "EF Core", "APIs"]
+related:
+  - aspnet-core-global-exception-handling
+  - ef-core-asnotracking-vs-identity-resolution
+  - aspnet-core-api-validation
+faq:
+  - q: "How do I fix a possible object cycle was detected?"
+    a: "Stop returning EF entities. Project to a DTO that does not walk both directions of a navigation. The cycle is the serializer, not the HTTP pipeline."
+  - q: "Should I enable ReferenceHandler.Preserve for Angular?"
+    a: "Almost never. Preserve emits $id/$ref that Angular HTTP clients do not expect. Shape the DTO instead."
+  - q: "Is a JSON cycle the same as EF identity resolution?"
+    a: "No. Identity resolution is two CLR objects for one row on a read. A JSON cycle is a graph that loops. Different articles."
 ---
 
 **A possible object cycle was detected** is System.Text.Json telling you the object graph loops. In ASP.NET Core that almost always means you returned an **EF Core entity** whose navigations point both ways: `Encounter.Patient` and `Patient.Encounters`. Angular never asked for that graph. The serializer walked it until it hit itself.

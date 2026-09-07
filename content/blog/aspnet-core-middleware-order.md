@@ -5,6 +5,17 @@ date: "2026-09-06"
 updated: "2026-09-07"
 category: "architecture"
 tags: ["ASP.NET Core", "Middleware", "CORS", "JWT", "API Security"]
+related:
+  - cors-angular-aspnet-core
+  - aspnet-core-global-exception-handling
+  - aspnet-core-rate-limiting
+faq:
+  - q: "What is the correct ASP.NET Core middleware order?"
+    a: "Forwarded headers, exception handler, HTTPS, CORS, authentication, authorization, then rate limiting and endpoints. Swagger is last among the public pipeline pieces."
+  - q: "Should UseCors run before UseAuthentication?"
+    a: "Yes. If auth runs first, a 401 often has no ACAO header and Chrome labels it CORS. The allowlist itself is the CORS article, not this page."
+  - q: "Is middleware order the same as a CORS policy?"
+    a: "No. Order is Program.cs sequence. Policy is which origins and headers. Fix the sequence here; fix origins on the CORS URL."
 ---
 
 **ASP.NET Core middleware order** is the list in `Program.cs`, not the CORS allowlist. Searchers land here after Swagger works and Chrome lies. Origins, credentials, and preflight belong in [CORS between Angular and ASP.NET Core](/blog/cors-angular-aspnet-core). This URL is **only the sequence**.

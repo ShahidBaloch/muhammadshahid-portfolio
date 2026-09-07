@@ -4,6 +4,17 @@ description: "Angular Signals for API-driven apps — load state from ASP.NET Co
 date: "2026-08-09"
 category: "architecture"
 tags: ["Angular", "Signals", "ASP.NET Core", "TypeScript", "RxJS", "SPA"]
+related:
+  - angular-dotnet-integration
+  - angular-jwt-interceptors
+  - angular-interview-questions-aspnet-core
+faq:
+  - q: "When should I use Angular Signals with an ASP.NET Core API?"
+    a: "For synchronous UI state the template reads constantly: loaded flags, selected clinic, form dirty. HTTP still starts as an Observable."
+  - q: "Do Signals replace RxJS HTTP?"
+    a: "No. toSignal or an explicit subscribe maps the response into state. Refresh queues and websockets stay RxJS."
+  - q: "Should a Signal store the JWT?"
+    a: "No. Access tokens belong in memory behind the interceptor. Signals are UI state, not a token vault."
 ---
 
 **Angular Signals** fix a pain every ASP.NET Core + Angular team hits: too many `subscribe` calls, manual `markForCheck`, and UI state that drifts from the last HTTP response. Signals are not a replacement for every RxJS stream — they are a better default for **synchronous state** your templates read constantly.

@@ -5,7 +5,7 @@ import { CtaBand, SectionHeading } from "@/components/SectionHeading";
 import { experience, siteConfig, skills } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "About",
+  title: "About Muhammad Shahid, .NET + Angular Engineer",
   description:
     "Muhammad Shahid is a senior .NET + Angular engineer with 5+ years designing and shipping healthcare, SaaS, and eCommerce systems.",
   alternates: { canonical: "/about" },
@@ -19,7 +19,7 @@ export default function AboutPage() {
           <div>
             <SectionHeading
               eyebrow="About"
-              title="Senior engineer with a solution mindset."
+              title="About Muhammad Shahid, .NET + Angular Engineer"
               description="I care about boundaries, security, data, and delivery — the decisions that keep products healthy after launch."
               level={1}
             />

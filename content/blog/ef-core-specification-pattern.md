@@ -1,9 +1,20 @@
 ---
-title: "EF Core Specification Pattern for Catalog Queries (Filters, Paging, and When to Skip It)"
+title: "EF Core Specification Pattern for Catalog Queries"
 description: "How I use specifications and repositories for eCommerce-style catalog filters and paging in ASP.NET Core — and the cases where the pattern is not worth the ceremony."
 date: "2026-02-05"
 category: "design-patterns"
 tags: ["EF Core", "ASP.NET Core", "Clean Architecture", "eCommerce"]
+related:
+  - repository-pattern-dotnet
+  - clean-architecture-aspnet-core
+  - ef-core-sql-performance
+faq:
+  - q: "When should I use the Specification pattern with EF Core?"
+    a: "When catalog filters, sort, and paging must stay identical for the Angular grid and an export job. A 200-line controller query is the smell."
+  - q: "Does a specification replace paging?"
+    a: "No. It names the filter. Skip/Take and a total count still live at the query edge. N+1 and cartesian are other URLs."
+  - q: "Is this the same as a generic IRepository?"
+    a: "No. Specifications compose queries. Generic GetAll/GetById is the repository article — and often overkill on DbContext."
 ---
 
 The first version of a product catalog API is deceptively simple. `GET /products?category=shoes&minPrice=50` maps to a LINQ query in the controller. Ship it, move on.

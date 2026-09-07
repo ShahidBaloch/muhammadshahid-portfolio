@@ -4,6 +4,17 @@ description: "When the repository pattern earns its place in .NET with EF Core, 
 date: "2026-07-05"
 category: "design-patterns"
 tags: ["Repository Pattern", "EF Core", ".NET", "Architecture", "Data Access"]
+related:
+  - ef-core-specification-pattern
+  - clean-architecture-aspnet-core
+  - ef-core-nplus1-include-vs-assplitquery
+faq:
+  - q: "Should I use the repository pattern with EF Core?"
+    a: "When the boundary reduces coordination — a named query the team can test. Not as IRepository<T> wrapping every DbSet."
+  - q: "Is DbContext already a repository?"
+    a: "Yes. DbSet is a collection gateway and the context is a unit of work. Extra interfaces must earn their keep."
+  - q: "When is a generic IRepository overkill?"
+    a: "When you add GetByIdWithDetails until the interface is a mini ORM. Prefer a specification or a focused query service."
 ---
 
 Early in my career, every data access class had an interface named `IRepository<T>`. Generic methods for `GetAll`, `GetById`, `Add`, `Update`, `Delete`. It felt clean until I watched a junior developer fight `IQueryable` leakage, duplicate EF Core includes across three repositories, and write `GetByIdWithDetails` variants until the interface was a mini ORM.

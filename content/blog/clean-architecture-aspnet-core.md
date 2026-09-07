@@ -4,6 +4,17 @@ description: "A senior engineer's guide to pragmatic Clean Architecture in ASP.N
 date: "2026-05-28"
 category: "architecture"
 tags: ["Clean Architecture", ".NET", "EF Core", "Architecture"]
+related:
+  - modular-monolith-vs-microservices-dotnet
+  - repository-pattern-dotnet
+  - mediatr-cqrs-aspnet-core
+faq:
+  - q: "How do I apply Clean Architecture in ASP.NET Core without over-engineering?"
+    a: "Keep domain rules independent of EF and Angular. Add a project only when a boundary saves change cost. Folders are not the architecture."
+  - q: "Must every API have a Domain layer on day one?"
+    a: "No. A clinic admin with two screens can wait. Ecom_NET10-style catalogs earn the split sooner. Ceremony vs delivery is the point."
+  - q: "Is Clean Architecture the same as microservices?"
+    a: "No. You can have clean modules in one host. Splitting processes is the modular monolith vs microservices article."
 ---
 
 Clean Architecture is one of those ideas that sounds obvious in a conference talk and feels heavy on a Tuesday when a product owner asks for a small pricing tweak. I have been building .NET backends for healthcare portals, SaaS dashboards, and eCommerce platforms long enough to know both sides of that story. The goal is not to win an architecture trophy. The goal is to keep domain rules stable while everything else — UI frameworks, ORM details, hosting choices — changes around them.

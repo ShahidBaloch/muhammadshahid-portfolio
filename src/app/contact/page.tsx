@@ -4,7 +4,7 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Contact Muhammad Shahid",
   description:
     "Contact Muhammad Shahid for .NET + Angular freelance and contract work. Email, WhatsApp, LinkedIn, or project inquiry form.",
   alternates: { canonical: "/contact" },
@@ -17,7 +17,7 @@ export default function ContactPage() {
         <div>
           <SectionHeading
             eyebrow="Contact"
-            title="Let's talk about your project."
+            title="Contact Muhammad Shahid"
             description="Share the problem, constraints, and timeline. I typically reply within one business day with a clear next step."
             level={1}
           />

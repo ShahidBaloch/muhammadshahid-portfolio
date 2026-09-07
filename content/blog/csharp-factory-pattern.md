@@ -4,6 +4,17 @@ description: "How to use the Factory Pattern in C# with ASP.NET Core DI — repl
 date: "2026-07-30"
 category: "design-patterns"
 tags: ["Factory Pattern", "C#", "Design Patterns", "Dependency Injection", "ASP.NET Core"]
+related:
+  - csharp-strategy-pattern
+  - keyed-services-aspnet-core-fromkeyedservices
+  - aspnet-core-dependency-injection
+faq:
+  - q: "How do I use the Factory pattern with ASP.NET Core DI?"
+    a: "Register implementations, then a factory delegate or class that picks one at runtime. Do not new them inside a growing switch in a constructor."
+  - q: "Is a switch in a constructor a factory?"
+    a: "It is a smell. Move creation behind a factory the container can test. Strategy is for swapping behavior you already have, not creating it."
+  - q: "Should keyed services replace every factory?"
+    a: "Only for a closed set of keys. Open or config-driven sets still want a factory. That comparison is also on the keyed-services page."
 ---
 
 The **Factory Pattern in C#** is one of the most searched design-pattern topics for .NET developers — usually right after someone pastes a growing `switch (providerType)` into a service constructor. In ASP.NET Core products, the useful version of Factory is rarely a textbook UML diagram. It is a clear way to **create the right implementation at runtime** while still playing nicely with **dependency injection**.

@@ -1,10 +1,21 @@
 ---
-title: "Deploying ASP.NET Core APIs to Azure App Service — What Actually Breaks"
+title: "Deploy ASP.NET Core APIs to Azure App Service"
 description: "Lessons from shipping ASP.NET Core APIs to Azure App Service in healthcare and SaaS — configuration, deployment slots, secrets, health checks, and the failures that only show up after go-live."
 date: "2026-03-20"
 updated: "2026-09-07"
 category: "architecture"
 tags: ["Azure", "ASP.NET Core", "App Service", "DevOps"]
+related:
+  - docker-dotnet-angular-local
+  - aspnet-core-appsettings-localappsettings
+  - aspnet-core-data-protection-xml-encryptor
+faq:
+  - q: "How do I deploy an ASP.NET Core API to Azure App Service?"
+    a: "Publish the API, then treat App Settings, connection strings, slots, health checks, and Data Protection as the real work. A successful zip deploy is not a production host."
+  - q: "Do Azure deployment slots share app settings?"
+    a: "Only the settings you mark as slot-sticky stay. JWT secrets, SQL, and Identity authority that differ per environment must be set on each slot or a swap will 401."
+  - q: "Why does App Service work in staging but fail in production?"
+    a: "Usually a missing setting, a slot swap that carried the wrong Identity authority, or Data Protection keys that are not shared across instances. Local Docker is a different article."
 ---
 
 Azure App Service is the default landing zone for a lot of ASP.NET Core APIs I build for healthcare portals, SaaS billing backends, and eCommerce marketplaces. The first deploy always feels clean. The interesting work starts when IdentityServer token validation, SQL Server connection pooling, and Angular production builds all depend on the same App Service configuration being correct across staging and production.

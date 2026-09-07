@@ -107,7 +107,7 @@ function buildSitemap(posts) {
       path: pathName,
       lastModified: siteLastModified,
       changeFrequency: "monthly",
-      priority: pathName === "" ? "1.0" : pathName === "/blog" || pathName === "/work" ? "0.8" : "0.6",
+      priority: pathName === "" ? "1.0" : pathName === "/blog" || pathName === "/work" ? "0.8" : pathName === "/privacy" || pathName === "/terms" || pathName === "/disclaimer" ? "0.2" : "0.6",
     })),
     ...PROJECT_SLUGS.map((slug) => ({
       path: `/work/${slug}`,

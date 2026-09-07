@@ -4,6 +4,17 @@ description: "ASP.NET Core API validation with ProblemDetails: FluentValidation 
 date: "2026-08-17"
 category: "architecture"
 tags: ["ASP.NET Core", "Validation", "Problem Details", "Angular", "API Design"]
+related:
+  - aspnet-core-global-exception-handling
+  - angular-dotnet-integration
+  - aspnet-core-json-object-cycle
+faq:
+  - q: "How should ASP.NET Core API validation return errors?"
+    a: "One ProblemDetails (or equivalent) envelope with field errors Angular forms can bind. Do not return a string from login and a nested object from checkout."
+  - q: "Should FluentValidation replace DataAnnotations?"
+    a: "Use one pipeline. FluentValidation is fine for rules that are not attributes. Mixing both without a single envelope is what breaks the SPA."
+  - q: "Do 500s belong in the same envelope as 400s?"
+    a: "Same family of ProblemDetails, different status. Unhandled exceptions are the global handler article. This page is expected 400s."
 ---
 
 Nothing erodes trust in an API faster than three different error shapes for the same validation failure. The login form expects `{ message: string }`. The checkout endpoint returns `{ errors: { field: ["..."] } }`. A middleware wraps 500s in yet another envelope. The Angular team builds three parsers, misses edge cases, and users see "Something went wrong" when the server actually sent a useful field error.

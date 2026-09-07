@@ -17,7 +17,7 @@ export default function ServicesPage() {
         <div className="container-narrow">
           <SectionHeading
             eyebrow="Services"
-            title="How I help teams ship the right system."
+            title="Hire a Senior .NET + Angular Engineer"
             description="Freelance and contract engagements for product teams that need senior .NET + Angular ownership — healthcare, SaaS, and marketplace systems, remote-friendly from Lahore."
             level={1}
           />

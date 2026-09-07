@@ -5,7 +5,7 @@ import { getPostsForTopic } from "@/lib/posts";
 import { learningTopics } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Blog Topics — Interviews, Auth, EF Core, EDI, DI & Architecture",
+  title: "Interviews, Auth, EF Core, EDI, and Architecture",
   description:
     "Topic guides for C# and ASP.NET Core interview questions, Angular authentication, identity, EF Core, healthcare EDI, CQRS, dependency injection, and architecture.",
   alternates: { canonical: "/learning" },
@@ -22,8 +22,8 @@ export default function LearningPage() {
         <div className="mt-6">
           <SectionHeading
             eyebrow="Blog topics"
-            title="Guided paths through the writing."
-            description="These topic hubs group related articles for SEO and study flow. Every piece still lives in the main blog."
+            title="Interviews, Auth, EF Core, EDI, and Architecture"
+            description="Topic hubs group related articles for study flow. Every piece still lives in the main blog."
             level={1}
           />
         </div>

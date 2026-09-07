@@ -4,6 +4,17 @@ description: "Practical ASP.NET Core patterns for uploading files to Azure Blob 
 date: "2026-06-20"
 category: "architecture"
 tags: ["Azure", "Blob Storage", "ASP.NET Core", "Files"]
+related:
+  - azure-app-service-aspnet-core
+  - aspnet-core-api-validation
+  - aspnet-core-jwt-auth
+faq:
+  - q: "How do I upload files to Azure Blob from ASP.NET Core?"
+    a: "Validate on the API, store in a private container, persist metadata in SQL. Return a download path the SPA can call with the user’s JWT."
+  - q: "Should Angular upload to a public container?"
+    a: "No for clinical or identity documents. Public plus a guessed URL is a leak. SAS or a streaming endpoint is the default."
+  - q: "Do I put a long-lived SAS in the SPA?"
+    a: "No. Mint short SAS server-side after authorization, or proxy the blob. Auth is the JWT article; this page is the blob contract."
 ---
 
 File uploads look simple until they meet production constraints: large payloads, private documents, virus scanning expectations, mobile networks, and Angular apps that need progress feedback. Azure Blob Storage is a solid default for ASP.NET Core products, but the API design around the blob matters as much as the SDK calls.

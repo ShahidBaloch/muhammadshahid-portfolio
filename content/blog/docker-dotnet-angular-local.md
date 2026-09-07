@@ -4,6 +4,17 @@ description: "How I Docker Compose a .NET API, Angular SPA, and SQL Server for m
 date: "2026-04-02"
 category: "architecture"
 tags: ["Docker", ".NET", "Angular", "Docker Compose"]
+related:
+  - azure-app-service-aspnet-core
+  - aspnet-core-data-protection-xml-encryptor
+  - aspnet-core-appsettings-localappsettings
+faq:
+  - q: "How do I Dockerize a .NET API and Angular app locally?"
+    a: "Compose the API, SPA, and SQL with one README port map. The goal is schema and env drift, not a production image."
+  - q: "Should the production image match local Compose?"
+    a: "Related, not identical. Local Compose includes SQL and volume hacks. App Service is a different host with different Data Protection."
+  - q: "Does Docker replace appsettings?"
+    a: "No. Compose injects env. Which JSON files exist is the config article. Missing keys still 401 in every container."
 ---
 
 When I join a marketplace or eCommerce project, the first week often includes someone discovering their local SQL schema is two migrations behind, the Angular app points at a staging API by accident, and the .NET API runs on a different port than the README claims. Docker does not fix architecture problems, but it does fix environment drift — which is one of the fastest ways to slow a product team down.

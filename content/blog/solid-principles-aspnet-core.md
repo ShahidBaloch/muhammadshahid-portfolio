@@ -4,6 +4,17 @@ description: "SOLID principles in C# for ASP.NET Core — detailed SRP, OCP, LSP
 date: "2026-08-11"
 category: "design-patterns"
 tags: ["SOLID", "C#", "ASP.NET Core", "Design Patterns", ".NET", "Architecture"]
+related:
+  - csharp-factory-pattern
+  - csharp-strategy-pattern
+  - clean-architecture-aspnet-core
+faq:
+  - q: "What are SOLID principles in ASP.NET Core?"
+    a: "A PR review lens: small services, open to new behaviors, honest subtypes, slim interfaces, and dependencies on abstractions you actually inject."
+  - q: "Does DIP mean an interface for every class?"
+    a: "No. DIP is not newing SqlConnection next to a Razor page. A 30-method IPatientService is not ISP either."
+  - q: "Is SOLID the same as Clean Architecture?"
+    a: "No. SOLID is how classes relate. Clean Architecture is where domain rules live. Folders do not make either true."
 ---
 
 Teams paste the five SOLID letters into Confluence, then ship god controllers, 30-method interfaces, and “DIP” that still news up `SqlConnection` in a service next to a Razor page.

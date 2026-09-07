@@ -4,6 +4,17 @@ description: "Contract-first habits for Angular and ASP.NET Core teams — DTO s
 date: "2026-04-20"
 category: "architecture"
 tags: ["Angular", ".NET", "APIs", "Delivery"]
+related:
+  - aspnet-core-api-validation
+  - aspnet-core-global-exception-handling
+  - angular-signals-aspnet-core
+faq:
+  - q: "How should Angular and ASP.NET Core share a contract?"
+    a: "Agree DTO shape, error envelope, and pagination before polish. Swagger is a check, not a substitute for a written contract."
+  - q: "Should list endpoints return a bare array?"
+    a: "Not for grids. Angular needs items plus totalCount (or equivalent). A bare array is why page 3 totals never match the footer."
+  - q: "Is this the JWT interceptor guide?"
+    a: "No. This page is DTO and delivery habits. Token attach and 401 queues have their own URLs."
 ---
 
 Most friction between Angular and ASP.NET Core teams is not framework rivalry. It is a Monday standup where the frontend expects `{ items, totalCount }` and the API returns a bare array — and both sides thought Swagger was "someone else's job."

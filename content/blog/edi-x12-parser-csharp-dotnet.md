@@ -4,6 +4,17 @@ description: "Independent notes on parsing X12 in C# for healthcare and supply-c
 date: "2026-08-15"
 category: "edi"
 tags: ["EDI", "X12", "ASP.NET Core", ".NET", "Healthcare"]
+related:
+  - serilog-pii-redaction-healthcare-aspnet-core
+  - aspnet-core-api-validation
+  - ihttpclientfactory-aspnet-core
+faq:
+  - q: "How do I parse EDI X12 in C#?"
+    a: "Split envelope from transaction, queue the heavy map, persist in SQL. Libraries help with ISA/GS/ST. They do not make an 837 a HIPAA product."
+  - q: "Should the ASP.NET Core request parse a full 837?"
+    a: "No. Accept, validate the envelope, enqueue. Parsing on the request thread times out and logs PHI when it fails."
+  - q: "Is this a certified X12 parser?"
+    a: "No. It is architecture and evaluation. Vendor pages sell parsers. This URL tells you what to ask before you pick one."
 ---
 
 Search results for “EDI X12 parser C#” are mostly vendor pages and GitHub READMEs. That is not an accident. Independent write-ups are rare because the work is messy, regulated-adjacent, and hard to demo with fake data.

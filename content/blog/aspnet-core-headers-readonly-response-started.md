@@ -8,6 +8,13 @@ related:
   - aspnet-core-global-exception-handling
   - aspnet-core-middleware-order
   - aspnet-core-json-object-cycle
+faq:
+  - q: "What does Headers are read-only, response has started mean?"
+    a: "Kestrel already flushed the body. IExceptionHandler cannot change status or CORS headers after WriteAsync. Check HttpContext.Response.HasStarted before writing."
+  - q: "Why does Angular report CORS on this exception?"
+    a: "The first write went out without ACAO. The exception handler is too late. Chrome then blames CORS instead of the original 500."
+  - q: "Is this the same as global exception handling setup?"
+    a: "No. That page is the ProblemDetails envelope. This page is the HasStarted failure when the envelope is too late."
 ---
 
 **Headers are read-only, response has started.** That is the `InvalidOperationException` Kestrel throws when code tries to change `StatusCode` or a header after the first bytes already went to the client. It is not a ProblemDetails-shape bug. It is not a `Program.cs` ordering essay. Those live in [global exception handling](/blog/aspnet-core-global-exception-handling) and [middleware order](/blog/aspnet-core-middleware-order).

@@ -1,9 +1,20 @@
 ---
-title: "Keyed Services in ASP.NET Core (FromKeyedServices) — When Keys Beat a Factory"
+title: "Keyed Services in ASP.NET Core (FromKeyedServices)"
 description: "How I use AddKeyedScoped and FromKeyedServices in ASP.NET Core for closed sets of implementations — EDI vs FHIR clients, tenant notifiers — and when a factory is still the honest design."
 date: "2026-08-16"
 category: "dependency-injection"
 tags: ["Dependency Injection", "ASP.NET Core", ".NET", "IoC"]
+related:
+  - csharp-factory-pattern
+  - aspnet-core-dependency-injection
+  - aspnet-core-unable-to-resolve-service
+faq:
+  - q: "When should I use FromKeyedServices in ASP.NET Core?"
+    a: "When you have a closed set of implementations of one interface — EDI vs FHIR clients, SMS vs email — and the key is known at composition time."
+  - q: "Are keyed services a service locator?"
+    a: "They can be if the key is a random string from the request. Prefer a factory when the set is open or config-driven."
+  - q: "Do keyed services replace the Factory pattern?"
+    a: "No. Keys win for a small enum of implementations. Factories still win when construction logic grows. Lifetimes stay on the DI guide."
 ---
 
 .NET 8 keyed services let you register **several implementations of the same interface** and inject **one of them by key**. That is useful. It is also a way to hide a service locator in constructor syntax.

@@ -1,9 +1,16 @@
 ---
-title: "MapIdentityApi Opaque Tokens vs JWT in ASP.NET Core — Pick Deliberately"
+title: "MapIdentityApi Opaque Tokens vs JWT"
 description: "ASP.NET Core Identity’s MapIdentityApi issues opaque access tokens by default — not JWTs. When that is enough, when you still need JWT bearer auth for Angular, and how to stop mixing the two by accident."
 date: "2026-08-15"
 category: "identity"
 tags: ["ASP.NET Core", "ASP.NET Core Identity", "JWT", "Security", "Angular"]
+faq:
+  - q: "Does MapIdentityApi return a JWT?"
+    a: "No. ASP.NET Core Identity’s MapIdentityApi issues opaque access tokens by default. They are not JWTs and JWT bearer middleware will reject them."
+  - q: "When should I use opaque tokens vs JWT?"
+    a: "Opaque tokens are enough for a first-party cookie or same-host SPA that calls Identity’s own API. Use JWT bearer when Angular or another API must validate a signed token locally."
+  - q: "Can Angular send a MapIdentityApi accessToken as Bearer?"
+    a: "It can send it. JwtBearer will still 401 unless you also configured Identity to issue JWTs. Mixing the two by accident is the usual rescue."
 ---
 
 A recurring freelance rescue: the team enabled `MapIdentityApi()`, Angular stored `accessToken` from `/login`, and then `[Authorize]` on a JWT bearer pipeline rejected every call. Swagger looked fine. The SPA looked broken. The missing sentence in too many tutorials is this: **Identity’s API endpoints issue opaque tokens by default. They are not JWTs.**

@@ -8,6 +8,13 @@ related:
   - azure-app-service-aspnet-core
   - identityserver4-openiddict-migration-checklist
   - aspnet-core-appsettings-localappsettings
+faq:
+  - q: "What does No XML encryptor found mean in ASP.NET Core?"
+    a: "Data Protection has nowhere durable to persist the key ring, so antiforgery and auth cookies break after recycle or scale-out. It is not a JWT signing certificate error."
+  - q: "Is Data Protection the same as JWT signing?"
+    a: "No. JWT uses TokenValidationParameters or JWKS. Data Protection encrypts cookies and antiforgery payloads. IDX10503 is a different URL."
+  - q: "Why do cookies fail after App Service scale-out?"
+    a: "Each instance minted its own key ring. Persist keys to Blob or Redis and share an XML encryptor. Docker without a volume has the same bug."
 ---
 
 **No XML encryptor found. This may indicate that your key ring is not being persisted correctly.** That warning (and the login/antiforgery failures that follow) is ASP.NET Core **Data Protection**, not JWT bearer validation and not IdentityServer’s signing certificate. IDX10503 stays in [the signature article](/blog/aspnet-core-idx10503-jwt-signature). App Service slots and `appsettings` stay in [Azure App Service](/blog/azure-app-service-aspnet-core) and the [config file map](/blog/aspnet-core-appsettings-localappsettings). This URL is the **key ring**.

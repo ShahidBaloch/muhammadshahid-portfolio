@@ -4,6 +4,17 @@ description: "How I log ASP.NET Core healthcare APIs with Serilog without puttin
 date: "2026-08-17"
 category: "edi"
 tags: ["Serilog", "Logging", "Healthcare", "EDI", "ASP.NET Core"]
+related:
+  - edi-x12-parser-csharp-dotnet
+  - aspnet-core-global-exception-handling
+  - azure-app-service-aspnet-core
+faq:
+  - q: "How do I redact PII in Serilog for healthcare APIs?"
+    a: "Do not destructure the whole request. Name the properties you allow. Member ids, names, and raw X12 stay out of Application Insights."
+  - q: "Can I log raw X12 in App Insights?"
+    a: "No. That is a second copy of the chart in a system support vendors can read. Keep payload in an audit table with access control, not in log lines."
+  - q: "Does Serilog redaction make an API HIPAA compliant?"
+    a: "No. Compliance is contracts, access, retention, and BAAs. This page is how I keep application logs from becoming PHI."
 ---
 
 The first production incident on a claims API is often not the parse. It is a support engineer pasting a log line that contains a member name into a ticket that is visible to a vendor. Serilog did what it was told: `{@request}`.

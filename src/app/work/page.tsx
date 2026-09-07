@@ -4,7 +4,7 @@ import { CtaBand, SectionHeading } from "@/components/SectionHeading";
 import { projects } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Work",
+  title: "Selected .NET and Angular Work",
   description:
     "Selected .NET and Angular projects by Muhammad Shahid — microservices marketplaces, eCommerce platforms, and healthcare SaaS.",
   alternates: { canonical: "/work" },
@@ -17,7 +17,7 @@ export default function WorkPage() {
         <div className="container-narrow">
           <SectionHeading
             eyebrow="Work"
-            title="Projects built for real product constraints."
+            title="Selected .NET and Angular Work"
             description="Case-style summaries: problem, solution, stack, and result — from auction microservices to healthcare operations."
             level={1}
           />

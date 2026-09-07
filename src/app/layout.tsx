@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, Source_Sans_3 } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@/components/Analytics";
@@ -22,6 +22,11 @@ const body = Source_Sans_3({
   variable: "--font-source",
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  themeColor: "#d8e2f0",
+  colorScheme: "light",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),

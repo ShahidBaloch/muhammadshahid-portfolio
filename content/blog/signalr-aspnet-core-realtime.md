@@ -2,8 +2,19 @@
 title: "SignalR Real-Time Patterns in ASP.NET Core"
 description: "How I ship SignalR with ASP.NET Core for auctions, notifications, and live dashboards — authenticated hubs, group strategy, scaling with Azure SignalR, and Angular clients that reconnect honestly."
 date: "2026-06-18"
-category: "authentication"
-tags: ["SignalR", "ASP.NET Core", "Realtime", "Angular", "JWT", "Azure"]
+category: "architecture"
+tags: ["SignalR", "ASP.NET Core", "Realtime", "Angular", "Azure", "Architecture"]
+related:
+  - aspnet-core-jwt-auth
+  - azure-app-service-aspnet-core
+  - redis-caching-aspnet-core
+faq:
+  - q: "How do I authenticate SignalR hubs in ASP.NET Core?"
+    a: "Use the same JWT (or cookie) the REST API uses, passed on the negotiate/WebSocket. A hub without [Authorize] is a public broadcast, which is rarely what a clinic queue board wants."
+  - q: "Why do SignalR messages vanish with two App Service instances?"
+    a: "In-memory backplane is per process. Two instances mean two disconnected sets of sockets. Use Azure SignalR or a Redis backplane before you scale out."
+  - q: "Should Angular reconnect SignalR silently forever?"
+    a: "Reconnect with backoff, then tell the user when the live feed is stale. Silent forever looks like a frozen auction, not a healthy socket."
 ---
 
 The first time I added live bidding to a marketplace product, the websocket connection worked on my laptop and failed the moment we deployed to two App Service instances. Bids appeared on one server’s connections but not the other. Sellers refreshed the page and accused us of hiding offers. That week taught me that SignalR is not “turn on hubs and broadcast.” It is a distributed systems problem with a friendly API.

@@ -26,7 +26,7 @@ export default function BlogPage() {
       <div className="container-narrow">
         <SectionHeading
           eyebrow="Blog"
-          title="Notes on .NET, Angular, and shipping software."
+          title="C# Interview Questions, IdentityServer, ASP.NET Core"
           description="Original articles from production work. Browse by topic when you want a guided path — or filter the feed below."
           level={1}
         />

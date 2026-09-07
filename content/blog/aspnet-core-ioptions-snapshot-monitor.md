@@ -4,6 +4,17 @@ description: "When to inject IOptions, IOptionsSnapshot, or IOptionsMonitor — 
 date: "2026-09-05"
 category: "dependency-injection"
 tags: ["ASP.NET Core", "Configuration", "Dependency Injection", "IOptions", ".NET"]
+related:
+  - aspnet-core-appsettings-localappsettings
+  - aspnet-core-dependency-injection
+  - azure-app-service-aspnet-core
+faq:
+  - q: "When should I use IOptions vs IOptionsSnapshot vs IOptionsMonitor?"
+    a: "IOptions is a singleton snapshot at first resolve. IOptionsSnapshot is per request. IOptionsMonitor notifies on reload. Pick the lifetime, not the tutorial default."
+  - q: "Why did an Azure App Setting change do nothing?"
+    a: "A Singleton holding IOptions never sees reloads. Use IOptionsMonitor or restart. Which JSON files exist is the config-file article, not this page."
+  - q: "Can I inject IOptions into a Singleton?"
+    a: "Yes, but you will not see runtime reloads. That is fine for JWT signing keys you rotate with a restart, and wrong for a clinic feature flag."
 ---
 
 Teams search **IOptions vs IOptionsSnapshot vs IOptionsMonitor** after a setting change in Azure does nothing, or after a singleton starts serving the wrong clinic’s feature flag. The three interfaces look interchangeable in a tutorial. They are not.

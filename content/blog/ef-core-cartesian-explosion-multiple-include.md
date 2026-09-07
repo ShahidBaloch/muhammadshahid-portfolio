@@ -1,10 +1,24 @@
 ---
-title: "EF Core Cartesian Explosion: Two Collection Includes, One Ugly JOIN"
-description: "Why Include(A).Include(B) on two collections multiplies SQL rows in EF Core, how to see it in SQL Server, and the fixes I use on ASP.NET Core APIs (AsSplitQuery, two queries, or stop including)."
+title: "EF Core Cartesian Explosion: Two Collection Includes"
+description: "Include(A).Include(B) on two collections multiplies SQL rows in EF Core. How I confirm it in SSMS and fix it with split query, two queries, or stop including."
 date: "2026-08-16"
+updated: "2026-09-07"
 category: "ef-core"
 tags: ["EF Core", "SQL Server", "Performance", "ASP.NET Core"]
+related:
+  - ef-core-nplus1-include-vs-assplitquery
+  - ef-core-sql-performance
+  - ef-core-asnotracking-vs-identity-resolution
+faq:
+  - q: "What is cartesian explosion in EF Core?"
+    a: "One query with two collection Includes. SQL Server joins both children, so row count is lines times events. EF stitches the graph back; the JSON still looks right. The tax is logical reads and CPU."
+  - q: "Is cartesian explosion the same as N+1?"
+    a: "No. N+1 is too many round-trips. Cartesian explosion is one fat JOIN. Use the N+1 article when command count is 1 plus page size."
+  - q: "Does AsSplitQuery fix cartesian explosion?"
+    a: "Yes when you truly need both collections on one request. Prefer not including both, or two queries you own. AsNoTracking alone does not stop the JOIN product."
 ---
+
+![One EF Core query with two collection Includes multiplying 8 lines times 6 events into 48 SQL rows](/images/blog/ef-core-cartesian-explosion.png)
 
 The C# looks innocent. The JSON looks correct. SQL Server returns **thousands of rows** for one order. That is **cartesian explosion** (sometimes called a cartesian product in the JOIN): EF `Include`s two **collections** in one query, the database multiplies child rows, and EF stitches the graph back together in memory.
 

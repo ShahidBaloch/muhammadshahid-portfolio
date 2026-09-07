@@ -4,6 +4,17 @@ description: "ASP.NET Core Minimal APIs for production — MapGet/MapPost, DI, v
 date: "2026-08-10"
 category: "architecture"
 tags: ["Minimal APIs", "ASP.NET Core", ".NET", "Web API", "C#", "Architecture"]
+related:
+  - clean-architecture-aspnet-core
+  - aspnet-core-api-validation
+  - aspnet-core-jwt-auth
+faq:
+  - q: "When should I use ASP.NET Core Minimal APIs?"
+    a: "Thin gateways, internal tools, and vertical slices. Keep controllers when an Angular admin has many actions and shared filters."
+  - q: "Can Minimal APIs use JWT and validation?"
+    a: "Yes. MapGroup, filters, and ProblemDetails work. Dumping business rules into Program.cs is the failure, not Minimal APIs themselves."
+  - q: "Should everything live in Program.cs?"
+    a: "No. Endpoint classes or feature folders keep the file readable. Clean Architecture boundaries still apply."
 ---
 
 **ASP.NET Core Minimal APIs** are not a toy for demos. They are a first-class way to ship HTTP endpoints with less ceremony — and a common source of spaghetti when teams dump business logic into `Program.cs`.

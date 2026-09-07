@@ -4,6 +4,17 @@ description: "A practical ASP.NET Core decision guide after MediatR’s commerci
 date: "2026-08-15"
 category: "cqrs"
 tags: ["MediatR", "Wolverine", "CQRS", "ASP.NET Core", ".NET"]
+related:
+  - mediatr-cqrs-aspnet-core
+  - clean-architecture-aspnet-core
+  - freelance-dotnet-project-checklist
+faq:
+  - q: "Should I replace MediatR after the commercial license?"
+    a: "Only if the license does not fit. Many teams stay. Others delete the bus. A three-week namespace swap is not an architecture decision."
+  - q: "Is Wolverine a drop-in for MediatR?"
+    a: "No. Handlers look similar; pipeline, messaging, and ops do not. Read current licenses for your company size before you migrate."
+  - q: "Can I do CQRS without a mediator?"
+    a: "Yes. Thin controllers calling application services is CQRS-lite. When to add MediatR at all is the ceremony article, not this license page."
 ---
 
 When MediatR’s licensing changed, a lot of teams did not ask “what does our architecture need?” They asked “what is the replace-NuGet story?” That is how you get a three-week migration that ships the same handlers with a new namespace and a new way to fail in production.

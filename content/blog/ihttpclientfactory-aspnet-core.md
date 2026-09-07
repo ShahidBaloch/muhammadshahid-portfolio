@@ -1,9 +1,20 @@
 ---
-title: "IHttpClientFactory in ASP.NET Core: Stop Socket Exhaustion the Right Way"
+title: "IHttpClientFactory: Stop Socket Exhaustion"
 description: "Use IHttpClientFactory in ASP.NET Core to avoid HttpClient socket exhaustion and stale DNS — named clients, typed clients, Polly retries, and mistakes that still break production APIs."
 date: "2026-08-03"
 category: "architecture"
 tags: ["IHttpClientFactory", "HttpClient", "ASP.NET Core", ".NET", "Performance"]
+related:
+  - csharp-async-await-aspnet-core
+  - aspnet-core-dependency-injection
+  - azure-app-service-aspnet-core
+faq:
+  - q: "Why use IHttpClientFactory in ASP.NET Core?"
+    a: "To avoid socket exhaustion and stale DNS from new HttpClient per call or a static client that never refreshes. Named or typed clients are the fix."
+  - q: "Is a static HttpClient enough?"
+    a: "It avoids sockets and then sticks to a dead DNS entry. Factory-managed handlers rotate. Async/await is a different page."
+  - q: "Do typed clients still need retries?"
+    a: "If the dependency flakes, yes — with care on POSTs. Polly is optional. Lifetime of the client is this article."
 ---
 
 If you search **IHttpClientFactory ASP.NET Core**, you are usually already in trouble — or about to be. The classic symptoms are intermittent `SocketException`, slow outbound calls after traffic spikes, and a server that “runs out of ports” while CPU looks fine. The root cause is almost always **incorrect `HttpClient` lifetime**.

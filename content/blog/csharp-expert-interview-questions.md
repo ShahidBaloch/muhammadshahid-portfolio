@@ -1,9 +1,16 @@
 ---
-title: "C# Expert-Level Interview Questions (Senior / Staff Scenarios)"
+title: "C# Expert-Level Interview Questions"
 description: "C# expert level interview questions with production answers — IAsyncEnumerable exports, cancellation across MediatR, ConcurrentDictionary caches, Span parsers, and bounded Channels."
 date: "2026-09-04"
 category: "interview-questions"
 tags: ["Interview Questions", "C#", ".NET", "ASP.NET Core", "Career"]
+faq:
+  - q: "What C# expert-level interview questions get asked?"
+    a: "Staff loops ask IAsyncEnumerable exports, cancellation through MediatR to SQL, ConcurrentDictionary tenant caches, Span parsers, and bounded Channels — not what a delegate is."
+  - q: "Is ConcurrentDictionary enough for a multi-tenant cache?"
+    a: "It is thread-safe, not tenant-safe. A missing tenant key in the cache key leaks clinic A’s data to clinic B. That is the answer seniors want."
+  - q: "Where do async await questions belong?"
+    a: "Starvation, async void, and WhenAll plus one DbContext live on the C# async await interview URL. This page is the layer above that."
 ---
 
 **C# expert-level interview questions** are not “what is a delegate.” Senior and staff loops ask whether you can keep an ASP.NET Core API correct under load: cancellation that actually reaches SQL, allocations in a hot parser, and caches that do not leak tenant data.
