@@ -234,4 +234,4 @@ Test reports against production-scale data copies. Empty databases lie.
 
 EF Core performance in healthcare and SaaS is usually about query shape: stop N+1, project early, track only when updating, and index what your Angular screens actually filter. Reporting pain needs bounded queries, aggregation in SQL, and sometimes read paths separate from transactional writes — not a rewrite on day one.
 
-If your ASP.NET Core API is struggling with SQL Server under real data volume and you want a focused performance review, [get in touch](/contact).
+If your ASP.NET Core API is struggling with SQL Server under real data volume and you want a focused performance review, [get in touch](/contact). Interview-style concurrency and query-filter questions are [EF Core interview questions](/blog/ef-core-interview-questions) — not this URL.

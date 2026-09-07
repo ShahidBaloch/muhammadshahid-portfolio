@@ -216,6 +216,6 @@ When replacing services in tests, match **lifetime intent**. Replacing a scoped 
 
 **ASP.NET Core dependency injection** is simple until lifetimes meet real infrastructure. Master Singleton/Scoped/Transient, avoid captive dependencies, prefer constructor injection, and use factories only when runtime creation needs a decision.
 
-Related: [Factory Pattern in C#](/blog/csharp-factory-pattern), [Clean Architecture in ASP.NET Core](/blog/clean-architecture-aspnet-core).
+Related: [Unable to resolve service for type](/blog/aspnet-core-unable-to-resolve-service), [Factory Pattern in C#](/blog/csharp-factory-pattern), [Clean Architecture in ASP.NET Core](/blog/clean-architecture-aspnet-core).
 
 Need a DI/architecture review on your .NET API? [Contact me](/contact).

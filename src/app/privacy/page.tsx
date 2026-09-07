@@ -127,8 +127,8 @@ export default function PrivacyPage() {
           <p>
             You may request access to or deletion of personal information you sent me by emailing{" "}
             <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>. You can reject analytics
-            and advertising cookies on the cookie banner, change your mind by clearing site data,
-            or block cookies in your browser settings.
+            and advertising cookies on the cookie banner, reopen Cookie settings from the footer at
+            any time, or block cookies in your browser settings.
           </p>
 
           <h2>Children&apos;s privacy</h2>

@@ -22,9 +22,20 @@ export function CookieConsent() {
   }, []);
 
   useEffect(() => {
+    const onOpen = () => setVisible(true);
+    window.addEventListener("cookie-consent-open", onOpen);
+    return () => window.removeEventListener("cookie-consent-open", onOpen);
+  }, []);
+
+  useEffect(() => {
     if (!visible) return;
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") applyChoice("rejected");
+      if (event.key !== "Escape") return;
+      if (getStoredConsent()) {
+        setVisible(false);
+        return;
+      }
+      applyChoice("rejected");
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);

@@ -2,7 +2,7 @@
 title: "ASP.NET Core Interview Questions: Scenario-Based Answers That Hold Up"
 description: "ASP.NET Core interview questions with detailed scenario answers — DI captive dependencies, JWT with Angular, middleware order, async starvation, EF Core slowness, and production tradeoffs."
 date: "2026-08-12"
-category: "architecture"
+category: "interview-questions"
 tags: ["Interview Questions", "ASP.NET Core", ".NET", "C#", "Career", "Web API"]
 ---
 
@@ -197,7 +197,7 @@ var rows = await _db.Orders.AsNoTracking()
     .ToListAsync(ct);
 ```
 
-See [EF Core performance](/blog/ef-core-sql-performance).
+See [EF Core performance](/blog/ef-core-sql-performance). If they switch to concurrency tokens or tenant query filters, that is [EF Core interview questions](/blog/ef-core-interview-questions) — not this scenario.
 
 ---
 
@@ -259,7 +259,9 @@ Partition thoughtfully: per-user or per-username on login after identity is know
 
 - [C# Expert-Level Interview Questions](/blog/csharp-expert-interview-questions)
 - [C# Async Await Interview Questions](/blog/csharp-async-await-interview-questions)
+- [EF Core Interview Questions](/blog/ef-core-interview-questions)
 - [Angular Interview Questions with ASP.NET Core](/blog/angular-interview-questions-aspnet-core)
+- [Interview questions hub](/learning/interview-questions)
 - [SOLID Principles in C# and ASP.NET Core](/blog/solid-principles-aspnet-core)
 - [Clean Architecture in ASP.NET Core](/blog/clean-architecture-aspnet-core)
 

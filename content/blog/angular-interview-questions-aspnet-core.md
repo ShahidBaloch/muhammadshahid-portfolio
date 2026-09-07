@@ -2,7 +2,7 @@
 title: "Angular Interview Questions with ASP.NET Core: Scenario Answers"
 description: "Angular interview questions for ASP.NET Core teams — detailed scenario answers on auth guards, JWT interceptors, Signals vs RxJS, CORS myths, RBAC, and SPA performance."
 date: "2026-08-11"
-category: "architecture"
+category: "interview-questions"
 tags: ["Interview Questions", "Angular", "ASP.NET Core", "TypeScript", "RxJS", "Career"]
 ---
 
@@ -216,6 +216,8 @@ Prefer incremental migration: new routes/components standalone first, shared NgM
 - [Angular + .NET integration habits](/blog/angular-dotnet-integration)
 - [ASP.NET Core interview scenarios](/blog/aspnet-core-interview-questions-scenarios)
 - [C# async await interview questions](/blog/csharp-async-await-interview-questions)
+- [EF Core interview questions](/blog/ef-core-interview-questions)
+- [Interview questions hub](/learning/interview-questions)
 - [Angular Signals with ASP.NET Core](/blog/angular-signals-aspnet-core)
 
 Hiring for Angular + ASP.NET Core, or preparing for that loop yourself? [Contact me](/contact) — we can run scenario drills that match real production failures.

@@ -70,6 +70,16 @@ export type LearningTopic = {
 /** Topic hubs under Blog — SEO landing pages that group related articles. */
 export const learningTopics: LearningTopic[] = [
   {
+    slug: "interview-questions",
+    label: "Interview Questions",
+    title: "C# and ASP.NET Core Interview Questions",
+    description:
+      "Scenario-based C#, ASP.NET Core, Angular, and EF Core interview questions from production work — not trivia lists copied from a dump.",
+    intro:
+      "Interview posts here are rehearsal, not implementation manuals. Each URL is a different loop: async traps, expert C# runtime, ASP.NET Core API judgment, Angular + JWT with a .NET backend, and EF Core change-tracker / concurrency questions. If you want the merge checklist, follow the how-to article linked from that scenario. Start with async await if that is the prompt you keep failing; use the ASP.NET Core scenarios page for middleware and JWT storytelling; use the EF Core interview page for SaveChanges, query filters, and concurrency — not for N+1 SQL, which has its own hub.",
+    matchTags: ["Interview Questions"],
+  },
+  {
     slug: "design-patterns",
     label: "C# Design Patterns",
     title: "C# Design Patterns",
@@ -92,7 +102,7 @@ export const learningTopics: LearningTopic[] = [
     description:
       "ASP.NET Core DI lifetimes, registration habits, and factory delegates — how senior teams keep services testable and avoid captive dependencies.",
     intro:
-      "Dependency injection in ASP.NET Core is easy to start and easy to get wrong. Most production bugs I see are not “forgot to register a service” — they are captive dependencies (a Singleton holding a Scoped DbContext), hidden new-ups that bypass the container, or factory delegates that close over request state. This hub collects the DI notes I use on healthcare, SaaS, and marketplace APIs: lifetimes, registration habits, and how Factory-style delegates fit when a switch statement is really a composition problem. Read the lifetimes article first if you own Program.cs. Pair it with Factory or Strategy posts when the container is being asked to pick an implementation at runtime. The goal is a container graph a teammate can explain in a PR, not a clever service locator.",
+      "Dependency injection in ASP.NET Core is easy to start and easy to get wrong. Most production bugs I see are not “forgot to register a service” — they are captive dependencies (a Singleton holding a Scoped DbContext), hidden new-ups that bypass the container, or factory delegates that close over request state. This hub collects the DI notes I use on healthcare, SaaS, and marketplace APIs: lifetimes, registration habits, and how Factory-style delegates fit when a switch statement is really a composition problem. Read the lifetimes article first if you own Program.cs. If the exception is Unable to resolve service for type, use that troubleshooting post instead of rereading lifetimes. Pair with Factory or Strategy posts when the container is being asked to pick an implementation at runtime. The goal is a container graph a teammate can explain in a PR, not a clever service locator.",
     matchTags: ["Dependency Injection", "IoC", "DI"],
   },
   {
@@ -112,7 +122,7 @@ export const learningTopics: LearningTopic[] = [
     description:
       "What IdentityServer is, when ASP.NET Identity is enough, when you need OpenIddict or Duende, and why MapIdentityApi tokens are not JWTs.",
     intro:
-      "Identity choice is a product decision: one app versus SSO, opaque Identity API tokens versus JWT bearer, Duende licensing versus OpenIddict. This hub is for that decision — not for interceptor plumbing. Read MapIdentityApi versus JWT if Angular is sending the wrong string into AddJwtBearer. Read IdentityServer versus Identity when a second app or an external IdP is on the roadmap. Read the IdentityServer4 to OpenIddict checklist only if you are leaving a dead IS4 host — not as a greenfield default.",
+      "Identity choice is a product decision: one app versus SSO, opaque Identity API tokens versus JWT bearer, Duende licensing versus OpenIddict. This hub is for that decision — not for interceptor plumbing. Read MapIdentityApi versus JWT if Angular is sending the wrong string into AddJwtBearer. Read IdentityServer versus Identity when a second app or an external IdP is on the roadmap. Read the IdentityServer4 to OpenIddict checklist only if you are leaving a dead IS4 host — not as a greenfield default. Login loops and redirect_uri mismatch live in the redirect URI article, not in the SSO essay.",
     matchTags: ["IdentityServer", "OpenIddict", "OIDC", "ASP.NET Core Identity", "SSO"],
   },
   {
@@ -122,7 +132,7 @@ export const learningTopics: LearningTopic[] = [
     description:
       "N+1 versus Include versus AsSplitQuery, cartesian explosion, AsNoTracking identity, parameter sniffing, and query habits that survive real clinic and catalog data.",
     intro:
-      "EF Core looks fine on demo data and fails when a clinic or seller catalog is real. This hub is SQL-shaped: N+1 round-trips, fat JOINs, split queries, projections, tracking, and sniffed plans. Start with the performance pillar for the checklist. Use the N+1 versus AsSplitQuery article when you are not sure which bug you have. Use cartesian explosion when two Includes made one query huge but the JSON still looked correct. Use AsNoTracking versus identity resolution when the same Patient is two objects. Use parameter sniffing when one tenant is fast and another times out on the same LINQ.",
+      "EF Core looks fine on demo data and fails when a clinic or seller catalog is real. This hub is SQL-shaped: N+1 round-trips, fat JOINs, split queries, projections, tracking, and sniffed plans. Start with the performance pillar for the checklist. Use the N+1 versus AsSplitQuery article when you are not sure which bug you have. Use cartesian explosion when two Includes made one query huge but the JSON still looked correct. Use AsNoTracking versus identity resolution when the same Patient is two objects. Use parameter sniffing when one tenant is fast and another times out on the same LINQ. Interview narration — concurrency tokens, global query filters, ExecuteUpdate — is the EF Core interview questions post, not a second SQL tutorial.",
     matchTags: ["EF Core", "SQL Server"],
   },
   {

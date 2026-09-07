@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CookieSettingsLink } from "@/components/CookieSettingsLink";
 import { siteConfig } from "@/lib/site";
 
 export function Footer() {
@@ -108,6 +109,7 @@ export function Footer() {
             <Link href="/disclaimer" className="hover:text-foam">
               Disclaimer
             </Link>
+            <CookieSettingsLink className="hover:text-foam" />
             <span>{siteConfig.url.replace("https://", "")}</span>
           </div>
         </div>

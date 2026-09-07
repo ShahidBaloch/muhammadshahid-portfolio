@@ -2,7 +2,7 @@
 title: "C# Async Await Interview Questions (Scenario-Based)"
 description: "C# async await interview questions with full scenario answers — .Result deadlocks, async void, Task.WhenAll with EF Core, CancellationToken, fire-and-forget, and ValueTask."
 date: "2026-08-12"
-category: "architecture"
+category: "interview-questions"
 tags: ["Interview Questions", "C#", "async await", "Asynchronous Programming", ".NET", "ASP.NET Core"]
 ---
 
@@ -261,6 +261,8 @@ No. One sync-over-async helper on a hot path reintroduces blocking. Interviewers
 - [C# Expert-Level Interview Questions](/blog/csharp-expert-interview-questions)
 - [C# Async and Await in ASP.NET Core](/blog/csharp-async-await-aspnet-core)
 - [ASP.NET Core Interview Questions (Scenarios)](/blog/aspnet-core-interview-questions-scenarios)
+- [EF Core Interview Questions](/blog/ef-core-interview-questions)
+- [Interview questions hub](/learning/interview-questions)
 - [IHttpClientFactory](/blog/ihttpclientfactory-aspnet-core)
 - [EF Core SQL Performance](/blog/ef-core-sql-performance)
 

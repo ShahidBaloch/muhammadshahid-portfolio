@@ -2,7 +2,7 @@
 title: "C# Expert-Level Interview Questions (Senior / Staff Scenarios)"
 description: "C# expert level interview questions with production answers — IAsyncEnumerable exports, cancellation across MediatR, ConcurrentDictionary caches, Span parsers, and bounded Channels."
 date: "2026-09-04"
-category: "architecture"
+category: "interview-questions"
 tags: ["Interview Questions", "C#", ".NET", "ASP.NET Core", "Career"]
 ---
 
@@ -218,7 +218,8 @@ If you only pass `timeout.Token`, the user closing the tab does not stop SQL. If
 - **This page:** language + runtime decisions that show up as memory, cancel, and throughput bugs
 - **[ASP.NET Core scenarios](/blog/aspnet-core-interview-questions-scenarios):** middleware, JWT vs Angular, cache isolation, architecture judgment
 - **[Async await questions](/blog/csharp-async-await-interview-questions):** `.Result`, `async void`, `WhenAll`, `ValueTask`, `ConfigureAwait`
+- **[EF Core interview questions](/blog/ef-core-interview-questions):** concurrency tokens, query filters, `SaveChanges` — not N+1 SQL
 
-If a loop is titled “expert C#,” start here, then use the framework post for the API story.
+If a loop is titled “expert C#,” start here, then use the framework post for the API story. The full set lives on the [interview questions hub](/learning/interview-questions).
 
 Preparing a senior / staff C# loop, or writing one for a hiring team? [Contact me](/contact). Bring a production incident, not a trivia list.

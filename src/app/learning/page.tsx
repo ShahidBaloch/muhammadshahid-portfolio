@@ -5,9 +5,9 @@ import { getPostsForTopic } from "@/lib/posts";
 import { learningTopics } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Blog Topics — Auth, EF Core, EDI, DI & Architecture",
+  title: "Blog Topics — Interviews, Auth, EF Core, EDI, DI & Architecture",
   description:
-    "Topic guides for ASP.NET Core + Angular authentication, identity, EF Core, healthcare EDI, CQRS, dependency injection, and architecture.",
+    "Topic guides for C# and ASP.NET Core interview questions, Angular authentication, identity, EF Core, healthcare EDI, CQRS, dependency injection, and architecture.",
   alternates: { canonical: "/learning" },
 };
 

@@ -48,7 +48,7 @@ export function blogJsonLd() {
     name: `${siteConfig.name} Blog`,
     url: `${siteConfig.url}/blog`,
     description:
-      "Original articles on ASP.NET Core, Angular, Azure, IdentityServer, EF Core, and C# from production healthcare, SaaS, and marketplace work.",
+      "Original articles on ASP.NET Core, Angular, Azure, IdentityServer, EF Core, and C# interview questions from production healthcare, SaaS, and marketplace work.",
     author: { "@id": personId },
     publisher: { "@id": personId },
     inLanguage: "en",
