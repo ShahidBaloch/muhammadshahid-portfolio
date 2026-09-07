@@ -1,5 +1,5 @@
 ---
-title: "Angular Auth Guard with ASP.NET Core JWT: Protect Routes the Right Way"
+title: "Angular Auth Guard with ASP.NET Core JWT"
 description: "How to implement Angular auth guards and role guards with ASP.NET Core JWT — canActivate, token expiry checks, and role claims from the API without brittle localStorage hacks."
 date: "2026-08-01"
 category: "authentication"

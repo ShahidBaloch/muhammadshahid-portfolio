@@ -1,8 +1,7 @@
 ---
-title: "ASP.NET Core Rate Limiting: Protect APIs Without Killing Real Users"
+title: "ASP.NET Core Rate Limiting for APIs"
 description: "Implement ASP.NET Core rate limiting middleware for Web APIs — fixed/sliding windows, per-user policies, 429 responses for Angular clients, and multi-instance pitfalls."
 date: "2026-08-04"
-category: "architecture"
 tags: ["Rate Limiting", "ASP.NET Core", "API Security", ".NET", "Performance"]
 related:
   - aspnet-core-middleware-order

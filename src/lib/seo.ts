@@ -43,6 +43,44 @@ export function websiteJsonLd() {
   };
 }
 
+export function pageSocial({
+  title,
+  description,
+  path,
+  type = "website",
+}: {
+  title: string;
+  description: string;
+  path: string;
+  type?: "website" | "article";
+}) {
+  const url = `${siteConfig.url}${path}`;
+  return {
+    openGraph: {
+      type,
+      title,
+      description,
+      url,
+      siteName: siteConfig.name,
+      locale: "en_US",
+      images: [
+        {
+          url: "/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image" as const,
+      title,
+      description,
+      images: ["/opengraph-image"],
+    },
+  };
+}
+
 export function blogJsonLd() {
   const featured = getHomepagePosts(3);
   return {
@@ -51,7 +89,7 @@ export function blogJsonLd() {
     name: `${siteConfig.name} Blog`,
     url: `${siteConfig.url}/blog`,
     description:
-      "C# async await interview questions, what an identity server is in ASP.NET Core, the ASP.NET Core config file, and original notes from production healthcare and SaaS work.",
+      "Original articles from healthcare, SaaS, and eCommerce work. Browse by topic or search the full feed.",
     author: { "@id": personId },
     publisher: { "@id": personId },
     inLanguage: "en",

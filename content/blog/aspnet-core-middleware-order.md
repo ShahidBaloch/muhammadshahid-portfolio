@@ -1,5 +1,5 @@
 ---
-title: "ASP.NET Core Middleware Order: The Pipeline That Breaks Auth and CORS"
+title: "ASP.NET Core Middleware Order for Auth and CORS"
 description: "Full ASP.NET Core middleware order I ship — forwarded headers, exception handler, CORS, auth before authorization, rate limits, and Swagger — not a CORS policy tutorial."
 date: "2026-09-06"
 updated: "2026-09-07"

@@ -12,7 +12,7 @@ const sizeClass = {
 export function BrandMark({ size = "sm", className = "" }: BrandMarkProps) {
   return (
     <span
-      className={`inline-flex shrink-0 items-center justify-center rounded-full bg-teal font-display font-semibold tracking-tight text-white ${sizeClass[size]} ${className}`}
+      className={`inline-flex shrink-0 items-center justify-center rounded-full bg-teal font-display font-semibold tracking-tight text-cta-ink transition duration-200 group-hover:scale-105 ${sizeClass[size]} ${className}`}
       aria-hidden
     >
       MS

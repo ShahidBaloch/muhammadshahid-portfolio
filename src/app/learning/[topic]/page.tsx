@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { PostDate } from "@/components/PostDate";
 import { SectionHeading } from "@/components/SectionHeading";
 import { getPostsForTopic } from "@/lib/posts";
-import { personId } from "@/lib/seo";
+import { pageSocial, personId } from "@/lib/seo";
 import { getLearningTopic, learningTopics, siteConfig } from "@/lib/site";
 
 type PageProps = {
@@ -24,10 +24,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: "Topic not found" };
   }
 
+  const path = `/learning/${topic.slug}`;
   return {
     title: topic.title,
     description: topic.description,
-    alternates: { canonical: `/learning/${topic.slug}` },
+    alternates: { canonical: path },
+    ...pageSocial({
+      title: topic.title,
+      description: topic.description,
+      path,
+    }),
   };
 }
 
@@ -108,9 +114,10 @@ export default async function LearningTopicPage({ params }: PageProps) {
               href={`/learning/${item.slug}`}
               className={`rounded border px-3 py-1.5 text-sm transition ${
                 item.slug === topic.slug
-                  ? "border-ink bg-ink text-white"
-                  : "border-slate-line text-muted hover:border-ink hover:text-ink"
+                  ? "chip-active"
+                  : "border-slate-line text-muted hover:border-teal hover:text-ink"
               }`}
+              aria-current={item.slug === topic.slug ? "page" : undefined}
             >
               {item.label}
             </Link>

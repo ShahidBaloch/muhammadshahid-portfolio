@@ -30,8 +30,8 @@ export default async function OpenGraphImage({ params }: ImageProps) {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#051d1f",
-          color: "white",
+          background: "#10141c",
+          color: "#f4f6fb",
           padding: 64,
           fontFamily: "sans-serif",
         }}
@@ -42,7 +42,8 @@ export default async function OpenGraphImage({ params }: ImageProps) {
               width: 44,
               height: 44,
               borderRadius: 999,
-              background: "#31a8d6",
+              background: "#ff9f1c",
+              color: "#1a1408",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -57,7 +58,7 @@ export default async function OpenGraphImage({ params }: ImageProps) {
         <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 1000 }}>
           <div style={{ fontSize: 44, fontWeight: 700, lineHeight: 1.2 }}>{displayTitle}</div>
         </div>
-        <div style={{ fontSize: 20, color: "#4bb8e0" }}>muhammadshahid.dev</div>
+        <div style={{ fontSize: 20, color: "#ffb34a" }}>muhammadshahid.dev</div>
       </div>
     ),
     { ...size },

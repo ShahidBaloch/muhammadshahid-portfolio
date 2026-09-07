@@ -32,20 +32,12 @@ const engagementSteps = [
   },
 ] as const;
 
-const techMarquee = [
-  "Clean Architecture",
-  "ASP.NET Core",
-  "Angular",
-  "Azure",
-  "SQL Server",
-  "Cosmos DB",
-  "Redis",
-  "IdentityServer",
-  "Docker",
-  "RabbitMQ",
-  "SignalR",
-  "CI/CD",
-];
+const trustStats = [
+  { label: "Shipping", value: "5+ years" },
+  { label: "Domains", value: "Healthcare · SaaS" },
+  { label: "Reply time", value: "1 business day" },
+  { label: "Availability", value: "Contract · remote" },
+] as const;
 
 export default function HomePage() {
   const featured = projects.slice(0, 3);
@@ -53,11 +45,14 @@ export default function HomePage() {
 
   return (
     <>
-      <section className="relative">
+      <section className="hero-canvas relative" aria-labelledby="home-heading">
         <div className="container-narrow grid items-center gap-10 px-5 pb-14 pt-28 sm:px-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:px-12 lg:pb-16 lg:pt-32">
           <div>
             <p className="eyebrow">{siteConfig.title}</p>
-            <h1 className="mt-5 font-display text-[1.85rem] font-semibold leading-[1.18] tracking-tight text-ink sm:text-4xl lg:text-[3.15rem] lg:leading-[1.12]">
+            <h1
+              id="home-heading"
+              className="mt-5 font-display text-[1.85rem] font-semibold leading-[1.18] tracking-tight text-ink sm:text-4xl lg:text-[3.15rem] lg:leading-[1.12]"
+            >
               I design and ship production systems on{" "}
               <span className="text-teal">.NET + Angular</span>.
             </h1>
@@ -82,7 +77,12 @@ export default function HomePage() {
                 className="font-semibold text-teal link-underline"
               >
                 Message me
+                <span className="sr-only"> (opens in a new tab)</span>
               </a>
+              {" · "}
+              <Link href="/services" className="font-semibold text-teal link-underline">
+                What I take on
+              </Link>
               {" · "}
               <Link href="/blog" className="font-semibold text-teal link-underline">
                 Read the blog
@@ -93,58 +93,38 @@ export default function HomePage() {
           <ProfileCard className="lg:justify-self-end" />
         </div>
 
-        <div className="border-y border-slate-line bg-mist">
+        <dl className="border-y border-slate-line bg-mist">
           <div className="container-narrow grid grid-cols-2 gap-6 px-5 py-8 sm:grid-cols-4 sm:px-8 lg:px-12">
-            {[
-              { label: "Shipping", value: "5+ years" },
-              { label: "Domains", value: "Healthcare · SaaS" },
-              { label: "Reply time", value: "1 business day" },
-              { label: "Availability", value: "Contract · remote" },
-            ].map((item) => (
-              <div key={item.label} className="min-w-0 text-center sm:text-left">
-                <p className="font-display text-base font-semibold text-ink sm:text-xl">{item.value}</p>
-                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-teal">
+            {trustStats.map((item) => (
+              <div key={item.label} className="flex min-w-0 flex-col-reverse text-center sm:text-left">
+                <dt className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
                   {item.label}
-                </p>
+                </dt>
+                <dd className="font-display text-base font-semibold text-ink sm:text-xl">
+                  {item.value}
+                </dd>
               </div>
             ))}
           </div>
-        </div>
-
-        <div className="group relative overflow-hidden border-b border-slate-line bg-paper py-4">
-          <div className="marquee-track flex w-max gap-10 whitespace-nowrap px-4 text-sm text-muted">
-            {techMarquee.map((item) => (
-              <span key={item} className="inline-flex items-center gap-10">
-                <span className="font-medium text-ink-soft">{item}</span>
-                <span className="text-cyan" aria-hidden>
-                  ✦
-                </span>
-              </span>
-            ))}
-            <span className="inline-flex items-center gap-10" aria-hidden>
-              {techMarquee.map((item) => (
-                <span key={`dup-${item}`} className="inline-flex items-center gap-10">
-                  <span className="font-medium text-ink-soft">{item}</span>
-                  <span className="text-cyan">✦</span>
-                </span>
-              ))}
-            </span>
-          </div>
-        </div>
+        </dl>
       </section>
 
-      <section className="section-pad">
+      <section className="section-pad" aria-labelledby="home-work-heading">
         <div className="container-narrow">
           <Reveal>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p className="eyebrow">Selected work</p>
-                <h2 className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl">
+                <h2
+                  id="home-work-heading"
+                  className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl"
+                >
                   Production systems with clear boundaries.
                 </h2>
               </div>
               <Link href="/work" className="font-semibold text-teal link-underline">
-                Full case notes →
+                Full case notes
+                <span aria-hidden> →</span>
               </Link>
             </div>
           </Reveal>
@@ -152,38 +132,41 @@ export default function HomePage() {
           <div className="mt-10 space-y-4">
             {featured.map((project, index) => (
               <Reveal key={project.slug} delayMs={index * 80}>
-                <Link href={`/work/${project.slug}`} className="block">
                 <article className="surface-hover grid gap-5 rounded-xl p-6 md:grid-cols-[0.9fr_1.4fr]">
-                    <ProjectVisual project={project} />
-                    <div>
-                      <p className="eyebrow">{project.domain}</p>
-                      <h3 className="mt-2 font-display text-2xl font-semibold text-ink">
+                  <ProjectVisual project={project} />
+                  <div>
+                    <p className="eyebrow">{project.domain}</p>
+                    <h3 className="mt-2 font-display text-2xl font-semibold text-ink">
+                      <Link href={`/work/${project.slug}`} className="hover:text-teal">
                         {project.title}
-                      </h3>
-                      {project.confidential ? (
-                        <p className="mt-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted">
-                          NDA — architecture patterns only
-                        </p>
-                      ) : null}
-                      <p className="mt-3 text-muted">{project.summary}</p>
-                      <p className="mt-3 text-sm text-ink-soft">{project.result}</p>
-                      <p className="mt-3 text-xs text-muted">{project.stack.slice(0, 6).join(" · ")}</p>
-                    </div>
-                  </article>
-                </Link>
+                      </Link>
+                    </h3>
+                    {project.confidential ? (
+                      <p className="mt-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted">
+                        NDA — architecture patterns only
+                      </p>
+                    ) : null}
+                    <p className="mt-3 text-muted">{project.summary}</p>
+                    <p className="mt-3 text-sm text-ink-soft">{project.result}</p>
+                    <p className="mt-3 text-xs text-muted">{project.stack.slice(0, 6).join(" · ")}</p>
+                  </div>
+                </article>
               </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section-pad !pt-0">
+      <section className="section-pad !pt-0" aria-labelledby="home-blog-heading">
         <div className="container-narrow">
           <Reveal>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p className="eyebrow">Blog</p>
-                <h2 className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl">
+                <h2
+                  id="home-blog-heading"
+                  className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl"
+                >
                   Original .NET and Angular notes from production.
                 </h2>
                 <p className="mt-3 max-w-2xl text-muted">
@@ -192,11 +175,16 @@ export default function HomePage() {
                 </p>
               </div>
               <div className="flex flex-col gap-2 sm:items-end">
-                <Link href="/learning/interview-questions" className="font-semibold text-teal link-underline">
-                  Interview questions →
+                <Link
+                  href="/learning/interview-questions"
+                  className="font-semibold text-teal link-underline"
+                >
+                  Interview questions
+                  <span aria-hidden> →</span>
                 </Link>
                 <Link href="/blog" className="font-semibold text-teal link-underline">
-                  All articles →
+                  All articles
+                  <span aria-hidden> →</span>
                 </Link>
               </div>
             </div>
@@ -218,12 +206,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section-pad !pt-4">
+      <section className="section-pad !pt-4" aria-labelledby="home-process-heading">
         <div className="container-narrow">
           <Reveal>
             <div className="max-w-2xl">
               <p className="eyebrow">How we work</p>
-              <h2 className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl text-balance">
+              <h2
+                id="home-process-heading"
+                className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl text-balance"
+              >
                 From discovery to production — without foggy retainers.
               </h2>
               <p className="mt-4 text-lg leading-relaxed text-muted">
@@ -235,13 +226,15 @@ export default function HomePage() {
 
           <ol className="mt-12 grid gap-6 md:grid-cols-3">
             {engagementSteps.map((step, index) => (
-              <Reveal key={step.title} delayMs={index * 80}>
-                <li className="h-full rounded-xl border border-slate-line bg-mist p-6">
-                  <p className="text-sm font-semibold text-ink-soft">Phase {index + 1}</p>
-                  <h3 className="mt-3 font-display text-xl font-semibold text-ink">{step.title}</h3>
-                  <p className="mt-3 leading-relaxed text-muted">{step.text}</p>
-                </li>
-              </Reveal>
+              <li key={step.title} className="h-full">
+                <Reveal className="h-full" delayMs={index * 80}>
+                  <div className="h-full rounded-xl border border-slate-line bg-mist p-6">
+                    <p className="text-sm font-semibold text-ink-soft">Phase {index + 1}</p>
+                    <h3 className="mt-3 font-display text-xl font-semibold text-ink">{step.title}</h3>
+                    <p className="mt-3 leading-relaxed text-muted">{step.text}</p>
+                  </div>
+                </Reveal>
+              </li>
             ))}
           </ol>
 

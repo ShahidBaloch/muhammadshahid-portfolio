@@ -1,5 +1,5 @@
 ---
-title: "EDI X12 Parsers in C# and .NET — How I Choose Architecture (Not a Vendor)"
+title: "EDI X12 Parsers in C# and .NET"
 description: "Independent notes on parsing X12 in C# for healthcare and supply-chain APIs: envelope vs transaction, 837-shaped pipelines, what libraries actually do, and how ASP.NET Core should host this work."
 date: "2026-08-15"
 category: "edi"

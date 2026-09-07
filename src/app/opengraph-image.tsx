@@ -15,8 +15,8 @@ export default function OpenGraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#051d1f",
-          color: "white",
+          background: "#10141c",
+          color: "#f4f6fb",
           padding: 64,
           fontFamily: "sans-serif",
         }}
@@ -34,8 +34,9 @@ export default function OpenGraphImage() {
             style={{
               width: 48,
               height: 48,
-              borderRadius: 6,
-              background: "#31a8d6",
+              borderRadius: 999,
+              background: "#ff9f1c",
+              color: "#1a1408",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -51,11 +52,11 @@ export default function OpenGraphImage() {
           <div style={{ fontSize: 54, fontWeight: 700, lineHeight: 1.15 }}>
             {siteConfig.title}
           </div>
-          <div style={{ fontSize: 26, color: "#4bb8e0", lineHeight: 1.4 }}>
+          <div style={{ fontSize: 26, color: "#9aa5b8", lineHeight: 1.4 }}>
             ASP.NET Core · Angular · Azure · Clean architecture
           </div>
         </div>
-        <div style={{ fontSize: 22, color: "rgba(255,255,255,0.82)" }}>
+        <div style={{ fontSize: 22, color: "#ffb34a" }}>
           muhammadshahid.dev
         </div>
       </div>

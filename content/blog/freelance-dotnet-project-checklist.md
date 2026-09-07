@@ -2,7 +2,6 @@
 title: "Freelance .NET + Angular Project Checklist Before You Start"
 description: "A discovery-to-acceptance checklist for freelance ASP.NET Core and Angular client engagements — scope, auth, hosting, and handoff criteria that prevent costly surprises."
 date: "2026-07-28"
-category: "architecture"
 tags: ["Freelance", ".NET", "Angular", "Delivery"]
 related:
   - angular-dotnet-integration

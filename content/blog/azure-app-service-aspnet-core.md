@@ -3,7 +3,6 @@ title: "Deploy ASP.NET Core APIs to Azure App Service"
 description: "Lessons from shipping ASP.NET Core APIs to Azure App Service in healthcare and SaaS — configuration, deployment slots, secrets, health checks, and the failures that only show up after go-live."
 date: "2026-03-20"
 updated: "2026-09-07"
-category: "architecture"
 tags: ["Azure", "ASP.NET Core", "App Service", "DevOps"]
 related:
   - docker-dotnet-angular-local

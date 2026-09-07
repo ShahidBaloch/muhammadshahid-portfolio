@@ -41,6 +41,7 @@ export default function ContactPage() {
                 className="mt-1 inline-block font-medium text-teal link-underline"
               >
                 {siteConfig.phone}
+                <span className="sr-only"> (WhatsApp, opens in a new tab)</span>
               </a>
             </li>
             <li>
@@ -52,17 +53,20 @@ export default function ContactPage() {
                 className="mt-1 inline-block font-medium text-teal link-underline"
               >
                 muhammad-shahid
+                <span className="sr-only"> (opens in a new tab)</span>
               </a>
             </li>
             <li>
               <p className="eyebrow">Location</p>
-              <p className="mt-1 font-medium text-ink">{siteConfig.location}</p>
+              <address className="mt-1 not-italic font-medium text-ink">{siteConfig.location}</address>
             </li>
           </ul>
         </div>
 
         <div className="surface rounded-xl p-6 sm:p-8">
-          <h2 className="font-display text-xl font-semibold text-ink">Project inquiry</h2>
+          <h2 id="project-inquiry" className="font-display text-xl font-semibold text-ink">
+            Project inquiry
+          </h2>
           <p className="mt-2 text-sm text-muted">
             Prefer email or WhatsApp? Use the links on the left — I typically reply within one
             business day.

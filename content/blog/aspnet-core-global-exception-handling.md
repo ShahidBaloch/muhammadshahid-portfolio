@@ -3,7 +3,6 @@ title: "ASP.NET Core Global Exception Handling for Angular APIs"
 description: "Set up ASP.NET Core global exception handling with ProblemDetails so Angular forms show consistent errors — middleware vs IExceptionHandler, 400 vs 500, and what not to leak."
 date: "2026-08-04"
 updated: "2026-09-07"
-category: "architecture"
 tags: ["ASP.NET Core", "Exception Handling", "ProblemDetails", "Angular", "APIs"]
 related:
   - aspnet-core-api-validation

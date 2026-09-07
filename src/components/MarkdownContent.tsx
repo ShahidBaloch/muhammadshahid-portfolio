@@ -39,10 +39,10 @@ export function MarkdownContent({ content }: { content: string }) {
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={url}
-              alt={alt ?? ""}
+              alt={alt?.trim() ? alt : ""}
               width={1200}
               height={675}
-              className="h-auto w-full rounded-xl border border-slate-line"
+              className="h-auto w-full rounded-xl border border-slate-line bg-navy p-2"
             />
           );
         },

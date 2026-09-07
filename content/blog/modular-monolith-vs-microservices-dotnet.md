@@ -1,5 +1,5 @@
 ---
-title: "Modular Monolith vs Microservices in .NET: Choose Boundaries, Not Hype"
+title: "Modular Monolith vs Microservices in .NET"
 description: "Modular monolith vs microservices for ASP.NET Core teams — when to split services, how to draw module boundaries, and how Angular frontends stay stable either way."
 date: "2026-08-02"
 category: "architecture"

@@ -10,8 +10,8 @@ export function ProjectVisual({ project }: { project: Project }) {
             key={layer}
             className={`rounded-md px-3 py-2 text-center text-xs font-medium ${
               index === 0
-                ? "bg-navy text-white"
-                : "border border-slate-line bg-mist text-ink-soft"
+                ? "bg-teal text-cta-ink"
+                : "border border-slate-line bg-paper text-ink-soft"
             }`}
           >
             {layer}

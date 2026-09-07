@@ -2,13 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionHeading } from "@/components/SectionHeading";
 import { getPostsForTopic } from "@/lib/posts";
+import { pageSocial } from "@/lib/seo";
 import { learningTopics } from "@/lib/site";
 
+const title = "Interviews, Auth, EF Core, EDI, and Architecture";
+const description =
+  "Topic guides for C# and ASP.NET Core interview questions, Angular authentication, identity, EF Core, healthcare EDI, CQRS, dependency injection, and architecture.";
+
 export const metadata: Metadata = {
-  title: "Interviews, Auth, EF Core, EDI, and Architecture",
-  description:
-    "Topic guides for C# and ASP.NET Core interview questions, Angular authentication, identity, EF Core, healthcare EDI, CQRS, dependency injection, and architecture.",
+  title,
+  description,
   alternates: { canonical: "/learning" },
+  ...pageSocial({ title, description, path: "/learning" }),
 };
 
 export default function LearningPage() {
@@ -32,18 +37,21 @@ export default function LearningPage() {
           {learningTopics.map((topic) => {
             const count = getPostsForTopic(topic).length;
             return (
-              <Link
-                key={topic.slug}
-                href={`/learning/${topic.slug}`}
-                className="surface surface-hover block rounded-xl p-6"
-              >
+              <article key={topic.slug} className="surface-hover rounded-xl p-6">
                 <p className="eyebrow">Topic</p>
-                <h2 className="mt-3 font-display text-xl font-semibold text-ink">{topic.label}</h2>
+                <h2 className="mt-3 font-display text-xl font-semibold text-ink">
+                  <Link href={`/learning/${topic.slug}`} className="hover:text-teal">
+                    {topic.label}
+                  </Link>
+                </h2>
                 <p className="mt-3 text-sm leading-relaxed text-muted">{topic.description}</p>
                 <p className="mt-5 text-sm font-semibold text-teal">
-                  {count} article{count === 1 ? "" : "s"} →
+                  <Link href={`/learning/${topic.slug}`}>
+                    {count} article{count === 1 ? "" : "s"}
+                    <span aria-hidden> →</span>
+                  </Link>
                 </p>
-              </Link>
+              </article>
             );
           })}
         </div>

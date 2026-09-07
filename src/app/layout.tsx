@@ -24,8 +24,8 @@ const body = Source_Sans_3({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#d8e2f0",
-  colorScheme: "light",
+  themeColor: "#10141c",
+  colorScheme: "dark",
 };
 
 export const metadata: Metadata = {
@@ -115,7 +115,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd()) }}
         />
         <Header />
-        <main id="main-content">{children}</main>
+        <main id="main-content" tabIndex={-1} className="outline-none">
+          {children}
+        </main>
         <Footer />
         <CookieConsent />
         <Analytics />

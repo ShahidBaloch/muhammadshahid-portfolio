@@ -36,7 +36,10 @@ export function CookieConsent() {
     const el = bannerRef.current;
     if (!el) return;
     const sync = () => {
-      document.documentElement.style.setProperty("--cookie-banner-space", `${el.offsetHeight}px`);
+      document.documentElement.style.setProperty(
+        "--cookie-banner-space",
+        `${el.offsetHeight + 8}px`,
+      );
     };
     sync();
     const observer = new ResizeObserver(sync);
@@ -75,7 +78,7 @@ export function CookieConsent() {
   return (
     <div
       ref={bannerRef}
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-line bg-mist/95 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:p-5"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-line bg-mist/95 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[0_-12px_40px_rgba(0,0,0,0.35)] sm:p-5"
       role="dialog"
       aria-modal="false"
       aria-labelledby="cookie-consent-title"

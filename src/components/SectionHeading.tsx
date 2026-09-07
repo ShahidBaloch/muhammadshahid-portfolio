@@ -37,14 +37,21 @@ export function SectionHeading({
 
 export function CtaBand() {
   return (
-    <section className="section-pad !pt-8">
-      <div className="container-narrow rounded-xl bg-navy px-6 py-12 text-white sm:px-10 sm:py-14">
-        <div className="max-w-2xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-foam">Next step</p>
-          <h2 className="mt-3 font-display text-3xl font-semibold text-white sm:text-4xl text-balance">
+    <section className="section-pad !pt-8" aria-labelledby="cta-heading">
+      <div className="container-narrow relative overflow-hidden rounded-xl border border-slate-line bg-mist px-6 py-12 sm:px-10 sm:py-14">
+        <div
+          className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-teal/20 blur-3xl"
+          aria-hidden
+        />
+        <div className="relative max-w-2xl">
+          <p className="eyebrow">Next step</p>
+          <h2
+            id="cta-heading"
+            className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl text-balance"
+          >
             Need a senior .NET + Angular partner for the next release?
           </h2>
-          <p className="mt-4 text-lg text-white/85">
+          <p className="mt-4 text-lg text-muted">
             Share the problem, constraints, and timeline. I&apos;ll come back with a clear
             technical approach and next step — usually within one business day.
           </p>
@@ -56,9 +63,10 @@ export function CtaBand() {
               href={siteConfig.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-white/45 px-5 py-3 text-sm font-semibold text-white transition hover:border-foam hover:text-foam sm:w-auto"
+              className="btn-secondary w-full sm:w-auto"
             >
               WhatsApp
+              <span className="sr-only"> (opens in a new tab)</span>
             </a>
           </div>
         </div>

@@ -158,7 +158,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
       ) : null}
-      <div className="container-narrow max-w-3xl">
+      <div className="container-narrow reading-surface max-w-3xl">
         <nav className="text-sm text-muted" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
             <li>
@@ -182,6 +182,10 @@ export default async function BlogPostPage({ params }: PageProps) {
                 </li>
               </>
             ) : null}
+            <li aria-hidden>/</li>
+            <li aria-current="page" className="text-ink">
+              <span className="line-clamp-1">{post.title}</span>
+            </li>
           </ol>
         </nav>
         <header className="mt-6 border-b border-slate-line pb-8">
@@ -224,7 +228,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         <OnThisPage headings={headings} />
 
-        <div className="prose mt-10 max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:text-ink prose-p:text-muted prose-li:text-muted prose-a:text-teal prose-strong:text-ink sm:prose-lg">
+        <div className="prose-site mt-10 sm:prose-lg">
           <MarkdownContent content={post.content} />
         </div>
 

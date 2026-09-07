@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function ResumePage() {
   return (
     <section className="section-pad pt-28 sm:pt-32">
-      <div className="container-narrow max-w-3xl">
+      <div className="container-narrow reading-surface max-w-3xl">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="eyebrow print:hidden">Resume</p>

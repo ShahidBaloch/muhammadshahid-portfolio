@@ -2,7 +2,6 @@
 title: "SignalR Real-Time Patterns in ASP.NET Core"
 description: "How I ship SignalR with ASP.NET Core for auctions, notifications, and live dashboards — authenticated hubs, group strategy, scaling with Azure SignalR, and Angular clients that reconnect honestly."
 date: "2026-06-18"
-category: "architecture"
 tags: ["SignalR", "ASP.NET Core", "Realtime", "Angular", "Azure", "Architecture"]
 related:
   - aspnet-core-jwt-auth

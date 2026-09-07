@@ -5,8 +5,7 @@ import { inquiryBudgets, inquiryTimelines, siteConfig } from "@/lib/site";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-const fieldClass =
-  "mt-2 w-full min-h-11 rounded border border-slate-line bg-paper px-3 py-2.5 text-base text-ink outline-none transition focus:border-teal";
+const fieldClass = "field";
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
@@ -70,7 +69,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-5">
+    <form onSubmit={onSubmit} className="space-y-5" aria-labelledby="project-inquiry">
       <div className="grid gap-5 sm:grid-cols-2">
         <label className="block text-sm font-medium text-ink">
           Name
@@ -147,7 +146,7 @@ export function ContactForm() {
       </button>
 
       {status === "error" ? (
-        <p className="text-sm text-red-700" role="alert">
+        <p className="text-sm text-danger" role="alert">
           {error}{" "}
           <a
             className="font-semibold text-teal link-underline"

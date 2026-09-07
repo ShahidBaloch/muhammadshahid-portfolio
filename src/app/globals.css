@@ -2,23 +2,25 @@
 @plugin "@tailwindcss/typography";
 
 /*
-  Live brand DNA (muhammadshahid.dev): ink #051D1F, paper #D8E2F0, accent cyan.
-  Live #31A8D6 is kept for glows and photo kinship, but text/buttons use a
-  darker stop of the same hue so small type meets WCAG AA.
+  Dark canvas + amber CTA. Texture is muted bronze (not the button gold).
+  Token names stay stable so existing Tailwind classes keep working.
 */
 @theme {
-  --color-ink: #051d1f;
-  --color-ink-soft: #2a3a3d;
-  --color-mist: #f4f7fb;
-  --color-paper: #d8e2f0;
-  --color-slate-line: #9eb1c6;
-  --color-muted: #4d5c63;
-  --color-label: #4d5c63;
-  --color-teal: #156a96;
-  --color-teal-bright: #1b7ead;
-  --color-cyan: #31a8d6;
-  --color-navy: #051d1f;
-  --color-foam: #4bb8e0;
+  --color-ink: #f4f6fb;
+  --color-ink-soft: #e6eaf3;
+  --color-mist: #1b2230;
+  --color-paper: #10141c;
+  --color-slate-line: #3d4a63;
+  --color-muted: #9aa5b8;
+  --color-label: #9aa5b8;
+  --color-kicker: #c4a46e;
+  --color-teal: #ff9f1c;
+  --color-teal-bright: #ffc14d;
+  --color-cyan: #c4a46e;
+  --color-navy: #0c1016;
+  --color-foam: #ffb34a;
+  --color-cta-ink: #1a1408;
+  --color-danger: #ff7a68;
   --font-display: var(--font-space), "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-source), "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
 }
@@ -27,18 +29,42 @@
   html {
     scroll-behavior: smooth;
     overflow-x: hidden;
+    color-scheme: dark;
   }
 
   body {
-    @apply bg-paper text-ink antialiased;
+    @apply bg-paper text-ink-soft antialiased;
     font-family: var(--font-body);
     overflow-x: hidden;
     background-image:
-      radial-gradient(ellipse 70% 45% at 100% 0%, rgba(49, 168, 214, 0.16), transparent 55%),
-      radial-gradient(ellipse 45% 35% at 0% 28%, rgba(5, 29, 31, 0.06), transparent 50%);
+      radial-gradient(ellipse 55% 40% at 100% 0%, rgba(255, 159, 28, 0.07), transparent 58%),
+      radial-gradient(rgba(196, 164, 110, 0.11) 1.15px, transparent 1.3px);
+    background-size: auto, 42px 42px;
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
     padding-bottom: var(--cookie-banner-space, 0px);
+  }
+
+  body::before {
+    content: "";
+    pointer-events: none;
+    position: fixed;
+    inset: -20% -10% auto auto;
+    width: min(42rem, 70vw);
+    height: min(28rem, 50vh);
+    background: radial-gradient(ellipse at center, rgba(255, 159, 28, 0.14), transparent 68%);
+    z-index: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    body::before {
+      animation: glow-drift 14s ease-in-out infinite;
+    }
+  }
+
+  body > * {
+    position: relative;
+    z-index: 1;
   }
 
   h1,
@@ -51,8 +77,13 @@
   }
 
   ::selection {
-    background: color-mix(in srgb, var(--color-cyan) 32%, white);
+    background: color-mix(in srgb, var(--color-teal) 38%, transparent);
     color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-teal);
+    outline-offset: 2px;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -88,7 +119,7 @@
   }
 
   .skip-link {
-    @apply absolute left-4 z-[100] rounded-lg bg-navy px-4 py-2 text-sm font-semibold text-white;
+    @apply absolute left-4 z-[100] rounded-lg bg-teal px-4 py-2 text-sm font-semibold text-cta-ink;
     top: -100%;
   }
 
@@ -97,7 +128,26 @@
   }
 
   .eyebrow {
-    @apply text-xs font-semibold uppercase tracking-[0.16em] text-teal;
+    @apply text-xs font-semibold uppercase tracking-[0.16em] text-kicker;
+  }
+
+  .hero-canvas {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 47px,
+      rgba(255, 255, 255, 0.018) 47px,
+      rgba(255, 255, 255, 0.018) 48px
+    );
+  }
+
+  .reading-surface {
+    position: relative;
+    z-index: 1;
+    background-color: var(--color-paper);
+    box-shadow:
+      -3rem 0 3rem 1.5rem var(--color-paper),
+      3rem 0 3rem 1.5rem var(--color-paper);
   }
 
   .link-underline {
@@ -105,7 +155,18 @@
   }
 
   .btn-primary {
-    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-teal bg-teal px-5 py-3 text-sm font-semibold text-white transition duration-200 hover:border-teal-bright hover:bg-teal-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-teal bg-teal px-5 py-3 text-sm font-semibold text-cta-ink transition duration-200 hover:border-teal-bright hover:bg-teal-bright focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal;
+    box-shadow: 0 10px 28px rgba(255, 159, 28, 0.22);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 14px 32px rgba(255, 159, 28, 0.34);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:disabled {
+    transform: none;
+    opacity: 0.7;
   }
 
   .btn-secondary {
@@ -113,11 +174,38 @@
   }
 
   .surface {
-    @apply border border-slate-line bg-mist shadow-sm;
+    @apply border border-slate-line bg-mist;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
   }
 
   .surface-hover {
-    @apply border border-slate-line bg-mist shadow-sm transition duration-200 hover:border-teal/50;
+    @apply border border-slate-line bg-mist transition duration-200;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
+  }
+
+  .surface-hover:hover {
+    border-color: color-mix(in srgb, var(--color-teal) 45%, var(--color-slate-line));
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.36), 0 0 0 1px rgba(255, 159, 28, 0.16);
+  }
+
+  .field {
+    @apply mt-2 w-full min-h-11 rounded-lg border border-slate-line bg-paper px-3 py-2.5 text-base text-ink outline-none transition focus:border-teal;
+  }
+
+  .chip-active {
+    @apply border-teal bg-teal/15 text-teal;
+  }
+
+  .prose-site {
+    @apply prose max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:text-ink prose-p:text-muted prose-li:text-muted prose-a:text-teal prose-strong:text-ink prose-code:text-ink prose-pre:bg-navy prose-pre:text-ink-soft prose-blockquote:border-teal prose-blockquote:text-ink-soft prose-hr:border-slate-line prose-th:text-ink prose-td:text-muted;
+  }
+
+  .nav-link {
+    @apply relative inline-flex min-h-11 items-center rounded-lg px-2.5 text-sm transition;
+  }
+
+  .nav-link-active {
+    @apply bg-teal/15 text-teal;
   }
 
   .reveal {
@@ -158,15 +246,55 @@
   }
 }
 
+@keyframes glow-drift {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate3d(-4%, 6%, 0) scale(1.06);
+  }
+}
+
 @media print {
   header,
   footer,
   .skip-link,
-  [role="dialog"] {
+  [role="dialog"],
+  body::before {
     display: none !important;
   }
 
+  html {
+    color-scheme: light;
+  }
+
   body {
-    background: white;
+    background: white !important;
+    color: #10141c !important;
+    background-image: none !important;
+  }
+
+  .reading-surface {
+    background: white !important;
+    box-shadow: none !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .text-ink,
+  .text-ink-soft {
+    color: #10141c !important;
+  }
+
+  .text-muted,
+  .text-teal,
+  .text-kicker,
+  .eyebrow {
+    color: #3d4a5e !important;
   }
 }

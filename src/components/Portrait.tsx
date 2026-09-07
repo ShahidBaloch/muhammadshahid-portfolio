@@ -9,7 +9,7 @@ type PortraitProps = {
 export function Portrait({ className = "", priority = false }: PortraitProps) {
   return (
     <div
-      className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-full ring-2 ring-white sm:h-24 sm:w-24 ${className}`}
+      className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-full ring-2 ring-teal/35 sm:h-24 sm:w-24 ${className}`}
     >
       <Image
         src="/images/profile.png"

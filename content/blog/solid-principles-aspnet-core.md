@@ -1,5 +1,5 @@
 ---
-title: "SOLID Principles in C# and ASP.NET Core (With Real API Examples)"
+title: "SOLID Principles in C# and ASP.NET Core"
 description: "SOLID principles in C# for ASP.NET Core — detailed SRP, OCP, LSP, ISP, DIP examples with DI, Angular-facing APIs, anti-patterns, and refactor checklists from production systems."
 date: "2026-08-11"
 category: "design-patterns"

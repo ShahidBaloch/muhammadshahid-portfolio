@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProjectCard } from "@/components/ProjectCard";
 import { CtaBand } from "@/components/SectionHeading";
-import { personId } from "@/lib/seo";
+import { pageSocial, personId } from "@/lib/seo";
 import { getProject, projects, siteConfig } from "@/lib/site";
 
 type PageProps = {
@@ -23,10 +23,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: "Work not found" };
   }
 
+  const path = `/work/${project.slug}`;
   return {
     title: project.title,
     description: project.summary,
-    alternates: { canonical: `/work/${project.slug}` },
+    alternates: { canonical: path },
+    ...pageSocial({
+      title: project.title,
+      description: project.summary,
+      path,
+      type: "article",
+    }),
   };
 }
 
@@ -84,13 +91,17 @@ export default async function WorkCasePage({ params }: PageProps) {
                   Work
                 </Link>
               </li>
+              <li aria-hidden>/</li>
+              <li aria-current="page" className="text-ink">
+                {project.title}
+              </li>
             </ol>
           </nav>
           <div className="mt-8">
             <ProjectCard project={project} asPage />
           </div>
 
-          <div className="mt-12 max-w-2xl space-y-5 text-lg leading-relaxed text-muted">
+          <div className="reading-surface mt-12 max-w-2xl space-y-5 text-lg leading-relaxed text-muted">
             {project.caseNotes.map((note) => (
               <p key={note.slice(0, 48)}>{note}</p>
             ))}
@@ -114,7 +125,7 @@ export default async function WorkCasePage({ params }: PageProps) {
           <p className="mt-10 max-w-2xl text-sm text-muted">
             Want a similar shape for your product?{" "}
             <Link href="/contact" className="font-semibold text-teal link-underline">
-              Send a project inquiry
+              {siteConfig.inquiryCta}
             </Link>{" "}
             and I will reply within one business day.
           </p>

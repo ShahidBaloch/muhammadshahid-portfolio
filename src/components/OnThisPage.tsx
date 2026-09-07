@@ -8,7 +8,7 @@ export function OnThisPage({ headings }: { headings: PostHeading[] }) {
       className="mt-8 rounded-xl border border-slate-line bg-mist p-5 sm:p-6"
       aria-label="On this page"
     >
-      <p className="eyebrow">On this page</p>
+      <h2 className="eyebrow">On this page</h2>
       <ol className="mt-4 space-y-2 text-sm">
         {headings.map((heading) => (
           <li key={heading.id}>

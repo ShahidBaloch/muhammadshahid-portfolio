@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
 import { ProjectCard } from "@/components/ProjectCard";
 import { CtaBand, SectionHeading } from "@/components/SectionHeading";
+import { pageSocial } from "@/lib/seo";
 import { projects } from "@/lib/site";
 
+const title = "Selected .NET and Angular Work";
+const description =
+  "Selected .NET and Angular projects by Muhammad Shahid — microservices marketplaces, eCommerce platforms, and healthcare SaaS.";
+
 export const metadata: Metadata = {
-  title: "Selected .NET and Angular Work",
-  description:
-    "Selected .NET and Angular projects by Muhammad Shahid — microservices marketplaces, eCommerce platforms, and healthcare SaaS.",
+  title,
+  description,
   alternates: { canonical: "/work" },
+  ...pageSocial({ title, description, path: "/work" }),
 };
 
 export default function WorkPage() {

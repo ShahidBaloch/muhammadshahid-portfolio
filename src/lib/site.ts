@@ -32,7 +32,7 @@ export const siteConfig = {
   tagline:
     "I design and ship production .NET + Angular systems for healthcare, SaaS, and eCommerce teams.",
   availability: "Open for freelance & contract engagements",
-  inquiryCta: "Start a project inquiry",
+  inquiryCta: "Hire me",
 } as const;
 
 export const inquiryTimelines = [
@@ -65,6 +65,8 @@ export type LearningTopic = {
   intro: string;
   /** Extra tags that also qualify a post for this topic hub. */
   matchTags: string[];
+  /** When true, list category matches and pinSlugs only — no tag spill. */
+  categoryOnly?: boolean;
   /** Hub order: Search Console winners and pillar URLs before newest dumps. */
   pinSlugs?: string[];
 };
@@ -196,14 +198,9 @@ export const learningTopics: LearningTopic[] = [
     description:
       "Architecture notes for .NET + Angular systems — config files, Clean Architecture, modular monolith vs services, Minimal APIs, and boundaries that survive healthcare, SaaS, and eCommerce delivery.",
     intro:
-      "Architecture here means the decisions that survive the first production incident: where data lives, who is allowed to change it, and how the Angular SPA talks to ASP.NET Core without a contract that rot. Start with the config-file article if the search was appsettings or localappsettings.json. This hub is also Clean Architecture, modular monolith vs services, Minimal APIs, and the JSON contract failures that look like “the API 500s on detail pages.” Cycle exceptions are the object-cycle article — not an EF N+1 tutorial. JWT plumbing, EF SQL, and EDI parsers have their own topic pages. Skip a split into microservices until a boundary has a real independent deploy or scaling reason.",
-    matchTags: [
-      "Architecture",
-      "Clean Architecture",
-      "Microservices",
-      "Modular Monolith",
-      "Minimal APIs",
-    ],
+      "Architecture here means the decisions that survive the first production incident: where data lives, who is allowed to change it, and how the Angular SPA talks to ASP.NET Core without a contract that rot. Start with the config-file article if the search was appsettings or localappsettings.json. This hub is also Clean Architecture, modular monolith vs services, Minimal APIs, and the JSON contract failures that look like “the API 500s on detail pages.” Cycle exceptions are the object-cycle article — not an EF N+1 tutorial. JWT plumbing, EF SQL, and EDI parsers have their own topic pages. Caching, SignalR, Docker, and delivery checklists live in the main blog, not here.",
+    matchTags: [],
+    categoryOnly: true,
     pinSlugs: [
       "aspnet-core-appsettings-localappsettings",
       "clean-architecture-aspnet-core",

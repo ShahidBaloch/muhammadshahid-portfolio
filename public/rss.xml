@@ -134,7 +134,7 @@
       <description><![CDATA[ASP.NET Core 401 vs 403 — Challenge vs Forbid, JWT bearer with no token vs a failed policy, and why Angular interceptors that treat every 403 as logout are wrong.]]></description>
     </item>
     <item>
-      <title><![CDATA[ASP.NET Core Middleware Order: The Pipeline That Breaks Auth and CORS]]></title>
+      <title><![CDATA[ASP.NET Core Middleware Order for Auth and CORS]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-middleware-order</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-middleware-order</guid>
       <pubDate>Sun, 06 Sep 2026 00:00:00 GMT</pubDate>
@@ -246,7 +246,7 @@
       <description><![CDATA[EF Core N+1 is extra round-trips in a loop. Include fixes that. AsSplitQuery is for a different bug. How I tell them apart on ASP.NET Core APIs.]]></description>
     </item>
     <item>
-      <title><![CDATA[EDI X12 Parsers in C# and .NET — How I Choose Architecture (Not a Vendor)]]></title>
+      <title><![CDATA[EDI X12 Parsers in C# and .NET]]></title>
       <link>https://www.muhammadshahid.dev/blog/edi-x12-parser-csharp-dotnet</link>
       <guid>https://www.muhammadshahid.dev/blog/edi-x12-parser-csharp-dotnet</guid>
       <pubDate>Sat, 15 Aug 2026 00:00:00 GMT</pubDate>
@@ -260,14 +260,14 @@
       <description><![CDATA[When a Backend-for-Frontend (BFF) with YARP is the right auth shape for Angular + ASP.NET Core: cookie sessions, token attachment at the edge, CSRF, and how this differs from SPA-held JWTs.]]></description>
     </item>
     <item>
-      <title><![CDATA[ASP.NET Core JWT Refresh Token Rotation (and How to Detect Theft)]]></title>
+      <title><![CDATA[ASP.NET Core JWT Refresh Token Rotation]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-jwt-refresh-token-rotation</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-jwt-refresh-token-rotation</guid>
       <pubDate>Sat, 15 Aug 2026 00:00:00 GMT</pubDate>
       <description><![CDATA[A production guide to JWT refresh token rotation in ASP.NET Core: hashed storage, family revocation, reuse detection, and the Angular contract that keeps short-lived access tokens usable.]]></description>
     </item>
     <item>
-      <title><![CDATA[AI in .NET with Semantic Kernel: Practical Patterns for ASP.NET Core]]></title>
+      <title><![CDATA[AI in .NET with Semantic Kernel]]></title>
       <link>https://www.muhammadshahid.dev/blog/dotnet-ai-semantic-kernel-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/dotnet-ai-semantic-kernel-aspnet-core</guid>
       <pubDate>Wed, 12 Aug 2026 00:00:00 GMT</pubDate>
@@ -295,7 +295,7 @@
       <description><![CDATA[ASP.NET Core interview questions with detailed scenario answers — DI captive dependencies, JWT with Angular, middleware order, async starvation, EF Core slowness, and production tradeoffs.]]></description>
     </item>
     <item>
-      <title><![CDATA[SOLID Principles in C# and ASP.NET Core (With Real API Examples)]]></title>
+      <title><![CDATA[SOLID Principles in C# and ASP.NET Core]]></title>
       <link>https://www.muhammadshahid.dev/blog/solid-principles-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/solid-principles-aspnet-core</guid>
       <pubDate>Tue, 11 Aug 2026 00:00:00 GMT</pubDate>
@@ -316,14 +316,14 @@
       <description><![CDATA[ASP.NET Core Minimal APIs for production — MapGet/MapPost, DI, validation, OpenAPI, auth, and when controllers still win for Angular-backed products.]]></description>
     </item>
     <item>
-      <title><![CDATA[Angular Signals with ASP.NET Core APIs: State Without Subscription Sprawl]]></title>
+      <title><![CDATA[Angular Signals with ASP.NET Core APIs]]></title>
       <link>https://www.muhammadshahid.dev/blog/angular-signals-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/angular-signals-aspnet-core</guid>
       <pubDate>Sun, 09 Aug 2026 00:00:00 GMT</pubDate>
       <description><![CDATA[Angular Signals for API-driven apps — load state from ASP.NET Core, computed UI flags, RxJS interop, and when Signals beat BehaviorSubject for SPA state.]]></description>
     </item>
     <item>
-      <title><![CDATA[ASP.NET Core Rate Limiting: Protect APIs Without Killing Real Users]]></title>
+      <title><![CDATA[ASP.NET Core Rate Limiting for APIs]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-rate-limiting</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-rate-limiting</guid>
       <pubDate>Tue, 04 Aug 2026 00:00:00 GMT</pubDate>
@@ -344,14 +344,14 @@
       <description><![CDATA[Use IHttpClientFactory in ASP.NET Core to avoid HttpClient socket exhaustion and stale DNS — named clients, typed clients, Polly retries, and mistakes that still break production APIs.]]></description>
     </item>
     <item>
-      <title><![CDATA[Redis Caching in ASP.NET Core: When It Speeds Up APIs (and When It Lies)]]></title>
+      <title><![CDATA[Redis Caching in ASP.NET Core: When It Lies]]></title>
       <link>https://www.muhammadshahid.dev/blog/redis-caching-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/redis-caching-aspnet-core</guid>
       <pubDate>Sun, 02 Aug 2026 00:00:00 GMT</pubDate>
       <description><![CDATA[Practical Redis caching in ASP.NET Core for Angular SPAs — IDistributedCache, cache keys, stampede control, invalidation, and the mistakes that make dashboards show stale data.]]></description>
     </item>
     <item>
-      <title><![CDATA[Modular Monolith vs Microservices in .NET: Choose Boundaries, Not Hype]]></title>
+      <title><![CDATA[Modular Monolith vs Microservices in .NET]]></title>
       <link>https://www.muhammadshahid.dev/blog/modular-monolith-vs-microservices-dotnet</link>
       <guid>https://www.muhammadshahid.dev/blog/modular-monolith-vs-microservices-dotnet</guid>
       <pubDate>Sun, 02 Aug 2026 00:00:00 GMT</pubDate>
@@ -365,7 +365,7 @@
       <description><![CDATA[Strategy Pattern in C# for ASP.NET Core — swap pricing, validation, or export algorithms without giant if-else blocks, and register strategies with dependency injection.]]></description>
     </item>
     <item>
-      <title><![CDATA[Angular Auth Guard with ASP.NET Core JWT: Protect Routes the Right Way]]></title>
+      <title><![CDATA[Angular Auth Guard with ASP.NET Core JWT]]></title>
       <link>https://www.muhammadshahid.dev/blog/angular-auth-guard-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/angular-auth-guard-aspnet-core</guid>
       <pubDate>Sat, 01 Aug 2026 00:00:00 GMT</pubDate>

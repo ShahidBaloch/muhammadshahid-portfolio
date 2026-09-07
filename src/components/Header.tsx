@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { BrandMark } from "@/components/BrandMark";
-import { learningTopics, navLinks } from "@/lib/site";
+import { learningTopics, navLinks, siteConfig } from "@/lib/site";
 
 export function Header() {
   const pathname = usePathname();
@@ -94,11 +94,9 @@ export function Header() {
     };
   }, [open]);
 
-  const blogActive =
-    pathname === "/blog" ||
-    pathname.startsWith("/blog/") ||
-    pathname === "/learning" ||
-    pathname.startsWith("/learning/");
+  const onBlog = pathname === "/blog" || pathname.startsWith("/blog/");
+  const blogCluster =
+    onBlog || pathname === "/learning" || pathname.startsWith("/learning/");
 
   return (
     <header
@@ -113,7 +111,8 @@ export function Header() {
       <div className="container-narrow flex h-14 shrink-0 items-center justify-between gap-3 px-4 sm:h-16 sm:gap-4 sm:px-8 lg:px-12">
         <Link
           href="/"
-          className="flex min-w-0 items-center gap-2 font-display text-[0.95rem] font-semibold tracking-tight text-ink transition hover:text-teal sm:gap-2.5 sm:text-lg"
+          aria-label="Muhammad Shahid, home"
+          className="group flex min-w-0 items-center gap-2 font-display text-[0.95rem] font-semibold tracking-tight text-ink transition hover:text-teal sm:gap-2.5 sm:text-lg"
         >
           <BrandMark size="sm" />
           <span className="truncate">Muhammad Shahid</span>
@@ -121,27 +120,36 @@ export function Header() {
 
         <nav className="hidden items-center gap-5 xl:gap-6 lg:flex" aria-label="Primary">
           {navLinks.map((link) => {
-            if (link.href === "/blog") {
+              if (link.href === "/blog") {
               return (
-                <div key={link.href} className="relative" ref={blogRef}>
+                <div key={link.href} className="relative flex items-center" ref={blogRef}>
+                  <Link
+                    href="/blog"
+                    className={`nav-link hover:text-teal ${
+                      blogCluster ? "nav-link-active" : "text-ink-soft"
+                    }`}
+                    aria-current={onBlog ? "page" : undefined}
+                  >
+                    {link.label}
+                  </Link>
                   <button
                     type="button"
-                    className={`relative inline-flex min-h-11 items-center gap-1 text-sm transition after:absolute after:bottom-2 after:left-0 after:h-0.5 after:w-0 after:bg-teal after:transition-all hover:text-teal hover:after:w-full ${
-                      blogActive ? "text-teal after:w-full" : "text-muted"
+                    className={`nav-link px-1 hover:text-teal ${
+                      blogCluster ? "text-teal" : "text-ink-soft"
                     }`}
                     aria-expanded={blogOpen}
                     aria-haspopup="menu"
                     aria-controls="blog-menu"
+                    aria-label="Blog topics"
                     onClick={() => setBlogOpen((value) => !value)}
                   >
-                    {link.label}
                     <span aria-hidden className="text-[10px]">
                       ▾
                     </span>
                   </button>
                   {blogOpen ? (
                     <div id="blog-menu" role="menu" className="absolute left-0 top-full z-50 pt-2">
-                      <div className="max-h-[min(24rem,70vh)] min-w-[230px] overflow-y-auto overscroll-contain rounded-xl border border-slate-line bg-mist py-2">
+                      <div className="max-h-[min(24rem,70vh)] min-w-[230px] overflow-y-auto overscroll-contain rounded-xl border border-slate-line bg-mist py-2 shadow-[0_18px_44px_rgba(0,0,0,0.42)]">
                         <Link
                           href="/blog"
                           role="menuitem"
@@ -177,16 +185,17 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative inline-flex min-h-11 items-center text-sm transition after:absolute after:bottom-2 after:left-0 after:h-0.5 after:w-0 after:bg-teal after:transition-all hover:text-teal hover:after:w-full ${
-                  active ? "text-teal after:w-full" : "text-muted"
+                aria-current={active ? "page" : undefined}
+                className={`nav-link hover:text-teal ${
+                  active ? "nav-link-active" : "text-ink-soft"
                 }`}
               >
                 {link.label}
               </Link>
             );
           })}
-          <Link href="/contact" className="btn-primary !px-4 !py-2 !text-xs">
-            Hire me
+          <Link href="/contact" className="btn-primary ml-2 !px-4 !py-2 !text-xs">
+            {siteConfig.inquiryCta}
           </Link>
         </nav>
 
@@ -233,6 +242,7 @@ export function Header() {
                   <div key={link.href} className="border-b border-slate-line/70">
                     <Link
                       href="/blog"
+                      aria-current={onBlog ? "page" : undefined}
                       className="flex min-h-12 items-center text-base font-medium text-ink hover:text-teal"
                     >
                       {link.label}
@@ -241,13 +251,18 @@ export function Header() {
                       type="button"
                       className="flex min-h-11 w-full items-center justify-between text-sm font-medium text-muted"
                       aria-expanded={topicsOpen}
+                      aria-controls="mobile-topics"
+                      aria-label="Blog topics"
                       onClick={() => setTopicsOpen((value) => !value)}
                     >
                       Topics
                       <span aria-hidden>{topicsOpen ? "–" : "+"}</span>
                     </button>
                     {topicsOpen ? (
-                      <div className="mb-3 flex flex-col border-l border-slate-line pl-3">
+                      <div
+                        id="mobile-topics"
+                        className="mb-3 flex flex-col border-l border-slate-line pl-3"
+                      >
                         {learningTopics.map((topic) => (
                           <Link
                             key={topic.slug}
@@ -268,6 +283,7 @@ export function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
+                  aria-current={active ? "page" : undefined}
                   className={`flex min-h-12 items-center border-b border-slate-line/70 text-base font-medium hover:text-teal ${
                     active ? "text-teal" : "text-ink"
                   }`}
@@ -276,14 +292,8 @@ export function Header() {
                 </Link>
               );
             })}
-            <Link
-              href="/contact"
-              className="flex min-h-12 items-center border-b border-slate-line/70 text-base font-medium text-ink hover:text-teal"
-            >
-              Contact
-            </Link>
             <Link href="/contact" className="btn-primary mt-6 w-full">
-              Hire me
+              {siteConfig.inquiryCta}
             </Link>
           </nav>
         </div>

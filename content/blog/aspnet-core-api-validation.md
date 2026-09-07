@@ -2,7 +2,6 @@
 title: "Clean API Validation and Error Envelopes in ASP.NET Core"
 description: "ASP.NET Core API validation with ProblemDetails: FluentValidation without the deprecated AspNetCore package, one error envelope, and Angular form mapping."
 date: "2026-08-17"
-category: "architecture"
 tags: ["ASP.NET Core", "Validation", "Problem Details", "Angular", "API Design"]
 related:
   - aspnet-core-global-exception-handling

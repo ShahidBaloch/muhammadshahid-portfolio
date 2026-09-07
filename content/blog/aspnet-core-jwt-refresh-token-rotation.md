@@ -1,5 +1,5 @@
 ---
-title: "ASP.NET Core JWT Refresh Token Rotation (and How to Detect Theft)"
+title: "ASP.NET Core JWT Refresh Token Rotation"
 description: "A production guide to JWT refresh token rotation in ASP.NET Core: hashed storage, family revocation, reuse detection, and the Angular contract that keeps short-lived access tokens usable."
 date: "2026-08-15"
 category: "authentication"

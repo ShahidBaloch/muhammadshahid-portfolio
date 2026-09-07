@@ -1,8 +1,7 @@
 ---
-title: "Redis Caching in ASP.NET Core: When It Speeds Up APIs (and When It Lies)"
+title: "Redis Caching in ASP.NET Core: When It Lies"
 description: "Practical Redis caching in ASP.NET Core for Angular SPAs — IDistributedCache, cache keys, stampede control, invalidation, and the mistakes that make dashboards show stale data."
 date: "2026-08-02"
-category: "architecture"
 tags: ["Redis", "ASP.NET Core", "Caching", "Performance", "Azure"]
 related:
   - ef-core-sql-performance

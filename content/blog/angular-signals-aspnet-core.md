@@ -1,8 +1,7 @@
 ---
-title: "Angular Signals with ASP.NET Core APIs: State Without Subscription Sprawl"
+title: "Angular Signals with ASP.NET Core APIs"
 description: "Angular Signals for API-driven apps — load state from ASP.NET Core, computed UI flags, RxJS interop, and when Signals beat BehaviorSubject for SPA state."
 date: "2026-08-09"
-category: "architecture"
 tags: ["Angular", "Signals", "ASP.NET Core", "TypeScript", "RxJS", "SPA"]
 related:
   - angular-dotnet-integration

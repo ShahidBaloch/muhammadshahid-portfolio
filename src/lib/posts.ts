@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import readingTime from "reading-time";
+import { learningTopics } from "@/lib/site";
 
 const postsDirectory = path.join(process.cwd(), "content", "blog");
 
@@ -104,28 +105,38 @@ export function getPostsByCategory(category: string): PostMeta[] {
   return getAllPosts().filter((post) => post.category === category);
 }
 
-/** Posts for a topic hub: matching category or matching topic tags. */
+const hubSlugs = new Set(learningTopics.map((topic) => topic.slug));
+
+/**
+ * Posts for a topic hub: category first. Tags may add a post only when it is
+ * not already owned by a different hub (so JWT on middleware does not land
+ * on Auth, and Architecture on an EF post does not land on Architecture).
+ * categoryOnly hubs skip tag matching. Explicit pinSlugs can still cross hubs.
+ */
 export function getPostsForTopic(topic: {
   slug: string;
   matchTags: readonly string[];
   pinSlugs?: readonly string[];
+  categoryOnly?: boolean;
 }): PostMeta[] {
   const tagSet = new Set(topic.matchTags.map((tag) => tag.toLowerCase()));
-  const seen = new Set<string>();
+  const all = getAllPosts();
 
-  const posts = getAllPosts().filter((post) => {
-    const byCategory = post.category === topic.slug;
+  const posts = all.filter((post) => {
+    if (post.category === topic.slug) return true;
+    if (topic.categoryOnly) return false;
     const byTag = post.tags.some((tag) => tagSet.has(tag.toLowerCase()));
-    if (!byCategory && !byTag) return false;
-    if (seen.has(post.slug)) return false;
-    seen.add(post.slug);
-    return true;
+    if (!byTag) return false;
+    const ownedByOtherHub = Boolean(
+      post.category && hubSlugs.has(post.category) && post.category !== topic.slug,
+    );
+    return !ownedByOtherHub;
   });
 
   const pinSlugs = topic.pinSlugs ?? [];
   if (pinSlugs.length === 0) return posts;
 
-  const bySlug = new Map(posts.map((post) => [post.slug, post]));
+  const bySlug = new Map(all.map((post) => [post.slug, post]));
   const pinned = pinSlugs
     .map((slug) => bySlug.get(slug))
     .filter((post): post is PostMeta => Boolean(post));
