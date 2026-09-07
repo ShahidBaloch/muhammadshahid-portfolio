@@ -2,6 +2,7 @@
 title: "ASP.NET Core Global Exception Handling for Angular APIs"
 description: "Set up ASP.NET Core global exception handling with ProblemDetails so Angular forms show consistent errors — middleware vs IExceptionHandler, 400 vs 500, and what not to leak."
 date: "2026-08-04"
+updated: "2026-09-07"
 category: "architecture"
 tags: ["ASP.NET Core", "Exception Handling", "ProblemDetails", "Angular", "APIs"]
 ---
@@ -172,6 +173,7 @@ If you use filters for MVC-only concerns, keep them aligned with the same status
 4. **Exposing `exception.Message` in production** — information disclosure  
 5. **Swallowing exceptions** — empty catch that returns 200  
 6. **Returning EF entities and hitting “possible object cycle was detected”** — that 500 is [the JSON cycle article](/blog/aspnet-core-json-object-cycle), not a missing `try/catch`  
+7. **`Headers are read-only, response has started`** — the handler ran after the body flushed; that is [the HasStarted article](/blog/aspnet-core-headers-readonly-response-started), not a ProblemDetails mapping miss  
 
 ## Minimal production checklist
 

@@ -43,6 +43,13 @@
       <description><![CDATA[IDX10503: Signature validation failed — what it actually means in ASP.NET Core JWT bearer auth: kid vs symmetric keys, disposed RSA, Identity opaque tokens, and the checks that are not this error.]]></description>
     </item>
     <item>
+      <title><![CDATA[Headers are read-only, response has started in ASP.NET Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-headers-readonly-response-started</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-headers-readonly-response-started</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[InvalidOperationException: Headers are read-only, response has started — why IExceptionHandler is too late after WriteAsync, how Angular sees a CORS error, and the HasStarted check I use.]]></description>
+    </item>
+    <item>
       <title><![CDATA[ASP.NET Core 401 vs 403: Challenge vs Forbid for Angular APIs]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-401-vs-403</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-401-vs-403</guid>

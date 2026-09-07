@@ -51,10 +51,16 @@ function xmlEscape(value) {
     .replaceAll("'", "&apos;");
 }
 
+const INDEXNOW_KEY = "88ec6b8ae88b26dc37ce3d9ac5d3c35d";
+
 function toLastModified(date) {
   const parsed = new Date(date);
   if (Number.isNaN(parsed.getTime())) {
     return "2026-01-01T00:00:00.000Z";
+  }
+  const now = new Date();
+  if (parsed.toISOString().slice(0, 10) === now.toISOString().slice(0, 10)) {
+    return now.toISOString();
   }
   return parsed.toISOString();
 }
@@ -166,8 +172,46 @@ function buildRss(posts) {
 `;
 }
 
+async function submitIndexNow(urlList) {
+  if (!process.env.VERCEL && !process.env.CI && process.env.INDEXNOW !== "1") {
+    return;
+  }
+
+  try {
+    const response = await fetch("https://api.indexnow.org/indexnow", {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify({
+        host: "www.muhammadshahid.dev",
+        key: INDEXNOW_KEY,
+        keyLocation: `${BASE_URL}/${INDEXNOW_KEY}.txt`,
+        urlList,
+      }),
+    });
+    console.log(`IndexNow ${response.status} (${urlList.length} URLs).`);
+  } catch (error) {
+    console.warn(`IndexNow skipped: ${error instanceof Error ? error.message : error}`);
+  }
+}
+
 const posts = readPosts();
 fs.mkdirSync(PUBLIC_DIR, { recursive: true });
+fs.writeFileSync(path.join(PUBLIC_DIR, `${INDEXNOW_KEY}.txt`), INDEXNOW_KEY);
 fs.writeFileSync(path.join(PUBLIC_DIR, "sitemap.xml"), buildSitemap(posts));
 fs.writeFileSync(path.join(PUBLIC_DIR, "rss.xml"), buildRss(posts));
 console.log(`Wrote public/sitemap.xml and public/rss.xml (${posts.length} posts).`);
+
+const indexNowUrls = [
+  BASE_URL,
+  `${BASE_URL}/blog`,
+  `${BASE_URL}/blog/csharp-async-await-interview-questions`,
+  `${BASE_URL}/blog/identityserver-vs-aspnet-identity`,
+  `${BASE_URL}/blog/aspnet-core-appsettings-localappsettings`,
+  `${BASE_URL}/blog/aspnet-core-headers-readonly-response-started`,
+  `${BASE_URL}/learning/interview-questions`,
+  `${BASE_URL}/learning/identity`,
+  `${BASE_URL}/learning/architecture`,
+  `${BASE_URL}/sitemap.xml`,
+];
+
+await submitIndexNow(indexNowUrls);

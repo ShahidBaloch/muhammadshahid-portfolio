@@ -208,6 +208,7 @@ export const learningTopics: LearningTopic[] = [
       "clean-architecture-aspnet-core",
       "aspnet-core-json-object-cycle",
       "aspnet-core-middleware-order",
+      "aspnet-core-headers-readonly-response-started",
     ],
   },
 ];

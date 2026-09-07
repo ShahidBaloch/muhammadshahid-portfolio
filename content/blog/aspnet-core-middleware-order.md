@@ -2,6 +2,7 @@
 title: "ASP.NET Core Middleware Order: The Pipeline That Breaks Auth and CORS"
 description: "Full ASP.NET Core middleware order I ship — forwarded headers, exception handler, CORS, auth before authorization, rate limits, and Swagger — not a CORS policy tutorial."
 date: "2026-09-06"
+updated: "2026-09-07"
 category: "architecture"
 tags: ["ASP.NET Core", "Middleware", "CORS", "JWT", "API Security"]
 ---
@@ -63,6 +64,7 @@ A limiter registered before CORS returns a naked 429. Same class of “browser c
 - Not `WithOrigins` vs `AllowCredentials` — CORS article
 - Not JWT validation parameters — [JWT checklist](/blog/aspnet-core-jwt-auth)
 - Not IdentityServer client URIs — [redirect URI loops](/blog/identityserver-redirect-uri-login-loop)
+- Not **Headers are read-only, response has started** — [HasStarted / streaming](/blog/aspnet-core-headers-readonly-response-started)
 
 ## Checklist
 
