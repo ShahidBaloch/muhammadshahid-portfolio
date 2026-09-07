@@ -100,6 +100,12 @@ export function Footer() {
             © {year} {siteConfig.name}. All rights reserved.
           </p>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs">
+            <Link href="/about" className="hover:text-foam">
+              About
+            </Link>
+            <Link href="/contact" className="hover:text-foam">
+              Contact
+            </Link>
             <Link href="/privacy" className="hover:text-foam">
               Privacy
             </Link>
