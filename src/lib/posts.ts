@@ -10,6 +10,7 @@ export type PostMeta = {
   title: string;
   description: string;
   date: string;
+  updated?: string;
   tags: string[];
   category?: string;
   readingTime: string;
@@ -46,6 +47,7 @@ export function getPostBySlug(slug: string): Post {
     title: String(data.title ?? slug),
     description: String(data.description ?? ""),
     date: String(data.date ?? ""),
+    updated: data.updated ? String(data.updated) : undefined,
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
     category: data.category ? String(data.category) : undefined,
     readingTime: stats.text,
@@ -62,6 +64,7 @@ export function getAllPosts(): PostMeta[] {
         title: post.title,
         description: post.description,
         date: post.date,
+        updated: post.updated,
         tags: post.tags,
         category: post.category,
         readingTime: post.readingTime,

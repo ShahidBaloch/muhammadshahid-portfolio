@@ -2,6 +2,7 @@
 title: "C# Async Await Interview Questions (Scenario-Based)"
 description: "C# async await interview questions with full scenario answers — .Result deadlocks, async void, Task.WhenAll with EF Core, CancellationToken, fire-and-forget, and ValueTask."
 date: "2026-08-12"
+updated: "2026-09-07"
 category: "interview-questions"
 tags: ["Interview Questions", "C#", "async await", "Asynchronous Programming", ".NET", "ASP.NET Core"]
 ---
@@ -11,6 +12,22 @@ Reciting “async does not create a new thread” is table stakes. Senior interv
 This is a set of scenario prompts with answers I expect from people who have shipped ASP.NET Core APIs (often with Angular clients). Every scenario is written from production debugging — not a trivia bank.
 
 This URL is **interview rehearsal**. For the request-path checklist you would actually merge, use [C# async and await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).
+
+## C# async await interview questions (the list)
+
+These are the **C# async await interview questions** I actually ask. Full scenario answers are below — this list is the prompt set, not a second article.
+
+1. `.Result` / `.GetAwaiter().GetResult()` — deadlock in UI vs thread-pool starvation in ASP.NET Core
+2. `async void` on a controller or Minimal API
+3. `Task.WhenAll` sharing one EF Core `DbContext`
+4. Angular navigates away; SQL keeps running (`CancellationToken`)
+5. “Will marking everything `async` cut latency in half?”
+6. Fire-and-forget email after checkout
+7. `ConfigureAwait(false)` on an ASP.NET Core API
+8. `ValueTask` vs `Task` (when it is not a flex)
+9. Sync-over-async inside a helper called from an async action
+
+If the loop is senior/staff runtime (channels, spans, linked tokens), use [expert C# interview questions](/blog/csharp-expert-interview-questions) instead of stretching this page.
 
 ---
 

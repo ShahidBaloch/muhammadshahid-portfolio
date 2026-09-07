@@ -2,6 +2,7 @@
 title: "What Is IdentityServer in ASP.NET Core? vs Identity and SSO"
 description: "IdentityServer explained for ASP.NET Core: what it is, when ASP.NET Identity is enough, and when OpenIddict or Duende is worth SSO — not a feature-chart copy."
 date: "2026-08-17"
+updated: "2026-09-07"
 category: "identity"
 tags: ["IdentityServer", "OpenIddict", "OIDC", "ASP.NET Core Identity", "Security", "SSO"]
 ---

@@ -23,7 +23,10 @@ export function getSitemapEntries(): SitemapEntry[] {
   } catch {
     posts = [];
   }
-  const latestContentDate = posts[0]?.date ?? "2026-08-04";
+  const latestContentDate =
+    posts
+      .map((post) => post.updated ?? post.date)
+      .sort((a, b) => (a < b ? 1 : -1))[0] ?? "2026-08-04";
   const siteLastModified = toLastModified(latestContentDate);
 
   const staticRoutes: SitemapEntry[] = [
@@ -60,7 +63,7 @@ export function getSitemapEntries(): SitemapEntry[] {
 
   const postRoutes: SitemapEntry[] = posts.map((post) => ({
     path: `/blog/${post.slug}`,
-    lastModified: toLastModified(post.date),
+    lastModified: toLastModified(post.updated ?? post.date),
     changeFrequency: "monthly",
     priority: 0.8,
   }));

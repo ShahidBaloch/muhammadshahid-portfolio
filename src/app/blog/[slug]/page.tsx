@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   try {
     const post = getPostBySlug(slug);
+    const modified = post.updated ?? post.date;
     return {
       title: post.title,
       description: post.description,
@@ -32,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         title: post.title,
         description: post.description,
         publishedTime: post.date,
-        modifiedTime: post.date,
+        modifiedTime: modified,
         url: `${siteConfig.url}/blog/${post.slug}`,
       },
       twitter: {
@@ -64,7 +65,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     headline: post.title,
     description: post.description,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.updated ?? post.date,
     url: pageUrl,
     image: [`${siteConfig.url}/blog/${post.slug}/opengraph-image`],
     author: { "@id": personId },
