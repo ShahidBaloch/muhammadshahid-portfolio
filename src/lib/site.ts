@@ -140,11 +140,11 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "identity",
     label: "Identity",
-    title: "IdentityServer and ASP.NET Core Identity (2026)",
+    title: "What is an identity server in ASP.NET Core?",
     description:
-      "What IdentityServer is, when ASP.NET Identity is enough, when you need OpenIddict or Duende, and why MapIdentityApi tokens are not JWTs.",
+      "What an identity server is in ASP.NET Core, when ASP.NET Identity is enough, when you need OpenIddict or Duende, and why MapIdentityApi tokens are not JWTs.",
     intro:
-      "Identity choice is a product decision: one app versus SSO, opaque Identity API tokens versus JWT bearer, Duende licensing versus OpenIddict. This hub is for that decision — not for interceptor plumbing. Read MapIdentityApi versus JWT if Angular is sending the wrong string into AddJwtBearer. Read IdentityServer versus Identity when a second app or an external IdP is on the roadmap. Read the IdentityServer4 to OpenIddict checklist only if you are leaving a dead IS4 host — not as a greenfield default. Login loops and redirect_uri mismatch live in the redirect URI article, not in the SSO essay.",
+      "Identity choice is a product decision: one app versus SSO, opaque Identity API tokens versus JWT bearer, Duende licensing versus OpenIddict. This hub is for that decision — not for interceptor plumbing. Start with what an identity server is if you are choosing Identity versus an authorization server. Read MapIdentityApi versus JWT if Angular is sending the wrong string into AddJwtBearer. Read the IdentityServer4 to OpenIddict checklist only if you are leaving a dead IS4 host — not as a greenfield default. Login loops and redirect_uri mismatch live in the redirect URI article, not in the SSO essay.",
     matchTags: ["IdentityServer", "OpenIddict", "OIDC", "ASP.NET Core Identity", "SSO"],
     pinSlugs: [
       "identityserver-vs-aspnet-identity",

@@ -1,6 +1,6 @@
 ---
-title: "C# Async Await Interview Questions (Scenario-Based)"
-description: "C# async await interview questions with full scenario answers — .Result deadlocks, async void, Task.WhenAll with EF Core, CancellationToken, fire-and-forget, and ValueTask."
+title: "C# Async Await Interview Questions"
+description: "C# async await interview questions with scenario answers — .Result starvation, async void, Task.WhenAll with EF Core, CancellationToken, and ValueTask."
 date: "2026-08-12"
 updated: "2026-09-07"
 category: "interview-questions"
@@ -16,13 +16,15 @@ faq:
     a: "Classic sync-context deadlock is a UI story. On ASP.NET Core, .Result still occupies a thread-pool worker until the task finishes, which starves the app under load."
   - q: "Can Task.WhenAll share one EF Core DbContext?"
     a: "No. DbContext is not thread-safe. WhenAll against one context is both an interview fail and a production race."
+  - q: "Does ConfigureAwait(false) matter on ASP.NET Core APIs?"
+    a: "Almost never on the request path. ASP.NET Core has no custom sync context. Use it in libraries that may run on UI apps, not as a default on every controller line."
 ---
 
 Reciting “async does not create a new thread” is table stakes. Senior interviews ask you to diagnose starvation, unobserved exceptions, and EF Core misuse under load.
 
 This is a set of scenario prompts with answers I expect from people who have shipped ASP.NET Core APIs (often with Angular clients). Every scenario is written from production debugging — not a trivia bank.
 
-This URL is **interview rehearsal**. For the request-path checklist you would actually merge, use [C# async and await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).
+This URL is **interview rehearsal**. For the request-path checklist you would actually merge, use [C# async and await in ASP.NET Core](/blog/csharp-async-await-aspnet-core). If Google sent you for **identity server** or the ASP.NET Core **config file**, those are [what an identity server is in ASP.NET Core](/blog/identityserver-vs-aspnet-identity) and [what the ASP.NET Core config file is](/blog/aspnet-core-appsettings-localappsettings) — not this rehearsal set.
 
 ## C# async await interview questions (the list)
 
@@ -291,6 +293,8 @@ No. One sync-over-async helper on a hot path reintroduces blocking. Interviewers
 - [ASP.NET Core Interview Questions (Scenarios)](/blog/aspnet-core-interview-questions-scenarios)
 - [EF Core Interview Questions](/blog/ef-core-interview-questions)
 - [Interview questions hub](/learning/interview-questions)
+- [What is an identity server in ASP.NET Core?](/blog/identityserver-vs-aspnet-identity)
+- [What is the ASP.NET Core config file?](/blog/aspnet-core-appsettings-localappsettings)
 - [IHttpClientFactory](/blog/ihttpclientfactory-aspnet-core)
 - [EF Core SQL Performance](/blog/ef-core-sql-performance)
 

@@ -5,6 +5,13 @@ date: "2026-06-12"
 updated: "2026-09-07"
 category: "authentication"
 tags: ["ASP.NET Core", "JWT", "Security", "Angular"]
+faq:
+  - q: "How do I set up JWT auth in ASP.NET Core?"
+    a: "Add JwtBearer, validate issuer, audience, signing key, and lifetime, then protect endpoints with policies. A token endpoint alone is not a production auth system."
+  - q: "How long should an ASP.NET Core JWT live?"
+    a: "Access tokens should be short — minutes, not days. Stay signed in with a refresh contract, not a 30-day JWT in localStorage."
+  - q: "Is JWT auth enough without refresh tokens?"
+    a: "For a kiosk or a job that already has another session, maybe. For Angular users who should stay signed in, you need rotation or a BFF. Those are separate articles."
 ---
 
 When a client says they need JWT auth, they almost never mean a token endpoint and a 200 on `/api/me`. They mean users can sign in from Angular, stay signed in reasonably, hit protected APIs, and log out in a way that sticks — without holes that show up the first time someone runs a scanner.
@@ -15,6 +22,7 @@ This article is the **API-side checklist**: issuance, lifetimes, policies, and s
 
 - SPA token attach, refresh, and 401 storms: [Angular JWT interceptors](/blog/angular-jwt-interceptors)
 - Who can open `/dashboard` vs `/admin`: [Angular auth guards](/blog/angular-auth-guard-aspnet-core)
+- Where JWT secrets and `appsettings` actually live: [ASP.NET Core config file](/blog/aspnet-core-appsettings-localappsettings)
 
 ## What "JWT auth" actually includes
 
@@ -166,7 +174,7 @@ If the log is **IDX10503: Signature validation failed** (often with a misleading
 
 ## When to reach for IdentityServer / OpenIddict
 
-Not every project needs a separate identity server on day one. I split identity out when:
+Not every project needs a separate [identity server](/blog/identityserver-vs-aspnet-identity) on day one. I split identity out when:
 
 - Multiple APIs or SPAs share the same user base (CarBazaar-style)
 - Third-party clients need OAuth client credentials
