@@ -20,7 +20,10 @@
     "react-dom": "^19.1.0",
     "react-markdown": "^10.1.0",
     "reading-time": "^1.5.0",
-    "remark-gfm": "^4.0.1"
+    "rehype-highlight": "^7.0.2",
+    "rehype-pretty-code": "^0.14.5",
+    "remark-gfm": "^4.0.1",
+    "shiki": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.0",

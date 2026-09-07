@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PostDate } from "@/components/PostDate";
 import { SectionHeading } from "@/components/SectionHeading";
+import { slugifyHeading } from "@/lib/headings";
 import { getPostsForTopic } from "@/lib/posts";
 import { pageSocial, personId } from "@/lib/seo";
 import { getLearningTopic, learningTopics, siteConfig } from "@/lib/site";
@@ -106,6 +107,34 @@ export default async function LearningTopicPage({ params }: PageProps) {
         </div>
 
         <p className="mt-8 max-w-3xl text-lg leading-relaxed text-muted">{topic.intro}</p>
+
+        {topic.tracks && topic.tracks.length > 0 ? (
+          <nav className="mt-10 max-w-3xl" aria-label="Start here">
+            {topic.tracks.map((track) => {
+              const items = track.slugs
+                .map((slug) => posts.find((post) => post.slug === slug))
+                .filter((post): post is (typeof posts)[number] => Boolean(post));
+              if (items.length === 0) return null;
+              const headingId = slugifyHeading(track.title);
+              return (
+                <section key={track.title} className="mt-8 first:mt-0">
+                  <h2 id={headingId} className="scroll-mt-28 font-display text-xl font-semibold text-ink">
+                    {track.title}
+                  </h2>
+                  <ul className="mt-3 list-disc space-y-2 pl-5">
+                    {items.map((post) => (
+                      <li key={post.slug} className="text-muted">
+                        <Link href={`/blog/${post.slug}`} className="font-medium text-teal link-underline">
+                          {post.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              );
+            })}
+          </nav>
+        ) : null}
 
         <nav className="mt-8 flex flex-wrap gap-2" aria-label="Blog topics">
           {learningTopics.map((item) => (

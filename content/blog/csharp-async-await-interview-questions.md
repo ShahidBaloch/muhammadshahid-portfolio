@@ -6,25 +6,35 @@ updated: "2026-09-07"
 category: "interview-questions"
 tags: ["Interview Questions", "C#", "async await", "Asynchronous Programming", ".NET", "ASP.NET Core"]
 related:
-  - csharp-expert-interview-questions
-  - aspnet-core-interview-questions-scenarios
-  - ef-core-interview-questions
+  - csharp-threadpool-starvation-sync-over-async
+  - csharp-task-run-aspnet-core
+  - csharp-async-await-aspnet-core
 faq:
   - q: "What C# async await interview questions actually get asked?"
-    a: "Senior loops ask .Result deadlocks and thread-pool starvation, async void, Task.WhenAll on one EF Core DbContext, CancellationToken, fire-and-forget, ConfigureAwait(false), and ValueTask vs Task — not trivia about whether async creates a thread."
+    a: "Senior interviews ask you to diagnose .Result as thread pool starvation (not a Framework-style deadlock), async void, Task.WhenAll on one EF Core DbContext, CancellationToken that actually reaches SQL, fire-and-forget after checkout, ConfigureAwait(false) as a library rule, and ValueTask vs Task. They do not ask trivia about whether async creates a thread. Recite the production failure, then the fix."
   - q: "Does .Result deadlock in ASP.NET Core?"
-    a: "Classic sync-context deadlock is a UI story. On ASP.NET Core, .Result still occupies a thread-pool worker until the task finishes, which starves the app under load."
+    a: "Classic SynchronizationContext deadlock is a UI or old ASP.NET story. ASP.NET Core has no request SynchronizationContext, so that hang is rare. .Result still occupies a ThreadPool worker until the Task finishes. Under Monday clinic load that is starvation: idle CPU, rising queue, 504s. Name both worlds in the interview."
   - q: "Can Task.WhenAll share one EF Core DbContext?"
-    a: "No. DbContext is not thread-safe. WhenAll against one context is both an interview fail and a production race."
+    a: "No. DbContext is not thread-safe. WhenAll of two queries on the same instance is a race in production and a fail in interview. Sequential awaits, two scopes, or one query. Clock-time overlap is not worth a corrupted context."
   - q: "Does ConfigureAwait(false) matter on ASP.NET Core APIs?"
-    a: "Almost never on the request path. ASP.NET Core has no custom sync context. Use it in libraries that may run on UI apps, not as a default on every controller line."
+    a: "Almost never on the request path. ASP.NET Core has no custom SynchronizationContext, so false is noise in controllers. Use it in libraries that may run on WPF, WinForms, or MAUI. It is not a .Result amnesty and it does not make the API faster."
 ---
 
-Reciting “async does not create a new thread” is table stakes. Senior interviews ask you to diagnose starvation, unobserved exceptions, and EF Core misuse under load.
+**This page is for 3–5 year interviews** (and anyone rehearsing those loops). `async`/`await` let an API wait on SQL or HTTP without holding a ThreadPool worker. Reciting “async does not create a new thread” is table stakes. Interviewers then ask you to diagnose starvation, unobserved exceptions, and EF Core misuse under load.
 
-This is a set of scenario prompts with answers I expect from people who have shipped ASP.NET Core APIs (often with Angular clients). Every scenario is written from production debugging — not a trivia bank.
+If `Task` vs `Thread` is still fuzzy, read [Task vs Thread](/blog/csharp-task-vs-thread) and [async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core) first. If the loop is staff (Channels, Span, tenant maps), use [expert C# interview questions](/blog/csharp-expert-interview-questions).
 
-This URL is **interview rehearsal**. For the request-path checklist you would actually merge, use [C# async and await in ASP.NET Core](/blog/csharp-async-await-aspnet-core). If Google sent you for **identity server** or the ASP.NET Core **config file**, those are [what an identity server is in ASP.NET Core](/blog/identityserver-vs-aspnet-identity) and [what the ASP.NET Core config file is](/blog/aspnet-core-appsettings-localappsettings) — not this rehearsal set.
+How-tos for the same traps: [starvation](/blog/csharp-threadpool-starvation-sync-over-async), [Task.Run vs await](/blog/csharp-task-run-aspnet-core), [ConfigureAwait](/blog/csharp-configureawait-false-library). Hub: [async & threading](/learning/async-concurrency).
+
+_Crisp definitions (read before the scenarios)._
+
+| Term | Crisp answer |
+|---|---|
+| `async` | Enables `await`; method returns an awaitable state machine |
+| `await` | Yields the worker during incomplete awaitables; resumes later |
+| `Task` | Representation of ongoing work / result — not an OS thread |
+| Thread-pool starvation | Too many workers blocked; async continuations cannot run promptly |
+| CancellationToken | Cooperative cancel signal; pass it to I/O APIs |
 
 ## C# async await interview questions (the list)
 
@@ -37,14 +47,16 @@ These are the **C# async await interview questions** I actually ask. Full scenar
 5. “Will marking everything `async` cut latency in half?”
 6. Fire-and-forget email after checkout
 7. `ConfigureAwait(false)` on an ASP.NET Core API
-8. `ValueTask` vs `Task` (when it is not a flex)
+8. `ValueTask` vs `Task` (when allocation actually matters)
 9. Sync-over-async inside a helper called from an async action
 
-If the loop is senior/staff runtime (channels, spans, linked tokens), use [expert C# interview questions](/blog/csharp-expert-interview-questions) instead of stretching this page.
+If the loop is senior/staff runtime (channels, spans, linked tokens), use [expert C# interview questions](/blog/csharp-expert-interview-questions) instead of stretching this page. Implementation deep-dives for the same traps: [starvation](/blog/csharp-threadpool-starvation-sync-over-async), [Task.Run vs await](/blog/csharp-task-run-aspnet-core), [ConfigureAwait](/blog/csharp-configureawait-false-library), [WhenAll vs WaitAll](/blog/csharp-task-whenall-vs-parallel-foreach), [IAsyncEnumerable](/blog/csharp-iasyncenumerable-yield-return).
 
 ---
 
 ## Scenario 1: `.Result` “just for now”
+
+**Definition:** ASP.NET Core has **no** request `SynchronizationContext`. `.Result` still occupies a ThreadPool worker until the `Task` finishes → **starvation** (idle CPU, 504s), not the classic UI deadlock. How-to: [thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async).
 
 **Prompt:** A shared library exposes `Task<Customer> GetCustomerAsync`. A legacy sync layer calls `GetCustomerAsync(id).Result`. In a WPF tool it deadlocks. In ASP.NET Core under morning load, requests hang while CPU stays low. Explain both worlds and the fix.
 
@@ -52,7 +64,7 @@ If the loop is senior/staff runtime (channels, spans, linked tokens), use [exper
 
 **UI / classic sync-context case:** `await` marshals back to the captured synchronization context by default in some app models. Blocking the context thread with `.Result` while the continuation needs that thread → **deadlock**.
 
-**ASP.NET Core case:** Modern ASP.NET Core does not behave like the old ASP.NET sync-context story in the same way, but `.Result` still **occupies a thread-pool thread** until the task finishes. Under concurrency, workers block waiting on work that needs workers → **thread-pool starvation**. Symptoms: rising queue length, healthy SQL, unhappy Angular timeouts.
+**ASP.NET Core case:** `.Result` **occupies a thread-pool thread** until the task finishes. Under concurrency, workers block waiting on work that needs workers → **thread-pool starvation**. Symptoms: rising queue length, healthy SQL, unhappy Angular timeouts.
 
 ```csharp
 // Interview red flag on a request path
@@ -60,6 +72,13 @@ var customer = customerService.GetCustomerAsync(id).Result;
 
 // Also a red flag
 customerService.GetCustomerAsync(id).GetAwaiter().GetResult();
+
+// Fix
+public async Task<ActionResult<Customer>> Get(Guid id, CancellationToken ct)
+{
+    var customer = await customerService.GetCustomerAsync(id, ct);
+    return customer is null ? NotFound() : Ok(customer);
+}
 ```
 
 **Fix:** make the call chain async end-to-end (`async Task` controllers/handlers). If you truly cannot, isolate the sync boundary carefully (rare) — never as the default pattern in new API code.
@@ -70,6 +89,8 @@ customerService.GetCustomerAsync(id).GetAwaiter().GetResult();
 ---
 
 ## Scenario 2: `async void` on an API
+
+**Definition:** `async void` is for UI event handlers that cannot return `Task`. On an API the host cannot await completion; exceptions are unobserved. How-to: [async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).
 
 **Prompt:** Candidate writes:
 
@@ -110,6 +131,8 @@ Or Minimal APIs returning `Task<IResult>`.
 
 ## Scenario 3: `Task.WhenAll` on one `DbContext`
 
+**Definition:** `DbContext` is not thread-safe. `WhenAll` of two queries on one instance is a race. How-to: [WhenAll vs Parallel.ForEach](/blog/csharp-task-whenall-vs-parallel-foreach).
+
 **Prompt:** To “speed up” a screen, a developer does:
 
 ```csharp
@@ -149,6 +172,8 @@ var db2 = scope2.ServiceProvider.GetRequiredService<AppDbContext>();
 
 ## Scenario 4: Angular navigates away; SQL keeps running
 
+**Definition:** Cancellation is cooperative — nothing stops unless you pass the token to `ToListAsync(ct)`. How-to: [CancellationToken in ASP.NET Core](/blog/csharp-cancellationtoken-aspnet-core).
+
 **Prompt:** User opens a heavy report route, then clicks away. Kestrel shows the request aborted, but SQL still runs ~30 seconds. Why, and how do you fix it?
 
 ### Detailed answer
@@ -173,6 +198,8 @@ Wire the token from the controller/Minimal API parameter (framework binds it) do
 
 ## Scenario 5: “Will async cut our latency in half?”
 
+**Definition:** Async frees workers during I/O. It does not shrink a 200ms SQL query to 100ms.
+
 **Prompt:** A PM read a blog post and wants every method marked `async` to make pages twice as fast. How do you respond in an interview (and in real life)?
 
 ### Detailed answer
@@ -193,6 +220,8 @@ Async does not shrink a 200ms SQL query to 100ms. It prevents that wait from mon
 
 ## Scenario 6: Fire-and-forget email after checkout
 
+**Definition:** Fire-and-forget means you start work and do not await it before `return Ok()`. The request token is already canceled; exceptions are unobserved. How-to: [Channel producer-consumer](/blog/csharp-channel-producer-consumer).
+
 **Prompt:** After `SaveChangesAsync`, code does:
 
 ```csharp
@@ -211,12 +240,13 @@ Risks:
 3. App recycle can kill in-flight sends
 4. No retry/visibility for ops
 
-**Better patterns:**
+```csharp
+await notify.Writer.WriteAsync(new OrderNotify(order.Id), ct);
+return Ok(order);
+// BackgroundService: await foreach (var msg in channel.Reader.ReadAllAsync(stopping))
+```
 
-- Outbox table + background worker
-- Queue (Azure Service Bus / RabbitMQ) — as in marketplace designs like CarBazaar
-- `IHostedService` / Channel consumer with retries
-- At minimum, `IHostApplicationLifetime.ApplicationStopping` awareness and proper logging if you must stay in-process (still weaker than a queue)
+**Better patterns:** outbox + worker; Azure Service Bus / RabbitMQ if recycle cannot drop the message; bounded `Channel` + `BackgroundService` for in-process smoothing.
 
 Interviewers love hearing **“the request boundary is not a unit of business durability.”**
 
@@ -224,9 +254,19 @@ Interviewers love hearing **“the request boundary is not a unit of business du
 
 ## Scenario 7: `ConfigureAwait(false)` debate
 
+**Definition:** `SynchronizationContext` is the rule for which thread continuations run on. ASP.NET Core has none on the request path. How-to: [ConfigureAwait(false) in libraries](/blog/csharp-configureawait-false-library).
+
 **Prompt:** A teammate pastes `ConfigureAwait(false)` on every await in an ASP.NET Core app. Necessary?
 
 ### Detailed answer
+
+```csharp
+// ASP.NET Core controller — skip; no context to skip
+var order = await _orders.GetByIdAsync(id, ct);
+
+// Shared library that WPF also calls
+var bytes = await stream.ReadAsync(buffer, ct).ConfigureAwait(false);
+```
 
 In **library code** that may run on UI sync contexts, `ConfigureAwait(false)` avoids forcing continuations onto a captured context.
 
@@ -236,11 +276,23 @@ Don’t pretend it fixes `.Result` deadlocks you introduced yourself.
 
 ---
 
-## Scenario 8: `ValueTask` flex
+## Scenario 8: `ValueTask` vs `Task`
+
+**Definition:** `ValueTask` is TAP with less allocation when the result is **often already complete** (cache hit). Await a given instance **once**. How-to: [Task vs Thread](/blog/csharp-task-vs-thread) (ValueTask section).
 
 **Prompt:** When do you choose `ValueTask` / `ValueTask<T>` over `Task`?
 
 ### Detailed answer
+
+```csharp
+public ValueTask<FeeSchedule?> GetCachedAsync(string tenantId)
+{
+    if (_memory.TryGetValue(tenantId, out FeeSchedule? schedule))
+        return new ValueTask<FeeSchedule?>(schedule); // sync complete — no Task allocated
+
+    return new ValueTask<FeeSchedule?>(LoadAsync(tenantId));
+}
+```
 
 When profiling shows allocation pressure on a **hot path that often completes synchronously**. Rules:
 
@@ -253,6 +305,8 @@ Candidates who reach for `ValueTask` everywhere without numbers score lower than
 ---
 
 ## Scenario 9: Sync over async in a “helper”
+
+**Definition:** One `.GetResult()` helper on a hot path reintroduces [starvation](/blog/csharp-threadpool-starvation-sync-over-async) even if every controller is `async Task`.
 
 **Prompt:** All controllers are async, but a helper does:
 
@@ -269,16 +323,6 @@ No. One sync-over-async helper on a hot path reintroduces blocking. Interviewers
 
 ---
 
-## Rapid-fire definitions (still asked)
-
-| Term | Crisp answer |
-|---|---|
-| `async` | Enables `await`; method returns an awaitable state machine |
-| `await` | Yields the worker during incomplete awaitables; resumes later |
-| `Task` | Representation of ongoing work / result — not an OS thread |
-| Thread-pool starvation | Too many workers blocked; async continuations cannot run promptly |
-| CancellationToken | Cooperative cancel signal; pass it to I/O APIs |
-
 ## How to practice for real interviews
 
 1. Narrate a bug you fixed involving `.Result` or missing tokens (2 minutes)
@@ -288,14 +332,11 @@ No. One sync-over-async helper on a hot path reintroduces blocking. Interviewers
 
 ## Related reading
 
+- [Thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async)
+- [Task.Run vs await on ASP.NET Core](/blog/csharp-task-run-aspnet-core)
 - [C# Expert-Level Interview Questions](/blog/csharp-expert-interview-questions)
 - [C# Async and Await in ASP.NET Core](/blog/csharp-async-await-aspnet-core)
-- [ASP.NET Core Interview Questions (Scenarios)](/blog/aspnet-core-interview-questions-scenarios)
-- [EF Core Interview Questions](/blog/ef-core-interview-questions)
+- [Async & threading hub](/learning/async-concurrency)
 - [Interview questions hub](/learning/interview-questions)
-- [What is an identity server in ASP.NET Core?](/blog/identityserver-vs-aspnet-identity)
-- [What is the ASP.NET Core config file?](/blog/aspnet-core-appsettings-localappsettings)
-- [IHttpClientFactory](/blog/ihttpclientfactory-aspnet-core)
-- [EF Core SQL Performance](/blog/ef-core-sql-performance)
 
 Want mock interviews focused on asynchronous programming and API scalability? [Get in touch](/contact).

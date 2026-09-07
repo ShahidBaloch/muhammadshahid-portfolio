@@ -1,30 +1,43 @@
 ---
 title: "C# Async and Await in ASP.NET Core: Stop Blocking Your API"
-description: "C# async await explained for ASP.NET Core APIs — Task vs async void, CancellationToken, .Result starvation, WhenAll, HttpClient, Minimal APIs, and how Angular clients behave under load."
+description: "async/await lets an ASP.NET Core API wait on SQL or HTTP without holding a thread. Task vs async void, CancellationToken, .Result starvation, WhenAll, and HttpClient."
 date: "2026-08-12"
 updated: "2026-09-07"
-category: "architecture"
+category: "async-concurrency"
 tags: ["C#", "async await", "Asynchronous Programming", "ASP.NET Core", ".NET", "Performance"]
 related:
-  - csharp-async-await-interview-questions
-  - csharp-expert-interview-questions
-  - ihttpclientfactory-aspnet-core
+  - csharp-threadpool-starvation-sync-over-async
+  - csharp-task-run-aspnet-core
+  - csharp-cancellationtoken-aspnet-core
 faq:
   - q: "How should I use async and await in ASP.NET Core?"
-    a: "Await I/O end to end: SQL, HttpClient, blobs. Do not block with .Result. Pass CancellationToken. That keeps the thread pool free for other Angular clients."
+    a: "Await I/O end to end: EF Core, HttpClient, blobs, and anything else that returns a Task. Do not block with .Result or .Wait(). Pass the action CancellationToken all the way to ToListAsync and SendAsync. That keeps ThreadPool workers free for other Angular clients. Async does not make SQL faster; it stops the lobby from backing up."
   - q: "Does async make a SQL query faster?"
-    a: "No. It frees the worker while you wait. Query time is indexing and EF. This page is the request-path checklist, not the interview rehearsal URL."
+    a: "No. Query time is still indexing, the plan, and EF. Async only frees the ThreadPool worker during the wait. A 2-second query stays 2 seconds. What changes is that 5,000 concurrent waits do not pin 5,000 workers."
   - q: "Can Task.WhenAll share one DbContext?"
-    a: "No. DbContext is not thread-safe. WhenAll on one context is a race. That trap is also in the async interview article; here it is the merge rule."
+    a: "No. DbContext is not thread-safe. WhenAll of two queries on the same instance is a race and a production crash, not a speedup. Use sequential awaits, two scopes, or one SQL shape."
 ---
 
-Async does not make a single SQL query finish sooner. It keeps the thread pool free while your API waits on databases, HTTP, or blob storage so other Angular clients are not stuck behind blocked workers.
+`async`/`await` let a method wait for slow work (database, HTTP, blobs) **without holding a thread**. The ThreadPool worker goes back to the pool and serves other requests. The query is not faster. The API can take more concurrent clients.
 
-I apply this checklist on healthcare portals, SaaS backends, and marketplace services (including CarBazaar-style architectures) where one sync-over-async helper under load starves an otherwise healthy farm.
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [production](#failure-story-sync-service-layer-in-a-clinic-portal) · [if an interviewer asks](#if-an-interviewer-asks).
 
-This URL is the **implementation guide** for ASP.NET Core request paths. Interview-style drills — what a strong candidate says under a prompt — live here: [C# async await interview questions](/blog/csharp-async-await-interview-questions).
+**Terms used here:** **ThreadPool** = shared workers Kestrel (the ASP.NET Core web server) uses for your actions. **I/O-bound** = waiting on SQL/HTTP/disk. **CPU-bound** = hashing or tight loops — not “mark it async.” **Sync-over-async** = calling `.Result` / `.Wait()` on a `Task`. **Continuation** = code after `await`. New to Task vs Thread? Read [Task vs Thread vs ThreadPool](/blog/csharp-task-vs-thread) first.
+
+```text
+Request hits Kestrel
+  worker runs GetAsync until await ToListAsync
+       │
+       ├── worker returned to ThreadPool   ← other Angular clients can run
+       │
+       SQL / HTTP completes
+       │
+       a worker continues: map DTO, return Ok()
+```
 
 ## What async actually buys you
+
+_Comparison: common async myths versus what ASP.NET Core actually gains._
 
 | Myth | Reality |
 |---|---|
@@ -43,7 +56,9 @@ public async Task<ActionResult<OrderDto>> GetAsync(
     Guid id,
     CancellationToken cancellationToken)
 {
+    // Task<...> = promise the host can observe; never async void here
     var order = await _orders.GetByIdAsync(id, cancellationToken);
+    // cancellationToken = Angular left; pass it so EF can stop
     if (order is null) return NotFound();
     return Ok(order);
 }
@@ -70,22 +85,24 @@ app.MapGet("/api/orders/{id:guid}", async (
 
 Same rules apply — see [Minimal APIs](/blog/aspnet-core-minimal-apis).
 
-## Async all the way down
+## Wrong vs right
 
-If the repository is async, the service and controller should be async too. Mixing sync over async is where outages hide:
+I would reject a PR that blocks on a `Task` on the request path, including “just in a helper.”
 
 ```csharp
-// Bad — blocks a thread-pool thread
+// Wrong — blocks a ThreadPool worker until EF finishes
 var order = _orders.GetByIdAsync(id).Result;
 
-// Bad — same class of problem
+// Wrong — same class of problem
 var order = _orders.GetByIdAsync(id).GetAwaiter().GetResult();
 
-// Good
+// Right
 var order = await _orders.GetByIdAsync(id, cancellationToken);
 ```
 
-Watch **helpers**, FluentValidation adapters, and “temporary” sync facades. On Ecom_NET10-style checkout paths, a single `.Result` helper called from many endpoints was enough to spike timeouts when traffic arrived. Staging with one user never showed it.
+If the repository is async, the service and controller should be async too. Mixing sync over async is where outages hide. Watch **helpers**, FluentValidation adapters, and “temporary” sync facades. Staging with one user never shows it.
+
+How to confirm starvation with `dotnet-counters` and Parallel Stacks is the [starvation diagnostic](/blog/csharp-threadpool-starvation-sync-over-async) — do not scale the farm first.
 
 ## CancellationToken is not decoration
 
@@ -109,7 +126,7 @@ public async Task<ExchangeRate> GetRateAsync(string pair, CancellationToken ct)
 }
 ```
 
-Without the token, SQL and outbound HTTP keep running after the Angular user navigates away. Under load that wastes connection pools and money.
+Without the token, SQL and outbound HTTP keep running after the Angular user navigates away. Under load that wastes connection pools and money. Linked timeouts, tests, and 499 vs 500 live on [CancellationToken in ASP.NET Core](/blog/csharp-cancellationtoken-aspnet-core).
 
 **SPA tip:** canceling an `HttpClient` call is necessary but not sufficient — the API must honor the token.
 
@@ -126,7 +143,7 @@ var prices = await pricesTask;
 var stock = await stockTask;
 ```
 
-**Do not** share one scoped `DbContext` across parallel queries. Use separate scopes or sequential awaits. Parallel EF operations on one context race.
+**Do not** share one scoped `DbContext` across parallel queries. Use separate scopes or sequential awaits. Parallel EF operations on one context race. Capping 10,000 outbound calls is [WhenAll vs Parallel.ForEach](/blog/csharp-task-whenall-vs-parallel-foreach).
 
 When both reads hit the same database, **one shaped SQL query** often beats clever `WhenAll`.
 
@@ -148,7 +165,7 @@ public sealed class InventoryClient
 }
 ```
 
-Combine with Polly only when you understand retry storms — retries amplify load during outages.
+Retries amplify load during outages — add Polly only when you have a budget and a jittered backoff, not “retry forever.”
 
 ## Exceptions and async
 
@@ -173,7 +190,7 @@ Let your [global exception handler](/blog/aspnet-core-global-exception-handling)
 
 ## ConfigureAwait in ASP.NET Core
 
-In library code that may run on UI sync contexts, `ConfigureAwait(false)` avoids forcing continuations onto a captured context. **Inside ASP.NET Core app code**, there is typically no UI sync context — skip the noise unless you author shared NuGet packages.
+**Inside ASP.NET Core app code**, skip `ConfigureAwait(false)` — there is no UI sync context. Shared NuGet packages still need it. The full split, including .NET 8 `ConfigureAwaitOptions`, is [ConfigureAwait(false) in libraries](/blog/csharp-configureawait-false-library).
 
 `ConfigureAwait` does not forgive `.Result`.
 
@@ -191,11 +208,11 @@ public async Task ProcessWebhookAsync(WebhookDto dto, CancellationToken ct) { ..
 
 ## Background work after the HTTP response
 
-Fire-and-forget (`_ = SendEmailAsync()`) after `SaveChangesAsync` risks disposed scopes and lost exceptions. Prefer queues, outbox patterns, or hosted services for work that must survive the request — especially in marketplace checkout flows.
+Fire-and-forget (`_ = SendEmailAsync()`) after `SaveChangesAsync` risks disposed scopes and lost exceptions. Prefer queues, outbox patterns, or a bounded in-process [Channel](/blog/csharp-channel-producer-consumer) hosted service for work that must survive the request — especially checkout notify.
 
 ## Failure story: sync service layer in a clinic portal
 
-A healthcare team wrapped every EF call in `.GetAwaiter().GetResult()` “because the service layer was sync.” Under morning login spikes, thread-pool starvation made the Angular SPA spin while SQL stayed healthy. Scaling App Service instances treated the symptom. Async all the way down treated the cause.
+A healthcare team wrapped every EF call in `.GetAwaiter().GetResult()` “because the service layer was sync.” Under morning login spikes, thread-pool starvation made the Angular SPA spin while SQL stayed healthy. Scaling App Service instances treated the symptom. Async all the way down treated the cause. I have seen the same shape on marketplace checkout when a pricing helper blocked on `HttpClient`.
 
 ## How to verify before you call it done
 
@@ -215,11 +232,14 @@ A healthcare team wrapped every EF call in `.GetAwaiter().GetResult()` “becaus
 6. Side effects that must be durable use a queue/outbox — not bare fire-and-forget
 7. Logging includes correlation ids so slow awaits are findable
 
-## Related reading
+## What this is not
 
-- [C# Async Await Interview Questions](/blog/csharp-async-await-interview-questions)
-- [IHttpClientFactory in ASP.NET Core](/blog/ihttpclientfactory-aspnet-core)
-- [EF Core and SQL Server Performance](/blog/ef-core-sql-performance)
-- [ASP.NET Core Global Exception Handling](/blog/aspnet-core-global-exception-handling)
+Idle-CPU 504s: [thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async). Wrapping I/O in `Task.Run`: [Task.Run vs await](/blog/csharp-task-run-aspnet-core). Tokens: [CancellationToken](/blog/csharp-cancellationtoken-aspnet-core). Topic map: [async & threading hub](/learning/async-concurrency).
+
+## If an interviewer asks
+
+What `async`/`await` buys you on ASP.NET Core; why `.Result` is starvation not a Core deadlock; why `async void` is wrong on an action; whether `WhenAll` can share a `DbContext`.
+
+**Strong answer:** async frees workers during I/O; the query is not faster; pass the token; never block on a `Task` on the request path.
 
 If your API still mixes sync wrappers around async EF Core and Angular clients time out under load, [contact me](/contact) — we can map the call chain and remove blockers before you scale hardware.

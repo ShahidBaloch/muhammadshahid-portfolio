@@ -145,7 +145,7 @@ export function getPostsForTopic(topic: {
   return [...pinned, ...rest];
 }
 
-export function getRelatedPosts(slug: string, limit = 3): PostMeta[] {
+export function getRelatedPosts(slug: string, limit = 5): PostMeta[] {
   const current = getPostBySlug(slug);
   const others = getAllPosts().filter((post) => post.slug !== slug);
   const bySlug = new Map(others.map((post) => [post.slug, post]));

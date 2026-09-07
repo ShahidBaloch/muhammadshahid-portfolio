@@ -2,20 +2,27 @@
 title: "C# Expert-Level Interview Questions"
 description: "C# expert level interview questions with production answers — IAsyncEnumerable exports, cancellation across MediatR, ConcurrentDictionary caches, Span parsers, and bounded Channels."
 date: "2026-09-04"
+updated: "2026-09-07"
 category: "interview-questions"
 tags: ["Interview Questions", "C#", ".NET", "ASP.NET Core", "Career"]
+related:
+  - csharp-iasyncenumerable-yield-return
+  - csharp-channel-producer-consumer
+  - csharp-concurrentdictionary-lock
 faq:
   - q: "What C# expert-level interview questions get asked?"
-    a: "Staff loops ask IAsyncEnumerable exports, cancellation through MediatR to SQL, ConcurrentDictionary tenant caches, Span parsers, and bounded Channels — not what a delegate is."
+    a: "Staff-level interviews ask IAsyncEnumerable exports that do not load 200k rows, cancellation through MediatR all the way to SQL, ConcurrentDictionary keys that include tenant id, Span parsers that do not allocate per claim, and bounded Channels instead of Task.Run per checkout. They do not ask what a delegate is. The expected answer names the production dump, not the textbook definition."
   - q: "Is ConcurrentDictionary enough for a multi-tenant cache?"
-    a: "It is thread-safe, not tenant-safe. A missing tenant key in the cache key leaks clinic A’s data to clinic B. That is the answer seniors want."
+    a: "It is thread-safe, not tenant-safe. A key of \"fees\" lets clinic B read clinic A’s last writer. Include tenant id (and a version) in the key. GetOrAdd can still run the factory twice. For a product cache you usually want IMemoryCache with size and TTL, not an unbounded dictionary."
   - q: "Where do async await questions belong?"
-    a: "Starvation, async void, and WhenAll plus one DbContext live on the C# async await interview URL. This page is the layer above that."
+    a: "Starvation, async void, WhenAll plus one DbContext, and ConfigureAwait live on the C# async await interview questions page. This page is the layer above that: streams, channels, tenant maps, and cancellation graphs."
 ---
+
+**Staff / 6–10 year loop.** If you have under a year with async, start with [async await interview questions](/blog/csharp-async-await-interview-questions) and the [async & threading hub](/learning/async-concurrency) tracks. This page names the dump first; the how-tos teach the merge.
 
 **C# expert-level interview questions** are not “what is a delegate.” Senior and staff loops ask whether you can keep an ASP.NET Core API correct under load: cancellation that actually reaches SQL, allocations in a hot parser, and caches that do not leak tenant data.
 
-This page is that layer. Framework storytelling lives in [ASP.NET Core interview scenarios](/blog/aspnet-core-interview-questions-scenarios). Async traps (`.Result`, `async void`, `WhenAll` + EF) live in [async await interview questions](/blog/csharp-async-await-interview-questions). Here I want answers that sound like someone who has owned a clinic or marketplace API on-call.
+Framework storytelling lives in [ASP.NET Core interview scenarios](/blog/aspnet-core-interview-questions-scenarios). Implementation: [IAsyncEnumerable](/blog/csharp-iasyncenumerable-yield-return), [Channel producer-consumer](/blog/csharp-channel-producer-consumer), [ConcurrentDictionary](/blog/csharp-concurrentdictionary-lock).
 
 ---
 
@@ -29,7 +36,7 @@ This page is that layer. Framework storytelling lives in [ASP.NET Core interview
 
 ### Strong answer
 
-`ToListAsync` **owns the whole result**. On a claims export that is a denial-of-service against yourself.
+`ToListAsync` **owns the whole result** — every row is in RAM before the first CSV line. On a claims export that is a denial-of-service against yourself.
 
 1. Stream with **`IAsyncEnumerable`** (or a bounded batch) so you never hold 200k entities.
 2. Project in SQL (`Select` to a DTO / anonymous type). Do not hydrate full `Claim` graphs.
@@ -82,12 +89,11 @@ public async Task<ReportDto> Handle(BuildReport query, CancellationToken cancell
         .Where(e => e.ClinicId == query.ClinicId)
         .Take(500)
         .Select(e => new ReportDto(e.Id, e.Status))
-        .ToListAsync(cancellationToken)
-        .ContinueWith(t => t.Result, cancellationToken); // do not do this — see below
+        .ToListAsync(cancellationToken);
 }
 ```
 
-The `ContinueWith` line is a trap. Just `await ...ToListAsync(cancellationToken)`.
+Do not wrap that in `ContinueWith(t => t.Result)` — that is a common mistake that reintroduces `.Result` on the continuation. Just `await ...ToListAsync(cancellationToken)`.
 
 **Proof:** SQL session with the request id in the application name, cancel from Angular, watch the session die. If it does not, a layer ate the token. The [async interview set](/blog/csharp-async-await-interview-questions) covers `.Result` and `async void`. This scenario is only **where the token disappeared in the handler graph**.
 
@@ -112,6 +118,14 @@ Thread-safe **structure** is not a **cache policy**.
 
 On healthcare fee schedules I use `IMemoryCache` with a tenant key and a version stamp written when ops publish. `ConcurrentDictionary` is for coordination (single-flight, idempotency keys), not “the product cache.”
 
+```csharp
+// Wrong — last clinic wins
+map.GetOrAdd("fees", _ => Load(clinicId));
+
+// Right
+map.GetOrAdd($"{clinicId}:{version}", _ => Load(clinicId, version));
+```
+
 ---
 
 ## Scenario 4: EDI / CSV parser allocating itself to death
@@ -124,7 +138,7 @@ On healthcare fee schedules I use `IMemoryCache` with a tenant key and a version
 
 ### Strong answer
 
-Hot parsers die on **`string` slices**. `Substring` copies. `Split(',')` allocates arrays.
+Hot parsers die on **`string` slices**. `Substring` copies a new string. `ReadOnlySpan<char>` is a **view** over existing memory — no copy. `Split(',')` allocates arrays.
 
 Expert answer names **`ReadOnlySpan<char>` / `ReadOnlyMemory<char>`** for scanning, and rented buffers (`ArrayPool<byte>`) for the read loop. Keep strings only at the boundary where you persist a field.
 
@@ -171,6 +185,20 @@ var channel = Channel.CreateBounded<OrderNotify>(new BoundedChannelOptions(256)
 {
     FullMode = BoundedChannelFullMode.Wait,
 });
+
+public sealed class OrderNotifyWorker(OrderNotifyChannel channel, IServiceScopeFactory scopes)
+    : BackgroundService
+{
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        await foreach (var msg in channel.Reader.ReadAllAsync(stoppingToken))
+        {
+            await using var scope = scopes.CreateAsyncScope();
+            var mail = scope.ServiceProvider.GetRequiredService<IOrderMailer>();
+            await mail.SendAsync(msg, stoppingToken);
+        }
+    }
+}
 ```
 
 If notify **must** happen for compliance, it is not `Task.Run`. It is a durable message. In-process channels are for shedding and smoothing, not legal delivery.

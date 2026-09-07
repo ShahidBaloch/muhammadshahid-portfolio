@@ -27,6 +27,10 @@ export function personJsonLd() {
       "C# interview questions",
       "EF Core",
       "Identity and access management",
+      "C# async await",
+      "multithreading",
+      "thread pool starvation",
+      "Task.Run vs await",
     ],
   };
 }

@@ -5,8 +5,8 @@ date: "2026-08-03"
 tags: ["IHttpClientFactory", "HttpClient", "ASP.NET Core", ".NET", "Performance"]
 related:
   - csharp-async-await-aspnet-core
+  - csharp-semaphore-slim-async-lock
   - aspnet-core-dependency-injection
-  - azure-app-service-aspnet-core
 faq:
   - q: "Why use IHttpClientFactory in ASP.NET Core?"
     a: "To avoid socket exhaustion and stale DNS from new HttpClient per call or a static client that never refreshes. Named or typed clients are the fix."
@@ -170,7 +170,7 @@ Fix the HTTP client lifetime first. Then add [rate limiting](/blog/aspnet-core-r
 
 ## Failure story I still see on client projects
 
-A healthcare integration service created `new HttpClient()` inside a loop that posted provider updates to a partner API. In QA with ten records it was fine. In production with a nightly batch of thousands, the app pool started failing with socket errors around midnight. The Angular “sync status” screen showed random failures. The fix was a typed client via **IHttpClientFactory**, batching, and concurrency limits — not more App Service instances.
+A healthcare integration service created `new HttpClient()` inside a loop that posted provider updates to a partner API. In QA with ten records it was fine. In production with a nightly batch of thousands, the app pool started failing with socket errors around midnight. The Angular “sync status” screen showed random failures. The fix was a typed client via **IHttpClientFactory**, batching, and [SemaphoreSlim concurrency limits](/blog/csharp-semaphore-slim-async-lock) — not more App Service instances.
 
 Another team made a static client and survived load day one. Two months later the partner rotated DNS. Half the instances kept the old IP until recycle. Factory handler rotation (or explicit `PooledConnectionLifetime`) would have narrowed the blast radius.
 

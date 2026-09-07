@@ -29,6 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
       title: post.title,
       description: post.description,
+      keywords: post.tags,
       authors: [{ name: siteConfig.name, url: siteConfig.url }],
       alternates: { canonical: `/blog/${post.slug}` },
       openGraph: {
@@ -67,7 +68,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   }
 
   const post = getPostBySlug(slug);
-  const related = getRelatedPosts(slug, 3);
+  const related = getRelatedPosts(slug, 5);
   const headings = getPostH2Headings(post.content);
   const learningTopic = post.category ? getLearningTopic(post.category) : undefined;
   const pageUrl = `${siteConfig.url}/blog/${post.slug}`;
@@ -213,8 +214,10 @@ export default async function BlogPostPage({ params }: PageProps) {
         </header>
 
         {post.faq && post.faq.length > 0 ? (
-          <section className="mt-8 rounded-xl border border-slate-line bg-mist p-5 sm:p-6" aria-label="Quick answers">
-            <h2 className="font-display text-xl font-semibold text-ink">Quick answers</h2>
+          <section className="mt-8 rounded-xl border border-slate-line bg-mist p-5 sm:p-6" aria-labelledby="quick-answers">
+            <h2 id="quick-answers" className="font-display text-xl font-semibold text-ink">
+              Quick answers
+            </h2>
             <dl className="mt-4 space-y-4">
               {post.faq.map((item) => (
                 <div key={item.q}>

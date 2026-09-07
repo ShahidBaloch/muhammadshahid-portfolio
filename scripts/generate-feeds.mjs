@@ -32,6 +32,7 @@ const PROJECT_SLUGS = ["carbazaar", "ecom-net10", "healthcare-saas"];
 
 const LEARNING_SLUGS = [
   "interview-questions",
+  "async-concurrency",
   "design-patterns",
   "dependency-injection",
   "authentication",
@@ -214,6 +215,7 @@ const indexNowUrls = [
   `${BASE_URL}/blog/aspnet-core-data-protection-xml-encryptor`,
   `${BASE_URL}/blog/aspnet-core-idx10501-jwt-kid`,
   `${BASE_URL}/learning/interview-questions`,
+  `${BASE_URL}/learning/async-concurrency`,
   `${BASE_URL}/learning/identity`,
   `${BASE_URL}/learning/architecture`,
   `${BASE_URL}/sitemap.xml`,

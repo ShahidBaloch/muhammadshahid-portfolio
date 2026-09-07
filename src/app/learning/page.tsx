@@ -5,9 +5,9 @@ import { getPostsForTopic } from "@/lib/posts";
 import { pageSocial } from "@/lib/seo";
 import { learningTopics } from "@/lib/site";
 
-const title = "Interviews, Auth, EF Core, EDI, and Architecture";
+const title = "Interviews, Async, Auth, EF Core, EDI, and Architecture";
 const description =
-  "Topic guides for C# and ASP.NET Core interview questions, Angular authentication, identity, EF Core, healthcare EDI, CQRS, dependency injection, and architecture.";
+  "Topic guides for C# async and multithreading, ASP.NET Core interview questions, Angular authentication, identity, EF Core, healthcare EDI, CQRS, dependency injection, and architecture.";
 
 export const metadata: Metadata = {
   title,
@@ -27,7 +27,7 @@ export default function LearningPage() {
         <div className="mt-6">
           <SectionHeading
             eyebrow="Blog topics"
-            title="Interviews, Auth, EF Core, EDI, and Architecture"
+            title="Interviews, Async, Auth, EF Core, EDI, and Architecture"
             description="Topic hubs group related articles for study flow. Every piece still lives in the main blog."
             level={1}
           />

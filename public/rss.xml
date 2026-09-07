@@ -92,6 +92,111 @@
       <description><![CDATA[AsNoTracking can allocate more memory when the same Patient is on every row. When I use AsNoTrackingWithIdentityResolution on ASP.NET Core reads.]]></description>
     </item>
     <item>
+      <title><![CDATA[C# ThreadPool Starvation: Why .Result Causes 504s]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-threadpool-starvation-sync-over-async</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-threadpool-starvation-sync-over-async</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Thread pool starvation is queued work with no free workers. C# .Result and .Wait on ASP.NET Core cause idle-CPU 504s — diagnose with dotnet-counters, then make the call chain async.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# TaskCompletionSource: Wrap Legacy Events as Tasks]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-taskcompletionsource-legacy-event</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-taskcompletionsource-legacy-event</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[TaskCompletionSource creates a Task you complete yourself. Use it to wrap event-based APIs (EAP) into TAP: TrySetResult when Connected fires, then callers await instead of WaitOne.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# Task.Yield: Keep WPF and MAUI UI Threads Responsive]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-task-yield-ui-thread</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-task-yield-ui-thread</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Skip this if you only write ASP.NET Core APIs. await Task.Yield() lets the WPF/MAUI message pump run, then continues on the UI thread. Prefer Task.Run for CPU. Yield is not a Core performance trick.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# Task.WhenAll vs Task.WaitAll vs Parallel.ForEach]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-task-whenall-vs-parallel-foreach</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-task-whenall-vs-parallel-foreach</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Task.WhenAll waits for many I/O tasks without blocking a thread. WaitAll blocks the pool. Cap 10,000 HTTP calls, never WhenAll two queries on one DbContext, Parallel.ForEach is for CPU.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# Task vs Thread vs ThreadPool]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-task-vs-thread</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-task-vs-thread</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[A Task is a promise that work will finish; a Thread is an OS worker. C# async/await is not multithreading — Task vs Thread vs ThreadPool, Sleep vs Delay, and when ValueTask is worth it.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# Task.Run vs await on ASP.NET Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-task-run-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-task-run-aspnet-core</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Task.Run queues CPU work on the ThreadPool; await yields the worker during I/O. On ASP.NET Core the request is already on the pool — wrapping ToListAsync makes 504s worse.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# SemaphoreSlim WaitAsync: Throttle Outbound API Calls]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-semaphore-slim-async-lock</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-semaphore-slim-async-lock</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[A semaphore is a handful of tickets. SemaphoreSlim.WaitAsync is the async lock for outbound HttpClient — bulkhead (max in flight), why lock cannot await, versus inbound rate limiting.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# lock vs Monitor vs Mutex vs Semaphore]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-lock-statement-monitor-mutex</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-lock-statement-monitor-mutex</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[lock protects a short in-memory critical section so two threads cannot corrupt shared data. lock is Monitor.Enter/Exit. You cannot await inside. Mutex is cross-process; async code uses SemaphoreSlim.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# Interlocked CompareExchange: Lock-Free Counters]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-interlocked-compareexchange</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-interlocked-compareexchange</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Interlocked updates one variable in an uninterruptible CPU step so two threads cannot both read 5 and both write 6. Use Increment for counters; CompareExchange (CAS) for flags; a lock when two fields must change together.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# IAsyncEnumerable: Stream SQL Rows with yield return]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-iasyncenumerable-yield-return</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-iasyncenumerable-yield-return</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[IAsyncEnumerable lets you process SQL rows one at a time instead of loading 100,000 entities into RAM. yield return, AsAsyncEnumerable, EnumeratorCancellation, and streaming HTTP.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[ConfigureAwait(false) in C# Libraries (Not ASP.NET Core)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-configureawait-false-library</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-configureawait-false-library</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[If you only write ASP.NET Core APIs, skip ConfigureAwait(false). It is a library contract for WPF/MAUI SynchronizationContext — not a Core performance trick, and not a .Result amnesty.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# ConcurrentDictionary vs lock: GetOrAdd Can Run Twice]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-concurrentdictionary-lock</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-concurrentdictionary-lock</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[ConcurrentDictionary is a thread-safe map, not a cache policy. GetOrAdd’s factory can run twice, keys must include tenant id, and a lock is still right when you mutate a value in place.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# Channel<T> Producer-Consumer vs BlockingCollection]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-channel-producer-consumer</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-channel-producer-consumer</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Producer-consumer means one part of the app enqueues work and another processes it. Channel<T> waits without parking a thread; BlockingCollection.Take does. Bounded backpressure vs a durable bus.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# CancellationToken in ASP.NET Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-cancellationtoken-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-cancellationtoken-aspnet-core</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[A CancellationToken is a cooperative please-stop flag. In ASP.NET Core, bind RequestAborted, pass it to EF Core and HttpClient, link timeouts, and do not log client abort as a 500.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# AsyncLocal vs ThreadLocal: Context Across await]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-asynclocal-vs-threadlocal</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-asynclocal-vs-threadlocal</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[ThreadLocal sticks to an OS thread; after await you are often on another ThreadPool worker. AsyncLocal flows with ExecutionContext. Prefer a tenantId parameter; ambient current-user is how clinic B saw clinic A.]]></description>
+    </item>
+    <item>
       <title><![CDATA[Unable to Resolve Service for Type in ASP.NET Core DI]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-unable-to-resolve-service</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-unable-to-resolve-service</guid>
@@ -285,7 +390,7 @@
       <link>https://www.muhammadshahid.dev/blog/csharp-async-await-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/csharp-async-await-aspnet-core</guid>
       <pubDate>Wed, 12 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[C# async await explained for ASP.NET Core APIs — Task vs async void, CancellationToken, .Result starvation, WhenAll, HttpClient, Minimal APIs, and how Angular clients behave under load.]]></description>
+      <description><![CDATA[async/await lets an ASP.NET Core API wait on SQL or HTTP without holding a thread. Task vs async void, CancellationToken, .Result starvation, WhenAll, and HttpClient.]]></description>
     </item>
     <item>
       <title><![CDATA[ASP.NET Core Interview Questions: Scenarios]]></title>

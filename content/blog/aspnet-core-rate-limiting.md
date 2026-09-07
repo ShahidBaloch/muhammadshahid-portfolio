@@ -4,9 +4,9 @@ description: "Implement ASP.NET Core rate limiting middleware for Web APIs — f
 date: "2026-08-04"
 tags: ["Rate Limiting", "ASP.NET Core", "API Security", ".NET", "Performance"]
 related:
+  - csharp-semaphore-slim-async-lock
   - aspnet-core-middleware-order
   - aspnet-core-jwt-auth
-  - redis-caching-aspnet-core
 faq:
   - q: "How do I add rate limiting in ASP.NET Core?"
     a: "Use the built-in middleware with named policies on login, search, and export. Return 429 with a body Angular can show. Place it after auth so you can limit per user."
@@ -197,6 +197,6 @@ Rate limiting is not a substitute for correct auth refresh logic ([Angular JWT i
 
 **ASP.NET Core rate limiting** is one of the highest-leverage protections you can add in an afternoon — if you tune partitions and avoid treating in-memory limits as global farm guarantees. Protect login and heavy endpoints first, teach Angular to respect 429, and escalate to distributed/edge limits when horizontal scale demands it.
 
-Related: [IHttpClientFactory](/blog/ihttpclientfactory-aspnet-core) for outbound resilience, [JWT auth checklist](/blog/aspnet-core-jwt-auth) for login surfaces worth protecting.
+Related: [IHttpClientFactory](/blog/ihttpclientfactory-aspnet-core) for outbound resilience, [SemaphoreSlim outbound throttle](/blog/csharp-semaphore-slim-async-lock) when you are the client hitting a partner cap, [JWT auth checklist](/blog/aspnet-core-jwt-auth) for login surfaces worth protecting.
 
 Need help hardening a .NET + Angular API? [Contact me](/contact).

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+@import "highlight.js/styles/vs2015.css";
 
 /*
   Dark canvas + amber CTA. Texture is muted bronze (not the button gold).
@@ -197,7 +198,93 @@
   }
 
   .prose-site {
-    @apply prose max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:text-ink prose-p:text-muted prose-li:text-muted prose-a:text-teal prose-strong:text-ink prose-code:text-ink prose-pre:bg-navy prose-pre:text-ink-soft prose-blockquote:border-teal prose-blockquote:text-ink-soft prose-hr:border-slate-line prose-th:text-ink prose-td:text-muted;
+    @apply prose max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:text-ink prose-p:text-muted prose-li:text-muted prose-a:text-teal prose-a:underline prose-strong:text-ink prose-code:text-ink prose-blockquote:border-teal prose-blockquote:text-ink-soft prose-hr:border-slate-line prose-th:text-ink prose-td:text-muted;
+  }
+
+  .prose-site pre {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-slate-line);
+    padding: 1.15rem 1.25rem 1.25rem;
+    background: #1e1e1e !important;
+    font-family: Consolas, "Cascadia Code", "Cascadia Mono", "Courier New", ui-monospace, monospace;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    tab-size: 4;
+  }
+
+  .prose-site pre code.hljs {
+    display: block;
+    overflow-x: visible;
+    padding: 0;
+    background: transparent !important;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: #dcdcdc;
+  }
+
+  .prose-site .hljs-title,
+  .prose-site .hljs-title.function_ {
+    color: #dcdcaa !important;
+  }
+
+  .prose-site .hljs-params {
+    color: #9cdcfe !important;
+  }
+
+  .prose-site .hljs-built_in,
+  .prose-site .hljs-type,
+  .prose-site .hljs-class .hljs-title {
+    color: #4ec9b0 !important;
+  }
+
+  .prose-site pre:has(code.language-csharp)::before,
+  .prose-site pre:has(code.language-cs)::before {
+    content: "C#";
+  }
+
+  .prose-site pre:has(code.language-typescript)::before,
+  .prose-site pre:has(code.language-ts)::before {
+    content: "TypeScript";
+  }
+
+  .prose-site pre:has(code.language-javascript)::before,
+  .prose-site pre:has(code.language-js)::before {
+    content: "JavaScript";
+  }
+
+  .prose-site pre:has(code.language-html)::before {
+    content: "HTML";
+  }
+
+  .prose-site pre:has(code.language-json)::before {
+    content: "JSON";
+  }
+
+  .prose-site pre:has(code.language-bash)::before,
+  .prose-site pre:has(code.language-shell)::before {
+    content: "Shell";
+  }
+
+  .prose-site pre:has(code[class*="language-"])::before {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9cdcfe;
+  }
+
+  .prose-site :not(pre) > code {
+    border-radius: 0.3rem;
+    border: 1px solid var(--color-slate-line);
+    background: color-mix(in srgb, var(--color-navy) 70%, var(--color-mist));
+    padding: 0.12em 0.4em;
+    font-size: 0.9em;
   }
 
   .nav-link {

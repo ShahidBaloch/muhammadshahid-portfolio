@@ -57,6 +57,11 @@ export const navLinks = [
   { href: "/about", label: "About" },
 ] as const;
 
+export type LearningTrack = {
+  title: string;
+  slugs: string[];
+};
+
 export type LearningTopic = {
   slug: string;
   label: string;
@@ -69,6 +74,8 @@ export type LearningTopic = {
   categoryOnly?: boolean;
   /** Hub order: Search Console winners and pillar URLs before newest dumps. */
   pinSlugs?: string[];
+  /** Optional start-here groups with real links (crawlers and readers). */
+  tracks?: LearningTrack[];
 };
 
 /** Topic hubs under Blog — SEO landing pages that group related articles.
@@ -81,7 +88,7 @@ export const learningTopics: LearningTopic[] = [
     description:
       "Scenario-based C#, ASP.NET Core, Angular, and EF Core interview questions from production work — not trivia lists copied from a dump.",
     intro:
-      "Interview posts here are rehearsal, not implementation manuals. Each URL is a different loop: async traps, expert C# runtime, ASP.NET Core API judgment, Angular + JWT with a .NET backend, and EF Core change-tracker / concurrency questions. If you want the merge checklist, follow the how-to article linked from that scenario. Start with async await if that is the prompt you keep failing; use the ASP.NET Core scenarios page for middleware and JWT storytelling; use the EF Core interview page for SaveChanges, query filters, and concurrency — not for N+1 SQL, which has its own hub.",
+      "Interview posts here are rehearsal, not implementation manuals. Each URL is a different loop: async traps, expert C# runtime, ASP.NET Core API judgment, Angular + JWT with a .NET backend, and EF Core change-tracker / concurrency questions. If you want the merge checklist, follow the how-to article linked from that scenario — starvation dumps, Channels, and tokens live on the Async & Threading hub, not as a second interview URL. Start with async await if that is the prompt you keep failing; use the ASP.NET Core scenarios page for middleware and JWT storytelling; use the EF Core interview page for SaveChanges, query filters, and concurrency — not for N+1 SQL, which has its own hub.",
     matchTags: ["Interview Questions"],
     pinSlugs: [
       "csharp-async-await-interview-questions",
@@ -89,6 +96,98 @@ export const learningTopics: LearningTopic[] = [
       "aspnet-core-interview-questions-scenarios",
       "ef-core-interview-questions",
       "angular-interview-questions-aspnet-core",
+    ],
+  },
+  {
+    slug: "async-concurrency",
+    label: "Async & Threading",
+    title: "C# Async, Multithreading, and Concurrency",
+    description:
+      "Thread pool starvation, Task.Run vs await, ConfigureAwait, IAsyncEnumerable, Channels, SemaphoreSlim, ConcurrentDictionary, CancellationToken, and the C# threading primitives that show up in production dumps.",
+    intro:
+      "This hub is the ‘API hangs, CPU is idle’ cluster. New to async (0–2 years): start with Task vs Thread, then the ASP.NET Core async checklist, then CancellationToken. Merging PRs (3–5 years): starvation, SemaphoreSlim, Channel, ConcurrentDictionary GetOrAdd, IAsyncEnumerable, then the async interview Q&A. On-call / staff (6–10 years): starvation diagnostics, ConfigureAwait in libraries, AsyncLocal, Interlocked, TaskCompletionSource, expert interview — skip the toys via the skip line on each post. Use thread-pool starvation when 504s arrive with healthy SQL. Use Task.Run vs await when a PR wrapped ToListAsync to ‘make it multithreaded.’ Use CancellationToken when Angular left and SQL did not. ConfigureAwait is a library rule, not a Core performance trick. Streams, Channels, WhenAll caps, SemaphoreSlim outbound gates, lock vs Mutex, Task.Yield, and tenant maps each have their own URL. Database deadlocks are the SQL hub, not Monitor.Enter. Inbound 429s are rate limiting, not SemaphoreSlim.",
+    matchTags: ["Asynchronous Programming", "Threading", "Concurrency"],
+    pinSlugs: [
+      "csharp-async-await-aspnet-core",
+      "csharp-threadpool-starvation-sync-over-async",
+      "csharp-task-run-aspnet-core",
+      "csharp-task-vs-thread",
+      "csharp-cancellationtoken-aspnet-core",
+      "csharp-configureawait-false-library",
+      "csharp-async-await-interview-questions",
+    ],
+    tracks: [
+      {
+        title: "New to async (0–2 years)",
+        slugs: [
+          "csharp-task-vs-thread",
+          "csharp-async-await-aspnet-core",
+          "csharp-cancellationtoken-aspnet-core",
+          "csharp-task-run-aspnet-core",
+          "csharp-lock-statement-monitor-mutex",
+          "csharp-task-whenall-vs-parallel-foreach",
+        ],
+      },
+      {
+        title: "Merging PRs (3–5 years)",
+        slugs: [
+          "csharp-threadpool-starvation-sync-over-async",
+          "csharp-semaphore-slim-async-lock",
+          "csharp-channel-producer-consumer",
+          "csharp-concurrentdictionary-lock",
+          "csharp-iasyncenumerable-yield-return",
+          "csharp-async-await-interview-questions",
+        ],
+      },
+      {
+        title: "On-call and staff (6–10 years)",
+        slugs: [
+          "csharp-threadpool-starvation-sync-over-async",
+          "csharp-configureawait-false-library",
+          "csharp-asynclocal-vs-threadlocal",
+          "csharp-interlocked-compareexchange",
+          "csharp-taskcompletionsource-legacy-event",
+          "csharp-expert-interview-questions",
+        ],
+      },
+      {
+        title: "Diagnose hangs and 504s",
+        slugs: [
+          "csharp-threadpool-starvation-sync-over-async",
+          "csharp-task-run-aspnet-core",
+          "csharp-task-vs-thread",
+          "csharp-configureawait-false-library",
+        ],
+      },
+      {
+        title: "Request-path async",
+        slugs: [
+          "csharp-async-await-aspnet-core",
+          "csharp-cancellationtoken-aspnet-core",
+          "csharp-iasyncenumerable-yield-return",
+          "csharp-task-whenall-vs-parallel-foreach",
+          "csharp-semaphore-slim-async-lock",
+        ],
+      },
+      {
+        title: "Threading primitives",
+        slugs: [
+          "csharp-channel-producer-consumer",
+          "csharp-concurrentdictionary-lock",
+          "csharp-lock-statement-monitor-mutex",
+          "csharp-interlocked-compareexchange",
+          "csharp-taskcompletionsource-legacy-event",
+          "csharp-task-yield-ui-thread",
+          "csharp-asynclocal-vs-threadlocal",
+        ],
+      },
+      {
+        title: "Interview questions",
+        slugs: [
+          "csharp-async-await-interview-questions",
+          "csharp-expert-interview-questions",
+        ],
+      },
     ],
   },
   {
@@ -198,7 +297,7 @@ export const learningTopics: LearningTopic[] = [
     description:
       "Architecture notes for .NET + Angular systems — config files, Clean Architecture, modular monolith vs services, Minimal APIs, and boundaries that survive healthcare, SaaS, and eCommerce delivery.",
     intro:
-      "Architecture here means the decisions that survive the first production incident: where data lives, who is allowed to change it, and how the Angular SPA talks to ASP.NET Core without a contract that rot. Start with the config-file article if the search was appsettings or localappsettings.json. This hub is also Clean Architecture, modular monolith vs services, Minimal APIs, and the JSON contract failures that look like “the API 500s on detail pages.” Cycle exceptions are the object-cycle article — not an EF N+1 tutorial. JWT plumbing, EF SQL, and EDI parsers have their own topic pages. Caching, SignalR, Docker, and delivery checklists live in the main blog, not here.",
+      "Architecture here means the decisions that survive the first production incident: where data lives, who is allowed to change it, and how the Angular SPA talks to ASP.NET Core without a contract that rot. Start with the config-file article if the search was appsettings or localappsettings.json. This hub is also Clean Architecture, modular monolith vs services, Minimal APIs, and the JSON contract failures that look like “the API 500s on detail pages.” Cycle exceptions are the object-cycle article — not an EF N+1 tutorial. JWT plumbing, EF SQL, EDI parsers, and async/threading (starvation, Channels, tokens) have their own topic pages. Caching, SignalR, Docker, and delivery checklists live in the main blog, not here.",
     matchTags: [],
     categoryOnly: true,
     pinSlugs: [
