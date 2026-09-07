@@ -115,4 +115,4 @@ If the answers are “several APIs,” “maybe Azure AD later,” or “mobile 
 
 ---
 
-If your Angular app is sending Identity API tokens into a JWT pipeline (or the other way around), [contact me](/contact). The fix is usually a deliberate scheme choice, not another interceptor.
+If your Angular app is sending Identity API tokens into a JWT pipeline (or the other way around), [contact me](/contact). The fix is usually a deliberate scheme choice, not another interceptor. The IdentityModel line for a JWT that cannot be verified is [IDX10503](/blog/aspnet-core-idx10503-jwt-signature).
