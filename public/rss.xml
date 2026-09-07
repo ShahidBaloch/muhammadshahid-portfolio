@@ -50,6 +50,13 @@
       <description><![CDATA[InvalidOperationException: Headers are read-only, response has started — why IExceptionHandler is too late after WriteAsync, how Angular sees a CORS error, and the HasStarted check I use.]]></description>
     </item>
     <item>
+      <title><![CDATA[No XML encryptor found in ASP.NET Core Data Protection]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-data-protection-xml-encryptor</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-data-protection-xml-encryptor</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[No XML encryptor found. This may indicate that your key ring is not being persisted correctly — Docker, App Service scale-out, antiforgery cookies, and the XML encryptor that is not a JWT signing cert.]]></description>
+    </item>
+    <item>
       <title><![CDATA[ASP.NET Core 401 vs 403: Challenge vs Forbid for Angular APIs]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-401-vs-403</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-401-vs-403</guid>

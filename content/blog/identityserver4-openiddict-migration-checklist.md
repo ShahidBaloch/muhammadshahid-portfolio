@@ -2,6 +2,7 @@
 title: "IdentityServer4 End of Life: OpenIddict Migration Checklist"
 description: "Leaving IdentityServer / IdentityServer4 for OpenIddict on ASP.NET Core — client inventory, keys, Angular OIDC breaks, and a cutover checklist from healthcare and SaaS work."
 date: "2026-08-17"
+updated: "2026-09-07"
 category: "identity"
 tags: ["IdentityServer", "OpenIddict", "OIDC", "ASP.NET Core Identity", "SSO"]
 ---
@@ -180,7 +181,7 @@ Machine clients (EDI jobs, Azure Functions) need **client credentials** re-regis
 ## Data and keys
 
 - Migrate **users** with Identity. Do not copy IS4 `PersistedGrant` rows and hope.
-- Plan a **signing key** that survives swaps (shared Data Protection or a cert).
+- Plan a **signing key** that survives swaps (shared Data Protection or a cert). If the log is **No XML encryptor found**, that is the [Data Protection key ring](/blog/aspnet-core-data-protection-xml-encryptor), not this migration list.
 - Shorten access token lifetime for the first week so a bad claim set dies quickly.
 - Keep IS4 running in read-only / redirect mode only if you must — I prefer DNS cutover plus a maintenance page.
 

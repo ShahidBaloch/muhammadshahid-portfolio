@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   getStoredConsent,
   storeConsent,
@@ -11,6 +11,7 @@ import {
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false);
+  const bannerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const stored = getStoredConsent();
@@ -26,6 +27,27 @@ export function CookieConsent() {
     window.addEventListener("cookie-consent-open", onOpen);
     return () => window.removeEventListener("cookie-consent-open", onOpen);
   }, []);
+
+  useEffect(() => {
+    if (!visible) {
+      document.documentElement.style.removeProperty("--cookie-banner-space");
+      return;
+    }
+    const el = bannerRef.current;
+    if (!el) return;
+    const sync = () => {
+      document.documentElement.style.setProperty("--cookie-banner-space", `${el.offsetHeight}px`);
+    };
+    sync();
+    const observer = new ResizeObserver(sync);
+    observer.observe(el);
+    window.addEventListener("resize", sync);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", sync);
+      document.documentElement.style.removeProperty("--cookie-banner-space");
+    };
+  }, [visible]);
 
   useEffect(() => {
     if (!visible) return;
@@ -52,6 +74,7 @@ export function CookieConsent() {
 
   return (
     <div
+      ref={bannerRef}
       className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-line bg-mist/95 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:p-5"
       role="dialog"
       aria-modal="false"
@@ -64,9 +87,17 @@ export function CookieConsent() {
           </p>
           <p className="mt-1">
             This site uses cookies for analytics and advertising if you accept. You can reject
-            non-essential cookies. See the{" "}
+            non-essential cookies.{" "}
             <Link href="/privacy" className="font-semibold text-teal link-underline">
-              Privacy Policy
+              Privacy
+            </Link>
+            {" · "}
+            <Link href="/terms" className="font-semibold text-teal link-underline">
+              Terms
+            </Link>
+            {" · "}
+            <Link href="/contact" className="font-semibold text-teal link-underline">
+              Contact
             </Link>
             .
           </p>

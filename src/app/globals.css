@@ -38,6 +38,7 @@
       radial-gradient(ellipse 45% 35% at 0% 28%, rgba(5, 29, 31, 0.06), transparent 50%);
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
+    padding-bottom: var(--cookie-banner-space, 0px);
   }
 
   h1,

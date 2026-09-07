@@ -209,6 +209,7 @@ export const learningTopics: LearningTopic[] = [
       "aspnet-core-json-object-cycle",
       "aspnet-core-middleware-order",
       "aspnet-core-headers-readonly-response-started",
+      "aspnet-core-data-protection-xml-encryptor",
     ],
   },
 ];

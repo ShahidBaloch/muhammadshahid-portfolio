@@ -2,6 +2,7 @@
 title: "Deploying ASP.NET Core APIs to Azure App Service — What Actually Breaks"
 description: "Lessons from shipping ASP.NET Core APIs to Azure App Service in healthcare and SaaS — configuration, deployment slots, secrets, health checks, and the failures that only show up after go-live."
 date: "2026-03-20"
+updated: "2026-09-07"
 category: "architecture"
 tags: ["Azure", "ASP.NET Core", "App Service", "DevOps"]
 ---
@@ -107,7 +108,7 @@ After several App Service migrations, the same categories of pain appear:
 
 **Forwarded headers and HTTPS.** App Service terminates TLS at the edge. If your API builds redirect URLs or sets cookie `Secure` flags incorrectly, login flows from Angular break in production only. `UseForwardedHeaders()` with known proxy networks is not optional for OAuth and IdentityServer.
 
-**File system assumptions.** App Service local storage is ephemeral and not shared across instances. Uploads to `wwwroot/uploads` disappear on restart and never sync between scaled instances. Use Azure Blob Storage for user files, exports, and report artifacts.
+**File system assumptions.** App Service local storage is ephemeral and not shared across instances. Uploads to `wwwroot/uploads` disappear on restart and never sync between scaled instances. Use Azure Blob Storage for user files, exports, and report artifacts. The same disk is why **Data Protection** defaults fail at scale — [No XML encryptor found](/blog/aspnet-core-data-protection-xml-encryptor) is that key ring, not an App Service slot click-through.
 
 **EF Core migrations on startup.** Running `Database.Migrate()` on every instance start in a scaled-out farm causes migration locks and race conditions. Run migrations from CI or a one-off job, then deploy the app.
 

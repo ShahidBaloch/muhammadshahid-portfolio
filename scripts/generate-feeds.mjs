@@ -208,6 +208,7 @@ const indexNowUrls = [
   `${BASE_URL}/blog/identityserver-vs-aspnet-identity`,
   `${BASE_URL}/blog/aspnet-core-appsettings-localappsettings`,
   `${BASE_URL}/blog/aspnet-core-headers-readonly-response-started`,
+  `${BASE_URL}/blog/aspnet-core-data-protection-xml-encryptor`,
   `${BASE_URL}/learning/interview-questions`,
   `${BASE_URL}/learning/identity`,
   `${BASE_URL}/learning/architecture`,
