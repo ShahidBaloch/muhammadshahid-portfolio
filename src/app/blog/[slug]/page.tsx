@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { Portrait } from "@/components/Portrait";
 import { PostDate } from "@/components/PostDate";
+import { MarkdownContent } from "@/components/MarkdownContent";
+import { OnThisPage } from "@/components/OnThisPage";
+import { getPostH2Headings } from "@/lib/headings";
 import { getPostBySlug, getPostSlugs, getRelatedPosts } from "@/lib/posts";
 import { personId } from "@/lib/seo";
 import { getLearningTopic, siteConfig } from "@/lib/site";
@@ -57,6 +58,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   const post = getPostBySlug(slug);
   const related = getRelatedPosts(slug, 3);
+  const headings = getPostH2Headings(post.content);
   const learningTopic = post.category ? getLearningTopic(post.category) : undefined;
   const pageUrl = `${siteConfig.url}/blog/${post.slug}`;
 
@@ -77,6 +79,15 @@ export default async function BlogPostPage({ params }: PageProps) {
     },
     keywords: post.tags.join(", "),
     inLanguage: "en",
+    ...(headings.length > 0
+      ? {
+          hasPart: headings.map((heading) => ({
+            "@type": "WebPageElement",
+            name: heading.text,
+            url: `${pageUrl}#${heading.id}`,
+          })),
+        }
+      : {}),
   };
 
   const breadcrumbItems = [
@@ -165,8 +176,10 @@ export default async function BlogPostPage({ params }: PageProps) {
           ) : null}
         </header>
 
+        <OnThisPage headings={headings} />
+
         <div className="prose mt-10 max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:text-ink prose-p:text-muted prose-li:text-muted prose-a:text-teal prose-strong:text-ink sm:prose-lg">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+          <MarkdownContent content={post.content} />
         </div>
 
         <aside className="mt-14 rounded-xl border border-slate-line bg-mist p-6 sm:p-8">
