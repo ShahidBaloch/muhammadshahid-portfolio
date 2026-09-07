@@ -171,7 +171,7 @@ while (await timer.WaitForNextTickAsync(stoppingToken))
 
 ## What this is not
 
-Request-path async: [async await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).
+Request-path async: [async await in ASP.NET Core](/blog/csharp-async-await-aspnet-core). Topic map: [async & threading hub](/learning/async-concurrency).
 
 ## If an interviewer asks
 

@@ -182,6 +182,13 @@ export default function HomePage() {
                   Interview questions
                   <span aria-hidden> →</span>
                 </Link>
+                <Link
+                  href="/learning/async-concurrency"
+                  className="font-semibold text-teal link-underline"
+                >
+                  Async & Threading
+                  <span aria-hidden> →</span>
+                </Link>
                 <Link href="/blog" className="font-semibold text-teal link-underline">
                   All articles
                   <span aria-hidden> →</span>

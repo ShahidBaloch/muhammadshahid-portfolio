@@ -139,7 +139,7 @@ Libraries still need [ConfigureAwait(false)](/blog/csharp-configureawait-false-l
 
 ## What this is not
 
-A stream of events is not a `Task`: [IAsyncEnumerable](/blog/csharp-iasyncenumerable-yield-return) or a [Channel](/blog/csharp-channel-producer-consumer). Tokens: [CancellationToken](/blog/csharp-cancellationtoken-aspnet-core). Libraries still need [ConfigureAwait(false)](/blog/csharp-configureawait-false-library).
+A stream of events is not a `Task`: [IAsyncEnumerable](/blog/csharp-iasyncenumerable-yield-return) or a [Channel](/blog/csharp-channel-producer-consumer). Tokens: [CancellationToken](/blog/csharp-cancellationtoken-aspnet-core). Libraries still need [ConfigureAwait(false)](/blog/csharp-configureawait-false-library). Topic map: [async & threading hub](/learning/async-concurrency).
 
 ## If an interviewer asks
 

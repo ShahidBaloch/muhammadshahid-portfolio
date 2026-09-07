@@ -148,7 +148,7 @@ app.MapGet("/api/claims/export.csv", async (
 
 ## What this is not
 
-Tokens: [CancellationToken](/blog/csharp-cancellationtoken-aspnet-core). In-process queues: [Channel](/blog/csharp-channel-producer-consumer). Staff narration: [expert C# interviews](/blog/csharp-expert-interview-questions).
+Tokens: [CancellationToken](/blog/csharp-cancellationtoken-aspnet-core). In-process queues: [Channel](/blog/csharp-channel-producer-consumer). Staff narration: [expert C# interviews](/blog/csharp-expert-interview-questions). Topic map: [async & threading hub](/learning/async-concurrency).
 
 ## If an interviewer asks
 

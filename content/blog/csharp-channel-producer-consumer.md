@@ -158,7 +158,7 @@ _Comparison: Channel versus BlockingCollection versus a durable message bus._
 
 ## What this is not
 
-Per-request `Task.Run`: [Task.Run vs await](/blog/csharp-task-run-aspnet-core). Fan-out cap: [WhenAll](/blog/csharp-task-whenall-vs-parallel-foreach).
+Per-request `Task.Run`: [Task.Run vs await](/blog/csharp-task-run-aspnet-core). Fan-out cap: [WhenAll](/blog/csharp-task-whenall-vs-parallel-foreach). Topic map: [async & threading hub](/learning/async-concurrency).
 
 ## If an interviewer asks
 

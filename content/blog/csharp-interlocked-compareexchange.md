@@ -118,7 +118,7 @@ Good for a hosted service gate. Bad for “transfer money”: debit and credit a
 
 ## What this is not
 
-Multi-field coordination: [lock vs Monitor](/blog/csharp-lock-statement-monitor-mutex). Maps: [ConcurrentDictionary](/blog/csharp-concurrentdictionary-lock).
+Multi-field coordination: [lock vs Monitor](/blog/csharp-lock-statement-monitor-mutex). Maps: [ConcurrentDictionary](/blog/csharp-concurrentdictionary-lock). Topic map: [async & threading hub](/learning/async-concurrency).
 
 ## If an interviewer asks
 

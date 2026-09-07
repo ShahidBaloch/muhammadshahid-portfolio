@@ -57,9 +57,16 @@ export const navLinks = [
   { href: "/about", label: "About" },
 ] as const;
 
+export type LearningFaq = {
+  q: string;
+  a: string;
+};
+
 export type LearningTrack = {
   title: string;
   slugs: string[];
+  /** Unique copy under the H2 so tracks are not link-only lists. */
+  blurb?: string;
 };
 
 export type LearningTopic = {
@@ -76,6 +83,11 @@ export type LearningTopic = {
   pinSlugs?: string[];
   /** Optional start-here groups with real links (crawlers and readers). */
   tracks?: LearningTrack[];
+  /** Hub FAQs for visible answers + FAQPage JSON-LD. */
+  faq?: LearningFaq[];
+  /** Other topic slugs rendered as real links under the intro. */
+  relatedTopicSlugs?: string[];
+  keywords?: string[];
 };
 
 /** Topic hubs under Blog — SEO landing pages that group related articles.
@@ -101,12 +113,20 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "async-concurrency",
     label: "Async & Threading",
-    title: "C# Async, Multithreading, and Concurrency",
+    title: "C# Async and Threading for ASP.NET Core",
     description:
-      "Thread pool starvation, Task.Run vs await, ConfigureAwait, IAsyncEnumerable, Channels, SemaphoreSlim, ConcurrentDictionary, CancellationToken, and the C# threading primitives that show up in production dumps.",
+      "Production C# async and threading for ASP.NET Core: thread pool starvation, Task.Run vs await, CancellationToken, Channels, and interview answers.",
     intro:
-      "This hub is the ‘API hangs, CPU is idle’ cluster. New to async (0–2 years): start with Task vs Thread, then the ASP.NET Core async checklist, then CancellationToken. Merging PRs (3–5 years): starvation, SemaphoreSlim, Channel, ConcurrentDictionary GetOrAdd, IAsyncEnumerable, then the async interview Q&A. On-call / staff (6–10 years): starvation diagnostics, ConfigureAwait in libraries, AsyncLocal, Interlocked, TaskCompletionSource, expert interview — skip the toys via the skip line on each post. Use thread-pool starvation when 504s arrive with healthy SQL. Use Task.Run vs await when a PR wrapped ToListAsync to ‘make it multithreaded.’ Use CancellationToken when Angular left and SQL did not. ConfigureAwait is a library rule, not a Core performance trick. Streams, Channels, WhenAll caps, SemaphoreSlim outbound gates, lock vs Mutex, Task.Yield, and tenant maps each have their own URL. Database deadlocks are the SQL hub, not Monitor.Enter. Inbound 429s are rate limiting, not SemaphoreSlim.",
+      "This hub is the ASP.NET Core “API hangs, CPU is idle” cluster: C# async/await, multithreading, and the concurrency primitives that show up in production dumps. Async does not make SQL faster, and it is not multithreading — start with Task vs Thread if that sentence is still fuzzy. Use thread-pool starvation when 504s arrive with healthy SQL. Use Task.Run vs await when a PR wrapped ToListAsync to “make it multithreaded.” Use CancellationToken when Angular left and SQL did not. ConfigureAwait is a library rule, not a Core performance trick. Database deadlocks belong on the EF Core hub, not Monitor.Enter. Inbound 429s are rate limiting, not SemaphoreSlim. Interview rehearsal lives on the interview questions hub; the how-tos that teach the merge live here.",
     matchTags: ["Asynchronous Programming", "Threading", "Concurrency"],
+    keywords: [
+      "C# async await",
+      "C# multithreading",
+      "thread pool starvation",
+      "Task.Run vs await",
+      "ASP.NET Core async",
+    ],
+    relatedTopicSlugs: ["interview-questions", "ef-core"],
     pinSlugs: [
       "csharp-async-await-aspnet-core",
       "csharp-threadpool-starvation-sync-over-async",
@@ -115,10 +135,35 @@ export const learningTopics: LearningTopic[] = [
       "csharp-cancellationtoken-aspnet-core",
       "csharp-configureawait-false-library",
       "csharp-async-await-interview-questions",
+      "csharp-expert-interview-questions",
+    ],
+    faq: [
+      {
+        q: "Does C# async/await create a new thread?",
+        a: "No. await on I/O yields the current ThreadPool worker; the continuation later runs on a pool thread in ASP.NET Core. Multithreading is Task.Run, Thread, and Parallel. Start with Task vs Thread, then the async/await checklist.",
+      },
+      {
+        q: "What is thread pool starvation in ASP.NET Core?",
+        a: "Queued work with no free workers — usually .Result or .Wait on a Task while CPU stays idle and Angular gets 504s. Diagnose with dotnet-counters, then make the call chain async. It is not slow SQL and not a classic UI deadlock.",
+      },
+      {
+        q: "Should I use Task.Run or await on ASP.NET Core?",
+        a: "Await I/O (EF, HttpClient). The request is already on the pool, so wrapping ToListAsync in Task.Run steals a second worker and makes 504s worse. Task.Run is for CPU off the request path, not to “make it multithreaded.”",
+      },
+      {
+        q: "When is ConfigureAwait(false) needed?",
+        a: "In libraries that may run on WPF, WinForms, or MAUI SynchronizationContext. Skip it on ASP.NET Core controllers — Core has no request sync context. It is not a performance trick and not a .Result amnesty.",
+      },
+      {
+        q: "Should async code use lock or SemaphoreSlim?",
+        a: "lock (Monitor) for a short in-memory critical section you cannot await. SemaphoreSlim.WaitAsync for an async gate — outbound HttpClient bulkheads, not inbound 429 rate limiting. Mutex is cross-process.",
+      },
     ],
     tracks: [
       {
-        title: "New to async (0–2 years)",
+        title: "Start here: C# Task vs Thread and async/await",
+        blurb:
+          "If Task vs Thread is still fuzzy. Async/await is not multithreading. Read Task vs Thread, then the ASP.NET Core async checklist, then CancellationToken before you touch the pool.",
         slugs: [
           "csharp-task-vs-thread",
           "csharp-async-await-aspnet-core",
@@ -129,7 +174,9 @@ export const learningTopics: LearningTopic[] = [
         ],
       },
       {
-        title: "Merging PRs (3–5 years)",
+        title: "Code review: starvation, Channels, SemaphoreSlim",
+        blurb:
+          "When you are merging a PR. .Result starvation, outbound SemaphoreSlim, Channel vs fire-and-forget, ConcurrentDictionary GetOrAdd, IAsyncEnumerable, then the interview Q&A.",
         slugs: [
           "csharp-threadpool-starvation-sync-over-async",
           "csharp-semaphore-slim-async-lock",
@@ -140,7 +187,9 @@ export const learningTopics: LearningTopic[] = [
         ],
       },
       {
-        title: "On-call and staff (6–10 years)",
+        title: "On-call: ConfigureAwait, AsyncLocal, Interlocked",
+        blurb:
+          "When you are on-call or reading a dump. Skip the toys via the skip line on each post. Library ConfigureAwait, AsyncLocal tenant leaks, Interlocked vs lock, wrapping legacy events, then staff interview dumps.",
         slugs: [
           "csharp-threadpool-starvation-sync-over-async",
           "csharp-configureawait-false-library",
@@ -151,7 +200,9 @@ export const learningTopics: LearningTopic[] = [
         ],
       },
       {
-        title: "Diagnose hangs and 504s",
+        title: "Diagnose idle-CPU 504s and thread pool starvation",
+        blurb:
+          "Idle CPU and 504s with healthy SQL is a queueing problem. Start with starvation, then Task.Run wrapping I/O, then Task vs Thread if someone thought async uses more workers.",
         slugs: [
           "csharp-threadpool-starvation-sync-over-async",
           "csharp-task-run-aspnet-core",
@@ -160,7 +211,9 @@ export const learningTopics: LearningTopic[] = [
         ],
       },
       {
-        title: "Request-path async",
+        title: "ASP.NET Core request-path async",
+        blurb:
+          "Await I/O end to end on the action: tokens to EF and HttpClient, stream big exports, cap WhenAll, gate outbound calls. Do not WhenAll two queries on one DbContext.",
         slugs: [
           "csharp-async-await-aspnet-core",
           "csharp-cancellationtoken-aspnet-core",
@@ -170,7 +223,9 @@ export const learningTopics: LearningTopic[] = [
         ],
       },
       {
-        title: "Threading primitives",
+        title: "C# threading primitives",
+        blurb:
+          "lock is a short in-memory gate you cannot await. Channel, ConcurrentDictionary, Interlocked, TaskCompletionSource, and AsyncLocal each have their own URL. Task.Yield is UI-only — skip it on ASP.NET Core.",
         slugs: [
           "csharp-channel-producer-consumer",
           "csharp-concurrentdictionary-lock",
@@ -182,7 +237,9 @@ export const learningTopics: LearningTopic[] = [
         ],
       },
       {
-        title: "Interview questions",
+        title: "C# async await interview questions",
+        blurb:
+          "Scenario answers, not trivia. Async await questions for the common loop; expert questions for staff (streams, channels, tenant maps).",
         slugs: [
           "csharp-async-await-interview-questions",
           "csharp-expert-interview-questions",

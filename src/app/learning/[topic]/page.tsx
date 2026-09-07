@@ -29,6 +29,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: topic.title,
     description: topic.description,
+    ...(topic.keywords && topic.keywords.length > 0 ? { keywords: topic.keywords } : {}),
+    authors: [{ name: siteConfig.name, url: siteConfig.url }],
     alternates: { canonical: path },
     ...pageSocial({
       title: topic.title,
@@ -36,6 +38,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       path,
     }),
   };
+}
+
+function newestPostDate(posts: { date: string; updated?: string }[]): string | undefined {
+  if (posts.length === 0) return undefined;
+  return posts.reduce((latest, post) => {
+    const value = post.updated ?? post.date;
+    return value > latest ? value : latest;
+  }, posts[0].updated ?? posts[0].date);
 }
 
 export default async function LearningTopicPage({ params }: PageProps) {
@@ -47,12 +57,18 @@ export default async function LearningTopicPage({ params }: PageProps) {
 
   const posts = getPostsForTopic(topic);
   const pageUrl = `${siteConfig.url}/learning/${topic.slug}`;
+  const dateModified = newestPostDate(posts);
+  const relatedTopics = (topic.relatedTopicSlugs ?? [])
+    .map((slug) => getLearningTopic(slug))
+    .filter((item): item is NonNullable<typeof item> => Boolean(item));
+
   const collectionJsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: topic.title,
     description: topic.description,
     url: pageUrl,
+    ...(dateModified ? { dateModified } : {}),
     isPartOf: {
       "@type": "Blog",
       "@id": `${siteConfig.url}/blog`,
@@ -81,6 +97,31 @@ export default async function LearningTopicPage({ params }: PageProps) {
       name: post.title,
     })),
   };
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.url },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${siteConfig.url}/blog` },
+      { "@type": "ListItem", position: 3, name: "Topics", item: `${siteConfig.url}/learning` },
+      { "@type": "ListItem", position: 4, name: topic.label, item: pageUrl },
+    ],
+  };
+  const faqJsonLd =
+    topic.faq && topic.faq.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: topic.faq.map((item) => ({
+            "@type": "Question",
+            name: item.q,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: item.a,
+            },
+          })),
+        }
+      : null;
 
   return (
     <section className="section-pad pt-28 sm:pt-32">
@@ -92,10 +133,42 @@ export default async function LearningTopicPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      {faqJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      ) : null}
       <div className="container-narrow">
-        <Link href="/blog" className="text-sm font-semibold text-teal link-underline">
-          ← All articles
-        </Link>
+        <nav className="text-sm text-muted" aria-label="Breadcrumb">
+          <ol className="flex flex-wrap items-center gap-2">
+            <li>
+              <Link href="/" className="hover:text-teal">
+                Home
+              </Link>
+            </li>
+            <li aria-hidden>/</li>
+            <li>
+              <Link href="/blog" className="hover:text-teal">
+                Blog
+              </Link>
+            </li>
+            <li aria-hidden>/</li>
+            <li>
+              <Link href="/learning" className="hover:text-teal">
+                Topics
+              </Link>
+            </li>
+            <li aria-hidden>/</li>
+            <li aria-current="page" className="text-ink">
+              {topic.label}
+            </li>
+          </ol>
+        </nav>
 
         <div className="mt-6">
           <SectionHeading
@@ -107,6 +180,36 @@ export default async function LearningTopicPage({ params }: PageProps) {
         </div>
 
         <p className="mt-8 max-w-3xl text-lg leading-relaxed text-muted">{topic.intro}</p>
+
+        {relatedTopics.length > 0 ? (
+          <p className="mt-4 max-w-3xl text-muted">
+            Related:{" "}
+            {relatedTopics.map((item, index) => (
+              <span key={item.slug}>
+                {index > 0 ? " · " : null}
+                <Link href={`/learning/${item.slug}`} className="font-medium text-teal link-underline">
+                  {item.label}
+                </Link>
+              </span>
+            ))}
+          </p>
+        ) : null}
+
+        {topic.faq && topic.faq.length > 0 ? (
+          <section className="mt-8 max-w-3xl rounded-xl border border-slate-line bg-mist p-5 sm:p-6" aria-labelledby="quick-answers">
+            <h2 id="quick-answers" className="font-display text-xl font-semibold text-ink">
+              Quick answers
+            </h2>
+            <dl className="mt-4 space-y-4">
+              {topic.faq.map((item) => (
+                <div key={item.q}>
+                  <dt className="font-semibold text-ink">{item.q}</dt>
+                  <dd className="mt-1 text-muted">{item.a}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        ) : null}
 
         {topic.tracks && topic.tracks.length > 0 ? (
           <nav className="mt-10 max-w-3xl" aria-label="Start here">
@@ -121,6 +224,7 @@ export default async function LearningTopicPage({ params }: PageProps) {
                   <h2 id={headingId} className="scroll-mt-28 font-display text-xl font-semibold text-ink">
                     {track.title}
                   </h2>
+                  {track.blurb ? <p className="mt-2 text-muted">{track.blurb}</p> : null}
                   <ul className="mt-3 list-disc space-y-2 pl-5">
                     {items.map((post) => (
                       <li key={post.slug} className="text-muted">
@@ -153,23 +257,28 @@ export default async function LearningTopicPage({ params }: PageProps) {
           ))}
         </nav>
 
-        <div className="mt-12 divide-y divide-slate-line border-y border-slate-line">
-          {posts.length === 0 ? (
-            <p className="py-10 text-muted">Articles for this track are coming soon.</p>
-          ) : (
-            posts.map((post) => (
-              <article key={post.slug} className="py-8">
-                <PostDate date={post.date} updated={post.updated} readingTime={post.readingTime} />
-                <h2 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">
-                  <Link href={`/blog/${post.slug}`} className="hover:text-teal">
-                    {post.title}
-                  </Link>
-                </h2>
-                <p className="mt-3 max-w-2xl text-muted">{post.description}</p>
-              </article>
-            ))
-          )}
-        </div>
+        {posts.length === 0 ? (
+          <p className="mt-12 py-10 text-muted">Articles for this track are coming soon.</p>
+        ) : (
+          <div className="mt-12">
+            <h2 className="font-display text-2xl font-semibold text-ink">
+              All {topic.label} articles
+            </h2>
+            <div className="mt-6 divide-y divide-slate-line border-y border-slate-line">
+              {posts.map((post) => (
+                <article key={post.slug} className="py-8">
+                  <PostDate date={post.date} updated={post.updated} readingTime={post.readingTime} />
+                  <h3 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">
+                    <Link href={`/blog/${post.slug}`} className="hover:text-teal">
+                      {post.title}
+                    </Link>
+                  </h3>
+                  <p className="mt-3 max-w-2xl text-muted">{post.description}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

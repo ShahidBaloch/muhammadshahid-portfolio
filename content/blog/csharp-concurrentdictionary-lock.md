@@ -122,7 +122,7 @@ A fee schedule loaded at startup and never mutated is not a `ConcurrentDictionar
 
 ## What this is not
 
-Broader primitives: [lock vs Monitor](/blog/csharp-lock-statement-monitor-mutex). Staff-loop cache questions: [expert C# interviews](/blog/csharp-expert-interview-questions).
+Broader primitives: [lock vs Monitor](/blog/csharp-lock-statement-monitor-mutex). Staff-loop cache questions: [expert C# interviews](/blog/csharp-expert-interview-questions). Topic map: [async & threading hub](/learning/async-concurrency).
 
 ## If an interviewer asks
 

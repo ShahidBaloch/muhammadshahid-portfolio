@@ -120,7 +120,7 @@ function buildSitemap(posts) {
       path: `/learning/${slug}`,
       lastModified: siteLastModified,
       changeFrequency: "weekly",
-      priority: "0.55",
+      priority: slug === "async-concurrency" ? "0.7" : "0.55",
     })),
     ...posts.map((post) => ({
       path: `/blog/${post.slug}`,

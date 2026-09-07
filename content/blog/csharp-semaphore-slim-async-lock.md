@@ -169,7 +169,7 @@ public sealed class LicenseCache
 
 ## What this is not
 
-`lock` itself: [lock vs Monitor vs Mutex](/blog/csharp-lock-statement-monitor-mutex). Inbound 429s: [rate limiting](/blog/aspnet-core-rate-limiting).
+`lock` itself: [lock vs Monitor vs Mutex](/blog/csharp-lock-statement-monitor-mutex). Inbound 429s: [rate limiting](/blog/aspnet-core-rate-limiting). Topic map: [async & threading hub](/learning/async-concurrency).
 
 ## If an interviewer asks
 

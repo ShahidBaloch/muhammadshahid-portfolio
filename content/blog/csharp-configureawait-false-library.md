@@ -151,7 +151,7 @@ One rule for `MyCompany.Claims.Parsing.csproj`. A different rule for `MyCompany.
 
 ## What this is not
 
-Request-path async: [async await in ASP.NET Core](/blog/csharp-async-await-aspnet-core). UI message pump: [Task.Yield](/blog/csharp-task-yield-ui-thread).
+Request-path async: [async await in ASP.NET Core](/blog/csharp-async-await-aspnet-core). UI message pump: [Task.Yield](/blog/csharp-task-yield-ui-thread). Topic map: [async & threading hub](/learning/async-concurrency).
 
 ## If an interviewer asks
 

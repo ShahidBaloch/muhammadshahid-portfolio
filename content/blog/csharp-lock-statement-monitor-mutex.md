@@ -116,7 +116,7 @@ Interview banks mix **database** locks with `lock`. If the dump shows `Monitor` 
 
 ## What this is not
 
-Async critical sections: [SemaphoreSlim WaitAsync](/blog/csharp-semaphore-slim-async-lock). One-shot flags: [Interlocked](/blog/csharp-interlocked-compareexchange).
+Async critical sections: [SemaphoreSlim WaitAsync](/blog/csharp-semaphore-slim-async-lock). One-shot flags: [Interlocked](/blog/csharp-interlocked-compareexchange). Topic map: [async & threading hub](/learning/async-concurrency).
 
 ## If an interviewer asks
 

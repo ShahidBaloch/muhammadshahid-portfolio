@@ -151,7 +151,7 @@ Rare: you must hash a payload on the request. Then `Task.Run` + a bound, or a [C
 
 ## What this is not
 
-Outbound reusable lock: [SemaphoreSlim](/blog/csharp-semaphore-slim-async-lock). Request-path async: [async await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).
+Outbound reusable lock: [SemaphoreSlim](/blog/csharp-semaphore-slim-async-lock). Request-path async: [async await in ASP.NET Core](/blog/csharp-async-await-aspnet-core). Topic map: [async & threading hub](/learning/async-concurrency).
 
 ## If an interviewer asks
 
