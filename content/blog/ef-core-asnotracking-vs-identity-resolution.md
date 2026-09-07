@@ -138,7 +138,7 @@ Command handlers that update call `.AsTracking()` or use a context configured fo
 - [ ] Nobody mutates no-tracking instances
 - [ ] Cartesian / N+1 diagnosed with SQL, not with CLR identity
 
-If the Angular screen only needs columns, you do not have an identity-resolution problem. You have an Include problem.
+If the Angular screen only needs columns, you do not have an identity-resolution problem. You have an Include problem. If the 500 log says **possible object cycle was detected**, that is [the JSON cycle post](/blog/aspnet-core-json-object-cycle) — you serialized a looping navigation graph, not two CLR instances of the same key.
 
 ---
 

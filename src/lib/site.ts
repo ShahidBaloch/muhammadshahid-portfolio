@@ -162,7 +162,7 @@ export const learningTopics: LearningTopic[] = [
     description:
       "Architecture notes for .NET + Angular systems — Clean Architecture, modular monolith vs services, Minimal APIs, and boundaries that survive healthcare, SaaS, and eCommerce delivery.",
     intro:
-      "Architecture here means the decisions that survive the first production incident: where data lives, who is allowed to change it, and how the Angular SPA talks to ASP.NET Core without a contract that rot. This hub is Clean Architecture, modular monolith vs services, and Minimal APIs — not JWT plumbing, not EF SQL, not EDI parsers. Those have their own topic pages. Start with Clean Architecture or modular monolith if you are choosing a shape. Skip a split into microservices until a boundary has a real independent deploy or scaling reason.",
+      "Architecture here means the decisions that survive the first production incident: where data lives, who is allowed to change it, and how the Angular SPA talks to ASP.NET Core without a contract that rot. This hub is Clean Architecture, modular monolith vs services, Minimal APIs, and the JSON contract failures that look like “the API 500s on detail pages.” Cycle exceptions are the object-cycle article — not an EF N+1 tutorial. JWT plumbing, EF SQL, and EDI parsers have their own topic pages. Start with Clean Architecture or modular monolith if you are choosing a shape. Skip a split into microservices until a boundary has a real independent deploy or scaling reason.",
     matchTags: [
       "Architecture",
       "Clean Architecture",

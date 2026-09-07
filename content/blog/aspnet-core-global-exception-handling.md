@@ -171,6 +171,7 @@ If you use filters for MVC-only concerns, keep them aligned with the same status
 3. **Returning 500 for bad input** — teaches clients the wrong recovery  
 4. **Exposing `exception.Message` in production** — information disclosure  
 5. **Swallowing exceptions** — empty catch that returns 200  
+6. **Returning EF entities and hitting “possible object cycle was detected”** — that 500 is [the JSON cycle article](/blog/aspnet-core-json-object-cycle), not a missing `try/catch`  
 
 ## Minimal production checklist
 
