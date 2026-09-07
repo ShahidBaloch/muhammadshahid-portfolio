@@ -276,6 +276,12 @@ export function Header() {
                 </Link>
               );
             })}
+            <Link
+              href="/contact"
+              className="flex min-h-12 items-center border-b border-slate-line/70 text-base font-medium text-ink hover:text-teal"
+            >
+              Contact
+            </Link>
             <Link href="/contact" className="btn-primary mt-6 w-full">
               Hire me
             </Link>
