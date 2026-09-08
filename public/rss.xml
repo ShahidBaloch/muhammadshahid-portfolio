@@ -92,7 +92,7 @@
       <description><![CDATA[AsNoTracking can allocate more memory when the same Patient is on every row. When I use AsNoTrackingWithIdentityResolution on ASP.NET Core reads.]]></description>
     </item>
     <item>
-      <title><![CDATA[C# ThreadPool Starvation: Why .Result Causes 504s]]></title>
+      <title><![CDATA[C# ThreadPool Starvation: Sync-Over-Async .Result Causes 504s]]></title>
       <link>https://www.muhammadshahid.dev/blog/csharp-threadpool-starvation-sync-over-async</link>
       <guid>https://www.muhammadshahid.dev/blog/csharp-threadpool-starvation-sync-over-async</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
@@ -113,11 +113,11 @@
       <description><![CDATA[Skip this if you only write ASP.NET Core APIs. await Task.Yield() lets the WPF/MAUI message pump run, then continues on the UI thread. Prefer Task.Run for CPU. Yield is not a Core performance trick.]]></description>
     </item>
     <item>
-      <title><![CDATA[C# Task.WhenAll vs Task.WaitAll vs Parallel.ForEach]]></title>
+      <title><![CDATA[C# Task.WhenAll vs WaitAll vs Parallel.ForEachAsync]]></title>
       <link>https://www.muhammadshahid.dev/blog/csharp-task-whenall-vs-parallel-foreach</link>
       <guid>https://www.muhammadshahid.dev/blog/csharp-task-whenall-vs-parallel-foreach</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Task.WhenAll waits for many I/O tasks without blocking a thread. WaitAll blocks the pool. Cap 10,000 HTTP calls, never WhenAll two queries on one DbContext, Parallel.ForEach is for CPU.]]></description>
+      <description><![CDATA[Task.WhenAll waits for many I/O tasks without blocking a thread. WaitAll blocks the pool. Cap 10,000 HTTP calls, never WhenAll two queries on one DbContext, Parallel.ForEachAsync is for CPU or throttled I/O.]]></description>
     </item>
     <item>
       <title><![CDATA[C# Task vs Thread vs ThreadPool]]></title>
@@ -188,6 +188,13 @@
       <guid>https://www.muhammadshahid.dev/blog/csharp-cancellationtoken-aspnet-core</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
       <description><![CDATA[A CancellationToken is a cooperative please-stop flag. In ASP.NET Core, bind RequestAborted, pass it to EF Core and HttpClient, link timeouts, and do not log client abort as a 500.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# BackgroundService in ASP.NET Core: Scopes and stoppingToken]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-backgroundservice-hosted-service-async</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-backgroundservice-hosted-service-async</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[A BackgroundService is a hosted worker the generic host starts and stops. Use stoppingToken, not RequestAborted. Create a DI scope per message. Task.Run after Ok() is not a worker.]]></description>
     </item>
     <item>
       <title><![CDATA[C# AsyncLocal vs ThreadLocal: Context Across await]]></title>

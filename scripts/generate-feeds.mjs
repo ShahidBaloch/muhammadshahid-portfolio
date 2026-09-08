@@ -214,6 +214,7 @@ const indexNowUrls = [
   `${BASE_URL}/blog/aspnet-core-headers-readonly-response-started`,
   `${BASE_URL}/blog/aspnet-core-data-protection-xml-encryptor`,
   `${BASE_URL}/blog/aspnet-core-idx10501-jwt-kid`,
+  `${BASE_URL}/blog/csharp-backgroundservice-hosted-service-async`,
   `${BASE_URL}/learning/interview-questions`,
   `${BASE_URL}/learning/async-concurrency`,
   `${BASE_URL}/learning/identity`,
