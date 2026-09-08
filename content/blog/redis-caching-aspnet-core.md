@@ -1,17 +1,26 @@
 ---
 title: "Redis Caching in ASP.NET Core: When It Lies"
-description: "Practical Redis caching in ASP.NET Core for Angular SPAs — IDistributedCache, cache keys, stampede control, invalidation, and the mistakes that make dashboards show stale data."
+description: "Redis caching in ASP.NET Core — IDistributedCache, cache hit vs miss, stampede control, invalidation, and fixing error establishing a Redis connection."
 date: "2026-08-02"
-tags: ["Redis", "ASP.NET Core", "Caching", "Performance", "Azure"]
+updated: "2026-09-08"
+category: "caching"
+tags: ["Redis", "ASP.NET Core", "Caching", "Performance", "Azure", "IMemoryCache"]
 related:
+  - what-is-a-cache-miss
+  - caching-system-dotnet-imemorycache-redis
+  - redis-connection-error-aspnet-core
   - ef-core-sql-performance
   - aspnet-core-rate-limiting
   - azure-app-service-aspnet-core
 faq:
+  - q: "What is a cache miss?"
+    a: "The key is absent or expired, so the app rebuilds from SQL instead of returning cached JSON. Hits are fast; misses run the full query. Definition: [what is a cache miss](/blog/what-is-a-cache-miss)."
   - q: "When should I add Redis caching in ASP.NET Core?"
     a: "When a hot read is cheaper stale than live SQL — catalog lists, feature flags. Not for per-user clinical records keyed only by URL."
   - q: "Why does Redis show stale dashboard data?"
     a: "Missing invalidation or a key that ignores tenant. Caching is a freshness trade. Stampede control is not a substitute for a tenant in the key."
+  - q: "Error establishing a Redis connection?"
+    a: "Wrong host/port, TLS mismatch on Azure (use 6380 + ssl=True), Docker hostname, or firewall. Fail-open to SQL for optional caches. Fix guide: [Redis connection error](/blog/redis-connection-error-aspnet-core)."
   - q: "Is Redis the same as SQL performance tuning?"
     a: "No. Redis hides a slow query until the cache misses. N+1 and sniffed plans still need the EF SQL articles."
 ---

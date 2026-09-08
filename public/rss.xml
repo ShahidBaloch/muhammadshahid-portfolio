@@ -8,6 +8,48 @@
     <atom:link href="https://www.muhammadshahid.dev/rss.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title><![CDATA[What Is an API? (Definition With REST and ASP.NET Core Examples)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/what-is-an-api</link>
+      <guid>https://www.muhammadshahid.dev/blog/what-is-an-api</guid>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[What is an API — definition, how REST APIs work, request/response flow, and a minimal ASP.NET Core example. Plain English before framework details.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[What Is a Cache Miss? (Definition With ASP.NET Core Examples)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/what-is-a-cache-miss</link>
+      <guid>https://www.muhammadshahid.dev/blog/what-is-a-cache-miss</guid>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[What is a cache miss — definition, cache hit vs miss, why misses hurt performance, and how cache misses work with IMemoryCache and Redis on ASP.NET Core APIs.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Repository Definition and Meaning (With .NET Examples)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/repository-definition-meaning</link>
+      <guid>https://www.muhammadshahid.dev/blog/repository-definition-meaning</guid>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Repository definition and meaning explained — what a repository is in software, define repository in plain English, and how the repository pattern applies to EF Core and ASP.NET Core.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Error Establishing a Redis Connection in ASP.NET Core (Fix Guide)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/redis-connection-error-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/redis-connection-error-aspnet-core</guid>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Fix 'error establishing a Redis connection' in ASP.NET Core — connection string, TLS, Azure Cache for Redis, Docker networking, timeout, and fail-open IDistributedCache patterns.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[.NET Interview Questions and Answers (C# and ASP.NET Core)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/dotnet-interview-questions-answers</link>
+      <guid>https://www.muhammadshahid.dev/blog/dotnet-interview-questions-answers</guid>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[.NET interview questions and answers for mid-to-senior roles — C# async, ASP.NET Core scenarios, EF Core, Angular integration, with links to full scenario write-ups.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Deadlock in C# and Operating Systems (Avoidance Explained)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/deadlock-csharp-explained</link>
+      <guid>https://www.muhammadshahid.dev/blog/deadlock-csharp-explained</guid>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Deadlock definition, deadlock in operating system terms, deadlock avoidance in OS and C# — lock ordering, async deadlocks, and SQL Server reader/writer deadlocks on ASP.NET Core.]]></description>
+    </item>
+    <item>
       <title><![CDATA[C# Multithreading Primer for ASP.NET Core]]></title>
       <link>https://www.muhammadshahid.dev/blog/csharp-multithreading-primer</link>
       <guid>https://www.muhammadshahid.dev/blog/csharp-multithreading-primer</guid>
@@ -15,11 +57,60 @@
       <description><![CDATA[C# multithreading tutorial in one pass — Thread vs ThreadPool vs Task, async is not multithreading, lock and Interlocked, and which primitive article to open next on ASP.NET Core.]]></description>
     </item>
     <item>
+      <title><![CDATA[Callback vs Promise vs Async/Await (C# and JavaScript)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/callback-vs-promise-async</link>
+      <guid>https://www.muhammadshahid.dev/blog/callback-vs-promise-async</guid>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Callback meaning in async programming — how callbacks differ from promises and async/await, with C# Task and JavaScript Promise examples for ASP.NET Core and Angular teams.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Caching System in .NET: IMemoryCache, Redis, and Object Cache]]></title>
+      <link>https://www.muhammadshahid.dev/blog/caching-system-dotnet-imemorycache-redis</link>
+      <guid>https://www.muhammadshahid.dev/blog/caching-system-dotnet-imemorycache-redis</guid>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Caching system explained for .NET and Java developers — object cache, in-memory vs distributed cache, IMemoryCache vs Redis on ASP.NET Core, compared to Java caching patterns.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Asynchronous Meaning and Definition (With C# Examples)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/asynchronous-meaning-definition</link>
+      <guid>https://www.muhammadshahid.dev/blog/asynchronous-meaning-definition</guid>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Asynchronous meaning and definition explained plainly — what asynchronous means in programming, how it differs from synchronous, and how C# async/await applies it on ASP.NET Core APIs.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Asynchronous Class in C#: Writing Async Methods on a Type]]></title>
+      <link>https://www.muhammadshahid.dev/blog/asynchronous-class-csharp</link>
+      <guid>https://www.muhammadshahid.dev/blog/asynchronous-class-csharp</guid>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[What an asynchronous class means in C# — async methods, Task return types, IAsyncDisposable, and ASP.NET Core service patterns. Plus how asynchronous class differs from online course terminology.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Async vs Sync: What's the Difference in Programming?]]></title>
+      <link>https://www.muhammadshahid.dev/blog/async-vs-sync-programming</link>
+      <guid>https://www.muhammadshahid.dev/blog/async-vs-sync-programming</guid>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Async vs sync explained with tables and C# examples — blocking vs non-blocking I/O, when to use each on ASP.NET Core, and how synchronous learning differs from asynchronous in plain English.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[What Is a Promise in Async Programming? (Task, Promise, Future)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/async-promise-explained</link>
+      <guid>https://www.muhammadshahid.dev/blog/async-promise-explained</guid>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Promise meaning in async programming — how C# Task, JavaScript Promise, and futures represent work that will complete later, with ASP.NET Core examples and interview answers.]]></description>
+    </item>
+    <item>
       <title><![CDATA[IDX10501 Unable to Match Key (kid) in ASP.NET Core JWT]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-idx10501-jwt-kid</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-idx10501-jwt-kid</guid>
       <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
       <description><![CDATA[Fix IDX10501 JWT kid mismatch in ASP.NET Core — token header kid not in JWKS, signing cert rotation overlap, Authority mismatch, and OpenIddict key refresh.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[API Design Principles for REST and ASP.NET Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/api-design-principles</link>
+      <guid>https://www.muhammadshahid.dev/blog/api-design-principles</guid>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[API design principles for production REST APIs — resource naming, versioning, errors, pagination, auth, and idempotency with ASP.NET Core examples.]]></description>
     </item>
     <item>
       <title><![CDATA[SQL Server TempDB Contention on .NET APIs]]></title>
@@ -467,7 +558,7 @@
       <link>https://www.muhammadshahid.dev/blog/redis-caching-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/redis-caching-aspnet-core</guid>
       <pubDate>Sun, 02 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Practical Redis caching in ASP.NET Core for Angular SPAs — IDistributedCache, cache keys, stampede control, invalidation, and the mistakes that make dashboards show stale data.]]></description>
+      <description><![CDATA[Redis caching in ASP.NET Core — IDistributedCache, cache hit vs miss, stampede control, invalidation, and fixing error establishing a Redis connection.]]></description>
     </item>
     <item>
       <title><![CDATA[Modular Monolith vs Microservices in .NET]]></title>
@@ -516,7 +607,7 @@
       <link>https://www.muhammadshahid.dev/blog/repository-pattern-dotnet</link>
       <guid>https://www.muhammadshahid.dev/blog/repository-pattern-dotnet</guid>
       <pubDate>Sun, 05 Jul 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[When the repository pattern earns its place in .NET with EF Core, when it becomes ceremony, and how I structure data access on healthcare SaaS and eCommerce products without lying about LINQ.]]></description>
+      <description><![CDATA[Repository definition and when the repository pattern earns its place in .NET with EF Core — named queries vs generic IRepository ceremony on healthcare and eCommerce APIs.]]></description>
     </item>
     <item>
       <title><![CDATA[Azure Blob Storage with ASP.NET Core File Uploads]]></title>

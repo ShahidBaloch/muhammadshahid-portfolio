@@ -4,7 +4,16 @@ title: "C# Async vs Multithreading for ASP.NET Core"
 
 ## Introduction
 
-If you search **C# async vs multithreading**, you usually want one clear answer before opening ten tabs: *what each model is*, *how they differ*, and *what to use on an ASP.NET Core API*. This page is that explanation. Deeper implementation guides — starvation dumps, `Task.Run` mistakes, `lock`, Channels — are linked at the end once the concepts make sense.
+If you search **asynchronous meaning**, **async vs sync**, or **C# async vs multithreading**, you usually want one clear answer before opening ten tabs: *what each model is*, *how they differ*, and *what to use on an ASP.NET Core API*. This page is that explanation.
+
+**New to definitions?** Start with the dedicated guides:
+
+- [Asynchronous meaning and definition](/blog/asynchronous-meaning-definition)
+- [Async vs sync](/blog/async-vs-sync-programming)
+- [What is a promise in async programming?](/blog/async-promise-explained)
+- [Asynchronous class in C#](/blog/asynchronous-class-csharp)
+
+Deeper implementation guides — starvation dumps, `Task.Run` mistakes, `lock`, Channels — are linked at the end once the concepts make sense.
 
 ## What is asynchronous programming in C#?
 
@@ -149,6 +158,12 @@ _Use this table after the sections above — not instead of them._
 
 | You are trying to… | Read |
 |---|---|
+| Learn **asynchronous meaning** or definition | [Asynchronous meaning and definition](/blog/asynchronous-meaning-definition) |
+| Compare **async vs sync** | [Async vs sync](/blog/async-vs-sync-programming) |
+| Understand **promise** (Task vs JavaScript) | [Promise in async programming](/blog/async-promise-explained) |
+| Compare **callback vs promise vs async/await** | [Callback vs promise](/blog/callback-vs-promise-async) |
+| Learn **deadlock** and avoidance | [Deadlock in C# and OS](/blog/deadlock-csharp-explained) |
+| Design an **asynchronous class** in C# | [Asynchronous class in C#](/blog/asynchronous-class-csharp) |
 | Learn threads, pool, and primitives end to end | [C# multithreading primer](/blog/csharp-multithreading-primer) |
 | Nail Task vs Thread vs ThreadPool | [Task vs Thread](/blog/csharp-task-vs-thread) |
 | Implement async on controllers and services | [async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core) |

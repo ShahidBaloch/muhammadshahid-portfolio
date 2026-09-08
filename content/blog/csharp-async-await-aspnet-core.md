@@ -6,6 +6,8 @@ updated: "2026-09-07"
 category: "async-concurrency"
 tags: ["C#", "async await", "Asynchronous Programming", "ASP.NET Core", ".NET", "Performance"]
 related:
+  - asynchronous-meaning-definition
+  - async-vs-sync-programming
   - csharp-threadpool-starvation-sync-over-async
   - csharp-task-run-aspnet-core
   - csharp-cancellationtoken-aspnet-core

@@ -104,6 +104,7 @@ export const learningTopics: LearningTopic[] = [
     matchTags: ["Interview Questions"],
     relatedTopicSlugs: ["async-concurrency", "ef-core", "authentication"],
     pinSlugs: [
+      "dotnet-interview-questions-answers",
       "csharp-async-await-interview-questions",
       "csharp-expert-interview-questions",
       "aspnet-core-interview-questions-scenarios",
@@ -111,6 +112,18 @@ export const learningTopics: LearningTopic[] = [
       "angular-interview-questions-aspnet-core",
     ],
     faq: [
+      {
+        q: "Where do I start for .NET interview questions?",
+        a: "Open the [.NET interview questions and answers](/blog/dotnet-interview-questions-answers) map — it links to async, ASP.NET Core scenarios, EF Core, and Angular tracks. Mid-level: async await + ASP.NET scenarios. Staff: expert C# questions.",
+      },
+      {
+        q: "What ASP.NET Core interview questions are asked most?",
+        a: "Captive DI, JWT + Angular CORS, middleware order, thread pool starvation, and EF slowness — scenario answers on [ASP.NET Core interview questions](/blog/aspnet-core-interview-questions-scenarios).",
+      },
+      {
+        q: "What C# interview questions and answers should I prepare?",
+        a: "Task vs Thread, .Result starvation, async void, WhenAll on one DbContext, ConfigureAwait in libraries. Full list: [C# async await interview questions](/blog/csharp-async-await-interview-questions).",
+      },
       {
         q: "Where do I start for C# async interview questions?",
         a: "Know **Task vs Thread** and **starvation vs deadlock** first. Then rehearse scenario prompts: `.Result`, `async void`, `WhenAll` on one DbContext, and `CancellationToken` through to SQL. Implementation checklists live on the [async & threading hub](/learning/async-concurrency).",
@@ -163,11 +176,16 @@ export const learningTopics: LearningTopic[] = [
     label: "Async & Threading",
     title: "C# Async vs Multithreading for ASP.NET Core",
     description:
-      "Learn the difference between C# async/await and multithreading — definitions, a real-world analogy, ASP.NET Core rules, when to use each, and interview questions.",
+      "Asynchronous meaning and definition, async vs sync, promises (Task), and C# multithreading — definitions, ASP.NET Core rules, when to use each, and interview questions.",
     intro:
-      "C# **async/await** and **multithreading** solve different problems. Async frees ThreadPool workers during I/O waits; multithreading coordinates parallel workers and in-memory synchronization. The sections below explain both before you open the symptom-specific articles.",
+      "C# **async/await** and **multithreading** solve different problems. Start with [asynchronous meaning](/blog/asynchronous-meaning-definition) and [async vs sync](/blog/async-vs-sync-programming) if definitions are fuzzy. Async frees ThreadPool workers during I/O waits; multithreading coordinates parallel workers and in-memory synchronization.",
     matchTags: ["Asynchronous Programming", "Threading", "Concurrency"],
     keywords: [
+      "asynchronous meaning",
+      "asynchronous definition",
+      "async vs sync",
+      "promise async programming",
+      "asynchronous class C#",
       "C# multithreading",
       "C# async vs multithreading",
       "ASP.NET Core threading",
@@ -175,6 +193,12 @@ export const learningTopics: LearningTopic[] = [
     ],
     relatedTopicSlugs: ["interview-questions", "ef-core"],
     pinSlugs: [
+      "asynchronous-meaning-definition",
+      "async-vs-sync-programming",
+      "async-promise-explained",
+      "callback-vs-promise-async",
+      "deadlock-csharp-explained",
+      "asynchronous-class-csharp",
       "csharp-multithreading-primer",
       "csharp-async-await-aspnet-core",
       "csharp-threadpool-starvation-sync-over-async",
@@ -188,6 +212,26 @@ export const learningTopics: LearningTopic[] = [
       "aspnet-core-rate-limiting",
     ],
     faq: [
+      {
+        q: "What is the asynchronous meaning in programming?",
+        a: "**Asynchronous** means code can start slow work (SQL, HTTP) and release its worker while waiting — completion arrives later via a `Task`. See [asynchronous meaning and definition](/blog/asynchronous-meaning-definition) for the full explanation and C# examples.",
+      },
+      {
+        q: "What is the difference between async and sync?",
+        a: "**Sync** blocks the caller until each step finishes. **Async** starts I/O, frees the ThreadPool worker during the wait, and resumes on completion. On ASP.NET Core APIs, use async for EF Core and HttpClient — never `.Result` on the request path. Full comparison: [async vs sync](/blog/async-vs-sync-programming).",
+      },
+      {
+        q: "What is a promise in async programming?",
+        a: "A **promise** is a handle on work that will complete later — result, fault, or cancel. In C# that is `Task` or `Task<T>`, not an OS thread. JavaScript uses `Promise`. Details: [promise in async programming](/blog/async-promise-explained).",
+      },
+      {
+        q: "What is a callback in async programming?",
+        a: "A **callback** is a function invoked when async work completes. Promises and `async`/`await` replace nested callback pyramids with composable Tasks. Comparison: [callback vs promise](/blog/callback-vs-promise-async).",
+      },
+      {
+        q: "What is deadlock and how do you avoid it?",
+        a: "**Deadlock** is circular wait — each thread holds a resource another needs. Avoid with lock ordering, timeouts, no `await` inside `lock`, and async end-to-end instead of `.Result`. OS theory and C# examples: [deadlock explained](/blog/deadlock-csharp-explained).",
+      },
       {
         q: "What is the difference between async and multithreading in C#?",
         a: "**Async/await** yields the ThreadPool worker during I/O waits — the `Task` is a promise, not a dedicated thread. **Multithreading** runs work on multiple workers (`Task.Run`, `Parallel`, `lock`, concurrent collections). On ASP.NET Core, default to async for SQL and HTTP; use threading primitives for CPU offload, in-memory gates, and background queues.",
@@ -211,7 +255,18 @@ export const learningTopics: LearningTopic[] = [
     ],
     tracks: [
       {
-        title: "Start here: multithreading primer and async/await",
+        title: "Start here: definitions (asynchronous, async vs sync, promise)",
+        blurb:
+          "Plain definitions before implementation — asynchronous meaning, async vs sync, what a promise is, and how an asynchronous class looks in C#.",
+        slugs: [
+          "asynchronous-meaning-definition",
+          "async-vs-sync-programming",
+          "async-promise-explained",
+          "asynchronous-class-csharp",
+        ],
+      },
+      {
+        title: "Multithreading primer and async/await on ASP.NET Core",
         blurb:
           "One guided pass over threads, the pool, and async — then the ASP.NET Core checklist and CancellationToken before you touch the pool.",
         slugs: [
@@ -275,7 +330,7 @@ export const learningTopics: LearningTopic[] = [
       "Practical C# design patterns for real ASP.NET Core products — Factory, Strategy, and patterns that reduce switch-statement sprawl without ceremony.",
     intro:
       "Named patterns for real ASP.NET Core APIs — when Factory, Strategy, Repository, and SOLID actually reduce change cost, and when they are ceremony.",
-    keywords: ["C# design patterns", "Factory pattern C#", "Strategy pattern ASP.NET Core", "Repository pattern .NET", "SOLID principles"],
+    keywords: ["C# design patterns", "repository definition", "define repository", "Factory pattern C#", "Strategy pattern ASP.NET Core", "Repository pattern .NET", "SOLID principles"],
     relatedTopicSlugs: ["dependency-injection", "ef-core"],
     faq: [
       {
@@ -297,6 +352,10 @@ export const learningTopics: LearningTopic[] = [
       "Strategy Pattern",
       "Repository Pattern",
       "SOLID",
+    ],
+    pinSlugs: [
+      "repository-definition-meaning",
+      "repository-pattern-dotnet",
     ],
   },
   {
@@ -480,6 +539,128 @@ export const learningTopics: LearningTopic[] = [
     matchTags: ["EDI", "X12", "Serilog"],
   },
   {
+    slug: "caching",
+    label: "Caching",
+    title: "Caching for ASP.NET Core APIs",
+    description:
+      "What is a cache miss, caching system design with IMemoryCache and Redis, object cache patterns, and fixing error establishing a Redis connection on ASP.NET Core.",
+    intro:
+      "Caching trades freshness for latency — but only on **cache hits**. Start with [what is a cache miss](/blog/what-is-a-cache-miss), then [caching system in .NET](/blog/caching-system-dotnet-imemorycache-redis) and [Redis production patterns](/blog/redis-caching-aspnet-core).",
+    keywords: [
+      "what is a cache miss",
+      "java caching system",
+      "java object cache",
+      "error establishing a redis connection",
+      "IMemoryCache ASP.NET Core",
+      "Redis caching",
+    ],
+    relatedTopicSlugs: ["architecture", "ef-core", "async-concurrency"],
+    matchTags: ["Caching", "Redis", "IMemoryCache", "Performance"],
+    pinSlugs: [
+      "what-is-a-cache-miss",
+      "caching-system-dotnet-imemorycache-redis",
+      "redis-connection-error-aspnet-core",
+      "redis-caching-aspnet-core",
+    ],
+    faq: [
+      {
+        q: "What is a cache miss?",
+        a: "The requested key is not in the cache (or expired), so the app loads from SQL or HTTP — slower than a hit. Definition: [what is a cache miss](/blog/what-is-a-cache-miss).",
+      },
+      {
+        q: "What is a Java object cache vs .NET?",
+        a: "Java uses Caffeine/Ehcache in heap; .NET uses **IMemoryCache** for in-process object cache. Both mirror the same cache-aside pattern. Distributed layer: Redis in both stacks. Guide: [caching system in .NET](/blog/caching-system-dotnet-imemorycache-redis).",
+      },
+      {
+        q: "How do I fix error establishing a Redis connection?",
+        a: "Check host, port (6380 + SSL on Azure), password, Docker service name vs localhost, and firewall. Fail-open to SQL if cache is optional. [Redis connection fix](/blog/redis-connection-error-aspnet-core).",
+      },
+    ],
+    tracks: [
+      {
+        title: "Definitions: cache miss and caching layers",
+        blurb:
+          "Hit vs miss, then IMemoryCache vs Redis — the vocabulary before production tuning.",
+        slugs: ["what-is-a-cache-miss", "caching-system-dotnet-imemorycache-redis"],
+      },
+      {
+        title: "Redis: patterns and connection errors",
+        blurb:
+          "Production cache-aside, stampede control, then troubleshooting when Redis will not connect.",
+        slugs: ["redis-caching-aspnet-core", "redis-connection-error-aspnet-core"],
+      },
+    ],
+  },
+  {
+    slug: "api-design",
+    label: "API Design",
+    title: "API Design for REST and ASP.NET Core",
+    description:
+      "What is an API, API design principles, REST resource naming, versioning, error envelopes, pagination, and auth — practical checklists for ASP.NET Core APIs consumed by Angular clients.",
+    intro:
+      "API design is the contract Angular, mobile, and partner clients depend on — URLs, status codes, ProblemDetails, versioning, and auth at the boundary. Start with [what is an API](/blog/what-is-an-api), then [API design principles](/blog/api-design-principles).",
+    keywords: [
+      "what is an API",
+      "api design",
+      "api design principles",
+      "REST API design",
+      "ASP.NET Core Web API",
+    ],
+    relatedTopicSlugs: ["architecture", "authentication", "interview-questions"],
+    matchTags: ["API Design", "REST", "Web API"],
+    pinSlugs: [
+      "what-is-an-api",
+      "api-design-principles",
+      "aspnet-core-api-validation",
+      "aspnet-core-global-exception-handling",
+      "aspnet-core-minimal-apis",
+      "angular-dotnet-integration",
+    ],
+    faq: [
+      {
+        q: "What is an API?",
+        a: "An Application Programming Interface — a contract for one program to request data or actions from another. Web APIs use HTTP, JSON, and status codes. Definition and example: [what is an API](/blog/what-is-an-api).",
+      },
+      {
+        q: "What are API design principles?",
+        a: "Resource URLs (nouns), correct HTTP verbs, consistent ProblemDetails errors, pagination, versioning before breaking changes, auth at the boundary, and idempotent writes for payments. Checklist: [API design principles](/blog/api-design-principles).",
+      },
+      {
+        q: "How do I design APIs for Angular?",
+        a: "One validation envelope, CORS with credentials if using cookies, stable JSON field names, and refresh-token flow that matches your interceptor. See [API validation](/blog/aspnet-core-api-validation) and [Angular + .NET integration](/blog/angular-dotnet-integration).",
+      },
+    ],
+    tracks: [
+      {
+        title: "Start here: definitions and principles",
+        blurb:
+          "What an API is, then the design principles checklist before you open validation and auth articles.",
+        slugs: ["what-is-an-api", "api-design-principles"],
+      },
+      {
+        title: "Errors, validation, and client contracts",
+        blurb:
+          "ProblemDetails, FluentValidation, and global exception handling so Angular parses one envelope.",
+        slugs: [
+          "aspnet-core-api-validation",
+          "aspnet-core-global-exception-handling",
+          "aspnet-core-json-object-cycle",
+        ],
+      },
+      {
+        title: "Auth, rate limits, and integration",
+        blurb:
+          "JWT, BFF, CORS, rate limiting, and the Angular HTTP contract.",
+        slugs: [
+          "aspnet-core-jwt-auth",
+          "bff-pattern-aspnet-core-angular-yarp",
+          "aspnet-core-rate-limiting",
+          "angular-dotnet-integration",
+        ],
+      },
+    ],
+  },
+  {
     slug: "architecture",
     label: "Architecture",
     title: "Software Architecture",
@@ -488,7 +669,7 @@ export const learningTopics: LearningTopic[] = [
     intro:
       "Architecture for .NET + Angular products — configuration, middleware, JSON contracts, Clean Architecture, and boundaries that survive the first production incident.",
     keywords: ["Clean Architecture ASP.NET Core", "appsettings ASP.NET Core", "middleware order", "modular monolith .NET"],
-    relatedTopicSlugs: ["dependency-injection", "authentication", "ef-core"],
+    relatedTopicSlugs: ["dependency-injection", "authentication", "ef-core", "api-design", "caching"],
     faq: [
       {
         q: "What is Clean Architecture in ASP.NET Core?",

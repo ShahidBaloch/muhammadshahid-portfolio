@@ -40,6 +40,8 @@ const LEARNING_SLUGS = [
   "ef-core",
   "cqrs",
   "edi",
+  "api-design",
+  "caching",
   "architecture",
 ];
 

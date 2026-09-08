@@ -6,6 +6,8 @@ title: "C# Design Patterns"
 
 **C# design patterns** are named solutions to **recurring structure problems** — not badges to sprinkle on every class. This hub covers patterns I actually use on ASP.NET Core APIs consumed by Angular clients: **Factory**, **Strategy**, **Repository**, **Specification**, and **SOLID** as a review lens.
 
+**Repository keywords:** [repository definition and meaning](/blog/repository-definition-meaning) · [repository pattern in .NET](/blog/repository-pattern-dotnet).
+
 ## What a design pattern is (and is not)
 
 A **pattern** documents a trade-off that worked often enough to name:

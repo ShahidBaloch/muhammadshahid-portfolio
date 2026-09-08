@@ -1,0 +1,192 @@
+---
+title: "Callback vs Promise vs Async/Await (C# and JavaScript)"
+description: "Callback meaning in async programming — how callbacks differ from promises and async/await, with C# Task and JavaScript Promise examples for ASP.NET Core and Angular teams."
+date: "2026-09-08"
+updated: "2026-09-08"
+category: "async-concurrency"
+tags: ["Asynchronous Programming", "Callback", "C#", "async await", ".NET", "ASP.NET Core", "Angular"]
+related:
+  - async-promise-explained
+  - asynchronous-meaning-definition
+  - async-vs-sync-programming
+  - csharp-taskcompletionsource-legacy-event
+faq:
+  - q: "What is a callback in programming?"
+    a: "A callback is a function passed to another function to run when an operation completes. Example: HttpClient.BeginGetResponse with a delegate, or fs.readFile(path, (err, data) => { }) in Node. The caller registers what to do later instead of blocking."
+  - q: "What is the difference between callback and promise?"
+    a: "Callbacks nest — error handling and composition become pyramid code. A promise (Task in C#, Promise in JS) represents the future result as an object you can await, chain, or combine with WhenAll/Promise.all."
+  - q: "What is the difference between callback and async await?"
+    a: "async/await is syntax built on promises. Under the hood, await still schedules continuations (callbacks). async/await flattens nested callbacks into linear code and propagates exceptions through try/catch."
+  - q: "Are callbacks still used in C#?"
+    a: "Legacy APIs (Begin/End, events) still expose callbacks. Modern code wraps them in Task via TaskCompletionSource, then uses await. New ASP.NET Core and EF Core APIs are Task-based, not callback-based."
+---
+
+Search **callback** in a programming context and you hit JavaScript history, Win32 delegates, and modern `async`/`await`. This page defines **callback**, compares **callback vs promise vs async/await**, and shows how **C# and Angular** teams should think about each on production APIs.
+
+Related: [promise in async programming](/blog/async-promise-explained), [asynchronous meaning](/blog/asynchronous-meaning-definition), [TaskCompletionSource for legacy events](/blog/csharp-taskcompletionsource-legacy-event).
+
+## Callback definition
+
+**Definition:** A **callback** is a **function (or delegate) you pass to another function** so it can invoke you when work finishes — success, failure, or progress.
+
+```javascript
+// JavaScript callback style
+fs.readFile("config.json", (err, data) => {
+  if (err) { console.error(err); return; }
+  console.log(data.toString());
+});
+```
+
+```csharp
+// C# delegate callback (older style)
+webClient.DownloadStringCompleted += (sender, e) =>
+{
+    if (e.Error != null) { /* handle */ return; }
+    Console.WriteLine(e.Result);
+};
+webClient.DownloadStringAsync(new Uri("https://example.com"));
+```
+
+The caller says: *"When this finishes, run **this** code."* That is the callback.
+
+## Why callbacks exist
+
+Before widespread **promises** and **async/await**, callbacks were how non-blocking I/O worked:
+
+1. Start operation
+2. Return immediately
+3. Invoke callback on completion thread / event loop
+
+They avoid blocking the UI thread or a scarce worker — same goal as modern `await`.
+
+## Callback problems (callback hell)
+
+Nested callbacks become hard to read and error-prone:
+
+```javascript
+getUser(id, (err, user) => {
+  if (err) return handle(err);
+  getOrders(user.id, (err, orders) => {
+    if (err) return handle(err);
+    getLines(orders[0].id, (err, lines) => {
+      if (err) return handle(err);
+      render(lines);  // pyramid
+    });
+  });
+});
+```
+
+Issues:
+
+- **Error handling** duplicated at every level
+- **Parallel steps** awkward (`count` variables, race bugs)
+- **Cancellation** rarely composes
+- **Debugging** stack traces split across anonymous functions
+
+## Promise — the composable callback
+
+A **promise** (JavaScript `Promise`, C# `Task`) is a **single object** representing future completion:
+
+```javascript
+const user = await getUser(id);
+const orders = await getOrders(user.id);
+const lines = await getLines(orders[0].id);
+render(lines);
+```
+
+```csharp
+var user = await GetUserAsync(id, ct);
+var orders = await GetOrdersAsync(user.Id, ct);
+var lines = await GetLinesAsync(orders[0].Id, ct);
+Render(lines);
+```
+
+Same sequencing, linear syntax, `try/catch` for errors.
+
+| | **Callback** | **Promise / Task** | **async/await** |
+|---|---|---|---|
+| **Shape** | Function passed in | Object with state | Syntax over promise |
+| **Composition** | Nested | `WhenAll`, `.then` chains | Linear code |
+| **Errors** | Manual `if (err)` | Faulted task / rejected promise | `try/catch` |
+| **C# today** | Legacy events, APM | `Task`, `Task<T>` | `async`/`await` |
+
+Full promise guide: [promise in async programming](/blog/async-promise-explained).
+
+## async/await — callbacks you do not write by hand
+
+`await` compiles to **continuations** — technically still callbacks, but:
+
+- Generated by the compiler
+- Exception propagation unified
+- No pyramid nesting
+
+```csharp
+public async Task<OrderDto?> GetOrderAsync(Guid id, CancellationToken ct)
+{
+    try
+    {
+        var order = await _db.Orders.FirstOrDefaultAsync(o => o.Id == id, ct);
+        return order is null ? null : Map(order);
+    }
+    catch (OperationCanceledException)
+    {
+        return null;
+    }
+}
+```
+
+You write linear code. The state machine schedules continuations when the `Task` completes.
+
+## Bridging callbacks to Task in C#
+
+Legacy APIs still fire **events** or use **Begin/End**. Wrap with `TaskCompletionSource`:
+
+```csharp
+var tcs = new TaskCompletionSource<string>();
+client.DownloadStringCompleted += (_, e) =>
+{
+    if (e.Error != null) tcs.TrySetException(e.Error);
+    else if (e.Cancelled) tcs.TrySetCanceled();
+    else tcs.TrySetResult(e.Result);
+};
+client.DownloadStringAsync(uri);
+return await tcs.Task;
+```
+
+Full pattern: [TaskCompletionSource for legacy events](/blog/csharp-taskcompletionsource-legacy-event).
+
+## Callback vs promise on ASP.NET Core + Angular
+
+| Layer | Modern pattern | Avoid |
+|---|---|---|
+| **ASP.NET Core API** | `async Task<IActionResult>` | `.Result`, callback-style APM |
+| **EF Core** | `ToListAsync`, `FirstOrDefaultAsync` | Sync `ToList()` on request path |
+| **Angular HttpClient** | `Observable` or `async` + `firstValueFrom` | Nested subscribe pyramids without `switchMap` |
+| **Legacy JS SDK** | Wrap in Promise, then `await` in Angular service | Raw callback from component |
+
+Angular's `HttpClient` returns `Observable` — not a classic callback, but subscribe-based code can recreate callback hell. Prefer `async` pipe or `firstValueFrom` for one-shot HTTP.
+
+## Migration path (callbacks → promises → await)
+
+```text
+1. Identify blocking or nested callback API
+2. Wrap in TaskCompletionSource (C#) or new Promise (JS)
+3. Expose async method to the rest of the app
+4. Delete .Result and nested subscribe blocks
+```
+
+## If an interviewer asks
+
+**"What is a callback?"**  
+A function invoked when async work completes — registration instead of blocking.
+
+**"Callback vs promise?"**  
+Callback is the pattern; promise is an object representing the outcome with composable chaining.
+
+**"Is await just syntactic sugar?"**  
+Yes — over Task/Promise continuations. You still need to understand thread pool and cancellation underneath.
+
+**"Event-based async vs TAP?"**  
+EAP uses `FooCompleted` events (callbacks). TAP uses `Task` (promises). Prefer TAP; bridge old APIs with TaskCompletionSource.
+
+Hub: [async & threading](/learning/async-concurrency).

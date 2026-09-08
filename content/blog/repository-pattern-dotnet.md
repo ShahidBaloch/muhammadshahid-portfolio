@@ -1,10 +1,12 @@
 ---
 title: "Repository Pattern in .NET — Useful vs Overkill"
-description: "When the repository pattern earns its place in .NET with EF Core, when it becomes ceremony, and how I structure data access on healthcare SaaS and eCommerce products without lying about LINQ."
+description: "Repository definition and when the repository pattern earns its place in .NET with EF Core — named queries vs generic IRepository ceremony on healthcare and eCommerce APIs."
 date: "2026-07-05"
+updated: "2026-09-08"
 category: "design-patterns"
-tags: ["Repository Pattern", "EF Core", ".NET", "Architecture", "Data Access"]
+tags: ["Repository Pattern", "EF Core", ".NET", "Architecture", "Data Access", "Design Patterns"]
 related:
+  - repository-definition-meaning
   - ef-core-specification-pattern
   - clean-architecture-aspnet-core
   - ef-core-nplus1-include-vs-assplitquery
