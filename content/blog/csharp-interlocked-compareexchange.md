@@ -20,12 +20,6 @@ faq:
 
 **`Interlocked`** is a .NET class whose static methods update **one variable in one uninterruptible step** (atomic), so two threads cannot corrupt it mid-update. **Compare-and-swap (CAS)** means “write this new value only if the location still holds the value I just read.”
 
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [CAS loop](#cas-loop-only-when-add-is-not-enough) · [if an interviewer asks](#if-an-interviewer-asks).
-
-**Terms used here:** **Atomic** = one uninterruptible CPU step. **CAS / compare-and-swap** = write only if the location still holds the value you read. **`volatile`** = a visibility hint, not a counter.
-
-If you are new to threading, start with [lock](/blog/csharp-lock-statement-monitor-mutex). Default for two fields: `lock`. Default for one counter: `Interlocked.Increment`.
-
 ```text
 Race on i++ (not atomic)
 
@@ -33,6 +27,12 @@ Race on i++ (not atomic)
   Thread B: read 5 ── add 1 ── write 6
   Lost an increment. Both thought they won.
 ```
+
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [CAS loop](#cas-loop-only-when-add-is-not-enough) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **Atomic** = one uninterruptible CPU step. **CAS / compare-and-swap** = write only if the location still holds the value you read. **`volatile`** = a visibility hint, not a counter.
+
+If you are new to threading, start with [lock](/blog/csharp-lock-statement-monitor-mutex). Default for two fields: `lock`. Default for one counter: `Interlocked.Increment`.
 
 ## Smallest example
 
@@ -126,4 +126,4 @@ Lock-free / CAS; race on `i++`; volatile; thread-safe singleton (atomic flag vs 
 
 **Strong answer:** one word, Interlocked; two fields, lock; don’t write a lock-free list.
 
-If a hot counter is under a coarse lock, [contact me](/contact). If you are inventing a lock-free ring buffer in an API, we should talk before that ships.
+. If you are inventing a lock-free ring buffer in an API, we should talk before that ships.

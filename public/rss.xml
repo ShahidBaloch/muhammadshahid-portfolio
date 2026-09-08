@@ -8,11 +8,18 @@
     <atom:link href="https://www.muhammadshahid.dev/rss.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title><![CDATA[C# Multithreading Primer for ASP.NET Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-multithreading-primer</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-multithreading-primer</guid>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[C# multithreading tutorial in one pass — Thread vs ThreadPool vs Task, async is not multithreading, lock and Interlocked, and which primitive article to open next on ASP.NET Core.]]></description>
+    </item>
+    <item>
       <title><![CDATA[IDX10501 Unable to Match Key (kid) in ASP.NET Core JWT]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-idx10501-jwt-kid</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-idx10501-jwt-kid</guid>
       <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[IDX10501: Signature validation failed. Unable to match key — the token kid is not in JWKS or TokenValidationParameters. Not IDX10503, not a metadata download failure.]]></description>
+      <description><![CDATA[Fix IDX10501 JWT kid mismatch in ASP.NET Core — token header kid not in JWKS, signing cert rotation overlap, Authority mismatch, and OpenIddict key refresh.]]></description>
     </item>
     <item>
       <title><![CDATA[SQL Server TempDB Contention on .NET APIs]]></title>
@@ -40,56 +47,56 @@
       <link>https://www.muhammadshahid.dev/blog/ef-core-value-conversions-enum</link>
       <guid>https://www.muhammadshahid.dev/blog/ef-core-value-conversions-enum</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[HasConversion maps an EmailAddress or enum to one SQL column. LINQ cannot query into a JSON blob you stuffed in that conversion.]]></description>
+      <description><![CDATA[EF Core value conversions for enums and value objects: HasConversion maps EmailAddress or enum to one SQL column — and what LINQ cannot query inside a JSON blob.]]></description>
     </item>
     <item>
       <title><![CDATA[Fix SQL Server Parameter Sniffing in EF Core]]></title>
       <link>https://www.muhammadshahid.dev/blog/ef-core-sql-server-parameter-sniffing</link>
       <guid>https://www.muhammadshahid.dev/blog/ef-core-sql-server-parameter-sniffing</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[EF Core query is fast for one clinic and times out for another. How I confirm SQL Server parameter sniffing and what I change — without trusting SSMS.]]></description>
+      <description><![CDATA[SQL Server parameter sniffing in EF Core: same LINQ fast for one clinic, 30s timeout for another. How to confirm in Query Store and what to change.]]></description>
     </item>
     <item>
       <title><![CDATA[EF Core Optimistic Concurrency with RowVersion]]></title>
       <link>https://www.muhammadshahid.dev/blog/ef-core-optimistic-concurrency-token</link>
       <guid>https://www.muhammadshahid.dev/blog/ef-core-optimistic-concurrency-token</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Two Angular tabs, one encounter, last write wins. How I map SQL Server rowversion, return 409, and when RCSI is the wrong fix.]]></description>
+      <description><![CDATA[EF Core optimistic concurrency with RowVersion: map SQL Server rowversion as a concurrency token, return 409 on conflict, and stop last-write-wins on encounters.]]></description>
     </item>
     <item>
       <title><![CDATA[EF Core Interview Questions]]></title>
       <link>https://www.muhammadshahid.dev/blog/ef-core-interview-questions</link>
       <guid>https://www.muhammadshahid.dev/blog/ef-core-interview-questions</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[EF Core interview questions with production answers — RowVersion concurrency, global query filters, ExecuteUpdate vs SaveChanges, and tenant leaks. Not an N+1 tutorial.]]></description>
+      <description><![CDATA[EF Core interview questions with production answers — RowVersion concurrency, global query filters, ExecuteUpdate vs SaveChanges, and tenant leaks.]]></description>
     </item>
     <item>
       <title><![CDATA[EF Core SaveChanges Interceptors for Audit Logs]]></title>
       <link>https://www.muhammadshahid.dev/blog/ef-core-interceptors-audit-log</link>
       <guid>https://www.muhammadshahid.dev/blog/ef-core-interceptors-audit-log</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[ISaveChangesInterceptor sets CreatedBy and ModifiedBy from the JWT. Hosted jobs have no HttpContext. ExecuteUpdate will not run this interceptor.]]></description>
+      <description><![CDATA[EF Core SaveChanges interceptors for audit logs: ISaveChangesInterceptor stamps CreatedBy and ModifiedBy from the JWT. Why ExecuteUpdate bypasses it.]]></description>
     </item>
     <item>
       <title><![CDATA[EF Core Global Query Filters for Soft Delete]]></title>
       <link>https://www.muhammadshahid.dev/blog/ef-core-global-query-filters-soft-delete</link>
       <guid>https://www.muhammadshahid.dev/blog/ef-core-global-query-filters-soft-delete</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[HasQueryFilter for IsDeleted and ClinicId. Why IgnoreQueryFilters is how tenant data leaks — and how I write the job that must see deleted rows.]]></description>
+      <description><![CDATA[EF Core global query filters for soft delete and multi-tenant ClinicId. How HasQueryFilter works — and why IgnoreQueryFilters is how tenant data leaks.]]></description>
     </item>
     <item>
       <title><![CDATA[EF Core ExecuteUpdate vs SaveChanges]]></title>
       <link>https://www.muhammadshahid.dev/blog/ef-core-bulk-update-executeupdate</link>
       <guid>https://www.muhammadshahid.dev/blog/ef-core-bulk-update-executeupdate</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[ExecuteUpdateAsync runs one UPDATE without loading entities. When I use it on fee schedules — and why it will not fire your audit interceptor.]]></description>
+      <description><![CDATA[EF Core ExecuteUpdateAsync runs one set-based UPDATE without loading entities. When to use it for bulk fee schedules — and why it skips SaveChanges interceptors.]]></description>
     </item>
     <item>
       <title><![CDATA[AsNoTracking vs Identity Resolution in EF Core]]></title>
       <link>https://www.muhammadshahid.dev/blog/ef-core-asnotracking-vs-identity-resolution</link>
       <guid>https://www.muhammadshahid.dev/blog/ef-core-asnotracking-vs-identity-resolution</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[AsNoTracking can allocate more memory when the same Patient is on every row. When I use AsNoTrackingWithIdentityResolution on ASP.NET Core reads.]]></description>
+      <description><![CDATA[AsNoTracking vs identity resolution in EF Core: when no-tracking duplicates Patient objects on every row, and when AsNoTrackingWithIdentityResolution fixes read-only Includes.]]></description>
     </item>
     <item>
       <title><![CDATA[C# ThreadPool Starvation: Sync-Over-Async .Result Causes 504s]]></title>
@@ -215,42 +222,42 @@
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-json-object-cycle</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-json-object-cycle</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Fix System.Text.Json’s possible object cycle was detected in ASP.NET Core — why EF navigation graphs explode, why ReferenceHandler.Preserve breaks Angular, and the DTO projection that actually ships.]]></description>
+      <description><![CDATA[Fix System.Text.Json object cycle detected in ASP.NET Core — EF navigation graphs, why ReferenceHandler.Preserve breaks Angular, and DTO projection that actually ships.]]></description>
     </item>
     <item>
       <title><![CDATA[IDX10503 Signature Validation Failed in ASP.NET Core JWT]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-idx10503-jwt-signature</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-idx10503-jwt-signature</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[IDX10503: Signature validation failed — what it actually means in ASP.NET Core JWT bearer auth: kid vs symmetric keys, disposed RSA, Identity opaque tokens, and the checks that are not this error.]]></description>
+      <description><![CDATA[Fix IDX10503 JWT signature validation failed in ASP.NET Core — wrong HMAC secret, disposed RSA keys, opaque Identity tokens, and how it differs from IDX10501 kid mismatch.]]></description>
     </item>
     <item>
       <title><![CDATA[Headers are read-only, response has started in ASP.NET Core]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-headers-readonly-response-started</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-headers-readonly-response-started</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[InvalidOperationException: Headers are read-only, response has started — why IExceptionHandler is too late after WriteAsync, how Angular sees a CORS error, and the HasStarted check I use.]]></description>
+      <description><![CDATA[Fix InvalidOperationException Headers are read-only response has started — IExceptionHandler after WriteAsync, streaming exports, Angular CORS errors, and the HasStarted guard.]]></description>
     </item>
     <item>
       <title><![CDATA[No XML encryptor found in ASP.NET Core Data Protection]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-data-protection-xml-encryptor</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-data-protection-xml-encryptor</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[No XML encryptor found. This may indicate that your key ring is not being persisted correctly — Docker, App Service scale-out, antiforgery cookies, and the XML encryptor that is not a JWT signing cert.]]></description>
+      <description><![CDATA[Fix No XML encryptor found in ASP.NET Core Data Protection — key ring persistence for Docker, App Service scale-out, antiforgery cookies, and the XML encryptor that is not JWT signing.]]></description>
     </item>
     <item>
       <title><![CDATA[ASP.NET Core 401 vs 403: Challenge vs Forbid for Angular APIs]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-401-vs-403</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-401-vs-403</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[ASP.NET Core 401 vs 403 — Challenge vs Forbid, JWT bearer with no token vs a failed policy, and why Angular interceptors that treat every 403 as logout are wrong.]]></description>
+      <description><![CDATA[ASP.NET Core 401 Unauthorized vs 403 Forbidden — Challenge vs Forbid, JWT bearer mapping, Angular interceptor rules, and why logging out on 403 is wrong.]]></description>
     </item>
     <item>
       <title><![CDATA[ASP.NET Core Middleware Order for Auth and CORS]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-middleware-order</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-middleware-order</guid>
       <pubDate>Sun, 06 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Full ASP.NET Core middleware order I ship — forwarded headers, exception handler, CORS, auth before authorization, rate limits, and Swagger — not a CORS policy tutorial.]]></description>
+      <description><![CDATA[ASP.NET Core middleware order for production — forwarded headers, exception handler, CORS before auth, rate limiting, and Swagger placement behind Azure and Angular SPAs.]]></description>
     </item>
     <item>
       <title><![CDATA[IOptions vs IOptionsSnapshot vs IOptionsMonitor in ASP.NET Core]]></title>
@@ -271,7 +278,7 @@
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-appsettings-localappsettings</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-appsettings-localappsettings</guid>
       <pubDate>Thu, 03 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[What the ASP.NET Core config file actually is — appsettings.json, user secrets, environment variables — and why localappsettings.json is usually the wrong name.]]></description>
+      <description><![CDATA[ASP.NET Core config files explained — appsettings.json, appsettings.{Environment}.json, user secrets, and why localappsettings.json is not a real framework file.]]></description>
     </item>
     <item>
       <title><![CDATA[Serilog PII Redaction for Healthcare ASP.NET Core APIs]]></title>
@@ -299,7 +306,7 @@
       <link>https://www.muhammadshahid.dev/blog/duende-bff-vs-yarp-custom-bff</link>
       <guid>https://www.muhammadshahid.dev/blog/duende-bff-vs-yarp-custom-bff</guid>
       <pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[When I pay for Duende BFF versus owning a YARP cookie gateway: session, CSRF, OIDC login, licensing, and the failure modes that are not in the architecture diagram.]]></description>
+      <description><![CDATA[Duende BFF vs custom YARP BFF for Angular ASP.NET Core — buy vs build, OIDC session, CSRF, licensing tradeoffs, and failure modes at 2 a.m.]]></description>
     </item>
     <item>
       <title><![CDATA[Clean API Validation and Error Envelopes in ASP.NET Core]]></title>
@@ -313,7 +320,7 @@
       <link>https://www.muhammadshahid.dev/blog/refresh-token-httponly-cookie-angular-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/refresh-token-httponly-cookie-angular-aspnet-core</guid>
       <pubDate>Sun, 16 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[HttpOnly cookie vs localStorage vs memory vs BFF for refresh tokens: CSRF, CORS credentials, cookie flags, and the Angular withCredentials contract I use with ASP.NET Core.]]></description>
+      <description><![CDATA[HttpOnly cookie refresh tokens for Angular and ASP.NET Core JWT — vs localStorage and BFF, cookie flags, withCredentials, CORS credentials, and CSRF defense.]]></description>
     </item>
     <item>
       <title><![CDATA[Keyed Services in ASP.NET Core (FromKeyedServices)]]></title>
@@ -327,14 +334,14 @@
       <link>https://www.muhammadshahid.dev/blog/ef-core-cartesian-explosion-multiple-include</link>
       <guid>https://www.muhammadshahid.dev/blog/ef-core-cartesian-explosion-multiple-include</guid>
       <pubDate>Sun, 16 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Include(A).Include(B) on two collections multiplies SQL rows in EF Core. How I confirm it in SSMS and fix it with split query, two queries, or stop including.]]></description>
+      <description><![CDATA[Cartesian explosion in EF Core: two collection Includes multiply SQL rows (lines × events). How to confirm in SSMS and fix with split query or fewer Includes.]]></description>
     </item>
     <item>
       <title><![CDATA[Angular Interceptor: Queue Concurrent 401s]]></title>
       <link>https://www.muhammadshahid.dev/blog/angular-interceptor-401-refresh-queue</link>
       <guid>https://www.muhammadshahid.dev/blog/angular-interceptor-401-refresh-queue</guid>
       <pubDate>Sun, 16 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[The concurrent 401 stampede against ASP.NET Core JWT refresh: why shareReplay still double-rotates, how I queue retries in RxJS, and what to skip so you do not log the user out.]]></description>
+      <description><![CDATA[Fix concurrent 401 refresh stampede in Angular against ASP.NET Core JWT rotation — single-flight RxJS queue, shareReplay pitfalls, skip rules, and POST retry safety.]]></description>
     </item>
     <item>
       <title><![CDATA[MediatR Commercial License vs Wolverine (and When to Stay)]]></title>
@@ -355,7 +362,7 @@
       <link>https://www.muhammadshahid.dev/blog/ef-core-nplus1-include-vs-assplitquery</link>
       <guid>https://www.muhammadshahid.dev/blog/ef-core-nplus1-include-vs-assplitquery</guid>
       <pubDate>Sat, 15 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[EF Core N+1 is extra round-trips in a loop. Include fixes that. AsSplitQuery is for a different bug. How I tell them apart on ASP.NET Core APIs.]]></description>
+      <description><![CDATA[EF Core N+1 problem: extra SQL round-trips when a loop touches navigation properties. How Include, projection, and AsSplitQuery each fix a different bug.]]></description>
     </item>
     <item>
       <title><![CDATA[EDI X12 Parsers in C# and .NET]]></title>
@@ -369,14 +376,14 @@
       <link>https://www.muhammadshahid.dev/blog/bff-pattern-aspnet-core-angular-yarp</link>
       <guid>https://www.muhammadshahid.dev/blog/bff-pattern-aspnet-core-angular-yarp</guid>
       <pubDate>Sat, 15 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[When a Backend-for-Frontend (BFF) with YARP is the right auth shape for Angular + ASP.NET Core: cookie sessions, token attachment at the edge, CSRF, and how this differs from SPA-held JWTs.]]></description>
+      <description><![CDATA[Backend-for-Frontend BFF pattern with ASP.NET Core, Angular, and YARP — cookie sessions, server-side tokens, CSRF defense, and when to skip SPA-held JWTs.]]></description>
     </item>
     <item>
       <title><![CDATA[ASP.NET Core JWT Refresh Token Rotation]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-jwt-refresh-token-rotation</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-jwt-refresh-token-rotation</guid>
       <pubDate>Sat, 15 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[A production guide to JWT refresh token rotation in ASP.NET Core: hashed storage, family revocation, reuse detection, and the Angular contract that keeps short-lived access tokens usable.]]></description>
+      <description><![CDATA[ASP.NET Core JWT refresh token rotation guide — hashed storage, family revocation, reuse detection, concurrency locks, and the Angular single-flight contract.]]></description>
     </item>
     <item>
       <title><![CDATA[AI in .NET with Semantic Kernel]]></title>
@@ -425,7 +432,7 @@
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-minimal-apis</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-minimal-apis</guid>
       <pubDate>Mon, 10 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[ASP.NET Core Minimal APIs for production — MapGet/MapPost, DI, validation, OpenAPI, auth, and when controllers still win for Angular-backed products.]]></description>
+      <description><![CDATA[ASP.NET Core Minimal APIs guide — MapGet, MapGroup, DI, validation, OpenAPI, JWT auth, and when controllers still win for Angular-backed products.]]></description>
     </item>
     <item>
       <title><![CDATA[Angular Signals with ASP.NET Core APIs]]></title>
@@ -467,7 +474,7 @@
       <link>https://www.muhammadshahid.dev/blog/modular-monolith-vs-microservices-dotnet</link>
       <guid>https://www.muhammadshahid.dev/blog/modular-monolith-vs-microservices-dotnet</guid>
       <pubDate>Sun, 02 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Modular monolith vs microservices for ASP.NET Core teams — when to split services, how to draw module boundaries, and how Angular frontends stay stable either way.]]></description>
+      <description><![CDATA[Modular monolith vs microservices for ASP.NET Core — when to split services, module boundaries, data ownership, Angular contract stability, and migration path.]]></description>
     </item>
     <item>
       <title><![CDATA[Strategy Pattern in C#: Replace If-Else With Clean Behavior Swaps]]></title>
@@ -481,7 +488,7 @@
       <link>https://www.muhammadshahid.dev/blog/angular-auth-guard-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/angular-auth-guard-aspnet-core</guid>
       <pubDate>Sat, 01 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[How to implement Angular auth guards and role guards with ASP.NET Core JWT — canActivate, token expiry checks, and role claims from the API without brittle localStorage hacks.]]></description>
+      <description><![CDATA[Angular auth guard and CanActivateFn with ASP.NET Core JWT — route protection, role guards, token expiry checks, returnUrl safety, and why guards are UX not API security.]]></description>
     </item>
     <item>
       <title><![CDATA[Dependency Injection in ASP.NET Core: Lifetimes Done Right]]></title>
@@ -530,21 +537,21 @@
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-jwt-auth</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-jwt-auth</guid>
       <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[A production-ready checklist for JWT authentication in ASP.NET Core APIs — token lifetimes, refresh flows, policies, and Angular client habits from real client work.]]></description>
+      <description><![CDATA[Production ASP.NET Core JWT authentication checklist — token lifetimes, refresh rotation, authorization policies, Angular client habits, and go-live security review.]]></description>
     </item>
     <item>
       <title><![CDATA[Clean Architecture in ASP.NET Core Without Over-Engineering]]></title>
       <link>https://www.muhammadshahid.dev/blog/clean-architecture-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/clean-architecture-aspnet-core</guid>
       <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[A senior engineer's guide to pragmatic Clean Architecture in ASP.NET Core — useful boundaries for eCommerce and SaaS without ceremony that slows delivery.]]></description>
+      <description><![CDATA[Pragmatic Clean Architecture in ASP.NET Core — domain boundaries, three-project layout, repository patterns, and when to skip ceremony on SaaS and eCommerce APIs.]]></description>
     </item>
     <item>
       <title><![CDATA[EF Core and SQL Server Performance]]></title>
       <link>https://www.muhammadshahid.dev/blog/ef-core-sql-performance</link>
       <guid>https://www.muhammadshahid.dev/blog/ef-core-sql-performance</guid>
       <pubDate>Sun, 10 May 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[EF Core and SQL Server performance from healthcare reporting and SaaS dashboards — N+1, projections, indexes, AsNoTracking, and pain that only shows under real data volume.]]></description>
+      <description><![CDATA[EF Core and SQL Server performance: N+1 queries, projections, AsNoTracking, indexes, and reporting pain that only shows under real data volume.]]></description>
     </item>
     <item>
       <title><![CDATA[MediatR and CQRS-Lite in ASP.NET Core — Ceremony vs Delivery]]></title>
@@ -558,7 +565,7 @@
       <link>https://www.muhammadshahid.dev/blog/angular-dotnet-integration</link>
       <guid>https://www.muhammadshahid.dev/blog/angular-dotnet-integration</guid>
       <pubDate>Mon, 20 Apr 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Contract-first habits for Angular and ASP.NET Core teams — DTO shaping, error envelopes, pagination, and delivery patterns from healthcare SaaS and eCommerce work.]]></description>
+      <description><![CDATA[Angular and ASP.NET Core integration habits — DTO contracts, error envelopes, pagination metadata, datetime policy, and CORS decisions that stop frontend-backend rework.]]></description>
     </item>
     <item>
       <title><![CDATA[Dockerizing .NET API and Angular for Reproducible Local Dev]]></title>
@@ -579,28 +586,28 @@
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-rbac-guide</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-rbac-guide</guid>
       <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Role and policy-based authorization in ASP.NET Core for healthcare and admin portals — why I replace scattered [Authorize(Roles)] attributes with named policies clients can audit.]]></description>
+      <description><![CDATA[ASP.NET Core RBAC with named authorization policies — role claims at login, tenant resource handlers, permission claims, and why Angular UI hiding is not security.]]></description>
     </item>
     <item>
       <title><![CDATA[Angular JWT Interceptors for ASP.NET Core APIs]]></title>
       <link>https://www.muhammadshahid.dev/blog/angular-jwt-interceptors</link>
       <guid>https://www.muhammadshahid.dev/blog/angular-jwt-interceptors</guid>
       <pubDate>Sun, 22 Feb 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[How I wire Angular HTTP interceptors for JWT access tokens, refresh rotation, and 401 recovery against ASP.NET Core and IdentityServer APIs — including memory vs localStorage tradeoffs.]]></description>
+      <description><![CDATA[Angular HTTP interceptors for ASP.NET Core JWT — bearer attach, in-memory token storage, single-flight refresh, 401 vs 403 handling, and IdentityServer CORS coordination.]]></description>
     </item>
     <item>
       <title><![CDATA[EF Core Specification Pattern for Catalog Queries]]></title>
       <link>https://www.muhammadshahid.dev/blog/ef-core-specification-pattern</link>
       <guid>https://www.muhammadshahid.dev/blog/ef-core-specification-pattern</guid>
       <pubDate>Thu, 05 Feb 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[How I use specifications and repositories for eCommerce-style catalog filters and paging in ASP.NET Core — and the cases where the pattern is not worth the ceremony.]]></description>
+      <description><![CDATA[EF Core specification pattern for catalog queries: reusable filters, paging, and counts that stay aligned across API lists and export jobs.]]></description>
     </item>
     <item>
       <title><![CDATA[Fix CORS Between Angular and ASP.NET Core]]></title>
       <link>https://www.muhammadshahid.dev/blog/cors-angular-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/cors-angular-aspnet-core</guid>
       <pubDate>Sun, 18 Jan 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Wrong origins, credentials, preflight, reverse proxies, and Azure App Service — the CORS failures I diagnose most often when Angular SPAs call ASP.NET Core APIs.]]></description>
+      <description><![CDATA[Fix CORS between Angular and ASP.NET Core — exact origins, AllowCredentials, OPTIONS preflight, middleware order, Azure App Service, and cookie-based JWT refresh.]]></description>
     </item>
   </channel>
 </rss>

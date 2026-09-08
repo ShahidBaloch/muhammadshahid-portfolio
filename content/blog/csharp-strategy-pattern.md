@@ -17,9 +17,20 @@ faq:
     a: "A switch that picks an implementation can be the inside of a factory. Strategy is the shared interface the caller depends on, not the switch itself."
 ---
 
-The **Strategy Pattern in C#** shows up in search results whenever a pricing, validation, or export feature becomes an `if/else` tower. Unlike Factory (which focuses on **creating** objects), Strategy focuses on **selecting a behavior** you already have and running it through a common interface.
+The **Strategy Pattern** swaps algorithms behind one interface so new behavior is a new class, not another `if` branch. Factory **creates** objects; Strategy **runs** a behavior you already registered in DI.
 
-I apply Strategy in fee calculations, eligibility checks, and document export pipelines on .NET backends that Angular UIs call. Here is how I implement it so it stays readable under DI.
+```text
+PricingService
+      │
+      ▼
+ IPricingStrategy  ←── retail / wholesale / partner
+      │
+  Calculate(order)
+```
+
+**New to this** → stay here. **Merging a PR** → [the smell](#the-smell-strategy-removes). **On-call / interview** → [Open/Closed](#openclosed-without-premature-abstraction) · [async strategies](#async-strategies-and-io-boundaries) · [if an interviewer asks](#if-an-interviewer-asks).
+
+I apply Strategy in fee calculations, eligibility checks, and document export pipelines on .NET backends that Angular UIs call.
 
 ## The smell Strategy removes
 
@@ -213,4 +224,9 @@ One integration test that resolves all registered `IPricingStrategy` implementat
 - [Factory Pattern in C#](/blog/csharp-factory-pattern)
 - [Dependency Injection lifetimes](/blog/aspnet-core-dependency-injection)
 
-Want help refactoring a pricing or rules engine in your API? [Get in touch](/contact).
+## If an interviewer asks
+
+Strategy vs Factory vs a switch; how to register multiple strategies in DI; when Strategy is overkill.
+
+**Strong answer:** Strategy selects behavior through a shared interface — add a class and register it. Factory picks which implementation to construct. A two-branch switch with no third mode on the roadmap does not need Strategy yet; a growing `if/else` tower does.
+

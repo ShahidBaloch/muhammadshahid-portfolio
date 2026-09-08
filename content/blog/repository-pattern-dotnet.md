@@ -17,6 +17,18 @@ faq:
     a: "When you add GetByIdWithDetails until the interface is a mini ORM. Prefer a specification or a focused query service."
 ---
 
+The **repository pattern** draws a persistence boundary around **named read/write operations** — not a generic `GetAll` wrapper around every `DbSet`. EF Core's `DbContext` is already a unit of work.
+
+```text
+Handler → IOrderReadRepository.GetDetailAsync()
+                    │
+                    ▼
+              DbContext (scoped)
+              projection / includes
+```
+
+**New to this** → stay here. **Merging a PR** → [when repositories help](#when-repositories-help). **On-call / interview** → [when they hurt](#when-repositories-hurt) · [decision guide](#decision-guide-i-use-in-code-reviews) · [if an interviewer asks](#if-an-interviewer-asks).
+
 Early in my career, every data access class had an interface named `IRepository<T>`. Generic methods for `GetAll`, `GetById`, `Add`, `Update`, `Delete`. It felt clean until I watched a junior developer fight `IQueryable` leakage, duplicate EF Core includes across three repositories, and write `GetByIdWithDetails` variants until the interface was a mini ORM.
 
 EF Core **is** already a repository and unit of work. `DbContext` tracks changes; `DbSet<T>` is a collection gateway. The question is not "repository yes or no." It is **what boundary you are drawing** and **whether that boundary reduces coordination cost** for your team.
@@ -172,4 +184,8 @@ The repository pattern is useful when it **names meaningful persistence operatio
 
 On .NET products with EF Core, I default to direct context access for simple paths and introduce feature-specific repositories when query complexity, reuse, or tenant safety demands a single home. Generic repositories for every entity are a smell I push back on in every review.
 
-If you want help untangling data access in an ASP.NET Core codebase — without a rewrite for pattern's sake — [reach out](/contact).
+## If an interviewer asks
+
+Whether DbContext is already a repository; when `IRepository<T>` is overkill; repository vs specification.
+
+**Strong answer:** `DbContext` + `DbSet` already provide collection access and change tracking. Add a repository when a complex query repeats across handlers or tenant filters must live in one place. Generic CRUD interfaces that leak `IQueryable` or grow twenty `GetByIdWith*` methods are ceremony without benefit — use specs or query objects for dynamic filters instead.

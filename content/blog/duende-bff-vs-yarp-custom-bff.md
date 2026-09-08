@@ -1,6 +1,6 @@
 ---
 title: "Duende BFF vs Custom YARP BFF for Angular and ASP.NET Core"
-description: "When I pay for Duende BFF versus owning a YARP cookie gateway: session, CSRF, OIDC login, licensing, and the failure modes that are not in the architecture diagram."
+description: "Duende BFF vs custom YARP BFF for Angular ASP.NET Core — buy vs build, OIDC session, CSRF, licensing tradeoffs, and failure modes at 2 a.m."
 date: "2026-08-17"
 category: "authentication"
 tags: ["YARP", "JWT", "Angular", "ASP.NET Core", "Security"]
@@ -13,11 +13,18 @@ faq:
     a: "Login correlation, session cookie flags, CSRF, token storage, and logout. YARP only proxies. Missing any of those is why 2 a.m. pages exist."
 ---
 
-The [BFF + YARP architecture post](/blog/bff-pattern-aspnet-core-angular-yarp) is the shape: Angular talks same-origin cookies; the gateway attaches bearer tokens to APIs. This page is only the **buy vs build** decision for that shape — Duende’s BFF package versus a custom YARP host you maintain.
+**Duende BFF vs custom YARP BFF** is the buy-vs-build decision for the same architecture: browser session cookies on the SPA origin, tokens off JavaScript, bearer attachment at the proxy — packaged product versus code you own.
 
-I have shipped both. They solve the same XSS problem (tokens not in JavaScript). They fail in different ways at 2 a.m.
+```text
+Same goal: Angular ──cookie──► gateway ──Bearer──► APIs
 
-This is not a vendor ranking and not legal advice. Duende licensing changes; read their current terms for your company. I am not suggesting you copy a commercial product to avoid a fee.
+Duende BFF     = documented /bff/login, CSRF, OIDC glue + license
+Custom YARP    = you write cookie auth + SaveTokens + CSRF + on-call
+```
+
+Picture **renting vs building a security desk**: Duende ships the desk, badge printer, and runbook. Custom YARP is carpentry — cheaper upfront if you have staff, expensive at 2 a.m. when `GetTokenAsync` returns null.
+
+**New to this** → read [BFF architecture](/blog/bff-pattern-aspnet-core-angular-yarp) first. **HttpOnly refresh without full BFF** → [refresh token cookie](/blog/refresh-token-httponly-cookie-angular-aspnet-core). **Interview prep** → [If an interviewer asks](#if-an-interviewer-asks).
 
 ## What you are actually choosing
 
@@ -45,18 +52,18 @@ The architecture article already shows a YARP sketch. Do not clone it here. The 
 | Fit with ASP.NET Identity only | Possible, more glue | Natural if you already issue your own tokens |
 | Fit with Duende IdentityServer already paid | Default | You would be paying and then ignoring the BFF package |
 
-If the client **already pays for Duende** and the SPA is internet-facing, I start with Duende BFF unless there is a concrete reason not to. Rebuilding session middleware to “stay independent” is not independence. It is a second auth stack.
+If the client **already pays for Duende** and the SPA is internet-facing, I start with Duende BFF unless there is a concrete reason not to. Rebuilding session middleware to "stay independent" is not independence. It is a second auth stack.
 
 If the client **will not** take a Duende dependency, and identity is ASP.NET Identity + JWTs we issue, I build a thin YARP BFF and I budget tests for cookie flags. I do not pretend it is free.
 
 ## When Duende BFF is the shorter path
 
 - Multiple first-party Angular apps, one login, IdentityServer already in the diagram
-- Security review wants a **named** BFF protocol, not a wiki page titled “our gateway”
+- Security review wants a **named** BFF protocol, not a wiki page titled "our gateway"
 - You need login/logout/userinfo endpoints that Angular developers can grep in docs
 - Token server-side storage and refresh are in-package instead of a custom ticket store you will get wrong on the second instance
 
-The win is not “Duende is more secure by magic.” The win is **fewer original cookie bugs**. Most BFF incidents I have seen were `SameSite`, `__Host-` vs `Domain=`, or a leftover Angular `apiUrl` pointing at the resource API.
+The win is not "Duende is more secure by magic." The win is **fewer original cookie bugs**. Most BFF incidents I have seen were `SameSite`, `__Host-` vs `Domain=`, or a leftover Angular `apiUrl` pointing at the resource API.
 
 ## When a custom YARP BFF is the honest path
 
@@ -65,13 +72,13 @@ The win is not “Duende is more secure by magic.” The win is **fewer original
 - Login is **not** OIDC yet — Identity cookie on the BFF, APIs still validate JWTs you mint at login
 - Native mobile apps will **never** use this BFF (they keep bearer tokens). The gateway is browser-only; do not force phones through it
 
-Custom is also right when the “BFF” is really an **API gateway** that happens to attach tokens, and the SPA is hosted from the same origin. Keep the cookie surface small: login, logout, user, proxy. Do not put business MVC in the BFF “because it is already ASP.NET Core.”
+Custom is also right when the "BFF" is really an **API gateway** that happens to attach tokens, and the SPA is hosted from the same origin. Keep the cookie surface small: login, logout, user, proxy. Do not put business MVC in the BFF "because it is already ASP.NET Core."
 
 ## The license conversation I actually have
 
 I put two numbers on a slide: estimated **engineering days** to own cookie + CSRF + session store + on-call, versus **Duende list price** for this product. I do not invent a moral winner.
 
-Teams that “cannot afford Duende” sometimes spend more than the license on a custom BFF that still has no CSRF tests. Teams that “must use Duende” sometimes have one SPA and would have been fine with [httpOnly refresh cookies](/blog/refresh-token-httponly-cookie-angular-aspnet-core) without a full BFF.
+Teams that "cannot afford Duende" sometimes spend more than the license on a custom BFF that still has no CSRF tests. Teams that "must use Duende" sometimes have one SPA and would have been fine with [httpOnly refresh cookies](/blog/refresh-token-httponly-cookie-angular-aspnet-core) without a full BFF.
 
 If the threat model is XSS on a public clinic portal, **some** BFF (or equivalent) is the point. Which package is a procurement decision sitting on top of that.
 
@@ -93,7 +100,7 @@ Guards still belong in Angular. They check session, not `localStorage`. See [aut
 
 **Duende BFF**
 
-- Angular still calls the resource API host (CORS returns, you think auth is “flaky”)
+- Angular still calls the resource API host (CORS returns, you think auth is "flaky")
 - License / package version skew with IdentityServer
 - Assuming BFF removes XSS. It removes **token theft** as the default prize. You still need CSP.
 
@@ -102,7 +109,7 @@ Guards still belong in Angular. They check session, not `localStorage`. See [aut
 - `GetTokenAsync("access_token")` is null because login never called `SaveTokens`
 - In-memory auth ticket: first scale-out logs everyone out
 - YARP logs the `Authorization` header into App Insights
-- CSRF only “SameSite=Lax” on a site that also has a GET that mutates
+- CSRF only "SameSite=Lax" on a site that also has a GET that mutates
 
 **Both**
 
@@ -111,7 +118,7 @@ Guards still belong in Angular. They check session, not `localStorage`. See [aut
 
 ## A decision I write in the architecture doc
 
-I will not leave this as “we’ll see.” One paragraph:
+I will not leave this as "we'll see." One paragraph:
 
 > Browser apps use a BFF. Tokens never enter JavaScript. We use **Duende BFF** because we already operate IdentityServer and will not staff a custom session protocol. Resource APIs stay JWT. Mobile uses bearer directly. EDI jobs use client credentials. CSRF is required on cookie mutations.
 
@@ -125,6 +132,16 @@ If you cannot write one of those paragraphs, you do not have a BFF. You have a b
 
 Internal admin on VPN, ten users, accepted XSS risk in writing — SPA JWT is fine. Machine clients never needed a BFF. [MapIdentityApi](/blog/mapidentityapi-opaque-token-vs-jwt) from a first-party SPA is a different product; do not wrap it in YARP as theatre.
 
----
+## If an interviewer asks
 
-If you need a written choice between Duende BFF and a YARP cookie gateway against your real hosts (not a slide), [contact me](/contact). Bring the identity product you already pay for; the BFF should follow that, not fight it.
+**"Is Duende BFF required for the BFF pattern?"**
+
+**Strong answer:** No. The pattern is tokens off JavaScript and same-origin cookies. Duende is one packaged implementation with OIDC login, CSRF conventions, and documented endpoints. Custom YARP with cookie auth achieves the same architecture if you implement session, CSRF, and token storage yourself.
+
+**"When would you choose custom YARP over Duende?"**
+
+**Strong answer:** No Duende license approved, existing YARP gateway team, ASP.NET Identity-only login without OIDC, or browser-only scope (mobile keeps bearer). Budget engineering days for cookie bugs and distributed session store before the second App Service instance.
+
+**"What does YARP alone not give you?"**
+
+**Strong answer:** YARP only proxies. It does not login, store tokens, set cookie flags, defend CSRF, or logout. A BFF is cookie session + token attach + CSRF — YARP is the forwarding layer inside that.

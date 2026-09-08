@@ -1,6 +1,6 @@
 ---
 title: "Fix CORS Between Angular and ASP.NET Core"
-description: "Wrong origins, credentials, preflight, reverse proxies, and Azure App Service — the CORS failures I diagnose most often when Angular SPAs call ASP.NET Core APIs."
+description: "Fix CORS between Angular and ASP.NET Core — exact origins, AllowCredentials, OPTIONS preflight, middleware order, Azure App Service, and cookie-based JWT refresh."
 date: "2026-01-18"
 category: "authentication"
 tags: ["Angular", "ASP.NET Core", "CORS", "Azure"]
@@ -13,11 +13,21 @@ faq:
     a: "No. Chrome reports CORS when the preflight or the response has no ACAO header — including 401s from JWT middleware that ran before UseCors."
 ---
 
-If Chrome says CORS and the real bug is middleware order (auth or exceptions before `UseCors`), start with [ASP.NET Core middleware order](/blog/aspnet-core-middleware-order). CORS is the kind of problem that makes a senior engineer look junior for twenty minutes. The API returns 200 in Swagger. Postman is fine. The Angular app in Chrome shows a red console error about `Access-Control-Allow-Origin`, and someone on the call asks whether the backend is down.
+**CORS (Cross-Origin Resource Sharing)** is a browser-enforced contract: the API must echo the SPA's exact `Origin` in response headers before JavaScript may read the response — Swagger and Postman never prove this path.
 
-It is not down. The browser is doing its job.
+```text
+Angular (origin A) ──► API (origin B)
+         │
+    Browser sends Origin: A
+         │
+    API must respond with Access-Control-Allow-Origin: A
+         │
+    Missing or wrong ──► red CORS error (even if API logic succeeded)
+```
 
-I have wired Angular front ends to ASP.NET Core APIs across healthcare provider registration portals, marketplace admin panels like CarBazaar, and catalog backends on projects such as Ecom_NET10. CORS is never the feature the client pays for, but it blocks every feature until the browser trusts the handshake. This is the checklist I run when a client says the SPA "cannot reach the API."
+Think of CORS as a **bouncer reading guest lists at two different doors**: your API may be open to curl from anywhere, but the browser only lets scripts from listed origins read answers. Auth with cookies or `Authorization` adds preflight — an `OPTIONS` handshake before the real request.
+
+**New to this** → stay here. **Middleware order issues** → [ASP.NET Core middleware order](/blog/aspnet-core-middleware-order). **Cookie refresh + credentials** → [httpOnly refresh cookie](/blog/refresh-token-httponly-cookie-angular-aspnet-core). **Interview prep** → [If an interviewer asks](#if-an-interviewer-asks).
 
 ## The failure is almost always environmental, not logical
 
@@ -173,4 +183,16 @@ That documentation prevents the same ticket three sprints later when a new devel
 
 Most Angular and ASP.NET Core CORS issues come from mismatched origins after credentials are enabled, preflight blocked upstream, or duplicate configuration at Azure and the app. Fix middleware order, use explicit allowlists, test `OPTIONS` through production infrastructure, and treat the browser error as a header problem — not proof that your business logic failed.
 
-If you are shipping an Angular SPA against an ASP.NET Core API and CORS is eating your sprint, [get in touch](/contact) — I can usually trace it to the right layer in the first session.
+## If an interviewer asks
+
+**"Why can't you use AllowAnyOrigin with AllowCredentials?"**
+
+**Strong answer:** Browser spec forbids `Access-Control-Allow-Origin: *` when credentials are included. ASP.NET Core throws `InvalidOperationException` if you try. You must list exact origins with `WithOrigins(...)`.
+
+**"Swagger works but Angular shows CORS — why?"**
+
+**Strong answer:** CORS is browser-only. Postman and Swagger do not enforce origin checks. The SPA's `Origin` header must match the API allowlist. Also check middleware order — 401 responses without CORS headers look like CORS failures in Chrome.
+
+**"Where does UseCors go in the pipeline?"**
+
+**Strong answer:** After `UseRouting`, before `UseAuthentication`. CORS must decorate error responses (401, 403, 500) too — if auth runs first and short-circuits without CORS headers, DevTools reports CORS even when the real issue is auth.

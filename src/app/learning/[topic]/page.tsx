@@ -6,6 +6,7 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { MarkdownContent } from "@/components/MarkdownContent";
 import { slugifyHeading } from "@/lib/headings";
 import { getPostsForTopic } from "@/lib/posts";
+import { getLearningTopicBody } from "@/lib/learning";
 import { pageSocial, personId } from "@/lib/seo";
 import { getLearningTopic, learningTopics, siteConfig } from "@/lib/site";
 
@@ -64,6 +65,7 @@ export default async function LearningTopicPage({ params }: PageProps) {
   }
 
   const posts = getPostsForTopic(topic);
+  const topicBody = getLearningTopicBody(topic.slug);
   const pageUrl = `${siteConfig.url}/learning/${topic.slug}`;
   const dateModified = newestPostDate(posts);
   const relatedTopics = (topic.relatedTopicSlugs ?? [])
@@ -190,6 +192,12 @@ export default async function LearningTopicPage({ params }: PageProps) {
         <div className="prose-site mt-8 max-w-3xl text-lg leading-relaxed text-muted">
           <MarkdownContent content={topic.intro} />
         </div>
+
+        {topicBody ? (
+          <div className="prose-site mt-10 max-w-3xl border-t border-slate-line pt-10">
+            <MarkdownContent content={topicBody} />
+          </div>
+        ) : null}
 
         {relatedTopics.length > 0 ? (
           <p className="mt-4 max-w-3xl text-muted">

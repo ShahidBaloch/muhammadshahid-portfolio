@@ -1,6 +1,6 @@
 ---
 title: "EF Core SaveChanges Interceptors for Audit Logs"
-description: "ISaveChangesInterceptor sets CreatedBy and ModifiedBy from the JWT. Hosted jobs have no HttpContext. ExecuteUpdate will not run this interceptor."
+description: "EF Core SaveChanges interceptors for audit logs: ISaveChangesInterceptor stamps CreatedBy and ModifiedBy from the JWT. Why ExecuteUpdate bypasses it."
 date: "2026-09-07"
 category: "ef-core"
 tags: ["EF Core", "Architecture", "Security", "ASP.NET Core"]
@@ -17,9 +17,27 @@ faq:
     a: "Not on healthcare rows. Member names and claim amounts in App Insights are a compliance incident. Log entity name, id, and state."
 ---
 
-Every encounter row needed `CreatedAt`, `CreatedBy`, `ModifiedAt`, `ModifiedBy`. Controllers stamped them by hand. One intern forgot on a PATCH. The audit trail said the row was created by nobody. **`ISaveChangesInterceptor`** is where I put that stamp so a handler cannot forget.
+**`ISaveChangesInterceptor`** hooks into EF Core's `SaveChanges` pipeline. Before SQL hits the database, you walk the change tracker and stamp `CreatedAt`, `CreatedBy`, `ModifiedAt`, `ModifiedBy` on every auditable entity — so no controller or handler can forget.
 
-This is not a second [query-filter](/blog/ef-core-global-query-filters-soft-delete) article. Filters hide rows. Interceptors write columns on save. Shadow properties (`Property<DateTime>("ModifiedAt")` with no CLR property) work the same way inside `SavingChanges` via `entry.Property("ModifiedAt")` — I do not need a separate URL for that.
+```text
+Tracked SaveChanges path              ExecuteUpdate path
+
+  Handler mutates entity              LINQ → single UPDATE
+       ↓                                    ↓
+  SaveChangesAsync                    (no SaveChanges)
+       ↓                                    ↓
+  AuditInterceptor.Stamp()            interceptor never runs
+       ↓
+  SQL with ModifiedBy set
+```
+
+**New to this** → stay here. **Merging a PR** → [stamp auditable entities](#stamp-auditable-entities-in-savingchanges). **On-call / interview** → [what this interceptor will never see](#what-this-interceptor-will-never-see) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **`SaveChangesInterceptor`** = EF Core hook that runs before/after `SaveChanges`. **`ICurrentUser`** = abstraction that reads JWT subject in HTTP requests and returns `"System"` for hosted jobs. **Shadow property** = a column mapped without a CLR property (`entry.Property("ModifiedAt")`).
+
+Every encounter row needed `CreatedAt`, `CreatedBy`, `ModifiedAt`, `ModifiedBy`. Controllers stamped them by hand. One intern forgot on a PATCH. The audit trail said the row was created by nobody.
+
+This is not a second [query-filter](/blog/ef-core-global-query-filters-soft-delete) article. Filters hide rows. Interceptors write columns on save.
 
 ## Stamp auditable entities in SavingChanges
 
@@ -102,4 +120,10 @@ Soft-delete via `IsDeleted = true` **does** go through `SaveChanges` if you load
 
 I have seen interceptors dump `entry.CurrentValues` into Serilog. On a claim that is PHI. Log `entry.Metadata.ClrType.Name`, primary key, and `EntityState`. Payload redaction is [the Serilog post](/blog/serilog-pii-redaction-healthcare-aspnet-core).
 
-If CreatedBy is empty on production rows, [contact me](/contact). Either the interceptor is not registered, the job path skipped `ICurrentUser`, or the write used ExecuteUpdate.
+## If an interviewer asks
+
+*Bulk fee-year close ran but `ModifiedBy` is null on every row. The audit interceptor exists. What happened?*
+
+**30-second answer:** `ExecuteUpdateAsync` does not call `SaveChanges`. The interceptor never ran. Set `ModifiedBy` in `SetProperty`, or do not use `ExecuteUpdate` for rows that must be audited that way.
+
+**Strong answer:** I'd check the write path first — if it is `ExecuteUpdate` or raw SQL, interceptors are bypassed by design. For tracked saves, I'd verify the interceptor is registered as a singleton on `AddInterceptors`, that `ICurrentUser` returns the JWT subject in HTTP scope and `"System"` in hosted jobs (not a null from missing `HttpContext`), and that both sync and async `SavingChanges` overrides exist. I'd log entity type, id, and state — never the full graph on healthcare rows.

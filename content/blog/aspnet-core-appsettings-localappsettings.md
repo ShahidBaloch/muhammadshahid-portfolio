@@ -1,8 +1,8 @@
 ---
 title: "What is the ASP.NET Core config file?"
-description: "What the ASP.NET Core config file actually is — appsettings.json, user secrets, environment variables — and why localappsettings.json is usually the wrong name."
+description: "ASP.NET Core config files explained — appsettings.json, appsettings.{Environment}.json, user secrets, and why localappsettings.json is not a real framework file."
 date: "2026-09-03"
-updated: "2026-09-07"
+updated: "2026-09-08"
 category: "architecture"
 tags: ["ASP.NET Core", "Configuration", "appsettings", "Azure", ".NET"]
 related:
@@ -17,17 +17,51 @@ faq:
     a: "User secrets in Development, or a gitignored appsettings.Local.json that you actually register with AddJsonFile. Do not commit production connection strings in any JSON file."
 ---
 
-People search **config file**, **appsettings.json**, and **localappsettings.json** when a setting works on one laptop and dies in Azure. The file name in the search box is often wrong. ASP.NET Core does not load a file called `localappsettings.json` unless you add it yourself.
+## Definition
 
-This is the config map I use on healthcare, SaaS, and eCommerce APIs: which files exist, which ones you invent, and where secrets actually belong. Deploy-slot and portal overlays are in [Azure App Service](/blog/azure-app-service-aspnet-core). How C# consumes those values is [IOptions vs IOptionsSnapshot vs IOptionsMonitor](/blog/aspnet-core-ioptions-snapshot-monitor). This page is the files on disk.
+The **ASP.NET Core config file** is not one file — it is a layered configuration pipeline. The host loads `appsettings.json`, then `appsettings.{Environment}.json`, then user secrets (Development only), then environment variables. **Last source wins.** A JSON file sitting in the project folder does nothing until `WebApplication.CreateBuilder` or `AddJsonFile` registers it.
 
-## What “config file” means in ASP.NET Core
+People search **config file**, **appsettings.json**, and **localappsettings.json** when a setting works on one laptop and dies in Azure. The file name in the search box is often wrong.
 
-When people search **config file**, they usually mean `appsettings.json` plus its environment overlay — not `web.config`, not a desktop JSON file, and not `local.appsettings.json` spelled from memory. The host only reads files you put on the configuration pipeline. A JSON file in the project folder does nothing until `CreateBuilder` (or `AddJsonFile`) loads it.
+## Analogy
 
-## There is no default `localappsettings.json`
+Configuration is a stack of transparencies on a light table:
 
-ASP.NET Core’s host looks for:
+```text
+Bottom (lowest priority)          Top (wins)
+────────────────────────          ──────────
+appsettings.json                  environment variables
+appsettings.Development.json      command-line args
+user secrets / appsettings.Local
+```
+
+Each layer can paint over the layer below. Azure Application Settings sit on top of everything you committed. That is why a laptop value vanishes after deploy — a higher layer replaced it, not because the JSON file was misspelled.
+
+## Routing
+
+**"What is the config file?"** → stay here.
+
+**`localappsettings.json` search** → [There is no default localappsettings.json](#there-is-no-default-localappsettingsjson).
+
+**How C# reads config** → [IOptions vs IOptionsSnapshot vs IOptionsMonitor](/blog/aspnet-core-ioptions-snapshot-monitor).
+
+**Azure deploy slots and portal overlays** → [Azure App Service](/blog/azure-app-service-aspnet-core).
+
+**Data Protection key ring config** → [No XML encryptor found](/blog/aspnet-core-data-protection-xml-encryptor).
+
+**Architecture topic map** → [architecture hub](/learning/architecture).
+
+## Details
+
+This is the config map I use on healthcare, SaaS, and eCommerce APIs: which files exist, which ones you invent, and where secrets actually belong.
+
+### What "config file" means in ASP.NET Core
+
+When people search **config file**, they usually mean `appsettings.json` plus its environment overlay — not `web.config`, not a desktop JSON file, and not `local.appsettings.json` spelled from memory. The host only reads files you put on the configuration pipeline.
+
+### There is no default `localappsettings.json`
+
+ASP.NET Core's host looks for:
 
 1. `appsettings.json`
 2. `appsettings.{Environment}.json` — usually `Development`, `Staging`, or `Production`
@@ -46,13 +80,13 @@ That is `CreateDefaultBuilder` / `WebApplication.CreateBuilder` order. **Last so
 | Azure Functions local config | `local.settings.json` | Functions runtime |
 | Azure App Service overlay | Application settings in the portal / Bicep | Deployed API |
 
-If you create `localappsettings.json` and never call `AddJsonFile("localappsettings.json")`, the host ignores it. The “config file” you edited was never in the pipeline.
+If you create `localappsettings.json` and never call `AddJsonFile("localappsettings.json")`, the host ignores it.
 
-## The files I actually commit
+### The files I actually commit
 
 **`appsettings.json`** holds non-secret defaults: log levels, feature names, connection-string *keys* (not values), CORS policy names. It ships to every environment.
 
-**`appsettings.Development.json`** holds laptop-safe overrides: `localhost` URLs, a local SQL name, Serilog to the console. It can be committed if it contains no secrets. Many teams still leak a shared SQL password here — that is a process failure, not a framework one.
+**`appsettings.Development.json`** holds laptop-safe overrides: `localhost` URLs, a local SQL name, Serilog to the console. It can be committed if it contains no secrets.
 
 I do **not** commit production connection strings, IdentityServer client secrets, or Stripe keys in any JSON file.
 
@@ -69,9 +103,9 @@ I do **not** commit production connection strings, IdentityServer client secrets
 
 That Development snippet is fine. The same shape with a production password is not.
 
-## Optional: `appsettings.Local.json` (the honest local file)
+### Optional: `appsettings.Local.json` (the honest local file)
 
-Some teams want a file that is never committed and never named “Development,” because two developers share a repo and different SQL instances. I add:
+Some teams want a file that is never committed and never named "Development," because two developers share a repo and different SQL instances. I add:
 
 ```csharp
 builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
@@ -79,14 +113,14 @@ builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, relo
 
 Place it **after** `appsettings.{Environment}.json` and **before** environment variables if you want laptop JSON to lose to Azure settings later. Add `appsettings.Local.json` to `.gitignore`.
 
-That file is what people are reaching for when they search **localappsettings.json**. Name it `appsettings.Local.json` so it matches the rest of the stack. Do not invent a third spelling unless the whole team already uses it.
+That file is what people are reaching for when they search **localappsettings.json**. Name it `appsettings.Local.json` so it matches the rest of the stack.
 
 ```gitignore
 appsettings.Local.json
 appsettings.*.Local.json
 ```
 
-## User secrets beat another JSON file for passwords
+### User secrets beat another JSON file for passwords
 
 For a connection string you must not commit, Development should use [user secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets):
 
@@ -96,24 +130,24 @@ dotnet user-secrets set "ConnectionStrings:Default" "Server=.;Database=clinic_de
 
 Secrets live outside the repo (`%APPDATA%\Microsoft\UserSecrets\...` on Windows). They load only when `Environment` is Development. Production never sees them — which is the point.
 
-If a teammate clones the repo and the API dies on startup because `ConnectionStrings:Default` is missing, that is correct. Fail fast. Do not “fix” it by committing a shared password into `appsettings.json`.
+If a teammate clones the repo and the API dies on startup because `ConnectionStrings:Default` is missing, that is correct. Fail fast.
 
-## Azure Functions: `local.settings.json`, not `localappsettings.json`
+### Azure Functions: `local.settings.json`, not `localappsettings.json`
 
 Functions local config is **`local.settings.json`**. Values map to environment variables at runtime. The file is gitignored by the Functions templates for a reason.
 
-Do not copy that file into an ASP.NET Core Web API project and expect `IConfiguration` to read it. Different host, different convention. If a search for `localappsettings.json` came from a Functions sample with a typo, start with `local.settings.json` and the Functions docs — not a new file in the API.
+Do not copy that file into an ASP.NET Core Web API project and expect `IConfiguration` to read it. Different host, different convention.
 
-## What production actually reads
+### What production actually reads
 
 On Azure App Service I treat JSON as **defaults only**. Real values come from Application settings / Key Vault references. Double-underscore nesting matches JSON:
 
 - JSON `IdentityServer:Authority` → `IdentityServer__Authority`
 - JSON `Cors:AllowedOrigins:0` → `Cors__AllowedOrigins__0`
 
-A laptop `appsettings.Development.json` never deploys as the production source of truth. If staging inherited a production connection string because a slot setting was wrong, that is [the App Service article](/blog/azure-app-service-aspnet-core) — not a missing `localappsettings.json`.
+A laptop `appsettings.Development.json` never deploys as the production source of truth.
 
-## Fail if the config file is incomplete
+### Fail if the config file is incomplete
 
 Silent `null` configuration is how healthcare APIs boot, serve 200s, and then fail on the first token or the first SQL call.
 
@@ -124,7 +158,7 @@ var authority = builder.Configuration["IdentityServer:Authority"]
 
 Required keys: connection string, authority, CORS origins, blob container. Optional keys: feature flags with a documented default.
 
-## Checklist I use on a new API
+### Checklist I use on a new API
 
 - [ ] `appsettings.json` has structure and safe defaults only
 - [ ] `appsettings.Development.json` has localhost URLs, no production secrets
@@ -135,10 +169,16 @@ Required keys: connection string, authority, CORS origins, blob container. Optio
 - [ ] Startup throws when a required key is missing
 - [ ] `.gitignore` covers local override files
 
-## Bottom line
+## If an interviewer asks
 
-The ASP.NET Core **config file** is `appsettings.json` plus `appsettings.{Environment}.json`. **`localappsettings.json` is not a framework file.** If you need a private laptop overlay, add `appsettings.Local.json` and register it, or use user secrets. If you are on Azure Functions, the local file is `local.settings.json`.
+**"How does ASP.NET Core configuration work? What is the load order?"**
 
-If a setting works on your machine and vanishes after deploy, the host is reading a different source — not a misspelled JSON filename. Bring the environment name and the App Service application-settings list; I will tell you which layer won.
+**Strong answer:** `appsettings.json` first, then `appsettings.{Environment}.json`, then user secrets in Development, then environment variables, then command-line args. Last source wins. `localappsettings.json` is not a framework file — teams mean `appsettings.Development.json`, user secrets, or a custom `appsettings.Local.json` they register with `AddJsonFile`. Production secrets belong in environment variables or Key Vault, not committed JSON. Fail fast at startup when required keys are missing.
 
-If you want a second pair of eyes on configuration for an ASP.NET Core API before it hits a staging slot, [contact me](/contact). Related architecture notes: [architecture hub](/learning/architecture).
+**Weak answer:** "We put everything in appsettings.json."
+
+## Related reading
+
+- [IOptions vs IOptionsSnapshot vs IOptionsMonitor](/blog/aspnet-core-ioptions-snapshot-monitor)
+- [Deploying ASP.NET Core to Azure App Service](/blog/azure-app-service-aspnet-core)
+- [Architecture hub](/learning/architecture)

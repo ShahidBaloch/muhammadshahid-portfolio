@@ -1,7 +1,8 @@
 ---
 title: "ASP.NET Core Minimal APIs: When to Use Them (and When Not To)"
-description: "ASP.NET Core Minimal APIs for production — MapGet/MapPost, DI, validation, OpenAPI, auth, and when controllers still win for Angular-backed products."
+description: "ASP.NET Core Minimal APIs guide — MapGet, MapGroup, DI, validation, OpenAPI, JWT auth, and when controllers still win for Angular-backed products."
 date: "2026-08-10"
+updated: "2026-09-08"
 category: "architecture"
 tags: ["Minimal APIs", "ASP.NET Core", ".NET", "Web API", "C#", "Architecture"]
 related:
@@ -17,11 +18,43 @@ faq:
     a: "No. Endpoint classes or feature folders keep the file readable. Clean Architecture boundaries still apply."
 ---
 
-**ASP.NET Core Minimal APIs** are not a toy for demos. They are a first-class way to ship HTTP endpoints with less ceremony — and a common source of spaghetti when teams dump business logic into `Program.cs`.
+## Definition
+
+**ASP.NET Core Minimal APIs** are a first-class way to define HTTP endpoints with less ceremony than MVC controllers — `MapGet`, `MapPost`, route groups, and automatic DI parameter binding. They are not a toy for demos. They are a valid production choice for thin gateways, webhooks, health checks, and vertical slices — when you organize endpoints into classes instead of dumping logic into `Program.cs`.
+
+## Analogy
+
+Controllers are a full restaurant kitchen with stations, prep lists, and a head chef. Minimal APIs are a food truck:
+
+```text
+Controllers (full kitchen)          Minimal APIs (food truck)
+─────────────────────────          ──────────────────────────
+Many dishes, shared prep           Few menu items, fast setup
+Filters, base classes, conventions  MapGroup + endpoint class
+Best for large admin surfaces       Best for gateways, webhooks, health
+```
+
+You would not run a banquet from a food truck. You would not build a food truck inside a stadium kitchen either. Pick the shape that matches the menu size.
+
+## Routing
+
+**Minimal API basics and when to use** → stay here.
+
+**Validation envelopes for Angular** → [API validation](/blog/aspnet-core-api-validation).
+
+**JWT policies and claims** → [ASP.NET Core JWT auth](/blog/aspnet-core-jwt-auth).
+
+**Layer boundaries and where logic lives** → [Clean Architecture](/blog/clean-architecture-aspnet-core).
+
+**Async patterns on endpoints** → [C# async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).
+
+**Architecture topic map** → [architecture hub](/learning/architecture).
+
+## Details
 
 I use Minimal APIs for thin gateways, internal tools, and vertical slices. I keep controllers (or carefully organized endpoint classes) when Angular admin surfaces need many actions, filters, and shared conventions.
 
-## What Minimal APIs give you
+### What Minimal APIs give you
 
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
@@ -46,7 +79,7 @@ app.Run();
 
 DI parameters bind automatically. Return `IResult` helpers (`Results.Ok`, `Results.NotFound`, `Results.ValidationProblem`).
 
-## Organize so Program.cs does not become a landfill
+### Organize so Program.cs does not become a landfill
 
 ```csharp
 // Endpoints/OrderEndpoints.cs
@@ -79,7 +112,7 @@ app.MapOrders();
 
 Same SRP rule as controllers: endpoints are HTTP adapters. Pricing and persistence stay in services/handlers.
 
-## Validation without MVC attributes everywhere
+### Validation without MVC attributes everywhere
 
 Options that work well:
 
@@ -104,9 +137,9 @@ app.MapPost("/api/orders", async (
 });
 ```
 
-Angular forms need stable problem details — same as MVC. See [API validation envelopes](/blog/aspnet-core-api-validation).
+Angular forms need stable problem details — same as MVC.
 
-## Auth, OpenAPI, and versioning
+### Auth, OpenAPI, and versioning
 
 ```csharp
 builder.Services.AddAuthentication().AddJwtBearer(...);
@@ -120,9 +153,9 @@ app.UseAuthorization();
 var orders = app.MapGroup("/api/v1/orders").RequireAuthorization("ManageOrders");
 ```
 
-Minimal APIs play fine with JWT policies you already use for Angular SPAs. Document claims the same way you would on controllers.
+Minimal APIs play fine with JWT policies you already use for Angular SPAs.
 
-## Controllers vs Minimal APIs — honest tradeoffs
+### Controllers vs Minimal APIs — honest tradeoffs
 
 | Prefer Minimal APIs when… | Prefer Controllers when… |
 |---|---|
@@ -133,15 +166,15 @@ Minimal APIs play fine with JWT policies you already use for Angular SPAs. Docum
 
 Ecom_NET10-style catalogs with dozens of merchandising actions still felt clearer as controllers. A CarBazaar webhook receiver was cleaner as Minimal API groups.
 
-## Performance note
+### Performance note
 
-Minimal APIs are lightweight, but **your EF queries and auth** dominate latency. Switching endpoint style will not fix N+1 SQL. Measure before celebrating.
+Minimal APIs are lightweight, but **your EF queries and auth** dominate latency. Switching endpoint style will not fix N+1 SQL.
 
-## Failure story: everything in Program.cs
+### Failure story: everything in Program.cs
 
-A team put 40 Map* calls, DTO mapping, and EF queries in one file “because Minimal APIs are simple.” Code review became impossible; Angular contract changes took hours to find. We extracted endpoint classes and handlers — Minimal APIs stayed, the landfill left.
+A team put 40 Map* calls, DTO mapping, and EF queries in one file "because Minimal APIs are simple." Code review became impossible; Angular contract changes took hours to find. We extracted endpoint classes and handlers — Minimal APIs stayed, the landfill left.
 
-## Delivery checklist
+### Delivery checklist
 
 1. Endpoints live in groups/classes — not a 2,000-line `Program.cs`
 2. Business logic in services/handlers, not lambdas
@@ -151,10 +184,17 @@ A team put 40 Map* calls, DTO mapping, and EF queries in one file “because Min
 6. Async + `CancellationToken` end to end
 7. Decide controller vs Minimal API per bounded context, not as ideology
 
+## If an interviewer asks
+
+**"When would you choose Minimal APIs over controllers in ASP.NET Core?"**
+
+**Strong answer:** Minimal APIs for thin surfaces — gateways, webhooks, health checks, small vertical slices with few endpoints. Controllers when you have a large Angular admin with many actions, shared filters, and base-class conventions. Either way, business logic stays in services/handlers — not in `Program.cs`. Minimal APIs support DI, JWT via `RequireAuthorization`, validation via endpoint filters, and OpenAPI. The failure mode is a 2,000-line `Program.cs`, not Minimal APIs themselves.
+
+**Weak answer:** "Minimal APIs are faster so use them everywhere."
+
 ## Related reading
 
 - [C# Async and Await in ASP.NET Core](/blog/csharp-async-await-aspnet-core)
 - [Clean Architecture in ASP.NET Core](/blog/clean-architecture-aspnet-core)
 - [ASP.NET Core JWT Auth checklist](/blog/aspnet-core-jwt-auth)
-
-Need help choosing Minimal APIs vs controllers for a new .NET + Angular slice? [Contact me](/contact) with the endpoint list and we can sketch the shape before the folder structure locks in.
+- [Architecture hub](/learning/architecture)

@@ -16,6 +16,19 @@ faq:
     a: "No. Redis hides a slow query until the cache misses. N+1 and sniffed plans still need the EF SQL articles."
 ---
 
+**Redis caching** trades freshness for latency — hot reads get a TTL-backed copy in `IDistributedCache` so SQL and Angular dashboards survive traffic spikes, if invalidation and tenant keys are honest.
+
+```text
+Read path: cache get → hit? return
+                │
+               miss
+                ▼
+            SQL rebuild → cache set (TTL)
+Write path: update SQL → invalidate key
+```
+
+**New to this** → stay here. **Merging a PR** → [when I add Redis](#when-i-add-redis-to-an-aspnet-core-api). **On-call / interview** → [stampede](#cache-stampede-and-tenant-keys) · [fail-open](#fail-open-vs-fail-closed) · [if an interviewer asks](#if-an-interviewer-asks).
+
 **Redis caching ASP.NET Core** is one of the most searched performance topics in the .NET ecosystem — and one of the easiest ways to ship a subtle production bug. Caching is not “add Redis and enjoy faster APIs.” It is a deliberate trade: freshness for latency.
 
 I add Redis to ASP.NET Core APIs that feed Angular dashboards in healthcare ops, SaaS admin panels, and catalog-heavy eCommerce. This post covers the patterns that actually reduce load, the key design that prevents collisions, and when I refuse to cache.
@@ -188,4 +201,8 @@ Wrap cache get/set in try/catch with warning logs. A hard dependency on Redis fo
 
 Redis in ASP.NET Core pays rent when reads are hot, payloads are lean, and invalidation is honest. It becomes a liability when used as a bandage for N+1 queries and oversized graphs.
 
-If you want help placing cache boundaries in a .NET API that serves Angular, [get in touch](/contact).
+## If an interviewer asks
+
+When Redis helps vs SQL tuning; cache stampede; tenant id in cache keys.
+
+**Strong answer:** Cache slim read models with explicit TTL when stale is acceptable — not per-user PHI keyed only by URL. Stampede: lock or single-flight on rebuild. Every key includes tenant/environment prefix. Redis down → fail-open to SQL for most reads; do not cache secrets or tokens.

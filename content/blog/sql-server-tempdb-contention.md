@@ -17,6 +17,19 @@ faq:
     a: "Yes. Large sorts and hashes spill. RCSI versions rows in TempDB. Table variables and spills from ungovered ORDER BY on a hub clinic are enough."
 ---
 
+**TempDB contention** means SQL Server threads queue on **PAGELATCH_UP** / **PAGELATCH_EX** while allocating pages in **database id 2** (TempDB). The API hangs while SQL CPU looks idle — this is a **file layout** problem, not a missing EF index.
+
+```text
+One TempDB data file              Eight equal data files
+
+[W1][W2][W3] → same PFS page     allocations round-robin
+queue at latch                    latch waits drop
+```
+
+**New to this** → stay here. **Merging a PR** → [fix multiple files](#fix-multiple-equal-files). **On-call / interview** → [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **PFS/SGAM** = allocation bitmap pages in TempDB. **RCSI** = row versions also stored in TempDB. **Spill** = sort/hash workspace when memory is insufficient.
+
 ![Many workers colliding on one TempDB PFS page versus allocations spread across eight equal files](/images/blog/sql-server-tempdb.png)
 
 The API spiked to seconds of latency. CPU on SQL Server was quiet. Memory was fine. Wait stats showed **`PAGELATCH_UP`** on **database id 2**. That id is always **TempDB**. Threads were queuing to update the same PFS/SGAM allocation page.
@@ -50,4 +63,8 @@ I do this on the VM or in the SQL configuration, not in `OnModelCreating`. Azure
 - Version store size if RCSI is on — a fee import that versions every row will still pressure TempDB even with eight files if the disk is slow
 - I do not “fix TempDB” by adding `AsNoTracking` in C#. That does not create extra files.
 
-If PAGELATCH_UP on database id 2 showed up after you turned on snapshot isolation, [contact me](/contact). File count, file size equality, and whether RCSI is new are the three facts I want.
+## If an interviewer asks
+
+**30-second answer:** `PAGELATCH_UP` on database id 2 is TempDB allocation contention — add multiple **equal-sized** TempDB data files (often one per CPU up to eight). EF can trigger it via sorts, spills, and RCSI versions without explicit `#temp` tables.
+
+**Strong answer:** Distinguishes from parameter sniffing and deadlocks, mentions equal file size/growth, and warns RCSI increases version-store pressure in TempDB.

@@ -1,7 +1,8 @@
 ---
 title: "Clean Architecture in ASP.NET Core Without Over-Engineering"
-description: "A senior engineer's guide to pragmatic Clean Architecture in ASP.NET Core — useful boundaries for eCommerce and SaaS without ceremony that slows delivery."
+description: "Pragmatic Clean Architecture in ASP.NET Core — domain boundaries, three-project layout, repository patterns, and when to skip ceremony on SaaS and eCommerce APIs."
 date: "2026-05-28"
+updated: "2026-09-08"
 category: "architecture"
 tags: ["Clean Architecture", ".NET", "EF Core", "Architecture"]
 related:
@@ -17,15 +18,55 @@ faq:
     a: "No. You can have clean modules in one host. Splitting processes is the modular monolith vs microservices article."
 ---
 
-Clean Architecture is one of those ideas that sounds obvious in a conference talk and feels heavy on a Tuesday when a product owner asks for a small pricing tweak. I have been building .NET backends for healthcare portals, SaaS dashboards, and eCommerce platforms long enough to know both sides of that story. The goal is not to win an architecture trophy. The goal is to keep domain rules stable while everything else — UI frameworks, ORM details, hosting choices — changes around them.
+## Definition
 
-This is the mindset I applied when structuring [Ecom_NET10](https://github.com/ShahidBaloch/Ecom_NET10), my Clean Architecture eCommerce reference on .NET 10. It is also how I decide, on client work, whether a boundary earns its keep or should wait until the product proves it needs one.
+**Clean Architecture** in ASP.NET Core means business rules live in an inner core that knows nothing about HTTP, SQL, or Angular. Outer layers (API, Infrastructure) depend inward. The goal is not folder purity — it is keeping domain rules stable while UI frameworks, ORM details, and hosting choices change around them.
 
-## What Clean Architecture is actually protecting
+## Analogy
 
-Uncle Bob's diagrams can look intimidating. In practice, I think about one question: **where do business rules live when Angular screens get redesigned and EF Core queries get tuned?**
+Clean Architecture is an onion — peel from outside in, dependencies point inward:
 
-If your cart discount logic sits inside a controller because that was fastest on day one, you will eventually copy it into a background job, then into an admin import script, then into a mobile API — and each copy will drift. Clean Architecture pushes those rules inward, behind interfaces the outer layers depend on.
+```text
+        ┌─────────────────────────────┐
+        │  API (HTTP, DTOs, auth)     │  ← outer: knows about HTTP
+        ├─────────────────────────────┤
+        │  Infrastructure (EF, email) │  ← implements Core interfaces
+        ├─────────────────────────────┤
+        │  Core (entities, rules)     │  ← inner: knows nothing external
+        └─────────────────────────────┘
+
+Cart discount logic lives in Core.
+Include() graph tuning lives in Infrastructure.
+Controllers stay thin translators.
+```
+
+If you can swap EF Core tuning without reopening checkout policy, the onion is working.
+
+## Routing
+
+**Clean Architecture without over-engineering** → stay here.
+
+**When to split into services** → [Modular monolith vs microservices](/blog/modular-monolith-vs-microservices-dotnet).
+
+**Repository pattern — when it earns its keep** → [Repository pattern in .NET](/blog/repository-pattern-dotnet).
+
+**MediatR / CQRS-lite** → [MediatR and CQRS](/blog/mediatr-cqrs-aspnet-core).
+
+**Minimal APIs vs controllers** → [ASP.NET Core Minimal APIs](/blog/aspnet-core-minimal-apis).
+
+**Architecture topic map** → [architecture hub](/learning/architecture).
+
+## Details
+
+Clean Architecture is one of those ideas that sounds obvious in a conference talk and feels heavy on a Tuesday when a product owner asks for a small pricing tweak. I have been building .NET backends for healthcare portals, SaaS dashboards, and eCommerce platforms long enough to know both sides of that story.
+
+This is the mindset I applied when structuring [Ecom_NET10](https://github.com/ShahidBaloch/Ecom_NET10), my Clean Architecture eCommerce reference on .NET 10.
+
+### What Clean Architecture is actually protecting
+
+The question I ask: **where do business rules live when Angular screens get redesigned and EF Core queries get tuned?**
+
+If your cart discount logic sits inside a controller because that was fastest on day one, you will eventually copy it into a background job, then into an admin import script, then into a mobile API — and each copy will drift.
 
 That inward dependency rule is the whole game:
 
@@ -33,9 +74,7 @@ That inward dependency rule is the whole game:
 - **Infrastructure** implements Core interfaces with EF Core, email providers, blob storage, and identity adapters.
 - **API** translates HTTP into application commands and maps results back out.
 
-When that direction is respected, swapping SQL Server tuning strategies or adding a Redis cache does not require reopening checkout policy. That is the changeability clients pay for, even if they never use the phrase "Clean Architecture."
-
-## A pragmatic three-project layout
+### A pragmatic three-project layout
 
 On Ecom_NET10 I use a layout that teams can navigate without a map taped to the monitor:
 
@@ -47,11 +86,11 @@ On Ecom_NET10 I use a layout that teams can navigate without a map taped to the 
 
 Your cart rules belong in Core. Your `Include()` graph tuning belongs in Infrastructure. Controllers stay thin enough that a new teammate can read one endpoint and know where the real work happens.
 
-I do not start with seven projects and an abstract "SharedKernel" unless the domain is already large. Three projects — Api, Core, Infrastructure — cover most SaaS and storefront backends I touch. CarBazaar went further because marketplace identity, search, and bidding genuinely needed separate deployable services. That is a scale decision, not a moral one.
+I do not start with seven projects and an abstract "SharedKernel" unless the domain is already large. Three projects — Api, Core, Infrastructure — cover most SaaS and storefront backends I touch.
 
-## Patterns that pay rent on real products
+### Patterns that pay rent on real products
 
-### Repository + Specification
+#### Repository + Specification
 
 Repositories hide persistence mechanics. Specifications compose query logic — filters, paging, sorting, includes — in one testable place.
 
@@ -72,17 +111,17 @@ public class ActiveProductsSpec : Specification<Product>
 }
 ```
 
-On catalog screens this stops the "query soup in every handler" problem. On healthcare admin lists, the same pattern keeps provider search readable when product adds three new filters mid-sprint.
+On catalog screens this stops the "query soup in every handler" problem.
 
-### MediatR / CQRS-lite
+#### MediatR / CQRS-lite
 
-I reach for MediatR when command and query paths diverge in behavior, not just in SQL. Placing an order validates stock, applies promotions, and writes audit rows. Listing orders projects a read model with different fields and no tracking. Separate handlers make that explicit.
+I reach for MediatR when command and query paths diverge in behavior, not just in SQL. Placing an order validates stock, applies promotions, and writes audit rows. Listing orders projects a read model with different fields and no tracking.
 
-I do not MediatR-wrap every CRUD endpoint on week one. If a resource is truly symmetric read/write, a focused service class is fine. Ceremony without payoff is how Clean Architecture gets a bad reputation.
+I do not MediatR-wrap every CRUD endpoint on week one. If a resource is truly symmetric read/write, a focused service class is fine.
 
-### Result objects instead of exception-driven flow
+#### Result objects instead of exception-driven flow
 
-"Coupon expired" is not exceptional in eCommerce. It is an expected outcome. I return typed results from application services:
+"Coupon expired" is not exceptional in eCommerce. It is an expected outcome:
 
 ```csharp
 public record OrderResult(bool Success, Guid? OrderId, string? ErrorCode);
@@ -99,29 +138,27 @@ public async Task<OrderResult> PlaceOrderAsync(PlaceOrderCommand cmd, Cancellati
 
 Controllers map `ErrorCode` to consistent HTTP responses. Angular clients show friendly messages without parsing stack traces.
 
-## What I deliberately skip early
+### What I deliberately skip early
 
-Clean Architecture is not a license to front-load every pattern in the book. On greenfield work I postpone:
+On greenfield work I postpone:
 
 - **Microservices on day one** — CarBazaar splits services because auction, identity, and search have different scaling and release cadences. A ten-user B2B SaaS admin portal does not need that split yet.
-- **Perfect ubiquitous language documents** — I capture glossary terms as we discover real confusion, not before the first user story ships.
+- **Perfect ubiquitous language documents** — I capture glossary terms as we discover real confusion.
 - **Abstractions with one implementation and no test benefit** — `IEmailSender` helps when you test without SMTP. `IProductService` that only wraps one class often does not.
 
-The test I use: *if I delete this interface, do tests get harder or just file count drop?* If it is only file count, I inline until a second implementation or a testing seam actually appears.
+The test I use: *if I delete this interface, do tests get harder or just file count drop?*
 
-## How this showed up in my portfolio work
+### How this showed up in my portfolio work
 
-**Ecom_NET10** is my reference for "Clean Architecture without cosplay." Catalog, cart, and order flows share Core rules while Infrastructure owns EF Core mappings and JWT-backed API policies. The point is not folder purity — it is that I can extend checkout or RBAC without spelunking through controllers.
+**Ecom_NET10** is my reference for "Clean Architecture without cosplay." Catalog, cart, and order flows share Core rules while Infrastructure owns EF Core mappings and JWT-backed API policies.
 
-**CarBazaar** pushed boundaries outward into microservices because identity and auction workloads do not belong in one deployable unit. IdentityServer, OAuth, and JWT show up there — but the same inward dependency idea applies inside each service's Core layer.
+**CarBazaar** pushed boundaries outward into microservices because identity and auction workloads do not belong in one deployable unit. The same inward dependency idea applies inside each service's Core layer.
 
-**Healthcare SaaS delivery** taught me where rigor matters most: provider enrollment rules, fee schedule calculations, and audit-sensitive mutations stay in application services with explicit authorization checks — not buried in Razor pages or one-off SQL scripts.
+**Healthcare SaaS delivery** taught me where rigor matters most: provider enrollment rules, fee schedule calculations, and audit-sensitive mutations stay in application services with explicit authorization checks.
 
 Different shapes, same principle: **domain decisions survive UI and infrastructure churn.**
 
-## Kickoff checklist I use with clients
-
-Before we commit to layers and patterns, I walk through this with the stakeholder:
+### Kickoff checklist
 
 - [ ] Can you name three business rules that must stay consistent across web, admin, and future API consumers?
 - [ ] Which integrations change often (payments, email, storage) and should sit behind interfaces?
@@ -131,14 +168,27 @@ Before we commit to layers and patterns, I walk through this with the stakeholde
 
 If the answers are thin, we keep the structure simple and tighten it after the first production lesson — not before the first demo.
 
-## The client value in plain terms
+### The client value in plain terms
 
 Clean Architecture done pragmatically buys you three things stakeholders actually feel:
 
-1. **Faster feature work after month two** — because new endpoints plug into known patterns instead of inventing persistence access each time.
-2. **Safer refactors** — because SQL tuning and Angular redesigns do not threaten checkout or compliance rules.
-3. **Easier onboarding** — because "where does X live?" has a consistent answer.
+1. **Faster feature work after month two** — because new endpoints plug into known patterns
+2. **Safer refactors** — because SQL tuning and Angular redesigns do not threaten checkout or compliance rules
+3. **Easier onboarding** — because "where does X live?" has a consistent answer
 
-The opposite is also true: over-engineered Clean Architecture buys you slower demos and frustrated teams. The skill is telling the difference early.
+The opposite is also true: over-engineered Clean Architecture buys you slower demos and frustrated teams.
 
-If you are standing up or untangling an ASP.NET Core backend — eCommerce, SaaS, or regulated workflows — and want boundaries that help rather than hinder, [get in touch](/contact). I am happy to review what you have and propose a pragmatic path forward.
+## If an interviewer asks
+
+**"How do you apply Clean Architecture in ASP.NET Core without over-engineering?"**
+
+**Strong answer:** Keep domain rules in a Core project that knows nothing about HTTP or EF. Infrastructure implements interfaces; API translates HTTP to commands. Start with three projects — Api, Core, Infrastructure — not seven. Add MediatR or repositories only when command/query paths diverge or query composition gets messy. Skip abstractions with one implementation and no test benefit. Clean Architecture is about changeability, not folder count — a clinic admin with two screens can wait; an eCommerce catalog earns the split sooner.
+
+**Weak answer:** "Create a Domain, Application, Infrastructure, and API project on day one."
+
+## Related reading
+
+- [Modular monolith vs microservices in .NET](/blog/modular-monolith-vs-microservices-dotnet)
+- [Repository pattern in .NET](/blog/repository-pattern-dotnet)
+- [MediatR and CQRS-lite](/blog/mediatr-cqrs-aspnet-core)
+- [Architecture hub](/learning/architecture)

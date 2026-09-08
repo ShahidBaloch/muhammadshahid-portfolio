@@ -1,6 +1,6 @@
 ---
 title: "EF Core Interview Questions"
-description: "EF Core interview questions with production answers — RowVersion concurrency, global query filters, ExecuteUpdate vs SaveChanges, and tenant leaks. Not an N+1 tutorial."
+description: "EF Core interview questions with production answers — RowVersion concurrency, global query filters, ExecuteUpdate vs SaveChanges, and tenant leaks."
 date: "2026-09-07"
 category: "interview-questions"
 tags: ["Interview Questions", "EF Core", "SQL Server", "ASP.NET Core", ".NET", "Career"]
@@ -13,9 +13,22 @@ faq:
     a: "No. IgnoreQueryFilters, raw SQL, and a job DbContext with the wrong tenant still leak. Filters are a seatbelt. The wiring post is the query-filters article."
 ---
 
-**EF Core interview questions** at senior level are not “what is `Include`.” Interviewers ask whether you can keep a clinic or marketplace database correct when two users save the same row, when a tenant filter is missing, and when a background job shares a `DbContext`.
+**EF Core interview questions** at senior level test whether you can keep a clinic or marketplace database **correct** under concurrent writes, missing tenant filters, and background jobs that share a `DbContext` — not whether you can define `Include`.
 
-This URL is **interview narration**. SQL-shaped performance (N+1, split queries, cartesian explosion, parameter sniffing, tracking vs identity resolution) lives in the [EF Core hub](/learning/ef-core). Do not retell those posts here. If the prompt is “the dashboard is slow,” start at [EF Core SQL performance](/blog/ef-core-sql-performance) and come back when they ask about **correctness**.
+```text
+Junior prompt                    Senior prompt
+─────────────                    ─────────────
+"What is Include?"               "Two tabs PATCH the same row — what happens?"
+"Tracking vs no-tracking?"       "Nightly job emailed clinic B clinic A's data"
+                                 "SaveChanges in a foreach on 4,000 rows"
+                                 "Another instance with the same key is tracked"
+```
+
+**New to this** → start with [Scenario 1](#scenario-1-two-clinicians-save-the-same-encounter). **Merging a PR** → [rapid-fire table](#rapid-fire-30-seconds). **On-call / interview** → all scenarios below · [cross-questions](#cross-questions).
+
+**Terms used here:** **Lost update** = two writers save the same row; last write wins without conflict detection. **Captive dependency** = a singleton holding a scoped `DbContext`. **Optimistic concurrency** = a row token (`rowversion`) that makes the second save fail with 409.
+
+This URL is **interview narration**. SQL-shaped performance (N+1, split queries, cartesian explosion, parameter sniffing, tracking vs identity resolution) lives in the [EF Core hub](/learning/ef-core). If the prompt is "the dashboard is slow," start at [EF Core SQL performance](/blog/ef-core-sql-performance) and come back when they ask about **correctness**.
 
 ---
 
@@ -203,4 +216,17 @@ Pending model changes at runtime means someone edited entities and skipped `dotn
 - [Interview questions hub](/learning/interview-questions)
 - [EF Core topic hub](/learning/ef-core)
 
-Preparing an EF Core loop for a healthcare or marketplace API, or sitting one? [Contact me](/contact). Bring a `SaveChanges` failure, not a definition of `DbSet`.
+## Cross-questions
+
+Interviewers often chain EF topics. These pairings test depth without repeating the dedicated posts:
+
+| If they ask about… | Follow-up they might spring | Point them to |
+|---|---|---|
+| RowVersion / 409 | "Does RCSI fix lost updates?" | No — RCSI is blocking; concurrency token is this page, Scenario 1 |
+| Query filter leak | "Is the filter a security boundary?" | No — Scenario 2; wiring is [query filters](/blog/ef-core-global-query-filters-soft-delete) |
+| SaveChanges in foreach | "What about ExecuteUpdate?" | Scenario 3; implementation is [ExecuteUpdate](/blog/ef-core-bulk-update-executeupdate) |
+| Two tracked instances | "What about AsNoTracking on reads?" | Different bug — [identity resolution](/blog/ef-core-asnotracking-vs-identity-resolution) |
+| Singleton + DbContext | "How do you fix the cache?" | `IServiceScopeFactory` per refresh — Scenario 5 |
+| Pending migrations at swap | "Migrate() in Program.cs?" | Scenario 6 — pipeline script, not startup on three instances |
+
+Bring a `SaveChanges` failure or a tenant-leak story, not a definition of `DbSet`.

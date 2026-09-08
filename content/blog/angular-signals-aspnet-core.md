@@ -2,6 +2,7 @@
 title: "Angular Signals with ASP.NET Core APIs"
 description: "Angular Signals for API-driven apps — load state from ASP.NET Core, computed UI flags, RxJS interop, and when Signals beat BehaviorSubject for SPA state."
 date: "2026-08-09"
+category: "architecture"
 tags: ["Angular", "Signals", "ASP.NET Core", "TypeScript", "RxJS", "SPA"]
 related:
   - angular-dotnet-integration
@@ -15,6 +16,19 @@ faq:
   - q: "Should a Signal store the JWT?"
     a: "No. Access tokens belong in memory behind the interceptor. Signals are UI state, not a token vault."
 ---
+
+**Angular Signals** hold synchronous UI state the template reads every change-detection cycle; HTTP from ASP.NET Core still starts as Observables and maps into signals via `toSignal` or explicit subscribe.
+
+```text
+HttpClient.get → Observable → toSignal / subscribe
+                                    │
+                                    ▼
+                          signal(orders) + computed(isEmpty)
+                                    │
+                              template reads
+```
+
+**New to this** → stay here. **Merging a PR** → [what signals are for](#what-signals-are-for). **On-call / interview** → [load from API](#load-from-aspnet-core-into-a-signal) · [RxJS interop](#rxjs-interop-without-chaos) · [if an interviewer asks](#if-an-interviewer-asks).
 
 **Angular Signals** fix a pain every ASP.NET Core + Angular team hits: too many `subscribe` calls, manual `markForCheck`, and UI state that drifts from the last HTTP response. Signals are not a replacement for every RxJS stream — they are a better default for **synchronous state** your templates read constantly.
 
@@ -142,4 +156,9 @@ A clinic admin SPA tracked `patient$`, `loading$`, `tab$`, and `dirty$` as subje
 - [SignalR realtime patterns](/blog/signalr-aspnet-core-realtime)
 - [ASP.NET Core Minimal APIs](/blog/aspnet-core-minimal-apis)
 
-If your Angular SPA is drowning in subjects while the .NET API is already stable, [contact me](/contact) — we can migrate the hot screens to Signals without a big-bang rewrite.
+## If an interviewer asks
+
+Signals vs BehaviorSubject; do Signals replace RxJS HTTP; should JWT live in a signal.
+
+**Strong answer:** Signals for synchronous UI state — loaded flags, selection, computed derived values. RxJS for HTTP, SignalR, and operator pipelines. Map HTTP into signals with `toSignal` or one subscribe in a service. Never store JWTs in signals — memory behind the interceptor, not template-readable state.
+

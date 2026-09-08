@@ -22,10 +22,6 @@ faq:
 
 A `CancellationToken` is a **“please stop” flag**. **Cooperative cancellation** means nothing is force-killed: each method must accept the token and pass it to the next I/O call. ASP.NET Core sets `HttpContext.RequestAborted` when Angular disconnects. If you drop the token on `ToListAsync()`, SQL keeps running after the tab closes.
 
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [linked timeout](#linked-timeout-abort) · [prove it](#prove-it-app-insights-then-sql) · [if an interviewer asks](#if-an-interviewer-asks).
-
-**Terms used here:** **`CancellationTokenSource` (CTS)** = the object that *owns* cancellation; you call `Cancel()` or set a timeout on it. The **token** is the flag you pass around. **499** = client closed the connection (Kestrel). **408 / 504** = *your* timeout with the tab still open.
-
 ```text
 Angular closes the tab
    → Kestrel sets RequestAborted
@@ -34,6 +30,10 @@ Angular closes the tab
             → ToListAsync(ct)     ← if you omit ct, this arrow is broken
                → SQL can stop
 ```
+
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [linked timeout](#linked-timeout-abort) · [prove it](#prove-it-app-insights-then-sql) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **`CancellationTokenSource` (CTS)** = the object that *owns* cancellation; you call `Cancel()` or set a timeout on it. The **token** is the flag you pass around. **499** = client closed the connection (Kestrel). **408 / 504** = *your* timeout with the tab still open.
 
 ## Binding at the edge
 
@@ -179,4 +179,4 @@ How to obtain the token; why every endpoint should accept one; linked timeout; R
 
 **Strong answer:** bind, pass, link+dispose, don’t 500 a cancel.
 
-If reports keep running after users navigate away, [contact me](/contact). We grep for `ToListAsync()` without a token first.
+. We grep for `ToListAsync()` without a token first.

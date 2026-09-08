@@ -22,10 +22,6 @@ faq:
 
 A **`BackgroundService`** is a class the generic host **starts with the process** and **stops on shutdown**. `ExecuteAsync` is the loop. It is not an HTTP request. **`_ = NotifyAsync()` after `return Ok()` is not a worker** — nobody owns the exceptions, and `RequestAborted` is already canceled.
 
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [stoppingToken](#stoppingtoken-vs-requestaborted) · [scope](#one-scope-per-message) · [if an interviewer asks](#if-an-interviewer-asks).
-
-**Terms used here:** **`IHostedService`** = the interface; `BackgroundService` is the usual base class. **`stoppingToken`** = host shutdown flag passed into `ExecuteAsync`. **`IServiceScopeFactory`** = create a DI scope so each message gets its own `DbContext`. **Durable queue** = Service Bus / RabbitMQ — survives recycle. In-process buffer: [Channel](/blog/csharp-channel-producer-consumer).
-
 ```text
 HTTP POST checkout
   await Writer.WriteAsync(orderId)     ← request path, then Ok()
@@ -35,6 +31,10 @@ HTTP POST checkout
     stoppingToken (shutdown, not Angular)
     CreateAsyncScope() → DbContext → send
 ```
+
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [stoppingToken](#stoppingtoken-vs-requestaborted) · [scope](#one-scope-per-message) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **`IHostedService`** = the interface; `BackgroundService` is the usual base class. **`stoppingToken`** = host shutdown flag passed into `ExecuteAsync`. **`IServiceScopeFactory`** = create a DI scope so each message gets its own `DbContext`. **Durable queue** = Service Bus / RabbitMQ — survives recycle. In-process buffer: [Channel](/blog/csharp-channel-producer-consumer).
 
 ## Smallest example
 
@@ -179,4 +179,4 @@ What a hosted service is; why `RequestAborted` is wrong after `Ok()`; how you ge
 
 **Strong answer:** host-owned loop, `stoppingToken`, scope per message, not `Task.Run`.
 
-If checkout “sends email” with `Task.Run` and nights drop notifies on recycle, [contact me](/contact). Bring the worker class.
+. Bring the worker class.

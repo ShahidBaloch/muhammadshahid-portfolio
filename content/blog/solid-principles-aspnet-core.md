@@ -17,6 +17,18 @@ faq:
     a: "No. SOLID is how classes relate. Clean Architecture is where domain rules live. Folders do not make either true."
 ---
 
+**SOLID** is five review rules for class design: one reason to change, extend without editing core logic, honest subtypes, slim interfaces, and dependencies on abstractions injected at the composition root — not an interface on every line of code.
+
+```text
+Controller → Handler → IPricingStrategy (OCP)
+                │              │
+                ▼              ▼
+           IOrderWriter    PartnerAPricing
+           (ISP/DIP)       WholesalePricing
+```
+
+**New to this** → stay here. **Merging a PR** → [SRP smell](#s--single-responsibility). **On-call / interview** → [mini case study](#mini-case-study-partner-pricing-outage) · [refactor checklist](#refactor-checklist-use-on-a-real-pr) · [if an interviewer asks](#if-an-interviewer-asks).
+
 Teams paste the five SOLID letters into Confluence, then ship god controllers, 30-method interfaces, and “DIP” that still news up `SqlConnection` in a service next to a Razor page.
 
 This is a practical walkthrough for ASP.NET Core APIs that serve Angular SPAs. Examples come from healthcare, SaaS, and marketplace work (including patterns around CarBazaar and Ecom_NET10-style systems). The point is a review lens you can use on a PR, not a Wikipedia recap.
@@ -292,4 +304,9 @@ SOLID on the server does not replace SPA structure — but leaky APIs force Angu
 - [Clean Architecture in ASP.NET Core](/blog/clean-architecture-aspnet-core)
 - [ASP.NET Core interview scenarios](/blog/aspnet-core-interview-questions-scenarios)
 
-If your .NET + Angular codebase treats SOLID as wallpaper while every feature edits the same controller, [contact me](/contact) — we can carve seams around the hottest change rates first.
+## If an interviewer asks
+
+One SOLID letter with a real example; DIP vs interface mania; how OCP relates to Strategy.
+
+**Strong answer:** SRP — controller does HTTP, handler orchestrates, domain owns rules. OCP — add partner pricing as a new strategy class, not another `case`. DIP — inject `IOrderWriter`, do not `new AppDbContext` in handlers. SOLID is a PR lens, not a mandate for `IOrder`/`Order` pairs.
+

@@ -16,6 +16,19 @@ faq:
     a: "No. Auth is abuse-shaped. Search is expensive SQL. Separate partitions so a catalog crawl does not lock clinicians out of login."
 ---
 
+**Rate limiting** caps how many requests a partition (IP, user, API key) can make per time window; ASP.NET Core returns **429** when the limit is exceeded. In-memory limiters are per process — not shared across App Service instances.
+
+```text
+Request → partition key (user / IP)
+              │
+              ▼
+         Fixed / sliding window
+              │
+         over limit? → 429 + JSON body
+```
+
+**New to this** → stay here. **Merging a PR** → [minimal setup](#minimal-setup). **On-call / interview** → [per-user partition](#partition-by-user-when-you-can) · [multi-instance reality](#multi-instance-and-redis-reality-check) · [if an interviewer asks](#if-an-interviewer-asks).
+
 **ASP.NET Core rate limiting** is a high-intent topic because it sits at the intersection of security, cost control, and uptime. Bots hammer login endpoints. A buggy Angular retry loop fans out hundreds of calls. One tenant floods a shared SaaS API. Without limits, you pay in CPU, SQL, and support tickets.
 
 Since .NET 7, ASP.NET Core ships built-in rate limiting middleware. I turn it on for public and partner APIs — especially auth, search, and export endpoints that are expensive or attractive to abuse.
@@ -197,6 +210,11 @@ Rate limiting is not a substitute for correct auth refresh logic ([Angular JWT i
 
 **ASP.NET Core rate limiting** is one of the highest-leverage protections you can add in an afternoon — if you tune partitions and avoid treating in-memory limits as global farm guarantees. Protect login and heavy endpoints first, teach Angular to respect 429, and escalate to distributed/edge limits when horizontal scale demands it.
 
-Related: [IHttpClientFactory](/blog/ihttpclientfactory-aspnet-core) for outbound resilience, [SemaphoreSlim outbound throttle](/blog/csharp-semaphore-slim-async-lock) when you are the client hitting a partner cap, [JWT auth checklist](/blog/aspnet-core-jwt-auth) for login surfaces worth protecting. Inbound 429s are this page — not an async lock. Topic map: [async & threading hub](/learning/async-concurrency).
+Related: [IHttpClientFactory](/blog/ihttpclientfactory-aspnet-core) for outbound resilience, [SemaphoreSlim outbound throttle](/blog/csharp-semaphore-slim-async-lock) when you are the client hitting a partner cap, [JWT auth checklist](/blog/aspnet-core-jwt-auth) for login surfaces worth protecting. Topic map: [async & threading hub](/learning/async-concurrency).
 
-Need help hardening a .NET + Angular API? [Contact me](/contact).
+## If an interviewer asks
+
+Fixed vs sliding window; per-IP vs per-user limits; does in-memory limiting work on multiple instances.
+
+**Strong answer:** Fixed window is simple but bursts at edges; sliding is smoother. Prefer authenticated user partition over corporate NAT IP. In-memory limiters are per App Service instance — use Redis or edge (APIM/WAF) for farm-wide login protection. Return 429 with JSON Angular can parse; `QueueLimit = 0` for fail-fast public APIs.
+

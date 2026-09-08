@@ -2,6 +2,7 @@
 title: "Clean API Validation and Error Envelopes in ASP.NET Core"
 description: "ASP.NET Core API validation with ProblemDetails: FluentValidation without the deprecated AspNetCore package, one error envelope, and Angular form mapping."
 date: "2026-08-17"
+category: "architecture"
 tags: ["ASP.NET Core", "Validation", "Problem Details", "Angular", "API Design"]
 related:
   - aspnet-core-global-exception-handling
@@ -15,6 +16,16 @@ faq:
   - q: "Do 500s belong in the same envelope as 400s?"
     a: "Same family of ProblemDetails, different status. Unhandled exceptions are the global handler article. This page is expected 400s."
 ---
+
+A consistent **validation envelope** returns one ProblemDetails shape with an `errors` dictionary Angular forms can bind — same keys for model binding, FluentValidation, and domain conflicts.
+
+```text
+Bad input → 400 ProblemDetails { errors: { field: ["msg"] } }
+Conflict  → 409 ProblemDetails { detail: "..." }
+Angular   → one interceptor parser
+```
+
+**New to this** → stay here. **Merging a PR** → [one envelope](#one-envelope-for-the-angular-client). **On-call / interview** → [FluentValidation pipeline](#fluentvalidation-without-the-deprecated-mvc-package) · [bulk import edge cases](#bulk-import-and-grid-editing-edge-cases) · [if an interviewer asks](#if-an-interviewer-asks).
 
 Nothing erodes trust in an API faster than three different error shapes for the same validation failure. The login form expects `{ message: string }`. The checkout endpoint returns `{ errors: { field: ["..."] } }`. A middleware wraps 500s in yet another envelope. The Angular team builds three parsers, misses edge cases, and users see "Something went wrong" when the server actually sent a useful field error.
 
@@ -252,4 +263,8 @@ Rate-limit public validation-heavy endpoints (registration, contact forms) separ
 
 Consistent validation envelopes turn API errors from a front-end guessing game into a predictable contract. That is one of the highest-leverage integrations between ASP.NET Core and Angular on multi-form SaaS products.
 
-If you want your .NET API and Angular client aligned on validation, ProblemDetails, and error handling before your next release, [get in touch](/contact).
+## If an interviewer asks
+
+ProblemDetails vs custom error JSON; FluentValidation vs DataAnnotations; should 500s use the same envelope as 400s.
+
+**Strong answer:** One ProblemDetails family for the SPA — 400 carries `errors` dictionary with field keys matching form paths; 409 for business conflicts with `detail`; 500 generic detail plus `traceId` in logs. Validation is expected failure — not exception middleware. FluentValidation in a single pipeline beats mixing attribute and manual checks with different shapes.

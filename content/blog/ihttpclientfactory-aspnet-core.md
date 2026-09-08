@@ -16,6 +16,16 @@ faq:
     a: "If the dependency flakes, yes — with care on POSTs. Polly is optional. Lifetime of the client is this article."
 ---
 
+**IHttpClientFactory** pools `HttpHandler` instances so you do not `new HttpClient()` per request (socket exhaustion) or keep one static client forever (stale DNS).
+
+```text
+Wrong: new HttpClient() per call → socket exhaustion
+Wrong: static HttpClient forever   → stale DNS
+Right: AddHttpClient<TypedClient>() → factory-managed pool
+```
+
+**New to this** → stay here. **Merging a PR** → [why lifetime matters](#why-httpclient-lifetime-bites). **On-call / interview** → [typed clients](#typed-clients-the-default-i-recommend) · [failure story](#failure-story-i-still-see-on-client-projects) · [if an interviewer asks](#if-an-interviewer-asks).
+
 If you search **IHttpClientFactory ASP.NET Core**, you are usually already in trouble — or about to be. The classic symptoms are intermittent `SocketException`, slow outbound calls after traffic spikes, and a server that “runs out of ports” while CPU looks fine. The root cause is almost always **incorrect `HttpClient` lifetime**.
 
 I wire outbound HTTP from ASP.NET Core APIs constantly: identity providers, payment gateways, Azure services, EDI partners, and internal microservices. This is the practical guide I give teams so Angular-facing APIs do not melt when background jobs and user traffic both call external systems.
@@ -182,4 +192,10 @@ A carefully configured singleton/`SocketsHttpHandler` with `PooledConnectionLife
 
 **IHttpClientFactory** exists because `HttpClient` lifetime is easy to get wrong and expensive in production. Use named/typed clients, keep handlers pooled, set auth carefully, and treat outbound HTTP as a first-class reliability concern.
 
-Outbound fan-out and async: [SemaphoreSlim](/blog/csharp-semaphore-slim-async-lock) and the [async & threading hub](/learning/async-concurrency). If you want a quick review of outbound integrations in your .NET API, [contact me](/contact).
+Outbound fan-out and async: [SemaphoreSlim](/blog/csharp-semaphore-slim-async-lock) and the [async & threading hub](/learning/async-concurrency).
+
+## If an interviewer asks
+
+Why not `new HttpClient()` per request; is static HttpClient OK; typed vs named clients.
+
+**Strong answer:** Each `new HttpClient()` can leave sockets in TIME_WAIT — exhaustion under load. Static client avoids sockets but pins DNS until recycle. Factory rotates handlers with `PooledConnectionLifetime`. Typed clients (`AddHttpClient<T>`) are the default — inject `T`, not raw `HttpClient`.

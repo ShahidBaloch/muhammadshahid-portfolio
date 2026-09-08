@@ -18,6 +18,16 @@ faq:
     a: "Usually no. One SPA plus one API is ASP.NET Core Identity plus JWT. Reach for IdentityServer or OpenIddict when a second app, a partner, or a real SSO requirement shows up."
 ---
 
+An **identity server** is an OpenID Connect authorization server that issues tokens for multiple apps. **ASP.NET Core Identity** is a user membership store inside one app. You need the protocol layer when several clients share login; one SPA plus one API usually needs Identity plus JWT, not Duende or OpenIddict.
+
+```text
+One SPA + one API     → Identity + JWT (membership in your DB)
+Multiple apps / SSO   → OIDC server (Duende / OpenIddict / Entra)
+                        └── may still use Identity as user store
+```
+
+**New to this** → stay here. **Merging a PR** → [2026 menu table](#openiddict-vs-duende-vs-identity-the-2026-menu). **On-call / interview** → [when OIDC earns its keep](#scenarios-where-i-reach-for-oidc--identityserver) · [common mistakes](#common-mistakes-i-have-had-to-unwind) · [if an interviewer asks](#if-an-interviewer-asks).
+
 **IdentityServer** is an OpenID Connect / OAuth 2.0 authorization server for ASP.NET Core — today that usually means Duende IdentityServer or OpenIddict, not the retired IdentityServer4 product. Clients often ask for "single sign-on" before they can name the apps that need to share a login. That is a recipe for shipping an identity server when ASP.NET Core Identity with a well-designed JWT setup would have been enough for the first year.
 
 I have built both. A healthcare SaaS platform with a clinician admin portal, a patient-facing Angular app, and a partner API. A marketplace with buyer and seller surfaces plus an internal ops console. In each case, the identity decision shaped hosting cost, release cadence, and how painful it was to onboard a third application six months later.
@@ -155,4 +165,10 @@ Reach for **OpenIddict or Duende / OIDC** when multiple apps must share login, e
 
 The wrong choice is not "Identity without OIDC." The wrong choice is **OIDC before you have the problem it solves**, or **Identity alone long after three apps and a partner API have made auth the bottleneck**.
 
-If you are planning auth for a multi-app .NET and Angular platform and want a second opinion before you commit to IdentityServer or stay lean with Identity, [reach out](/contact). More identity posts: [Identity hub](/learning/identity).
+More identity posts: [Identity hub](/learning/identity).
+
+## If an interviewer asks
+
+Identity vs identity server; when one Angular app does not need OIDC; what Duende/OpenIddict add over Identity.
+
+**Strong answer:** Identity = user store and passwords in your app database. Identity server = OIDC issuer for multiple clients, federation, and standard token flows. One SPA + one API → Identity + JWT. Multiple apps, partners, or Entra SSO → authorization server. IS4 is EOL — OpenIddict or Duende for new OIDC work.

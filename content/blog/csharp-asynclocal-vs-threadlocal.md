@@ -22,16 +22,16 @@ faq:
 
 **`ThreadLocal<T>`** (and `[ThreadStatic]`) stores a value **per OS thread**. **`AsyncLocal<T>`** stores a value **per async flow**, so it survives `await` even when work resumes on a different thread. After `await ToListAsync`, ASP.NET Core often continues on another ThreadPool worker. Prefer passing `tenantId` as a parameter. **`IHttpContextAccessor`** is the request-scoped way to read the current user — not a static field.
 
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [AsyncLocal pattern](#asynclocal-done-as-safely-as-ambient-gets) · [if an interviewer asks](#if-an-interviewer-asks).
-
-**Terms used here:** **Ambient context** = a hidden “current user” instead of a parameter. **ExecutionContext** = the logical call context that flows across `await` (`AsyncLocal`, culture, `Activity`). **SynchronizationContext** = which *thread* continuations run on (UI). They are not the same.
-
 ```text
 Request starts on Thread 5    User.Value = "clinic-a"  (ThreadLocal)
        await ToListAsync
 Request continues on Thread 12   ThreadLocal empty — or Thread 12 still has clinic-b leftover
                                  AsyncLocal still "clinic-a"
 ```
+
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [AsyncLocal pattern](#asynclocal-done-as-safely-as-ambient-gets) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **Ambient context** = a hidden “current user” instead of a parameter. **ExecutionContext** = the logical call context that flows across `await` (`AsyncLocal`, culture, `Activity`). **SynchronizationContext** = which *thread* continuations run on (UI). They are not the same.
 
 ## Thread hop demo
 
@@ -136,4 +136,4 @@ ThreadLocal vs AsyncLocal; leftovers of current user; thread id across await.
 
 **Strong answer:** pool threads are reused; ThreadLocal lies after await; prefer parameters; AsyncLocal is a measured compromise.
 
-If logs show the wrong clinic after an await, [contact me](/contact). We look for `ThreadStatic` and static `User` first.
+. We look for `ThreadStatic` and static `User` first.

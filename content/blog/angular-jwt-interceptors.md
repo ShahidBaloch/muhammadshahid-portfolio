@@ -1,6 +1,6 @@
 ---
 title: "Angular JWT Interceptors for ASP.NET Core APIs"
-description: "How I wire Angular HTTP interceptors for JWT access tokens, refresh rotation, and 401 recovery against ASP.NET Core and IdentityServer APIs — including memory vs localStorage tradeoffs."
+description: "Angular HTTP interceptors for ASP.NET Core JWT — bearer attach, in-memory token storage, single-flight refresh, 401 vs 403 handling, and IdentityServer CORS coordination."
 date: "2026-02-22"
 category: "authentication"
 tags: ["Angular", "JWT", "ASP.NET Core", "Security"]
@@ -13,15 +13,23 @@ faq:
     a: "No. Guards decide whether a URL may open. Interceptors attach tokens and recover 401s. You need both, plus API authorization that does not trust the SPA."
 ---
 
-Every Angular app that talks to a secured ASP.NET Core API eventually needs the same plumbing: attach a bearer token, recover when it expires, and stop five parallel requests from all trying to refresh at once.
+**An Angular JWT interceptor** is an `HttpInterceptorFn` that clones outgoing API requests to attach `Authorization: Bearer`, and optionally catches 401s to refresh once and retry.
 
-I have implemented this on healthcare admin portals, CarBazaar-style marketplace backends, and catalog systems where the API issues short-lived JWTs — sometimes through custom token endpoints, sometimes through IdentityServer. The libraries change; the delivery problems do not.
+```text
+HttpClient.get('/api/orders')
+       │
+       ▼
+ authInterceptor ──► adds Bearer access token
+       │
+       ▼
+   API call ──401──► refreshInterceptor ──► ONE refresh ──► retry with X-Retry
+       │
+      200
+```
 
-This article is the **Angular HTTP interceptor**: storage, refresh, and 401 recovery. Token validation and policies live on the API. Route access lives in the guard.
+Interceptors are the **automatic toll transponder** on every highway on-ramp: you do not hand cash at each exit. Guards only decide whether you may enter the highway system; interceptors pay the toll on every API mile.
 
-- API issuance, lifetimes, and policies: [ASP.NET Core JWT checklist](/blog/aspnet-core-jwt-auth)
-- Blocking routes by auth and role: [Angular auth guards](/blog/angular-auth-guard-aspnet-core)
-- Concurrent 401 stampede (queue, skip refresh URL, POST retry): [interceptor 401 refresh queue](/blog/angular-interceptor-401-refresh-queue)
+**New to this** → stay here. **Route blocking** → [auth guards](/blog/angular-auth-guard-aspnet-core). **Concurrent 401 stampede** → [401 refresh queue](/blog/angular-interceptor-401-refresh-queue). **API issuance** → [ASP.NET Core JWT checklist](/blog/aspnet-core-jwt-auth). **Interview prep** → [If an interviewer asks](#if-an-interviewer-asks).
 
 ## The contract between SPA and API
 
@@ -231,4 +239,17 @@ I also manually expire tokens in DevTools and walk through the client's highest-
 
 Solid JWT interceptors come down to a single token owner, bearer attachment on API routes only, single-flight refresh with one retry marked by a custom header, and storage choices documented rather than accidental. Pair that with an ASP.NET Core refresh endpoint that rotates and revokes honestly, and Angular apps stay usable while access tokens stay short-lived.
 
-If your SPA is stuck in login loops or refresh storms against an IdentityServer or custom JWT API, [get in touch](/contact).
+## If an interviewer asks
+
+**"Where should the access JWT live in Angular?"**
+
+**Strong answer:** Memory in a root `AuthTokenService` by default. localStorage survives XSS. Refresh in httpOnly cookie or BFF is a separate decision. Document the tradeoff; do not let feature teams read `localStorage` directly.
+
+**"Why two interceptors instead of one?"**
+
+**Strong answer:** Separation of concerns — attach bearer on every API call; handle 401 only on failures. Skip auth routes in the attach interceptor so you do not send an expired token to `/auth/refresh`. Register both once at app root; duplicate interceptors in lazy modules recreate refresh stampedes.
+
+**"What happens on 403 in the interceptor?"**
+
+**Strong answer:** Nothing to tokens. Show "not allowed." Refreshing on 403 does not grant a missing role and may confuse users into thinking their session died.
+

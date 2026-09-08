@@ -1,6 +1,6 @@
 ---
 title: "ASP.NET Core RBAC: Policies Over Scattered Roles"
-description: "Role and policy-based authorization in ASP.NET Core for healthcare and admin portals — why I replace scattered [Authorize(Roles)] attributes with named policies clients can audit."
+description: "ASP.NET Core RBAC with named authorization policies — role claims at login, tenant resource handlers, permission claims, and why Angular UI hiding is not security."
 date: "2026-03-08"
 category: "authentication"
 tags: ["ASP.NET Core", "RBAC", "Security", "Healthcare"]
@@ -13,11 +13,20 @@ faq:
     a: "No. UI hiding is courtesy. The API must Forbid 403 on the same policy. Otherwise a forged request still hits clinical notes."
 ---
 
-Healthcare admin portals and marketplace back offices rarely stay at two roles. You start with Admin and User. Then compliance wants ReadOnlyAuditor. Operations needs SupportAgent who can reset passwords but not view clinical notes. A billing partner gets access to invoices for one tenant only.
+**RBAC in ASP.NET Core** is role-based access control enforced by named authorization policies — deciding what an authenticated user may do after JWT validation succeeds.
 
-If every controller action carries a different `[Authorize(Roles = "...")]` string — or worse, inline role checks in methods — authorization becomes impossible to audit and dangerous to change. I have inherited ASP.NET Core APIs where fixing one role typo opened a endpoint that should have been clinic-scoped.
+```text
+JWT valid ──► [Authorize(Policy = "ViewClinicalRecords")]
+                    │
+              role + tenant check
+                    │
+         pass ──► action runs
+         fail ──► 403 Forbid (not 401)
+```
 
-This is how I implement RBAC on .NET APIs that sit behind Angular admin UIs — including provider registration systems, CarBazaar-style vendor consoles, and internal ops tools on Azure.
+Think of RBAC as **job titles on a badge**: "Physician" gets you through certain doors. Tenant checks ask "is this your clinic's patient record?" — role alone is not enough in healthcare or multi-tenant SaaS.
+
+**New to this** → stay here. **401 vs 403** → [401 vs 403](/blog/aspnet-core-401-vs-403). **JWT claims at login** → [ASP.NET Core JWT checklist](/blog/aspnet-core-jwt-auth). **Angular guards** → [auth guards](/blog/angular-auth-guard-aspnet-core). **Interview prep** → [If an interviewer asks](#if-an-interviewer-asks).
 
 ## Roles are for humans; policies are for enforcement
 
@@ -191,4 +200,17 @@ Regulated environments treat role change audit trails as a feature, not paperwor
 
 RBAC stays maintainable in ASP.NET Core when you name policies after business capabilities, issue consistent claims at login, combine role policies with tenant resource handlers, and treat Angular as a reflection of server rules — not the security boundary. Replace scattered role strings early; add permission claims when roles get blunt; test 403 paths as seriously as happy paths.
 
-If you are hardening authorization on a healthcare or admin portal — or untangling `[Authorize]` sprawl before an audit — [get in touch](/contact).
+## If an interviewer asks
+
+**"Policies vs [Authorize(Roles)] — when do you switch?"**
+
+**Strong answer:** Named policies from day one on any app that will grow past two roles. Policies group business capabilities (`ManageProviderRegistration`) in one registration block. When requirements change, you update one policy — not twelve controller attributes.
+
+**"How do you handle JWT role snapshots after a demotion?"**
+
+**Strong answer:** Short access token TTL (5–15 minutes), refresh revocation on role change, or a security stamp / token version claim invalidated on demotion. For privileged role removal in healthcare, force re-authentication rather than waiting for natural expiry.
+
+**"Does hiding a button in Angular enforce RBAC?"**
+
+**Strong answer:** No. UI hiding is UX. Verify with curl/Swagger that the API returns 403 for wrong roles. The guard blocking a route while the endpoint is `[AllowAnonymous]` is decoration, not security.
+

@@ -1,6 +1,6 @@
 ---
 title: "IDX10503 Signature Validation Failed in ASP.NET Core JWT"
-description: "IDX10503: Signature validation failed — what it actually means in ASP.NET Core JWT bearer auth: kid vs symmetric keys, disposed RSA, Identity opaque tokens, and the checks that are not this error."
+description: "Fix IDX10503 JWT signature validation failed in ASP.NET Core — wrong HMAC secret, disposed RSA keys, opaque Identity tokens, and how it differs from IDX10501 kid mismatch."
 date: "2026-09-07"
 category: "authentication"
 tags: ["JWT", "ASP.NET Core", "Security", "Angular", "Identity"]
@@ -17,9 +17,17 @@ faq:
     a: "No. That accepts forged tokens. Fix the signing credential, key lifetime, or stop sending MapIdentityApi opaque tokens to JwtBearer."
 ---
 
-**IDX10503: Signature validation failed** is IdentityModel saying: none of the keys you configured could verify this token’s signature. The rest of the sentence is often a lie. “Token does not have a kid” shows up on **symmetric HS256** APIs that never used a `kid`. Developers paste the whole line into Google. This URL is that paste.
+**IDX10503** means IdentityModel selected one or more signing keys and none of them verified the token's signature — the credential was parsed but cryptographically rejected.
 
-Issuing JWTs, lifetimes, and policies stay in [the JWT checklist](/blog/aspnet-core-jwt-auth). Opaque Identity API tokens vs JWT is [MapIdentityApi vs JWT](/blog/mapidentityapi-opaque-token-vs-jwt). Refresh rotation is [refresh token rotation](/blog/aspnet-core-jwt-refresh-token-rotation). A `kid` that is missing from JWKS is [IDX10501](/blog/aspnet-core-idx10501-jwt-kid), not this page. I will not retell those. Here I only decode **signature** failures on `AddJwtBearer`.
+```text
+JWT arrives ──► pick key(s) ──► verify signature ──► FAIL ──► IDX10503
+                     │
+         (wrong secret / disposed RSA / not a JWT at all)
+```
+
+Think of a **signature on a check**: the bank found your account number (key selection worked) but the signature does not match what's on file. IDX10501 is when the bank cannot even find the right signature card on file (`kid` missing from JWKS).
+
+**New to this** → stay here. **kid not in JWKS** → [IDX10501](/blog/aspnet-core-idx10501-jwt-kid). **JWT setup** → [ASP.NET Core JWT checklist](/blog/aspnet-core-jwt-auth). **Opaque Identity tokens** → [MapIdentityApi vs JWT](/blog/mapidentityapi-opaque-token-vs-jwt). **Interview prep** → [If an interviewer asks](#if-an-interviewer-asks).
 
 ## Read the line before you add a `kid`
 
@@ -116,4 +124,16 @@ Audience and issuer failures are **not** signature failures. Do not rotate the s
 - [Angular JWT interceptors](/blog/angular-jwt-interceptors)
 - [JWT refresh token rotation](/blog/aspnet-core-jwt-refresh-token-rotation)
 
-401s that only happen on the second request after a key was constructed in a `using`? [Contact me](/contact) — bring the IdentityModel line, not a screenshot of jwt.io alone.
+## If an interviewer asks
+
+**"Can you disable ValidateIssuerSigningKey to fix IDX10503?"**
+
+**Strong answer:** No. That accepts forged tokens. Fix the signing credential alignment, RSA key lifetime, or stop sending opaque Identity tokens to JwtBearer. Disabling validation is not a fix — it removes security.
+
+**"Why does IDX10503 say 'Token does not have a kid' on HS256?"**
+
+**Strong answer:** Symmetric keys often have no `kid` header. IdentityModel still tried the configured key and signature failed. The "no kid" hint is about key selection, not the root cause. The root cause is usually wrong secret bytes or encoding mismatch between issuer and validator.
+
+**"401 only on every second request — what causes that?"**
+
+**Strong answer:** Disposed RSA inside a `using` block while IdentityModel caches signature providers. First request works; second hits disposed key. Keep `RsaSecurityKey` for app lifetime or disable provider caching as a hotfix.

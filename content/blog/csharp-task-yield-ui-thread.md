@@ -22,10 +22,6 @@ faq:
 
 **`await Task.Yield()`** returns to the caller immediately and posts the rest of the method onto the captured **SynchronizationContext**. On WPF/MAUI that context is the **UI thread** (dispatcher). The **message pump** can run (paint, clicks). Then your method continues **on the UI thread**, which is what you want if the next line touches controls.
 
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [ASP.NET Core](#asp-net-core) · [if an interviewer asks](#if-an-interviewer-asks).
-
-**Terms used here:** **UI thread / dispatcher** = the one thread allowed to touch controls. **Message pump** = the loop that paints and handles clicks; a tight CPU loop on that thread freezes the window. **`async void`** is normally dangerous (exceptions unobserved, host cannot await). The **exception** is a UI event handler — there is no `Task` return slot. Still prefer `async Task` everywhere else.
-
 ```text
 [UI thread] HashFile (CPU)  →  frozen window
 [UI thread] HashFile → await Task.Yield() → pump paints Progress → back on UI
@@ -33,6 +29,10 @@ Better: await Task.Run(() => HashAll()) → UI never hashes
 ```
 
 `async` alone does not slice a tight CPU loop. It only yields at `await`.
+
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [ASP.NET Core](#asp-net-core) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **UI thread / dispatcher** = the one thread allowed to touch controls. **Message pump** = the loop that paints and handles clicks; a tight CPU loop on that thread freezes the window. **`async void`** is normally dangerous (exceptions unobserved, host cannot await). The **exception** is a UI event handler — there is no `Task` return slot. Still prefer `async Task` everywhere else.
 
 ## Smallest example
 
@@ -114,4 +114,4 @@ Purpose of `await Task.Yield()`; Sleep vs Delay; async void on a button.
 
 **Strong answer:** Yield posts back to the UI pump. Prefer `Task.Run` for CPU. Core APIs almost never need Yield.
 
-If a WPF or MAUI screen freezes during export but the API is fine, [contact me](/contact). The fix is usually `Task.Run` plus progress marshalled back.
+. The fix is usually `Task.Run` plus progress marshalled back.

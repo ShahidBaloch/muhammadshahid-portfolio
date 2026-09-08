@@ -16,6 +16,19 @@ faq:
     a: "Reconnect with backoff, then tell the user when the live feed is stale. Silent forever looks like a frozen auction, not a healthy socket."
 ---
 
+**SignalR** pushes server events to connected clients over WebSockets (with fallbacks) — authenticated hubs, group membership, and a scale-out backplane when more than one App Service instance exists.
+
+```text
+API action → Hub.Clients.Group("lot-42").SendAsync(...)
+                    │
+        ┌───────────┴───────────┐
+        ▼                       ▼
+   Instance A              Instance B
+   (needs backplane)       (needs backplane)
+```
+
+**New to this** → stay here. **Merging a PR** → [match pattern to use case](#match-the-pattern-to-the-use-case). **On-call / interview** → [auth on negotiate](#authenticate-the-connection-not-just-rest) · [reconnect resync](#reconnect-and-resync-angular-honesty) · [if an interviewer asks](#if-an-interviewer-asks).
+
 The first time I added live bidding to a marketplace product, the websocket connection worked on my laptop and failed the moment we deployed to two App Service instances. Bids appeared on one server’s connections but not the other. Sellers refreshed the page and accused us of hiding offers. That week taught me that SignalR is not “turn on hubs and broadcast.” It is a distributed systems problem with a friendly API.
 
 Since then I have used SignalR for auction floors, in-app notification feeds, healthcare queue boards, and order-status tickers in eCommerce admin panels. The transport is the same. The product rules — who may hear what, what happens on reconnect, how you scale — differ. This post covers the patterns I reuse so real-time features stay correct under load and across deploys.
@@ -158,4 +171,8 @@ Mock `@microsoft/signalr` in Angular unit tests. Save real connections for CI sm
 
 Ship one live loop first — one event, one screen, one group strategy — then expand. Real-time features fail quietly when teams skip reconnect resync and scale planning.
 
-If you are adding auctions, notifications, or live dashboards to an ASP.NET Core and Angular product and want production-grade SignalR from the start, [get in touch](/contact).
+## If an interviewer asks
+
+Why SignalR breaks with two App Service instances; hub auth; REST vs SignalR source of truth.
+
+**Strong answer:** In-memory hub state is per process — scale-out needs Azure SignalR or Redis backplane. Pass the same JWT on negotiate as REST; `[Authorize]` on hubs. SignalR delivers events; SQL remains source of truth — on reconnect, REST fetch missed notifications. Group by business id (`lot-42`), not connection id.

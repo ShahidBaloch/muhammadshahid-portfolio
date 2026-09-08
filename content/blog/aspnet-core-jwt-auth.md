@@ -1,6 +1,6 @@
 ---
 title: "ASP.NET Core JWT Auth: A Practical Checklist"
-description: "A production-ready checklist for JWT authentication in ASP.NET Core APIs — token lifetimes, refresh flows, policies, and Angular client habits from real client work."
+description: "Production ASP.NET Core JWT authentication checklist — token lifetimes, refresh rotation, authorization policies, Angular client habits, and go-live security review."
 date: "2026-06-12"
 updated: "2026-09-07"
 category: "authentication"
@@ -14,15 +14,23 @@ faq:
     a: "For a kiosk or a job that already has another session, maybe. For Angular users who should stay signed in, you need rotation or a BFF. Those are separate articles."
 ---
 
-When a client says they need JWT auth, they almost never mean a token endpoint and a 200 on `/api/me`. They mean users can sign in from Angular, stay signed in reasonably, hit protected APIs, and log out in a way that sticks — without holes that show up the first time someone runs a scanner.
+**JWT authentication in ASP.NET Core** is a system — not a token endpoint — covering issuance, validation, lifetimes, refresh, policies, and how the SPA stores and sends credentials.
 
-I have wired JWT and OAuth-style flows across marketplace microservices, eCommerce storefronts, and healthcare admin portals. CarBazaar splits identity into its own service. Ecom_NET10 keeps auth inside the monolith API with role-based policies. Healthcare work added stricter session and audit expectations. The libraries repeat; the threat model does not.
+```text
+Login ──► access JWT (short) + refresh (long, server-tracked)
+              │
+              ▼
+         API validates iss/aud/key/exp on every request
+              │
+              ▼
+         [Authorize] policies on sensitive paths
+              │
+         401 ──► SPA refresh ──► retry or logout
+```
 
-This article is the **API-side checklist**: issuance, lifetimes, policies, and secrets. It is not the Angular interceptor or the route guard.
+Think of JWT auth as a **theme park wristband system**: the wristband (access token) gets you through rides for a few hours; the season pass record (refresh token) at guest services lets you get a new wristband — but guest services can revoke the pass if it is stolen.
 
-- SPA token attach, refresh, and 401 storms: [Angular JWT interceptors](/blog/angular-jwt-interceptors)
-- Who can open `/dashboard` vs `/admin`: [Angular auth guards](/blog/angular-auth-guard-aspnet-core)
-- Where JWT secrets and `appsettings` actually live: [ASP.NET Core config file](/blog/aspnet-core-appsettings-localappsettings)
+**New to this** → stay here. **Angular interceptors** → [JWT interceptors](/blog/angular-jwt-interceptors). **Route guards** → [auth guards](/blog/angular-auth-guard-aspnet-core). **Refresh rotation** → [refresh token rotation](/blog/aspnet-core-jwt-refresh-token-rotation). **Interview prep** → [If an interviewer asks](#if-an-interviewer-asks).
 
 ## What "JWT auth" actually includes
 
@@ -182,6 +190,17 @@ Not every project needs a separate [identity server](/blog/identityserver-vs-asp
 
 For a single API + single Angular admin, JWT baked into the API with clear refresh endpoints is often enough until the second consumer appears.
 
----
+## If an interviewer asks
 
-JWT auth is boring when it is done right — and exciting in the wrong way when it is not. If you need ASP.NET Core and Angular auth wired for production, with policies that match your domain rather than a template, [contact me](/contact) and we can map your flow before code multiplies the cost of fixing it.
+**"What must you validate on every JWT in ASP.NET Core?"**
+
+**Strong answer:** Issuer, audience, signing key, and lifetime — explicitly in `TokenValidationParameters`. Do not rely on defaults you have not read. Clock skew should be modest (about one minute), not five minutes that keep expired tokens alive.
+
+**"How long should access vs refresh tokens live?"**
+
+**Strong answer:** Access: minutes (5–15 for SPAs). Refresh: hours to days with server-side hashing, rotation, and family revocation. Long-lived access tokens because refresh was hard is a common breach pattern.
+
+**"Is JWT auth enough without refresh tokens?"**
+
+**Strong answer:** For kiosks or jobs with another session, maybe. For SPAs where users stay signed in, you need refresh rotation, httpOnly cookie refresh, or a BFF — each is a documented tradeoff, not an accident.
+

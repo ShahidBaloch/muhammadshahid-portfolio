@@ -257,4 +257,4 @@ If you only pass `timeout.Token`, the user closing the tab does not stop SQL. If
 
 If a loop is titled “expert C#,” start here, then use the framework post for the API story. The full set lives on the [interview questions hub](/learning/interview-questions).
 
-Preparing a senior / staff C# loop, or writing one for a hiring team? [Contact me](/contact). Bring a production incident, not a trivia list.
+Preparing a senior / staff C# loop, or writing one for a hiring team?. Bring a production incident, not a trivia list.

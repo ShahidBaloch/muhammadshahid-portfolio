@@ -1,6 +1,6 @@
 ---
 title: "EF Core Value Conversions for Enums and VOs"
-description: "HasConversion maps an EmailAddress or enum to one SQL column. LINQ cannot query into a JSON blob you stuffed in that conversion."
+description: "EF Core value conversions for enums and value objects: HasConversion maps EmailAddress or enum to one SQL column — and what LINQ cannot query inside a JSON blob."
 date: "2026-09-07"
 category: "ef-core"
 tags: ["EF Core", "Architecture", "DDD", "C#"]
@@ -17,9 +17,23 @@ faq:
     a: "It might if you leave it as an owned entity by convention. HasConversion to string keeps one NVARCHAR column. That is what I want for email and money."
 ---
 
+**Value conversions** in EF Core (`HasConversion`) map a rich CLR type — `EmailAddress`, an enum, money — to a single database column. SQL Server stores `NVARCHAR` or `INT`; your domain keeps validation at construction. EF translates on read and write without creating a separate table per value object.
+
+```text
+Without HasConversion                 With HasConversion
+
+  EmailAddress by convention          User.Email → NVARCHAR(256)
+  → surprise owned-entity table       enum Status → 'Submitted' string
+  → extra JOINs                       one column, domain type in C#
+```
+
+**New to this** → stay here. **Merging a PR** → [map a value object](#map-a-value-object-to-one-column). **On-call / interview** → [what LINQ cannot do](#what-linq-cannot-do) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **`HasConversion`** = fluent API with to-column and from-column lambdas. **`OwnsOne`** = EF maps nested properties to columns or JSON — use when you need to filter on inner fields. **Translating vs client eval** = EF must turn your LINQ into SQL; converted JSON blobs cannot be queried inside.
+
 I do not want a `string Email` on `User` if the domain already has an `EmailAddress` that rejects junk at construction. SQL Server still needs `NVARCHAR`. **`HasConversion`** is how I keep the CLR type and a single column.
 
-This is not a Clean Architecture folder tour — that is [the architecture post](/blog/clean-architecture-aspnet-core). It is the mapping that stops EF from turning a value object into a surprise table.
+This is not a Clean Architecture folder tour — that is [the architecture post](/blog/clean-architecture-aspnet-core).
 
 ## Map a value object to one column
 
@@ -71,6 +85,12 @@ db.Users.Where(u => u.Settings.Theme == "Dark")
 
 EF sees a primitive. It cannot reach `.Theme`. If you must filter on pieces of the object, **do not** use a JSON `HasConversion`. Use `OwnsOne`, or EF Core’s JSON column mapping, so SQL Server sees properties. [ExecuteUpdate](/blog/ef-core-bulk-update-executeupdate) on a converted column sets the whole value, not an inner field.
 
-I do not serialize an entire `Patient` graph into a converted column to “stay DDD.” That is a blob that cannot be indexed honestly. Keep the value object small: email, money, a code.
+I do not serialize an entire `Patient` graph into a converted column to "stay DDD." That is a blob that cannot be indexed honestly. Keep the value object small: email, money, a code.
 
-If EF just created a table for `EmailAddress`, [contact me](/contact). The conversion (or `OwnsOne` with `ToJson`) is the fix, not another entity.
+## If an interviewer asks
+
+*How do you store an enum as a string in EF Core — and can you query inside a value object stored as JSON?*
+
+**30-second answer:** `Property(e => e.Status).HasConversion<string>()` with a max length. A simple `HasConversion` to JSON makes the column opaque to LINQ — you cannot `Where(u => u.Settings.Theme == "Dark")`. Use `OwnsOne` or SQL Server JSON column mapping if you need to filter inner properties.
+
+**Strong answer:** I'd use `HasConversion` for small value objects — email, money, status enums — with `HasMaxLength` and validation in the constructor. Strings in SSMS are worth the storage on healthcare status columns. I'd never change a conversion on a live table without a migration plan. If analysts need to filter on nested settings, I'd use `OwnsOne` with `ToJson()` so EF sees properties, not a blob. `ExecuteUpdate` on a converted column sets the whole value, not an inner field.

@@ -22,10 +22,6 @@ faq:
 
 `Task.WhenAll` takes several `Task`s and returns **one** `Task` that completes when the last child finishes. That is **I/O concurrency** (many waits in flight). `Parallel.ForEach` is **CPU parallelism** (use the cores). `Task.WaitAll` is WhenAll’s blocking cousin — same clock time, a parked ThreadPool worker.
 
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [cap of 50](#whenall-with-a-cap-of-50) · [Parallel.ForEachAsync](#parallel-foreachasync) · [if an interviewer asks](#if-an-interviewer-asks).
-
-**Terms used here:** **429** = HTTP Too Many Requests (partner throttled you). **rps** = requests per second. **`AggregateException`** = wrapper WhenAll uses when more than one child faulted; `await` usually unwraps to the first. **`Parallel.ForEachAsync`** = .NET 6+.
-
 ```text
 Three 2-second HTTP calls
 
@@ -37,6 +33,10 @@ WaitAll:           same 2s clock, but a ThreadPool worker sits idle the whole ti
 ```
 
 `async`/`await` **does not** mean “run on many cores.” It means “do not hold a worker while I/O is in flight.”
+
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [cap of 50](#whenall-with-a-cap-of-50) · [Parallel.ForEachAsync](#parallel-foreachasync) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **429** = HTTP Too Many Requests (partner throttled you). **rps** = requests per second. **`AggregateException`** = wrapper WhenAll uses when more than one child faulted; `await` usually unwraps to the first. **`Parallel.ForEachAsync`** = .NET 6+.
 
 ## Smallest example
 
@@ -161,4 +161,4 @@ WhenAll vs Parallel.ForEach; WhenAll vs WaitAll; three 2-second calls; WhenAll o
 
 **Strong answer:** I/O → WhenAll + cap. CPU → Parallel. Never one context in parallel.
 
-If a bulk enrich job 429s a partner or starves Kestrel, [contact me](/contact). Bring the loop and the partner’s rate limit.
+. Bring the loop and the partner’s rate limit.

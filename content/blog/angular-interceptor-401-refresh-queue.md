@@ -1,6 +1,6 @@
 ---
 title: "Angular Interceptor: Queue Concurrent 401s"
-description: "The concurrent 401 stampede against ASP.NET Core JWT refresh: why shareReplay still double-rotates, how I queue retries in RxJS, and what to skip so you do not log the user out."
+description: "Fix concurrent 401 refresh stampede in Angular against ASP.NET Core JWT rotation — single-flight RxJS queue, shareReplay pitfalls, skip rules, and POST retry safety."
 date: "2026-08-16"
 updated: "2026-09-07"
 category: "authentication"
@@ -14,9 +14,19 @@ faq:
     a: "No. 403 means the user is authenticated and forbidden. Refreshing a valid token will not grant a missing policy. Only 401 should enter the queue."
 ---
 
-The dashboard loads six widgets. The access JWT expired thirty seconds ago. Six HTTP calls return **401** in the same tick. Six interceptors call `/auth/refresh`. If the API [rotates refresh tokens](/blog/aspnet-core-jwt-refresh-token-rotation), the second caller presents a token the first caller already consumed. The server may treat that as **reuse** and kill the session. The user did nothing wrong.
+**A 401 refresh queue** is a single in-flight refresh observable that every concurrent 401 waits on — so six expired-widget calls produce one rotation, not six competing refresh POSTs that kill the session.
 
-This page is only that failure: **multiple 401s, one refresh, queued retries**. The broader interceptor, storage, and guard story lives in [Angular JWT interceptors](/blog/angular-jwt-interceptors). Do not copy that article into this one.
+```text
+Widget A ──401──┐
+Widget B ──401──┼──► ONE refresh POST ──► new access token ──► retry A,B,C,D
+Widget C ──401──┤         ▲
+Widget D ──401──┘         │
+                     (second refresh blocked until finalize)
+```
+
+Picture a **single-lane toll booth**: the first car pays; everyone behind waits in line. If six cars all try separate booths with one debit card (the refresh token), the bank flags fraud and cancels the card — that is reuse detection on the API.
+
+**New to this** → stay here. **Full interceptor setup** → [Angular JWT interceptors](/blog/angular-jwt-interceptors). **Server-side rotation** → [JWT refresh token rotation](/blog/aspnet-core-jwt-refresh-token-rotation). **403 vs 401** → [401 vs 403](/blog/aspnet-core-401-vs-403). **Interview prep** → [If an interviewer asks](#if-an-interviewer-asks).
 
 ## What “queue” means (and what it does not)
 
@@ -186,6 +196,16 @@ If you see two refresh rows, the lock is not shared. If you see refresh looping,
 
 It is not a JWT tutorial. It is not cookie vs `localStorage`. It is not “how to write an interceptor.” Those pages exist. This page exists because **concurrent 401 + rotation** is the bug that looks like “Angular auth is flaky” on Monday morning.
 
----
+## If an interviewer asks
 
-If your SPA logs people out when several widgets load at once against an ASP.NET Core refresh endpoint, [contact me](/contact). Bring a HAR with two refresh calls if you have one — that is usually enough to see whether the race is the client or the API.
+**"Why does shareReplay alone fail to prevent double refresh?"**
+
+**Strong answer:** Each 401 may construct a new inner observable before the lock is set. Two interceptors registered (root + lazy module), refresh URL not excluded from the 401 handler, or refresh going through the same interceptor — all bypass a naive shareReplay. You need one synchronously assigned in-flight observable at root scope, plus skip rules for refresh/login URLs.
+
+**"Should you retry POST after 401 refresh?"**
+
+**Strong answer:** Only when idempotent or the API supports Idempotency-Key. A 401 on POST may mean the server processed the request but the response was lost. Blind retry can double-charge or double-submit clinical records. GET/HEAD retry; dangerous POSTs surface "session refreshed — submit again."
+
+**"What status codes should trigger refresh?"**
+
+**Strong answer:** 401 only. 403 means authenticated but forbidden — refresh will not grant a missing role. APIs that return 401 for policy failures train the SPA to refresh forever; fix the API first.

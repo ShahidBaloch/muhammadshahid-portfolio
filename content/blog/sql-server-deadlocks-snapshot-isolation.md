@@ -17,6 +17,20 @@ faq:
     a: "Every update versions a row into TempDB. If TempDB is one file on slow disks, you trade deadlocks for PAGELATCH_UP. Configure TempDB first."
 ---
 
+**Read Committed Snapshot Isolation (RCSI)** lets SQL Server readers see the last committed row version in TempDB instead of taking shared locks that block writers. It fixes many **reader/writer deadlocks** on ASP.NET Core APIs — it does **not** replace **optimistic concurrency tokens** when two writers touch the same row.
+
+```text
+Read Committed (default)          RCSI enabled
+
+Reader wants S lock  ──X──  Writer UPDATE    Reader reads version in TempDB
+Writer waits on reader           Writer does not wait on readers
+→ deadlock victim                → fewer reader/writer deadlocks
+```
+
+**New to this** → stay here. **Merging a PR** → [Enable RCSI](#enable-rcsi). **On-call / interview** → [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **RCSI** = `READ_COMMITTED_SNAPSHOT ON` at database level. **Version store** = row versions in TempDB. **RowVersion** = EF optimistic concurrency token for same-row writes.
+
 ![Read committed locks blocking readers versus RCSI sending readers to a TempDB row version](/images/blog/sql-server-deadlocks.png)
 
 The marketplace API threw `SqlException`: transaction was deadlocked and chosen as the victim. The deadlock graph was a **long reporting SELECT** holding shared locks against a **checkout UPDATE**. CPU looked fine. Throughput was not.
@@ -49,4 +63,8 @@ Versions live in TempDB. Write-heavy fee imports plus RCSI plus one TempDB file 
 
 I do not enable RCSI on a misconfigured box as a Friday hero fix without watching `PAGELATCH_UP` on database id 2.
 
-If checkout deadlocks against a report, [contact me](/contact). The deadlock graph plus whether RCSI is on is the whole conversation.
+## If an interviewer asks
+
+**30-second answer:** Reader/writer deadlocks under default Read Committed — enable RCSI so readers use row versions. Two writers on the same row still need a concurrency token; RCSI does not fix last-write-wins.
+
+**Strong answer:** Names TempDB trade-off after RCSI, distinguishes RCSI from session `SNAPSHOT` isolation, and says when the deadlock graph shows two writers on the same key.

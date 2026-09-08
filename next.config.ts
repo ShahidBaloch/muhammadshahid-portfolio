@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   // blog/learning pages cannot 500 if a function ever reads content at runtime.
   // sitemap.xml and rss.xml are static files generated in prebuild.
   outputFileTracingIncludes: {
-    "*": ["./content/blog/**/*"],
+    "*": ["./content/blog/**/*", "./content/learning/**/*"],
   },
   async redirects() {
     return [

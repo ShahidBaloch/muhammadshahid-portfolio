@@ -13,6 +13,19 @@ faq:
     a: "It can send it. JwtBearer will still 401 unless you also configured Identity to issue JWTs. Mixing the two by accident is the usual rescue."
 ---
 
+**MapIdentityApi** exposes Identity over HTTP with **opaque** access tokens by default — random identifiers validated against Identity's store, not self-contained JWTs. Angular can store the string, but `AddJwtBearer()` will 401 unless you configured JWT issuance separately.
+
+```text
+/login → opaque accessToken
+              │
+              ▼
+/api/orders + JwtBearer only  → 401 (wrong scheme)
+/api/orders + Identity bearer  → 200 (if same host)
+Second API process            → needs JWT or introspection
+```
+
+**New to this** → stay here. **Merging a PR** → [decision table](#a-decision-table-i-actually-use). **On-call / interview** → [Authorize mismatch](#mapidentityapi-plus-authorize-on-minimal-apis) · [if you need JWT](#if-you-need-jwt-anyway) · [if an interviewer asks](#if-an-interviewer-asks).
+
 A recurring freelance rescue: the team enabled `MapIdentityApi()`, Angular stored `accessToken` from `/login`, and then `[Authorize]` on a JWT bearer pipeline rejected every call. Swagger looked fine. The SPA looked broken. The missing sentence in too many tutorials is this: **Identity’s API endpoints issue opaque tokens by default. They are not JWTs.**
 
 This is a decision article. It is not “JWT is dead” and it is not “never use MapIdentityApi.”
@@ -122,4 +135,10 @@ If the answers are “several APIs,” “maybe Azure AD later,” or “mobile 
 
 ---
 
-If your Angular app is sending Identity API tokens into a JWT pipeline (or the other way around), [contact me](/contact). The fix is usually a deliberate scheme choice, not another interceptor. The IdentityModel line for a JWT that cannot be verified is [IDX10503](/blog/aspnet-core-idx10503-jwt-signature).
+The fix is usually a deliberate scheme choice, not another interceptor. JWT signature failures: [IDX10503](/blog/aspnet-core-idx10503-jwt-signature).
+
+## If an interviewer asks
+
+Does MapIdentityApi return a JWT; when opaque tokens are enough; why `/login` works but `/api` returns 401.
+
+**Strong answer:** MapIdentityApi issues opaque tokens by default — not JWTs. Fine for one first-party host that validates against Identity. Multiple APIs or local JWT validation need explicit JWT issuance or OIDC. 401 after login usually means JwtBearer is the default scheme but the SPA sends an Identity opaque token — align authenticate schemes or issue JWTs after `SignInManager`.

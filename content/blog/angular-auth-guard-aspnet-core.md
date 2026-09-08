@@ -1,6 +1,6 @@
 ---
 title: "Angular Auth Guard with ASP.NET Core JWT"
-description: "How to implement Angular auth guards and role guards with ASP.NET Core JWT — canActivate, token expiry checks, and role claims from the API without brittle localStorage hacks."
+description: "Angular auth guard and CanActivateFn with ASP.NET Core JWT — route protection, role guards, token expiry checks, returnUrl safety, and why guards are UX not API security."
 date: "2026-08-01"
 category: "authentication"
 tags: ["Angular", "Auth Guard", "JWT", "ASP.NET Core", "Security"]
@@ -13,14 +13,28 @@ faq:
     a: "No. Guards block navigation. Interceptors attach Bearer tokens and handle 401. Role UI hiding is also not authorization — policies on the API are."
 ---
 
-A route guard that only checks `localStorage.getItem('token')` is enough for a demo. It is not enough for a healthcare portal or an admin SPA, where a stale token or a forged role claim becomes an incident.
+**An Angular auth guard** is a `CanActivateFn` (or class guard) that decides whether the router may load a route — using token presence, expiry, and role claims from the JWT the API issued.
 
-I wire Angular route guards against ASP.NET Core JWT APIs on client work — provider portals, marketplace admin screens, and eCommerce back offices. This article is **who may open a URL**: what the API must put in the token, how the guard should decide, and where people break security without noticing.
+```text
+User clicks /admin
+       │
+       ▼
+  authGuard ──no token──► /login?returnUrl=/admin
+       │
+    has token
+       │
+       ▼
+  roleGuard ──wrong role──► /forbidden
+       │
+    allowed
+       │
+       ▼
+  load admin component  (API still enforces [Authorize] on every call)
+```
 
-It is not the token endpoint and not the HTTP interceptor.
+Think of guards as the **bouncer at the door**: they check your wristband before you enter the VIP room. The kitchen (API) still verifies you before serving food. A demo that only checks `localStorage.getItem('token')` is a bouncer who never looks at expiry or whether the wristband was printed by the venue.
 
-- API JWT configuration: [ASP.NET Core JWT checklist](/blog/aspnet-core-jwt-auth)
-- Attaching and refreshing tokens: [Angular JWT interceptors](/blog/angular-jwt-interceptors)
+**New to this** → stay here. **Token attach and 401 recovery** → [Angular JWT interceptors](/blog/angular-jwt-interceptors). **API claims and policies** → [ASP.NET Core JWT checklist](/blog/aspnet-core-jwt-auth). **Interview prep** → [If an interviewer asks](#if-an-interviewer-asks).
 
 ## What people mean when they search this
 
@@ -185,4 +199,17 @@ Add before production:
 6. Interceptor handles 401 without login loops
 7. Manual test: expired token, wrong role, direct API call without UI
 
-If you want the same auth story wired into your product, [contact me](/contact).
+## If an interviewer asks
+
+**"Do auth guards secure the API?"**
+
+**Strong answer:** No. Guards are client-side UX. They block navigation and lazy-loaded bundles. Anyone can call the API with curl. Security is `[Authorize]` and policies on ASP.NET Core. Guards reduce confusion and prevent downloading admin bundles to anonymous users.
+
+**"Why not just hide the Admin menu with `*ngIf`?"**
+
+**Strong answer:** Bookmarks, deep links, and browser history bypass hidden UI. A guard on the route plus API policy on the endpoint covers both navigation and data access. Hiding buttons is courtesy; guards and policies are enforcement layers.
+
+**"How do you handle expired tokens in a guard?"**
+
+**Strong answer:** Decode `exp` (with modest clock skew), not just "string exists." Pair with an interceptor that refreshes on 401 so a guard during async init does not race refresh-on-startup. Clear storage and redirect to login when refresh fails.
+

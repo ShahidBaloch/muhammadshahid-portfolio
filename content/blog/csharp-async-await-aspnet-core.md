@@ -20,10 +20,6 @@ faq:
 
 `async`/`await` let a method wait for slow work (database, HTTP, blobs) **without holding a thread**. The ThreadPool worker goes back to the pool and serves other requests. The query is not faster. The API can take more concurrent clients.
 
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [production](#failure-story-sync-service-layer-in-a-clinic-portal) · [if an interviewer asks](#if-an-interviewer-asks).
-
-**Terms used here:** **ThreadPool** = shared workers Kestrel (the ASP.NET Core web server) uses for your actions. **I/O-bound** = waiting on SQL/HTTP/disk. **CPU-bound** = hashing or tight loops — not “mark it async.” **Sync-over-async** = calling `.Result` / `.Wait()` on a `Task`. **Continuation** = code after `await`. New to Task vs Thread? Read [Task vs Thread vs ThreadPool](/blog/csharp-task-vs-thread) first.
-
 ```text
 Request hits Kestrel
   worker runs GetAsync until await ToListAsync
@@ -34,6 +30,10 @@ Request hits Kestrel
        │
        a worker continues: map DTO, return Ok()
 ```
+
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [production](#failure-story-sync-service-layer-in-a-clinic-portal) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **ThreadPool** = shared workers Kestrel (the ASP.NET Core web server) uses for your actions. **I/O-bound** = waiting on SQL/HTTP/disk. **CPU-bound** = hashing or tight loops — not “mark it async.” **Sync-over-async** = calling `.Result` / `.Wait()` on a `Task`. **Continuation** = code after `await`. New to Task vs Thread? Read [Task vs Thread vs ThreadPool](/blog/csharp-task-vs-thread) first.
 
 ## What async actually buys you
 
@@ -242,4 +242,3 @@ What `async`/`await` buys you on ASP.NET Core; why `.Result` is starvation not a
 
 **Strong answer:** async frees workers during I/O; the query is not faster; pass the token; never block on a `Task` on the request path.
 
-If your API still mixes sync wrappers around async EF Core and Angular clients time out under load, [contact me](/contact) — we can map the call chain and remove blockers before you scale hardware.

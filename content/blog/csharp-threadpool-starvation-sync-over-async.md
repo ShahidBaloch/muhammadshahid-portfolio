@@ -22,12 +22,6 @@ faq:
 
 **Thread pool starvation** means the ThreadPool has work (new HTTP requests and async continuations) and **no free worker**, because existing workers are blocked. A **504 Gateway Timeout** is the reverse proxy giving up while your API is still queued — often while CPU looks idle. The usual cause is **sync-over-async**: `.Result`, `.Wait()`, or `.GetAwaiter().GetResult()` on a `Task`.
 
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [production](#how-it-showed-up-in-production) · [diagnose](#diagnose-before-you-scale-the-farm) · [if an interviewer asks](#if-an-interviewer-asks).
-
-Read first if this is new: [Task vs Thread](/blog/csharp-task-vs-thread) and [async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).
-
-**Terms used here:** **Kestrel** = ASP.NET Core’s web server. **Continuation** = code after `await` that needs a worker when I/O finishes. **Hill-climbing** = the runtime adds ThreadPool workers slowly (about **one or two per second**) when the queue is backed up. **p95** = the 95th-percentile request duration.
-
 ```text
 Healthy await                         Starved by .Result
 
@@ -38,6 +32,12 @@ Healthy await                         Starved by .Result
      CPU: low, by design                   CPU: still low — nobody is computing
                                            gateway: 504
 ```
+
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [production](#how-it-showed-up-in-production) · [diagnose](#diagnose-before-you-scale-the-farm) · [if an interviewer asks](#if-an-interviewer-asks).
+
+Read first if this is new: [Task vs Thread](/blog/csharp-task-vs-thread) and [async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).
+
+**Terms used here:** **Kestrel** = ASP.NET Core’s web server. **Continuation** = code after `await` that needs a worker when I/O finishes. **Hill-climbing** = the runtime adds ThreadPool workers slowly (about **one or two per second**) when the queue is backed up. **p95** = the 95th-percentile request duration.
 
 ## Wrong vs right
 
@@ -178,4 +178,4 @@ What thread-pool starvation is; what `.Result` does; why async does not create a
 
 **Strong answer:** names injection rate, queue length, and a dump of `Wait`/`Result` — not “async is broken.”
 
-If your API 504s while SQL and CPU look fine, [contact me](/contact). Bring a 30-second `dotnet-counters` capture and one dump.
+. Bring a 30-second `dotnet-counters` capture and one dump.

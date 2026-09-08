@@ -17,7 +17,18 @@ faq:
     a: "Yes. Thin controllers calling application services is CQRS-lite. When to add MediatR at all is the ceremony article, not this license page."
 ---
 
-When MediatR’s licensing changed, a lot of teams did not ask “what does our architecture need?” They asked “what is the replace-NuGet story?” That is how you get a three-week migration that ships the same handlers with a new namespace and a new way to fail in production.
+After MediatR's commercial license, teams have three honest paths: **pay and stay**, **delete the bus** and call application services, or **migrate** to Wolverine when messaging/outbox — not license avoidance — is the real need.
+
+```text
+License shock
+    ├── Stay (behaviors load-bearing)
+    ├── Drop IMediator → application services
+    └── Wolverine (messaging + outbox, not protest vote)
+```
+
+**New to this** → stay here. **Merging a PR** → [when to stay](#when-i-stay-on-mediatr). **On-call / interview** → [drop mediator entirely](#when-i-drop-the-mediator-entirely) · [Wolverine upgrade case](#when-wolverine-is-a-real-upgrade-not-a-protest-vote) · [if an interviewer asks](#if-an-interviewer-asks).
+
+When MediatR's licensing changed, a lot of teams did not ask "what does our architecture need?" They asked "what is the replace-NuGet story?" That is how you get a three-week migration that ships the same handlers with a new namespace and a new way to fail in production.
 
 I have shipped ASP.NET Core APIs with MediatR, without a mediator, and with Wolverine-style in-process messaging. This article is a **decision and migration** note: stay, switch, or delete the bus. It is not legal advice. License terms change — read Lucky Penny / MediatR and Wolverine’s current licenses for **your** company size and product before you act.
 
@@ -155,6 +166,8 @@ or
 
 If nobody can sign a sentence, you are shopping.
 
----
+## If an interviewer asks
 
-If you need a calm MediatR / Wolverine / no-bus decision on an existing ASP.NET Core solution — including a slice-level migration plan — [contact me](/contact). Bring a handler count and whether you use notifications. That changes the answer more than the brand names.
+Should you replace MediatR after the license change; is Wolverine a drop-in; can you do CQRS without any mediator.
+
+**Strong answer:** License is a business decision — paying is valid if behaviors are load-bearing. Wolverine is not a rename migration; it targets messaging and outbox. Many teams should delete `IMediator` and call services — that is still CQRS-lite. Migrate one vertical slice and measure before rewriting forty handlers.

@@ -1,6 +1,6 @@
 ---
 title: "EF Core Global Query Filters for Soft Delete"
-description: "HasQueryFilter for IsDeleted and ClinicId. Why IgnoreQueryFilters is how tenant data leaks — and how I write the job that must see deleted rows."
+description: "EF Core global query filters for soft delete and multi-tenant ClinicId. How HasQueryFilter works — and why IgnoreQueryFilters is how tenant data leaks."
 date: "2026-09-07"
 category: "ef-core"
 tags: ["EF Core", "Architecture", "Security", "ASP.NET Core"]
@@ -17,9 +17,25 @@ faq:
     a: "There is no HttpContext. Pass clinic id in the job payload and filter explicitly — or create a scope that sets ITenantContext before resolving DbContext."
 ---
 
-If every LINQ query must remember `!IsDeleted && ClinicId == current`, someone will forget. A nightly CSV then emails clinic B clinic A’s encounters. I have cleaned that up. **Global query filters** make the common case automatic. They do **not** replace authorization.
+**Global query filters** in EF Core append a predicate to every LINQ query on an entity — `!IsDeleted && ClinicId == currentTenant` without repeating it in every handler. They make the common case automatic. They are a seatbelt, not a security boundary.
 
-This URL is how I wire `HasQueryFilter` and how I bypass it **without** a leak. The interview prompt (“the job ignored the filter”) is [EF Core interview questions](/blog/ef-core-interview-questions). Who deleted the row belongs in an [audit interceptor](/blog/ef-core-interceptors-audit-log), not in this filter.
+```text
+Without filter (someone forgets)     With HasQueryFilter
+
+  db.Encounters.ToList()             db.Encounters.ToList()
+  → all clinics, incl. deleted       → WHERE IsDeleted = 0
+                                       AND ClinicId = @tenant
+  nightly CSV emails wrong clinic    forget IgnoreQueryFilters
+                                     or you still leak
+```
+
+**New to this** → stay here. **Merging a PR** → [the filter I put on healthcare rows](#the-filter-i-put-on-healthcare-rows). **On-call / interview** → [bypass without leaking](#bypass-without-leaking-the-other-clinic) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **`HasQueryFilter`** = fluent API that registers a global `WHERE` clause on an entity type. **`IgnoreQueryFilters()`** = disables every filter on that query — soft-delete and tenant together. **Soft delete** = `IsDeleted = true` UPDATE instead of `DELETE`; rows stay in the table but disappear from default queries.
+
+If every LINQ query must remember `!IsDeleted && ClinicId == current`, someone will forget. A nightly CSV then emails clinic B clinic A's encounters. I have cleaned that up.
+
+The interview prompt ("the job ignored the filter") is [EF Core interview questions](/blog/ef-core-interview-questions). Who deleted the row belongs in an [audit interceptor](/blog/ef-core-interceptors-audit-log), not in this filter.
 
 ## The filter I put on healthcare rows
 
@@ -71,4 +87,10 @@ A user in clinic A can still hit `GET /encounters/{id}` for an id from clinic B 
 
 Do not log encounter payloads when you debug a filter miss. [PII redaction](/blog/serilog-pii-redaction-healthcare-aspnet-core) is the logging article.
 
-If a SaaS job exported the wrong tenant’s rows, [contact me](/contact). The `HasQueryFilter` line plus whether the job called `IgnoreQueryFilters` is the whole incident review.
+## If an interviewer asks
+
+*A nightly job emailed clinic B a CSV of clinic A's encounters. `HasQueryFilter` is on `Encounter`. How?*
+
+**30-second answer:** `IgnoreQueryFilters()` without re-applying `ClinicId`, raw SQL that never saw the filter, or a `DbContext` constructed with the wrong tenant because the hosted service has no HTTP scope.
+
+**Strong answer:** I'd list every escape hatch: `IgnoreQueryFilters` copied from a debug session, `FromSqlRaw`, a singleton or mis-scoped `DbContext` with `Guid.Empty` as tenant, and navigation includes from an unfiltered parent. The fix is explicit `Where(e => e.ClinicId == clinicId)` on exports, tenant from the job payload, and treating `IgnoreQueryFilters` in a PR as a review event. Filters are a seatbelt — authorization still lives in policies. A guessed GUID on `GET /encounters/{id}` still works if you never check the resource.

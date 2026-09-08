@@ -13,6 +13,22 @@ faq:
     a: "Yes. Logout loops are the same class of bug with a different client field. Register both login and logout URIs per environment."
 ---
 
+A **redirect URI mismatch** means the `redirect_uri` Angular sends to `/connect/authorize` is not character-exact on the OIDC client registration — scheme, host, path, trailing slash. A **login loop** often means the URI was accepted but tokens never landed in the SPA.
+
+```text
+Angular → /connect/authorize?redirect_uri=...
+              │
+         valid URI? ──no──► error / retry loop
+              │
+             yes
+              ▼
+         /auth-callback?code=...
+              │
+         token exchange OK? ──no──► authorize again (loop)
+```
+
+**New to this** → stay here. **Merging a PR** → [two failures table](#two-failures-that-look-the-same-in-the-spa). **On-call / interview** → [mismatch rules](#mismatch-is-character-exact) · [debug checklist](#what-i-check-this-bug-only) · [if an interviewer asks](#if-an-interviewer-asks).
+
 People search **IdentityServer** when Angular bounces between `/connect/authorize` and the app origin and nobody is logged in. Logs say `redirect_uri is not valid`, or they say nothing. Swagger’s password flow still works.
 
 Whether you should run an identity server at all is [IdentityServer vs ASP.NET Identity](/blog/identityserver-vs-aspnet-identity). Leaving IS4 is the [OpenIddict checklist](/blog/identityserver4-openiddict-migration-checklist). This URL is **client redirect URIs and the login loop** — not another SSO essay.
@@ -104,4 +120,8 @@ If step 2 fails, registration or HTTPS/PathBase. If step 3 fails, PKCE/CORS/clie
 - [ ] Token request succeeds (not only authorize)
 - [ ] Query string survives the reverse proxy
 
-If you are stuck in an IdentityServer / OpenIddict redirect loop with Angular, [contact me](/contact). Bring the client’s allowed URIs and one failing authorize URL — not a screenshot of the login page.
+## If an interviewer asks
+
+Redirect URI mismatch vs login loop; why trailing slashes matter; what to check before blaming Angular interceptors.
+
+**Strong answer:** Mismatch = `redirect_uri` not on the client list — fix registration first. Loop = authorize succeeded but code/token never stuck — check PKCE, CORS on `/connect/token`, PathBase, and interceptor 401 handling. Log requested URI next to allowed list before rewriting SPA code.

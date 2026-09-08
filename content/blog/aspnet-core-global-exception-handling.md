@@ -3,6 +3,7 @@ title: "ASP.NET Core Global Exception Handling for Angular APIs"
 description: "Set up ASP.NET Core global exception handling with ProblemDetails so Angular forms show consistent errors — middleware vs IExceptionHandler, 400 vs 500, and what not to leak."
 date: "2026-08-04"
 updated: "2026-09-07"
+category: "architecture"
 tags: ["ASP.NET Core", "Exception Handling", "ProblemDetails", "Angular", "APIs"]
 related:
   - aspnet-core-api-validation
@@ -16,6 +17,20 @@ faq:
   - q: "Do 400 validation errors belong in exception middleware?"
     a: "No. 400s are expected ModelState or FluentValidation failures. Global handling is for unhandled exceptions. Mixing them makes Angular treat typos as outages."
 ---
+
+**Global exception handling** catches unhandled exceptions once at the host edge, maps them to stable HTTP status codes, and returns ProblemDetails JSON — so Angular never sees HTML error pages or per-controller error shapes.
+
+```text
+Unhandled exception
+        │
+        ▼
+IExceptionHandler / middleware
+        │
+        ▼
+ProblemDetails JSON + traceId (log full detail server-side)
+```
+
+**New to this** → stay here. **Merging a PR** → [what global should mean](#what-global-should-mean). **On-call / interview** → [development vs production](#development-vs-production-behavior) · [common mistakes](#common-mistakes-i-still-see) · [if an interviewer asks](#if-an-interviewer-asks).
 
 Search traffic for **ASP.NET Core global exception handling** stays high because every Angular + API team hits the same pain: one endpoint returns a string, another returns a nested validation object, a third returns an HTML error page in production. The SPA then needs special cases forever.
 
@@ -193,6 +208,10 @@ If you use filters for MVC-only concerns, keep them aligned with the same status
 4. Production never returns stack traces  
 5. Trace id visible to support and present in logs  
 6. Load test that forced 500s still return JSON, not HTML error pages  
-7. Support can find logs from a `traceId` shown in the UI  
+7. Support can find logs from a `traceId` shown in the UI
 
-If you want this envelope standardized across your .NET + Angular API, [contact me](/contact).
+## If an interviewer asks
+
+Middleware vs `IExceptionHandler`; should controllers use try/catch; do validation errors belong in global handling.
+
+**Strong answer:** Global handler catches unhandled exceptions once — ProblemDetails with safe `detail` in production and `traceId` for support. Expected 400 validation stays in model binding / FluentValidation — not exception middleware. Per-action try/catch duplicates envelopes and leaks stacks when someone forgets the production check.

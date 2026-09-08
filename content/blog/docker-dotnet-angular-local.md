@@ -16,6 +16,17 @@ faq:
     a: "No. Compose injects env. Which JSON files exist is the config article. Missing keys still 401 in every container."
 ---
 
+**Docker Compose** gives the team one command to run SQL, the ASP.NET Core API, and Angular with aligned hostnames — so `localhost:4200` and `api:8080` mean the same thing on every laptop.
+
+```text
+docker compose up
+    ├── sql (healthcheck)
+    ├── api (waits for sql)
+    └── angular (proxy → api)
+```
+
+**New to this** → stay here. **Merging a PR** → [why Docker locally](#why-docker-for-local-dev-on-a-net--angular-stack). **On-call / interview** → [common failures](#common-failures-and-fixes) · [handoff README](#handoff-documentation-that-clients-actually-use) · [if an interviewer asks](#if-an-interviewer-asks).
+
 When I join a marketplace or eCommerce project, the first week often includes someone discovering their local SQL schema is two migrations behind, the Angular app points at a staging API by accident, and the .NET API runs on a different port than the README claims. Docker does not fix architecture problems, but it does fix environment drift — which is one of the fastest ways to slow a product team down.
 
 This post describes how I Dockerize a .NET API and Angular front end for **local and dev** environments. Production images are related but not identical; the goal here is reproducibility for every developer on the team.
@@ -215,6 +226,10 @@ That page reduces Slack questions more than any architecture diagram.
 
 ## Bottom line
 
-Docker Compose for .NET and Angular is about **reproducible dev environments** for complex product stacks — especially marketplace and eCommerce codebases where SQL schema, auth, and front-end API URLs must stay aligned. Get service names, health checks, and host-vs-container URLs right, and the team spends less time fixing laptops and more time shipping features.
+Docker Compose for .NET and Angular is about **reproducible dev environments** for complex product stacks — especially marketplace and eCommerce codebases where SQL schema, auth, and front-end API URLs must stay aligned.
 
-If you want a Docker-based local dev setup for your .NET API and Angular front end — or help aligning it with Azure staging — [get in touch](/contact).
+## If an interviewer asks
+
+`localhost` vs Docker service names; why API starts before SQL fails; bind mounts on Windows.
+
+**Strong answer:** Inside the compose network use service names (`db`, `api`); from the host browser use `localhost` ports. `depends_on` with health condition prevents API migrations before SQL is ready. Windows bind mounts need polling for Angular hot reload — document `CHOKIDAR_USEPOLLING` when file watch breaks.

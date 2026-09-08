@@ -100,8 +100,9 @@ export const learningTopics: LearningTopic[] = [
     description:
       "Scenario-based C#, ASP.NET Core, Angular, and EF Core interview questions from production work — not trivia lists copied from a dump.",
     intro:
-      "Interview posts here are rehearsal, not implementation manuals. Each URL is a different loop: async traps, expert C# runtime, ASP.NET Core API judgment, Angular + JWT with a .NET backend, and EF Core change-tracker / concurrency questions. If you want the merge checklist, follow the how-to article linked from that scenario — starvation dumps, Channels, and tokens live on the Async & Threading hub, not as a second interview URL. Start with async await if that is the prompt you keep failing; use the ASP.NET Core scenarios page for middleware and JWT storytelling; use the EF Core interview page for SaveChanges, query filters, and concurrency — not for N+1 SQL, which has its own hub.",
+      "Scenario-based interview prep for C# and ASP.NET Core — production symptoms, strong oral answers, and links to implementation articles when the interviewer goes deeper.",
     matchTags: ["Interview Questions"],
+    relatedTopicSlugs: ["async-concurrency", "ef-core", "authentication"],
     pinSlugs: [
       "csharp-async-await-interview-questions",
       "csharp-expert-interview-questions",
@@ -109,15 +110,62 @@ export const learningTopics: LearningTopic[] = [
       "ef-core-interview-questions",
       "angular-interview-questions-aspnet-core",
     ],
+    faq: [
+      {
+        q: "Where do I start for C# async interview questions?",
+        a: "Know **Task vs Thread** and **starvation vs deadlock** first. Then rehearse scenario prompts: `.Result`, `async void`, `WhenAll` on one DbContext, and `CancellationToken` through to SQL. Implementation checklists live on the [async & threading hub](/learning/async-concurrency).",
+      },
+      {
+        q: "What is the difference between mid-level and expert C# interview posts?",
+        a: "Mid-level loops test **async traps and API judgment** under load. Staff loops add **streams, Channels, Span, tenant maps**, and bounded concurrency — failures you see in dumps, not flashcards.",
+      },
+      {
+        q: "Should I study ASP.NET Core and EF Core interview questions separately?",
+        a: "Yes. ASP.NET Core scenarios are **pipeline, JWT, validation, middleware order**. EF Core scenarios are **change tracker, filters, concurrency, ExecuteUpdate** — not N+1 SQL tuning (that is a separate how-to track).",
+      },
+      {
+        q: "How do interview posts relate to how-to articles?",
+        a: "Interview URLs are **oral rehearsal** — definition, prompt, strong answer. How-tos are **merge checklists**. A strong candidate names the production symptom *and* the PR-shaped fix.",
+      },
+    ],
+    tracks: [
+      {
+        title: "Async and threading (most common loop)",
+        blurb:
+          "Scenario answers for the 3–5 year async loop, then staff runtime (streams, channels, tenant maps). Read Task vs Thread first if definitions are still fuzzy.",
+        slugs: [
+          "csharp-async-await-interview-questions",
+          "csharp-expert-interview-questions",
+        ],
+      },
+      {
+        title: "ASP.NET Core API scenarios",
+        blurb:
+          "Middleware order, JWT, validation, ProblemDetails, and production failure storytelling — not property-bag trivia.",
+        slugs: ["aspnet-core-interview-questions-scenarios"],
+      },
+      {
+        title: "EF Core change tracker and concurrency",
+        blurb:
+          "SaveChanges failures, global query filters, RowVersion, ExecuteUpdate — not an N+1 tutorial.",
+        slugs: ["ef-core-interview-questions"],
+      },
+      {
+        title: "Angular + ASP.NET Core",
+        blurb:
+          "JWT interceptors, guards, refresh races, and the SPA contract with a .NET API backend.",
+        slugs: ["angular-interview-questions-aspnet-core"],
+      },
+    ],
   },
   {
     slug: "async-concurrency",
     label: "Async & Threading",
     title: "C# Async vs Multithreading for ASP.NET Core",
     description:
-      "Topic map for C# async versus multithreading on ASP.NET Core — which article to open for idle-CPU hangs, request-path I/O, and threading primitives.",
+      "Learn the difference between C# async/await and multithreading — definitions, a real-world analogy, ASP.NET Core rules, when to use each, and interview questions.",
     intro:
-      "This hub is the ASP.NET Core “API hangs, CPU is idle” map: C# async/await, multithreading, and the concurrency primitives that show up in production dumps. Async is not multithreading — start with [Task vs Thread](/blog/csharp-task-vs-thread) if that sentence is still fuzzy. For implementation, follow [the async await checklist](/blog/csharp-async-await-aspnet-core). Use [thread-pool starvation](/blog/csharp-threadpool-starvation-sync-over-async) when 504s arrive with healthy SQL. Use [Task.Run vs await](/blog/csharp-task-run-aspnet-core) when a PR wrapped ToListAsync to “make it multithreaded.” Use [CancellationToken](/blog/csharp-cancellationtoken-aspnet-core) when Angular left and SQL did not. [ConfigureAwait](/blog/csharp-configureawait-false-library) is a library rule, not a Core performance trick. Database deadlocks belong on the [EF Core hub](/learning/ef-core) or [EF Core optimistic concurrency](/blog/ef-core-optimistic-concurrency-token), not [lock vs Monitor](/blog/csharp-lock-statement-monitor-mutex). Inbound 429s are [rate limiting](/blog/aspnet-core-rate-limiting), not [SemaphoreSlim](/blog/csharp-semaphore-slim-async-lock). For outbound calls, use [IHttpClientFactory](/blog/ihttpclientfactory-aspnet-core) to avoid socket exhaustion. [Interview rehearsal](/learning/interview-questions) lives on the interview questions hub; the how-tos that teach the merge live here.",
+      "C# **async/await** and **multithreading** solve different problems. Async frees ThreadPool workers during I/O waits; multithreading coordinates parallel workers and in-memory synchronization. The sections below explain both before you open the symptom-specific articles.",
     matchTags: ["Asynchronous Programming", "Threading", "Concurrency"],
     keywords: [
       "C# multithreading",
@@ -127,6 +175,7 @@ export const learningTopics: LearningTopic[] = [
     ],
     relatedTopicSlugs: ["interview-questions", "ef-core"],
     pinSlugs: [
+      "csharp-multithreading-primer",
       "csharp-async-await-aspnet-core",
       "csharp-threadpool-starvation-sync-over-async",
       "csharp-task-run-aspnet-core",
@@ -135,35 +184,38 @@ export const learningTopics: LearningTopic[] = [
       "csharp-configureawait-false-library",
       "csharp-backgroundservice-hosted-service-async",
       "csharp-async-await-interview-questions",
+      "ihttpclientfactory-aspnet-core",
+      "aspnet-core-rate-limiting",
     ],
     faq: [
       {
         q: "What is the difference between async and multithreading in C#?",
-        a: "Async/await is about freeing threads during I/O waits (non-blocking), whereas multithreading is about running CPU-bound work across multiple cores. Learn more in [Task vs Thread vs ThreadPool](/blog/csharp-task-vs-thread) and [async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).",
+        a: "**Async/await** yields the ThreadPool worker during I/O waits — the `Task` is a promise, not a dedicated thread. **Multithreading** runs work on multiple workers (`Task.Run`, `Parallel`, `lock`, concurrent collections). On ASP.NET Core, default to async for SQL and HTTP; use threading primitives for CPU offload, in-memory gates, and background queues.",
       },
       {
         q: "Why does an ASP.NET Core API hang with idle CPU?",
-        a: "This is usually thread pool starvation caused by calling `.Result` or `.Wait()` on async methods (sync-over-async), which blocks workers. See how to diagnose and fix it in [ThreadPool Starvation](/blog/csharp-threadpool-starvation-sync-over-async) and [Task.Run vs await](/blog/csharp-task-run-aspnet-core).",
+        a: "Usually **thread pool starvation**: `.Result`, `.Wait()`, or `.GetAwaiter().GetResult()` block pool workers while async continuations still need workers to finish. The queue grows, gateways return 504, and CPU stays low because nobody is computing — they are waiting. Fix: async end to end, not more VMs.",
       },
       {
         q: "When is async void vs async Task acceptable in C#?",
-        a: "Always return `Task` or `Task<T>` on Web APIs so the host can observe completion and handle exceptions. `async void` is only for UI event handlers. Read the rules in [async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).",
+        a: "Web APIs should return **`Task` or `Task<T>`** so Kestrel can observe completion and exceptions. **`async void`** is for UI event handlers that cannot return a Task. An `async void` controller action is an interview red flag.",
       },
       {
         q: "What is an async deadlock in C#?",
-        a: "Classic deadlocks happen when blocking on a Task with a custom `SynchronizationContext` (like WPF or legacy ASP.NET). ASP.NET Core has no request sync context, so it starves the pool instead of deadlocking. Read [ConfigureAwait(false)](/blog/csharp-configureawait-false-library) and [ThreadPool Starvation](/blog/csharp-threadpool-starvation-sync-over-async).",
+        a: "On **WPF/legacy ASP.NET**, blocking the UI/sync-context thread while an `await` tries to post back causes a classic deadlock. **ASP.NET Core** has no request sync context — `.Result` on Core **starves the pool** instead. Different symptom, same rule: do not block on `Task`.",
       },
       {
         q: "Should I use CancellationToken, Channels, or rate limiting?",
-        a: "Use [CancellationToken](/blog/csharp-cancellationtoken-aspnet-core) to cancel database/HTTP calls when a client disconnects. Use a [BackgroundService](/blog/csharp-backgroundservice-hosted-service-async) plus a [Channel](/blog/csharp-channel-producer-consumer) for in-process work after Ok(). Use [rate limiting](/blog/aspnet-core-rate-limiting) to throttle incoming requests, and [SemaphoreSlim](/blog/csharp-semaphore-slim-async-lock) to gate outbound HTTP calls.",
+        a: "**CancellationToken** — cooperative cancel when the client disconnects; pass it to `ToListAsync` and `HttpClient`. **Channel + BackgroundService** — in-process work after `Ok()` (not `Task.Run` fire-and-forget). **Rate limiting middleware** — throttle *inbound* abuse (429). **SemaphoreSlim** — cap *outbound* partner calls. They solve different edges.",
       },
     ],
     tracks: [
       {
-        title: "Start here: C# Task vs Thread and async/await",
+        title: "Start here: multithreading primer and async/await",
         blurb:
-          "If Task vs Thread is still fuzzy. Async/await is not multithreading. Read Task vs Thread, then the ASP.NET Core async checklist, then CancellationToken before you touch the pool.",
+          "One guided pass over threads, the pool, and async — then the ASP.NET Core checklist and CancellationToken before you touch the pool.",
         slugs: [
+          "csharp-multithreading-primer",
           "csharp-task-vs-thread",
           "csharp-async-await-aspnet-core",
           "csharp-cancellationtoken-aspnet-core",
@@ -222,7 +274,23 @@ export const learningTopics: LearningTopic[] = [
     description:
       "Practical C# design patterns for real ASP.NET Core products — Factory, Strategy, and patterns that reduce switch-statement sprawl without ceremony.",
     intro:
-      "I reach for a named design pattern when a product already has a repeating decision — pricing rules, export formats, catalog filters — and the if-else tree is about to become the feature. This hub is not a catalog of every Gang of Four name. It is the subset I actually use on ASP.NET Core APIs that Angular teams consume: Factory when construction logic keeps growing, Strategy when behavior must swap without editing callers, Repository when query shape deserves a name, and SOLID as a review lens rather than a folder religion. Each article walks a production-shaped example, then says when the pattern is ceremony. If you are studying for interviews, start with SOLID and Factory; if you are refactoring a live API, start with Strategy or Repository and skip anything that does not match a change you can point at in source control.",
+      "Named patterns for real ASP.NET Core APIs — when Factory, Strategy, Repository, and SOLID actually reduce change cost, and when they are ceremony.",
+    keywords: ["C# design patterns", "Factory pattern C#", "Strategy pattern ASP.NET Core", "Repository pattern .NET", "SOLID principles"],
+    relatedTopicSlugs: ["dependency-injection", "ef-core"],
+    faq: [
+      {
+        q: "Which C# design pattern should I learn first for interviews?",
+        a: "**SOLID** as a review lens, then **Factory** when construction branches grow, then **Strategy** when behavior swaps by tenant or product line. Repository only when query shape is reused — not as a default wrapper over DbContext.",
+      },
+      {
+        q: "Is the Repository pattern required with EF Core?",
+        a: "No. Use it when a named query or command is reused across handlers and tests. A pass-through repository over `DbContext` is ceremony.",
+      },
+      {
+        q: "Strategy vs Factory — what is the difference?",
+        a: "**Factory** chooses *which object to construct*. **Strategy** swaps *how an operation runs* after construction. Both beat giant `switch` statements when variants keep growing.",
+      },
+    ],
     matchTags: [
       "Design Patterns",
       "Factory Pattern",
@@ -238,7 +306,23 @@ export const learningTopics: LearningTopic[] = [
     description:
       "ASP.NET Core DI lifetimes, registration habits, and factory delegates — how senior teams keep services testable and avoid captive dependencies.",
     intro:
-      "Dependency injection in ASP.NET Core is easy to start and easy to get wrong. Most production bugs I see are not “forgot to register a service” — they are captive dependencies (a Singleton holding a Scoped DbContext), hidden new-ups that bypass the container, or factory delegates that close over request state. This hub collects the DI notes I use on healthcare, SaaS, and marketplace APIs: lifetimes, registration habits, and how Factory-style delegates fit when a switch statement is really a composition problem. Read the lifetimes article first if you own Program.cs. If the exception is Unable to resolve service for type, use that troubleshooting post instead of rereading lifetimes. Pair with Factory or Strategy posts when the container is being asked to pick an implementation at runtime. The goal is a container graph a teammate can explain in a PR, not a clever service locator.",
+      "ASP.NET Core dependency injection — lifetimes, captive dependencies, and registration mistakes that only show up under load or in Azure.",
+    keywords: ["ASP.NET Core dependency injection", "DI lifetimes", "Unable to resolve service", "IOptions Snapshot"],
+    relatedTopicSlugs: ["design-patterns"],
+    faq: [
+      {
+        q: "What are ASP.NET Core DI lifetimes?",
+        a: "**Singleton** — one instance per application. **Scoped** — one per HTTP request (DbContext). **Transient** — new instance every resolve. Never inject scoped into singleton without a scope factory.",
+      },
+      {
+        q: "Why cannot I inject DbContext into a Singleton?",
+        a: "DbContext is scoped and not thread-safe. A singleton holding it becomes a **captive dependency** — stale context, wrong tenant, or `ObjectDisposedException`.",
+      },
+      {
+        q: "IOptions vs IOptionsSnapshot vs IOptionsMonitor?",
+        a: "**IOptions** — singleton snapshot at first use. **Snapshot** — reloads per scope when config changes. **Monitor** — change notifications for singletons that must react to config updates.",
+      },
+    ],
     matchTags: ["Dependency Injection", "IoC", "DI"],
     pinSlugs: [
       "aspnet-core-dependency-injection",
@@ -253,7 +337,23 @@ export const learningTopics: LearningTopic[] = [
     description:
       "JWT refresh, Angular interceptors, BFF/YARP, cookies, CORS with credentials, and the production failures that look like “flaky auth.”",
     intro:
-      "This hub is the Angular + ASP.NET Core token lifecycle: short-lived JWTs, refresh rotation, concurrent 401s, httpOnly cookies, CORS credentials, and when a BFF is the honest answer. Start with the JWT checklist if you are issuing tokens; use 401 vs 403 if the SPA logs people out on a permission miss; use IDX10501 if the token kid is missing from JWKS and IDX10503 if signature failed with keys that were actually tried; use the interceptor and 401-queue posts if refresh is racing; read BFF when you want tokens off the browser; read Duende BFF versus custom YARP when the architecture is already decided and the remaining question is buy versus build. CORS belongs here when the failure showed up after login, not as a generic networking topic.",
+      "JWT, refresh tokens, Angular interceptors, CORS with credentials, and BFF patterns — definitions and failure modes before the deep-dive articles.",
+    keywords: ["ASP.NET Core JWT", "Angular JWT interceptor", "refresh token rotation", "BFF pattern ASP.NET Core"],
+    relatedTopicSlugs: ["identity", "interview-questions"],
+    faq: [
+      {
+        q: "What is the difference between 401 and 403 for an Angular SPA?",
+        a: "**401** — not authenticated or token invalid/expired; re-login or refresh. **403** — authenticated but forbidden; show an access-denied UI, do not automatically log the user out unless that is your product rule.",
+      },
+      {
+        q: "Should refresh tokens live in localStorage?",
+        a: "High-risk SPAs prefer **httpOnly cookies** and often a **BFF** so refresh tokens never sit in JavaScript-accessible storage. Trade-off: CSRF protection and CORS credentials configuration.",
+      },
+      {
+        q: "Why does JWT validate on jwt.io but API returns 401?",
+        a: "Wrong issuer/audience, clock skew, signing key disposed, or **`kid` missing from JWKS** after key rotation. Validate against the API's authority metadata, not jwt.io alone.",
+      },
+    ],
     matchTags: ["JWT", "CORS", "YARP"],
     pinSlugs: [
       "aspnet-core-jwt-auth",
@@ -270,7 +370,23 @@ export const learningTopics: LearningTopic[] = [
     description:
       "IdentityServer, OpenIddict, ASP.NET Identity, and MapIdentityApi notes — the product choice, not interceptor plumbing.",
     intro:
-      "Identity choice is a product decision: one app versus SSO, opaque Identity API tokens versus JWT bearer, Duende licensing versus OpenIddict. This hub is for that decision — not for interceptor plumbing. Start with what an identity server is if you are choosing Identity versus an authorization server. Read MapIdentityApi versus JWT if Angular is sending the wrong string into AddJwtBearer. Read the IdentityServer4 to OpenIddict checklist only if you are leaving a dead IS4 host — not as a greenfield default. Login loops and redirect_uri mismatch live in the redirect URI article, not in the SSO essay.",
+      "IdentityServer, OpenIddict, ASP.NET Core Identity, and MapIdentityApi — product choice and migration, not interceptor plumbing.",
+    keywords: ["IdentityServer vs ASP.NET Identity", "OpenIddict migration", "OIDC redirect URI", "MapIdentityApi JWT"],
+    relatedTopicSlugs: ["authentication"],
+    faq: [
+      {
+        q: "IdentityServer vs ASP.NET Core Identity?",
+        a: "**Identity** is a user store in your app. **IdentityServer/OpenIddict** is an OAuth/OIDC **token issuer** for SSO across clients. APIs usually validate JWTs; they do not replace an identity server for multi-app login.",
+      },
+      {
+        q: "Why am I stuck in an OIDC redirect loop?",
+        a: "**redirect_uri** must match the client registration exactly — scheme, host, path, trailing slash. One character mismatch causes endless redirects.",
+      },
+      {
+        q: "MapIdentityApi vs AddJwtBearer?",
+        a: "**MapIdentityApi** issues Identity API tokens (often opaque). **JWT bearer** expects a signed JWT with issuer/audience your API trusts. Angular must send the token type your API is configured for.",
+      },
+    ],
     matchTags: ["IdentityServer", "OpenIddict", "OIDC", "ASP.NET Core Identity", "SSO"],
     pinSlugs: [
       "identityserver-vs-aspnet-identity",
@@ -286,7 +402,23 @@ export const learningTopics: LearningTopic[] = [
     description:
       "N+1 versus Include versus AsSplitQuery, cartesian explosion, AsNoTracking identity, parameter sniffing, and query habits that survive real clinic and catalog data.",
     intro:
-      "EF Core looks fine on demo data and fails when a clinic or seller catalog is real. This hub is SQL-shaped: N+1 round-trips, fat JOINs, split queries, projections, tracking, and sniffed plans. Start with the performance pillar for the checklist. Use the N+1 versus AsSplitQuery article when you are not sure which bug you have. Use cartesian explosion when two Includes made one query huge but the JSON still looked correct. Use AsNoTracking versus identity resolution when the same Patient is two objects. Use parameter sniffing when one tenant is fast and another times out on the same LINQ. Interview narration — concurrency tokens, global query filters, ExecuteUpdate — is the EF Core interview questions post, not a second SQL tutorial.",
+      "EF Core and SQL Server for ASP.NET Core APIs — N+1, cartesian explosion, tracking, query filters, and plans that fail only on real clinic or catalog data.",
+    keywords: ["EF Core performance", "EF Core N+1", "AsSplitQuery", "EF Core global query filter", "SQL Server parameter sniffing"],
+    relatedTopicSlugs: ["interview-questions", "async-concurrency"],
+    faq: [
+      {
+        q: "What is EF Core N+1?",
+        a: "One query for the parent list plus **one query per row** for a related entity — often from lazy loading or a loop calling the database. Fix with projection, Include, or a single SQL shape.",
+      },
+      {
+        q: "Include vs AsSplitQuery?",
+        a: "**Include** can create one large JOIN (cartesian explosion). **AsSplitQuery** runs multiple SQL statements without duplicating parent rows in memory.",
+      },
+      {
+        q: "When should I use AsNoTracking?",
+        a: "Read-only endpoints where you will not call `SaveChanges`. For updates, use tracking or attach explicitly. Lists should often **project to DTO** in SQL instead of loading full entities.",
+      },
+    ],
     matchTags: ["EF Core", "SQL Server"],
     pinSlugs: [
       "ef-core-sql-performance",
@@ -302,7 +434,23 @@ export const learningTopics: LearningTopic[] = [
     description:
       "CQRS-lite in ASP.NET Core — when MediatR is worth a license, when Wolverine is a real upgrade, and when a mediator is ceremony.",
     intro:
-      "CQRS here means commands and queries as separate use cases, not event sourcing. Start with the MediatR ceremony article if you are adding a bus. Use the licensing article if the question is stay, pay, migrate to Wolverine, or delete IMediator. Do not add a second competing “what is CQRS” URL.",
+      "CQRS-lite on ASP.NET Core — commands vs queries, when MediatR earns its license, and when a mediator is ceremony.",
+    keywords: ["CQRS ASP.NET Core", "MediatR license", "Wolverine .NET", "IMediator"],
+    relatedTopicSlugs: ["design-patterns", "architecture"],
+    faq: [
+      {
+        q: "What is CQRS in ASP.NET Core?",
+        a: "Separating **commands** (writes) from **queries** (reads) — often as MediatR handlers. It does not require two databases or event sourcing.",
+      },
+      {
+        q: "MediatR vs calling a service directly?",
+        a: "MediatR when pipelines (validation, logging, transactions) compose across many use cases. A plain service class is fine when handlers stay thin and few.",
+      },
+      {
+        q: "Should I migrate from MediatR to Wolverine?",
+        a: "Depends on handler count, notification usage, and license cost — not brand preference. See the licensing article for a slice-level migration lens.",
+      },
+    ],
     matchTags: ["MediatR", "CQRS", "Wolverine"],
   },
   {
@@ -312,7 +460,23 @@ export const learningTopics: LearningTopic[] = [
     description:
       "Vendor-neutral X12 intake on ASP.NET Core — envelopes, 837-shaped pipelines, and what not to log. Not a product pitch and not a compliance certificate.",
     intro:
-      "Independent EDI write-ups are rare; vendor pages are not. This hub is architecture for X12 on .NET: intake, queues, mapping boundaries, and PHI-safe logging. The parser article is the starting point. The Serilog PII article is what not to put in App Insights. Transaction-specific 837 / 835 / 850 pages come next only when they add a real pipeline, not a duplicate URL.",
+      "X12 EDI on .NET — intake pipelines, mapping boundaries, and PHI-safe logging for healthcare integrations.",
+    keywords: ["X12 EDI C#", "healthcare EDI ASP.NET Core", "837 parser .NET", "PHI logging Serilog"],
+    relatedTopicSlugs: ["architecture"],
+    faq: [
+      {
+        q: "How do you parse X12 in ASP.NET Core?",
+        a: "Stream segments — do not load multi-gigabyte interchanges into a single string. Validate envelope and transaction control numbers, map to domain models, persist **idempotently**, ACK with 997/999.",
+      },
+      {
+        q: "Can EDI parsing run on the HTTP request thread?",
+        a: "No for production volume. Accept upload, enqueue, return **202**. Workers parse with bounded memory and retry policy.",
+      },
+      {
+        q: "What EDI data should never hit default logs?",
+        a: "Member identifiers, diagnoses, and full segment payloads. Use redaction or restricted sinks — see the Serilog PII article.",
+      },
+    ],
     matchTags: ["EDI", "X12", "Serilog"],
   },
   {
@@ -322,7 +486,23 @@ export const learningTopics: LearningTopic[] = [
     description:
       "Architecture notes for .NET + Angular systems — config files, Clean Architecture, modular monolith vs services, Minimal APIs, and boundaries that survive healthcare, SaaS, and eCommerce delivery.",
     intro:
-      "Architecture here means the decisions that survive the first production incident: where data lives, who is allowed to change it, and how the Angular SPA talks to ASP.NET Core without a contract that rot. Start with the config-file article if the search was appsettings or localappsettings.json. This hub is also Clean Architecture, modular monolith vs services, Minimal APIs, and the JSON contract failures that look like “the API 500s on detail pages.” Cycle exceptions are the object-cycle article — not an EF N+1 tutorial. JWT plumbing, EF SQL, EDI parsers, and async/threading (starvation, Channels, tokens) have their own topic pages. Caching, SignalR, Docker, and delivery checklists live in the main blog, not here.",
+      "Architecture for .NET + Angular products — configuration, middleware, JSON contracts, Clean Architecture, and boundaries that survive the first production incident.",
+    keywords: ["Clean Architecture ASP.NET Core", "appsettings ASP.NET Core", "middleware order", "modular monolith .NET"],
+    relatedTopicSlugs: ["dependency-injection", "authentication", "ef-core"],
+    faq: [
+      {
+        q: "What is Clean Architecture in ASP.NET Core?",
+        a: "Domain and application rules at the center; infrastructure and UI at the edges. Controllers stay thin. The goal is testable boundaries — not a folder template copied without domain complexity.",
+      },
+      {
+        q: "Why does middleware order matter?",
+        a: "**CORS** must run before the browser gives up on a 401 without headers. **Authentication** before **authorization**. **Exception handling** cannot fix responses that already started writing.",
+      },
+      {
+        q: "Modular monolith vs microservices?",
+        a: "Start monolith with **clear module boundaries**. Split services when independent deploy/scale is proven necessary — not because diagrams looked cleaner.",
+      },
+    ],
     matchTags: [],
     categoryOnly: true,
     pinSlugs: [

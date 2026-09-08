@@ -14,6 +14,21 @@ faq:
     a: "Only if you no longer need OIDC for multiple apps or partners. That product choice is the IdentityServer vs ASP.NET Identity article, not this cutover list."
 ---
 
+Migrating **IdentityServer4 to OpenIddict** (or Duende) is a cutover: inventory clients, redirect URIs, signing keys, and scopes — then align discovery, JWKS, and Angular authority. It is not a grep-replace NuGet swap.
+
+```text
+IS4 (EOL) ──inventory──► clients / keys / scopes
+              │
+              ▼
+    OpenIddict or Duende host
+              │
+    ┌─────────┴─────────┐
+    ▼                   ▼
+Angular authority   API JwtBearer (iss, aud)
+```
+
+**New to this** → stay here. **Merging a PR** → [what does not migrate](#what-does-not-migrate-as-a-rename). **On-call / interview** → [cutover checklist](#cutover-checklist-i-walk-in-a-war-room) · [when not to migrate](#when-i-would-not-migrate-to-openiddict) · [if an interviewer asks](#if-an-interviewer-asks).
+
 IdentityServer4 is end of life. Teams still run it because login works, Angular still redirects, and nobody wants to touch certificates in production. Then a CVE, a .NET upgrade, or a security questionnaire makes the conversation unavoidable.
 
 This page is a **migration checklist**, not a “which product is morally better” essay. For the product choice (Identity alone vs an authorization server vs MapIdentityApi), start with [IdentityServer vs ASP.NET Identity](/blog/identityserver-vs-aspnet-identity) and [opaque tokens vs JWT](/blog/mapidentityapi-opaque-token-vs-jwt). This article assumes you already decided you still need OIDC — multiple apps, a partner, or an enterprise IdP — and you are leaving IS4.
@@ -213,6 +228,8 @@ Machine clients (EDI jobs, Azure Functions) need **client credentials** re-regis
 
 OpenIddict is a good ASP.NET Core authorization server. It is not free of operations. Migration is the price of leaving a dead product, not a weekend rename.
 
----
+## If an interviewer asks
 
-If you are cutting IdentityServer4 over on a .NET + Angular platform and want a second pair of eyes on clients, keys, and the Angular authority URL, [contact me](/contact). Bring the client spreadsheet; architecture without redirect URIs is fiction.
+What does not copy from IS4 to OpenIddict; why Angular breaks on cutover; should you migrate to Identity instead.
+
+**Strong answer:** Schema, grant storage, middleware, and claim mapping differ — treat as cutover. Angular breaks when authority, `client_id`, or redirect URIs change without coordinated deploy. If you only have one SPA and one API, delete the authorization server — migrate to Identity + JWT, not to OpenIddict. Force re-login on cutover; do not port IS4 refresh tokens.

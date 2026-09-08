@@ -14,9 +14,7 @@ export function Footer() {
               {siteConfig.name}
             </p>
             <p className="mt-3 max-w-md text-muted">{siteConfig.title}</p>
-            <p className="mt-4 text-sm text-muted">
-              <address className="not-italic">{siteConfig.location}</address>
-            </p>
+            <address className="mt-4 text-sm text-muted not-italic">{siteConfig.location}</address>
           </div>
 
           <nav aria-label="Footer">

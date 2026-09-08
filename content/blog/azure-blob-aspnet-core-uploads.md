@@ -16,6 +16,19 @@ faq:
     a: "No. Mint short SAS server-side after authorization, or proxy the blob. Auth is the JWT article; this page is the blob contract."
 ---
 
+**Azure Blob uploads** in ASP.NET Core: validate on the API, store in a **private** container, persist metadata in SQL, and serve reads through authorization or short-lived SAS — not public URLs for clinical or identity documents.
+
+```text
+Angular → API (validate) → Blob (private)
+              │
+              ▼
+         SQL metadata row
+              │
+Download ← API stream or minted SAS (after authz)
+```
+
+**New to this** → stay here. **Merging a PR** → [upload path choice](#choose-the-upload-path-on-purpose). **On-call / interview** → [private containers](#containers-access-tiers-and-naming) · [rollout order](#a-pragmatic-rollout-order) · [if an interviewer asks](#if-an-interviewer-asks).
+
 File uploads look simple until they meet production constraints: large payloads, private documents, virus scanning expectations, mobile networks, and Angular apps that need progress feedback. Azure Blob Storage is a solid default for ASP.NET Core products, but the API design around the blob matters as much as the SDK calls.
 
 This is the checklist I use when adding uploads to .NET backends that serve Angular clients — especially documents and images in SaaS and healthcare-style portals where “public container + direct URL” is the wrong default.
@@ -152,4 +165,8 @@ Backup and disaster recovery conversations should include whether blob data is i
 
 That order keeps early demos honest without painting you into a public-container corner.
 
-If you need Azure Blob uploads implemented cleanly in an ASP.NET Core API with an Angular client — private containers, validation, and deployable configuration — [get in touch](/contact).
+## If an interviewer asks
+
+API proxy upload vs browser SAS; should Angular hold long-lived SAS; public container risks.
+
+**Strong answer:** Default private container + metadata in SQL + authorize before read. API streams small files; SAS for large direct uploads minted server-side after auth — short TTL, never embedded in SPA bundles. Public containers plus guessed URLs are IDOR waiting to happen on healthcare documents.

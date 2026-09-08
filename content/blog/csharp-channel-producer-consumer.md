@@ -20,16 +20,16 @@ faq:
 
 **Producer-consumer** means one part of your app **adds** work items (producer) and another part **processes** them in the background (consumer). **`Channel<T>`** is an async in-process queue for that. **Backpressure** means when the queue is full, the producer slows down instead of memory growing forever.
 
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [hosted service](#hosted-service-shape) · [if an interviewer asks](#if-an-interviewer-asks).
-
-**Terms used here:** **Fire-and-forget** = `Task.Run` after `return Ok()` with nobody awaiting it. **Hosted service / `BackgroundService`** = a long-running process the generic host starts and stops. **`IServiceScopeFactory`** = create a DI scope per message so each gets its own `DbContext`. **Durable queue** = RabbitMQ / Service Bus — survives process recycle.
-
 ```text
 HTTP POST checkout
    → WriteAsync(OrderNotify)  →  [ bounded Channel buffer ]
                                    ReadAsync
                                       → BackgroundService SendEmail
 ```
+
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [hosted service](#hosted-service-shape) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **Fire-and-forget** = `Task.Run` after `return Ok()` with nobody awaiting it. **Hosted service / `BackgroundService`** = a long-running process the generic host starts and stops. **`IServiceScopeFactory`** = create a DI scope per message so each gets its own `DbContext`. **Durable queue** = RabbitMQ / Service Bus — survives process recycle.
 
 ## Smallest example
 
@@ -166,4 +166,4 @@ Bounded worker queue inside a .NET process; fire-and-forget after checkout.
 
 **Strong answer:** bounded channel + hosted service + “not durable.”
 
-If checkout starts `Task.Run` per order and p95 explodes on sale day, [contact me](/contact). Bring the notify method.
+. Bring the notify method.

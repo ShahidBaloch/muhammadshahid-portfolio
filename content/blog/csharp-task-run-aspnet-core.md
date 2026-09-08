@@ -20,10 +20,6 @@ faq:
 
 **`Task.Run` queues CPU work onto the ThreadPool.** `await` gives the current worker back during I/O. They are not the same. On ASP.NET Core the action **already runs on the pool**, so wrapping `ToListAsync` in `Task.Run` does not make the API “multithreaded.” It steals a second worker for the same SQL wait.
 
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [when Task.Run is right](#when-task-run-is-the-right-tool) · [fire-and-forget](#fire-and-forget-is-not-task-run) · [if an interviewer asks](#if-an-interviewer-asks).
-
-**Terms used here:** **I/O-bound** = SQL, HTTP, blobs, disk. **CPU-bound** = hash, image encode, tight parse. **Fire-and-forget** = starting work you do not await before `return Ok()`. **Kestrel** = the ASP.NET Core web server.
-
 ```text
 await ToListAsync                     await Task.Run(() => ToListAsync())
 
@@ -34,6 +30,10 @@ await ToListAsync                     await Task.Run(() => ToListAsync())
 ```
 
 Microsoft’s ASP.NET Core best-practices page: do not call `Task.Run` and immediately await it. Do not use `Task.Run` to make a synchronous API look asynchronous.
+
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [when Task.Run is right](#when-task-run-is-the-right-tool) · [fire-and-forget](#fire-and-forget-is-not-task-run) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **I/O-bound** = SQL, HTTP, blobs, disk. **CPU-bound** = hash, image encode, tight parse. **Fire-and-forget** = starting work you do not await before `return Ok()`. **Kestrel** = the ASP.NET Core web server.
 
 ## Wrong vs right
 
@@ -131,4 +131,3 @@ Task.Run vs await; why Task.Run on I/O starves Kestrel; when CPU offload is lega
 
 **Strong answer:** the request is already on the pool. Await I/O. Task.Run is CPU. Do not wrap `.Result`.
 
-If a PR “made it multithreaded” and p95 got worse, [contact me](/contact). Bring the helper.

@@ -130,4 +130,4 @@ Thread-safe collections; why Singleton services must be thread-safe; GetOrAdd ru
 
 **Strong answer:** “Thread-safe structure, not a cache policy. Factory can run twice. Keys include tenant.”
 
-If a multi-tenant cache is leaking clinic data or growing without bound, [contact me](/contact). Bring the key shape and the DI lifetime of the dictionary.
+. Bring the key shape and the DI lifetime of the dictionary.

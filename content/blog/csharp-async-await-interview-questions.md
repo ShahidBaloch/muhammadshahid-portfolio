@@ -339,4 +339,3 @@ No. One sync-over-async helper on a hot path reintroduces blocking. Interviewers
 - [Async & threading hub](/learning/async-concurrency)
 - [Interview questions hub](/learning/interview-questions)
 
-Want mock interviews focused on asynchronous programming and API scalability? [Get in touch](/contact).

@@ -1,6 +1,6 @@
 ---
 title: "EF Core Cartesian Explosion: Two Collection Includes"
-description: "Include(A).Include(B) on two collections multiplies SQL rows in EF Core. How I confirm it in SSMS and fix it with split query, two queries, or stop including."
+description: "Cartesian explosion in EF Core: two collection Includes multiply SQL rows (lines × events). How to confirm in SSMS and fix with split query or fewer Includes."
 date: "2026-08-16"
 updated: "2026-09-07"
 category: "ef-core"
@@ -18,11 +18,23 @@ faq:
     a: "Yes when you truly need both collections on one request. Prefer not including both, or two queries you own. AsNoTracking alone does not stop the JOIN product."
 ---
 
+**Cartesian explosion** in EF Core happens when one query `Include`s two **collections** on the same parent. SQL Server JOINs both children, so raw row count becomes `collectionA.Count × collectionB.Count` — not `1 + A + B`. EF deduplicates back into the graph you expected. The JSON looks correct. The tax is logical reads, network, and CPU.
+
+```text
+Claim with 8 lines, 6 events — one query, two collection Includes
+
+  SQL rows returned:  8 × 6 = 48  (not 1 + 8 + 6 = 15)
+  C# graph after EF:  1 claim, 8 lines, 6 events  ✓
+  SSMS row count:     48  ← the signal
+```
+
 ![One EF Core query with two collection Includes multiplying 8 lines times 6 events into 48 SQL rows](/images/blog/ef-core-cartesian-explosion.png)
 
-The C# looks innocent. The JSON looks correct. SQL Server returns **thousands of rows** for one order. That is **cartesian explosion** (sometimes called a cartesian product in the JOIN): EF `Include`s two **collections** in one query, the database multiplies child rows, and EF stitches the graph back together in memory.
+**New to this** → stay here. **Merging a PR** → [confirm in five minutes](#how-to-confirm-in-five-minutes). **On-call / interview** → [fixes in order](#fixes-in-the-order-i-try-them) · [if an interviewer asks](#if-an-interviewer-asks).
 
-This is **not** [N+1](/blog/ef-core-nplus1-include-vs-assplitquery). N+1 is many small queries. This is one query that got fat. The [EF performance pillar](/blog/ef-core-sql-performance) mentions split query in passing; this page is the failure mode.
+**Terms used here:** **Collection Include** = `Include` on a one-to-many navigation (`ServiceLines`, `StatusEvents`). **Cartesian product** = every row from set A paired with every row from set B in a JOIN. **`AsSplitQuery`** = EF issues separate SELECTs per collection instead of one multiplied JOIN.
+
+The C# looks innocent. The JSON looks correct. SQL Server returns **thousands of rows** for one order. This is not [N+1](/blog/ef-core-nplus1-include-vs-assplitquery) — that is many small queries. This is one query that got fat.
 
 ## The query that lies in the debugger
 
@@ -145,6 +157,10 @@ You still JOIN two collections in one statement unless you split. Filters shrink
 
 Tiny collections, cold endpoint, measured row counts in the tens, team refuses two round-trips. I still add a comment and a warning-as-error in Development so the next feature does not add `Include(c => c.Attachments)` and quietly go exponential.
 
----
+## If an interviewer asks
 
-If a “simple” EF Include is burning SQL Server on one ASP.NET Core detail endpoint, [contact me](/contact). A row-count from SSMS plus the Include list is enough to choose split vs split the API.
+*The claim detail endpoint is slow. `Include` has `ServiceLines` and `StatusEvents`. What is wrong?*
+
+**30-second answer:** Two collection Includes in one query multiply JOIN rows. Eight lines and six events become forty-eight SQL rows, not fifteen. Fix with `AsSplitQuery`, two separate queries, or stop loading both collections on one GET.
+
+**Strong answer:** I'd log the SQL, run it in SSMS with actual execution plan, and compare **rows read** to the C# collection counts. If actual rows ≈ product of collection sizes, that is cartesian explosion — not N+1, not missing indexes. I'd prefer splitting the API (lines on one tab, events on another) or projecting only what the screen needs. `AsSplitQuery` is the fallback when both collections must arrive in one request; I'd wrap it in a transaction if snapshot consistency matters. `AsNoTracking` alone does not fix this — the JOIN already multiplied rows before materialization.

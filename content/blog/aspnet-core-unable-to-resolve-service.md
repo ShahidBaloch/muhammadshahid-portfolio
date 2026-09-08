@@ -17,6 +17,20 @@ faq:
     a: "WebApplicationFactory often skips a registration the real host adds. Register it in the test host or the constructor will fail only in tests."
 ---
 
+**Unable to resolve service for type** means the DI container has no registration matching what a constructor asked for — wrong interface, missing `AddDbContext`, `IOptions<T>` vs `T`, or keyed vs unkeyed. It is not a lifetime bug; captive dependencies resolve and then misbehave.
+
+```text
+EncounterController needs IEncounterStore
+        │
+        ▼
+Container lookup → no IEncounterStore registered
+        │
+        ▼
+Unable to resolve service for type 'IEncounterStore'
+```
+
+**New to this** → stay here. **Merging a PR** → [read the exception](#read-the-exception-before-you-add-another-addscoped). **On-call / interview** → [IOptions vs T](#cause-2-you-asked-for-t-but-registered-ioptionst) · [hosted service scope](#cause-3-hosted-service-constructor-has-no-http-scope) · [if an interviewer asks](#if-an-interviewer-asks).
+
 **Unable to resolve service for type** is the exception people paste into Google when `Program.cs` and a constructor disagree. It is not a captive-dependency bug. Captive dependencies *resolve* and then leak tenant data or throw **disposed**. This URL is the **registration miss**: the container never had a matching service.
 
 Lifetimes, Singleton-holds-DbContext, and `IServiceScopeFactory` stay in [DI lifetimes](/blog/aspnet-core-dependency-injection). Keyed `FromKeyedServices` design stays in [keyed services](/blog/keyed-services-aspnet-core-fromkeyedservices). Here I only decode the exception and the misses I still see on healthcare and SaaS APIs.
@@ -160,4 +174,9 @@ One public constructor. Tests `new PdfRenderer(Options.Create(testOptions))`.
 - [Factory pattern in C#](/blog/csharp-factory-pattern)
 - [DI topic hub](/learning/dependency-injection)
 
-Need a registration graph review on an ASP.NET Core API that only fails in Azure? [Contact me](/contact).
+## If an interviewer asks
+
+How to read the exception message; `Configure<T>` vs injecting `T`; why keyed services fail unkeyed injection.
+
+**Strong answer:** Copy the inner type from the exception — register that abstraction, not the controller. `Configure<BlobOptions>` registers `IOptions<BlobOptions>`, not `BlobOptions`. Keyed `AddKeyedScoped` does not satisfy unkeyed `IOutboundClient` — use `[FromKeyedServices("x12")]` or register a default.
+

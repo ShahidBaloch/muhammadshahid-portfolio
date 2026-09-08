@@ -22,12 +22,6 @@ faq:
 
 A **race condition** is two threads read-modify-write the same data and the result is wrong (`count++` can lose updates). A **critical section** is a few lines only one thread should run at a time. **`lock`** is the in-process tool for that. The compiler emits `Monitor.Enter` / `Exit`. The **same thread** must release — so you cannot `await` inside.
 
-**Terms used here:** **Race** = lost update because two threads both read-then-write. **Critical section** = the few lines only one thread should run. **Thread-affine** = the same OS thread must `Exit` that entered. **Monitor** = the CLR type `lock` compiles to.
-
-**Do you need `lock` in an ASP.NET controller?** Usually no. The database, EF, and concurrent collections cover most request data. Use `lock` for short in-memory shared state (a singleton counter, a small in-process window). Use [SemaphoreSlim](/blog/csharp-semaphore-slim-async-lock) if you must `await`.
-
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [primitives table](#mutex-vs-semaphore-vs-readerwriter) · [if an interviewer asks](#if-an-interviewer-asks).
-
 ```text
 Lock-order deadlock
 
@@ -35,6 +29,12 @@ Lock-order deadlock
   Thread 2:              lock(B) ── wait for A
   Neither runs. CPU idle. SQL idle.
 ```
+
+**Do you need `lock` in an ASP.NET controller?** Usually no. The database, EF, and concurrent collections cover most request data. Use `lock` for short in-memory shared state (a singleton counter, a small in-process window). Use [SemaphoreSlim](/blog/csharp-semaphore-slim-async-lock) if you must `await`.
+
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [primitives table](#mutex-vs-semaphore-vs-readerwriter) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **Race** = lost update because two threads both read-then-write. **Critical section** = the few lines only one thread should run. **Thread-affine** = the same OS thread must `Exit` that entered. **Monitor** = the CLR type `lock` compiles to.
 
 ## Smallest example
 
@@ -124,4 +124,3 @@ lock vs Monitor; lock(this); Mutex/Semaphore; thread-safe singleton; race vs dea
 
 **Strong answer:** private gate, no await, order locks, SQL deadlocks are a different dump.
 
-If two publishes hang with idle SQL, [contact me](/contact). Bring Parallel Stacks.

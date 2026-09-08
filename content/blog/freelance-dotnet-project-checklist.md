@@ -16,6 +16,17 @@ faq:
     a: "No. It is discovery and handoff. Boundaries and folders live on the Clean Architecture URL."
 ---
 
+A **freelance .NET kickoff checklist** aligns scope, auth, hosting, acceptance, and payment before code — discovery is delivery, not a formality before the "real" coding starts.
+
+```text
+Discovery → vertical slice → milestones → demo cadence
+     │              │
+     ▼              ▼
+Auth/hosting    Out-of-scope written down
+```
+
+**New to this** → stay here. **Merging a PR** → [kickoff table](#quick-reference-one-page-kickoff-table). **On-call / interview** → [red flags](#red-flags-that-should-pause-the-start-date) · [acceptance milestones](#definition-of-done-for-the-engagement) · [if an interviewer asks](#if-an-interviewer-asks).
+
 The cheapest hour on a freelance .NET + Angular project is the hour you spend clarifying scope before writing code. The most expensive week is the one where you discover — after building half the admin portal — that the client expected Azure AD login, HIPAA-friendly audit logs, and a deployment pipeline nobody mentioned in the kickoff call.
 
 I have taken engagements across healthcare SaaS modules, eCommerce platforms like Ecom_NET10, and marketplace architectures like CarBazaar. The tech stacks rhyme; the failure modes repeat. This checklist is what I run through before signing a statement of work or pushing the first commit. It is written for freelancers and for clients hiring them — either side can use it to align expectations.
@@ -230,8 +241,8 @@ Fill this with the client before code:
 | Milestones | |
 | First demo date | |
 
----
+## If an interviewer asks
 
-Freelance .NET and Angular work is most successful when both sides treat discovery as part of delivery — not a formality before the "real" coding starts. I use this checklist on every engagement, from storefront APIs to healthcare admin modules.
+What to clarify before starting a greenfield API; how to scope auth; red flags in client discovery.
 
-If you are planning a client project and want a second pair of eyes on scope, auth, or architecture before commitments harden, [reach out](/contact). A focused review call is cheaper than a rework month.
+**Strong answer:** Lock primary outcome, vertical slice, out-of-scope list, auth approach, and acceptance owner before sprint one. "Figure out auth later" and production PHI on laptops are pause triggers. Tie payment to accepted milestones, not vibes — document staging access and who signs off.

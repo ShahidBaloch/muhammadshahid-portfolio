@@ -17,7 +17,18 @@ faq:
     a: "No. Keys win for a small enum of implementations. Factories still win when construction logic grows. Lifetimes stay on the DI guide."
 ---
 
-.NET 8 keyed services let you register **several implementations of the same interface** and inject **one of them by key**. That is useful. It is also a way to hide a service locator in constructor syntax.
+**Keyed services** register multiple implementations of one interface under string keys — resolved with `[FromKeyedServices("key")]` or `GetRequiredKeyedService`. They replace small factories for closed sets; they are not a license to inject `IServiceProvider` everywhere.
+
+```text
+AddKeyedScoped<IOutboundClient>("x12")  → X12OutboundClient
+AddKeyedScoped<IOutboundClient>("fhir") → FhirOutboundClient
+        │
+PartnerDispatch resolves by channel enum → key
+```
+
+**New to this** → stay here. **Merging a PR** → [registration example](#what-keyed-services-are-for). **On-call / interview** → [lifetimes still apply](#lifetimes-still-apply-this-is-where-keyed-di-bites) · [factory vs keyed](#what-keyed-di-is-worse-at-than-a-factory-class) · [if an interviewer asks](#if-an-interviewer-asks).
+
+.NET 8 keyed services let you register **several implementations of the same interface** and inject **one of them by key**.
 
 This article is the **keyed DI** tutorial I wish teams read before they replace every factory with `[FromKeyedServices("sms")]`. Lifetimes and captive dependencies stay in [the DI guide](/blog/aspnet-core-dependency-injection). Factory vs keyed vs strategy is sketched in [Factory pattern](/blog/csharp-factory-pattern); here the examples are **healthcare multi-implementation**, not checkout payments.
 
@@ -122,6 +133,8 @@ Same keys as production. If a test host forgets a key, fail at startup — that 
 
 The SPA should not know that ASP.NET Core uses keyed DI. It should know **allowed channels**. Document them. Return 400 for unknown. That is the same rule as factory keys in the Factory article — because keyed DI is still a mapping from a string to a behavior.
 
----
+## If an interviewer asks
 
-If you are choosing keyed services vs a factory on an ASP.NET Core API with more than one outbound integration (EDI, FHIR, email), [contact me](/contact). The registration graph is usually a one-hour review; the tenant-isolation mistakes are not.
+Keyed services vs factory; when `GetRequiredKeyedService` is acceptable; lifetime rules for keyed registrations.
+
+**Strong answer:** Keyed DI fits a closed enum of implementations with container-owned lifetimes. A factory adds logging, fallbacks, and per-call config. Prefer `AddKeyedScoped` when the implementation uses `DbContext` or tenant state. Wrap `GetRequiredKeyedService` in one resolver class — not scattered in handlers.

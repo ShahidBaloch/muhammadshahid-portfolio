@@ -16,7 +16,21 @@ faq:
     a: "No. Token caches are model-vendor features. Redis for clinic list endpoints is the Redis article. Do not mix the two keys."
 ---
 
-**AI in .NET** is no longer a demo slide. Product teams want chat assistants, document Q&A, and drafting helpers behind Angular SPAs — with the same auth, logging, and cost controls as any other ASP.NET Core feature.
+**Semantic Kernel** orchestrates LLM calls in ASP.NET Core — prompts, plugins, and grounding data stay on the server; Angular calls your API, never the model provider directly.
+
+```text
+Angular → /api/ai/ask (Authorize)
+              │
+              ▼
+         Kernel + plugins (scoped data)
+              │
+              ▼
+         OpenAI / Azure OpenAI
+```
+
+**New to this** → stay here. **Merging a PR** → [what belongs on server](#what-belongs-on-the-server). **On-call / interview** → [plugins](#plugins-and-tools-keep-them-boring) · [safety checklist](#safety-checklist-healthcare--saas) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**AI in .NET** is no longer a demo slide. Product teams want chat assistants, document Q&A, and drafting helpers behind Angular SPAs.
 
 I treat LLM calls like external HTTP: secrets in config, timeouts, retries with care, user-scoped auth, and never “just call OpenAI from the browser.”
 
@@ -131,4 +145,8 @@ A team put the OpenAI key in Angular environment files “for a weekend POC.” 
 - [Redis Caching in ASP.NET Core](/blog/redis-caching-aspnet-core)
 - [C# Async and Await in ASP.NET Core](/blog/csharp-async-await-aspnet-core)
 
-Want an AI assistant bolted onto an existing .NET + Angular product without leaking keys or burning budget? [Contact me](/contact) with the use case and constraints — we can ship a thin vertical slice first.
+## If an interviewer asks
+
+Should Angular call the LLM directly; what belongs in a Kernel plugin; how to handle PHI in prompts.
+
+**Strong answer:** Never put provider keys in Angular — API owns the kernel, rate limits, and audit. Plugins expose narrow tools (`get_order_status`), not raw SQL. Strip or refuse PHI leaving your boundary; log token usage and latency, not full prompts in clear text where policy forbids it.

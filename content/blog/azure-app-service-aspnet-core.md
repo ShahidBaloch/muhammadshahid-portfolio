@@ -17,6 +17,20 @@ faq:
     a: "Usually a missing setting, a slot swap that carried the wrong Identity authority, or Data Protection keys that are not shared across instances. Local Docker is a different article."
 ---
 
+**Azure App Service** hosts ASP.NET Core APIs as a managed web app — but production readiness is configuration (App Settings, slots, Data Protection keys, health checks), not a successful zip deploy.
+
+```text
+dotnet publish → App Service
+        │
+        ▼
+App Settings + Key Vault + slot-sticky secrets
+        │
+        ▼
+Health probe + shared DP keys (multi-instance)
+```
+
+**New to this** → stay here. **Merging a PR** → [configuration baseline](#configuration-is-the-product-not-a-side-quest). **On-call / interview** → [deployment slots](#deployment-slots-and-swaps) · [Data Protection](#data-protection-across-instances) · [if an interviewer asks](#if-an-interviewer-asks).
+
 Azure App Service is the default landing zone for a lot of ASP.NET Core APIs I build for healthcare portals, SaaS billing backends, and eCommerce marketplaces. The first deploy always feels clean. The interesting work starts when IdentityServer token validation, SQL Server connection pooling, and Angular production builds all depend on the same App Service configuration being correct across staging and production.
 
 This post is not a portal click-through. It is what I watch for when a team moves from "it works on my machine" to "it works under real traffic with secrets, slots, and on-call."
@@ -153,4 +167,8 @@ For healthcare APIs, also log **who** performed sensitive actions at the applica
 
 App Service is a strong host for ASP.NET Core when configuration, slots, secrets, and health checks are treated as part of the release — not as infrastructure tickets filed after launch. Most production fires I have seen were preventable with slot discipline, honest health probes, and secrets outside source control.
 
-If you are planning an Azure App Service deployment for a .NET API with staging slots, Key Vault, and a proper smoke-test gate, [reach out](/contact) — I help teams get the boring path right so the product work can continue.
+## If an interviewer asks
+
+Why staging works but production fails after slot swap; slot-sticky settings; Data Protection across instances.
+
+**Strong answer:** Slot swap can carry wrong JWT authority or SQL if settings are not slot-sticky. Multi-instance apps need shared Data Protection key ring or auth cookies break on the next request. Fail fast on missing config at startup — partial config is harder to debug than a 503 at boot.

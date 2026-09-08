@@ -22,10 +22,6 @@ faq:
 
 **Start here if you are new to async.** A `Task` is a promise that work will finish. A `Thread` is an operating-system worker that actually runs code. **Async/await is not multithreading.** It is a way to give that worker back while your API waits on SQL or HTTP.
 
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [ValueTask and TAP](#valuetask-vs-task) · [if an interviewer asks](#if-an-interviewer-asks).
-
-**Terms used here:** **ThreadPool** = the CLR’s shared set of worker threads. **I/O** = waiting on database, HTTP, or disk. **CPU-bound** = hashing, image encode, tight loops. **Continuation** = the code after `await` that runs when the wait finishes. **Kestrel** = the ASP.NET Core web server.
-
 If a teammate says “we made it async so it uses more threads,” they have this backwards. Multithreading is `Thread`, `Task.Run`, and `Parallel`. Async is a **state machine** that lets you return the worker during I/O.
 
 ```text
@@ -41,6 +37,10 @@ One HTTP request, waiting on SQL
 ```
 
 That picture is why a `Task` is not a thread. The ticket exists while nobody is standing still.
+
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [ValueTask and TAP](#valuetask-vs-task) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **ThreadPool** = the CLR’s shared set of worker threads. **I/O** = waiting on database, HTTP, or disk. **CPU-bound** = hashing, image encode, tight loops. **Continuation** = the code after `await` that runs when the wait finishes. **Kestrel** = the ASP.NET Core web server.
 
 ## Smallest working example
 
@@ -202,4 +202,4 @@ Task vs Thread vs pool; async vs multithreading in 30 seconds; does await create
 
 **Strong answer:** Task is a promise. Async frees workers during I/O. Threads are for CPU or dedicated listeners.
 
-If a team is adding `Task.Run` to “make the API multithreaded,” [contact me](/contact). That PR is usually reversed in an afternoon.
+”. That PR is usually reversed in an afternoon.

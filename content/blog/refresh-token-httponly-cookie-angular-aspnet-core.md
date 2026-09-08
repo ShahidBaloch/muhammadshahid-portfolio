@@ -1,6 +1,6 @@
 ---
 title: "HttpOnly Cookie for Angular Refresh Tokens"
-description: "HttpOnly cookie vs localStorage vs memory vs BFF for refresh tokens: CSRF, CORS credentials, cookie flags, and the Angular withCredentials contract I use with ASP.NET Core."
+description: "HttpOnly cookie refresh tokens for Angular and ASP.NET Core JWT — vs localStorage and BFF, cookie flags, withCredentials, CORS credentials, and CSRF defense."
 date: "2026-08-16"
 category: "authentication"
 tags: ["ASP.NET Core", "Angular", "JWT", "Security", "CORS"]
@@ -13,11 +13,18 @@ faq:
     a: "Yes. Cross-origin cookie refresh fails silently without withCredentials and a precise CORS origin. Same-site BFF setups do not need this SPA cookie dance."
 ---
 
-People search “store refresh token httpOnly cookie Angular ASP.NET Core” when they have already been burned by `localStorage`. The cookie is not automatically safer. It **moves** the problem: JavaScript cannot read the token, but the browser **will send it** on matching requests — which is CSRF if you are sloppy, and a CORS mess if `AllowCredentials` meets a wildcard origin.
+**An httpOnly refresh cookie** stores the refresh token where JavaScript cannot read it — the browser sends it automatically on matching requests, which shifts XSS risk to CSRF risk you must mitigate.
 
-This is a **comparison plus the cookie contract**. Token rotation and reuse detection are [the API rotation article](/blog/aspnet-core-jwt-refresh-token-rotation). Concurrent 401s are [the interceptor queue](/blog/angular-interceptor-401-refresh-queue). Taking **all** tokens off the SPA is [BFF + YARP](/blog/bff-pattern-aspnet-core-angular-yarp).
+```text
+localStorage  ──► XSS reads token directly
+httpOnly cookie ──► XSS cannot read; browser sends on POST /auth/refresh
+                      │
+                 attacker site CSRF ──► must block with SameSite + custom header
+```
 
-Nothing here is a security certification. Cookie flags and CORS are easy to copy wrong.
+Think of httpOnly as a ** sealed envelope the browser carries**: XSS cannot peek inside, but any site that tricks the browser into delivering the envelope to your refresh endpoint needs a bouncer (CSRF defenses).
+
+**New to this** → stay here. **Server rotation** → [refresh token rotation](/blog/aspnet-core-jwt-refresh-token-rotation). **CORS + credentials** → [CORS Angular ASP.NET Core](/blog/cors-angular-aspnet-core). **All tokens off SPA** → [BFF + YARP](/blog/bff-pattern-aspnet-core-angular-yarp). **Interview prep** → [If an interviewer asks](#if-an-interviewer-asks).
 
 ## Four places a refresh token can live
 
@@ -28,7 +35,7 @@ Nothing here is a security certification. Cookie flags and CORS are easy to copy
 | **HttpOnly cookie** (this article) | No | **Yes — must mitigate** | **Credentials + exact origins** | Refresh for first-party SPA when you are not ready for a BFF |
 | BFF session cookie | No | Yes — BFF must mitigate | Often avoided (same site) | Public SPAs, stronger threat model |
 
-Access tokens stay **short-lived** and I still prefer them in **memory** (Authorization header). Putting the **access** JWT in a cookie for every API call is a different design (CSRF on every POST). Do not mix “httpOnly refresh” with “cookie on all `/api` routes” unless you meant to build a BFF.
+Access tokens stay **short-lived** and I still prefer them in **memory** (Authorization header). Putting the **access** JWT in a cookie for every API call is a different design (CSRF on every POST). Do not mix "httpOnly refresh" with "cookie on all `/api` routes" unless you meant to build a BFF.
 
 ## What I set on the refresh cookie (ASP.NET Core)
 
@@ -86,13 +93,13 @@ Cross-origin SPA (`https://app.example.com`) + API (`https://api.example.com`) +
 
 Cross-site cookies are the painful path. Same-site (`app.example.com` + `app.example.com/api`) is easier: Lax often works; CORS may disappear if you proxy.
 
-If Chrome shows a CORS error after you added cookies, read [CORS between Angular and ASP.NET Core](/blog/cors-angular-aspnet-core). Many “CORS” failures are **401 without ACAO headers** because middleware order died first. That is a sibling diagnosis, not a reason to put the token back in `localStorage`.
+If Chrome shows a CORS error after you added cookies, read [CORS between Angular and ASP.NET Core](/blog/cors-angular-aspnet-core). Many "CORS" failures are **401 without ACAO headers** because middleware order died first. That is a sibling diagnosis, not a reason to put the token back in `localStorage`.
 
-`AllowAnyOrigin()` + `AllowCredentials()` throws `InvalidOperationException` in ASP.NET Core. That throw is the framework saving you. Do not catch it and “make CORS work.”
+`AllowAnyOrigin()` + `AllowCredentials()` throws `InvalidOperationException` in ASP.NET Core. That throw is the framework saving you. Do not catch it and "make CORS work."
 
 ## CSRF on the refresh endpoint
 
-The cookie will be sent to `POST /api/auth/refresh` if the attacker can make the victim’s browser call that URL while logged in.
+The cookie will be sent to `POST /api/auth/refresh` if the attacker can make the victim's browser call that URL while logged in.
 
 Mitigations I stack:
 
@@ -109,7 +116,7 @@ SameSite is not a full CSRF story for every browser and every cross-site case. T
 - The SPA is a public internet app with a serious XSS budget and you can afford a gateway
 - The team cannot get CORS+credentials right in three environments
 
-Cookie-for-refresh is a **middle** design: better than `localStorage` for XSS theft of refresh, worse than BFF for “JavaScript never sees token plumbing.”
+Cookie-for-refresh is a **middle** design: better than `localStorage` for XSS theft of refresh, worse than BFF for "JavaScript never sees token plumbing."
 
 ## Checklist before you ship
 
@@ -123,6 +130,16 @@ Cookie-for-refresh is a **middle** design: better than `localStorage` for XSS th
 - [ ] Rotation + hashed storage on the server
 - [ ] Interceptor [queues 401s](/blog/angular-interceptor-401-refresh-queue) so two tabs / six widgets do not rotate twice
 
----
+## If an interviewer asks
 
-If you are moving an Angular SPA off `localStorage` refresh tokens onto ASP.NET Core cookies (or deciding that a BFF is cheaper), [contact me](/contact). The cookie flags and CORS matrix are where copy-paste tutorials go to die.
+**"Is httpOnly cookie safer than localStorage for refresh?"**
+
+**Strong answer:** It blocks XSS from reading the refresh token. It does not block CSRF — the browser auto-sends cookies. You must add SameSite, custom headers on refresh, and explicit CORS origins. Wildcard CORS + credentials is worse than localStorage.
+
+**"Why keep access token in memory but refresh in cookie?"**
+
+**Strong answer:** Access token goes on every API call via Authorization header — putting it in a cookie CSRF-protects every POST. Refresh only hits `/auth/refresh` — narrow Path + CSRF on that endpoint is manageable. Short-lived access in memory limits XSS window.
+
+**"Does Angular need withCredentials for cookie refresh?"**
+
+**Strong answer:** Yes for cross-origin setups. Without it, the browser will not send the cookie on XHR. Same-site BFF or proxied `/api` may avoid the dance. Login must also set `withCredentials` or the cookie never lands.

@@ -1,6 +1,6 @@
 ---
 title: "EF Core and SQL Server Performance"
-description: "EF Core and SQL Server performance from healthcare reporting and SaaS dashboards — N+1, projections, indexes, AsNoTracking, and pain that only shows under real data volume."
+description: "EF Core and SQL Server performance: N+1 queries, projections, AsNoTracking, indexes, and reporting pain that only shows under real data volume."
 date: "2026-05-10"
 updated: "2026-09-07"
 category: "ef-core"
@@ -14,7 +14,22 @@ faq:
     a: "N+1 is extra round-trips. Cartesian explosion is one JOIN that multiplied rows. This page is the checklist; those two articles are the failure modes."
 ---
 
-The Angular dashboard looked fine in demo data. Then a clinic turned on twelve months of appointment history, a marketplace seller exported four thousand orders, and the API started timing out at thirty seconds. Nothing changed in the controller signature. EF Core was doing exactly what we asked — we just asked for too much, too many times, with tracking enabled on a read-only report.
+**EF Core and SQL Server performance** problems almost always come down to query shape: too many round-trips, too many columns, tracking on read-only handlers, or plans that scan because indexes do not match the filter. EF does exactly what you asked — the fix is asking for less, fewer times, with the right index underneath.
+
+```text
+Demo data (50 rows)                 Production (50,000 rows)
+
+  N+1 invisible                     51 SQL commands per request
+  fat Include fine                  cartesian JOIN × thousands
+  no index needed                   table scan on ClinicId + date
+  tracking "free"                   GC + snapshot cost
+```
+
+**New to this** → stay here. **Merging a PR** → [measure before you optimize](#measure-before-you-optimize). **On-call / interview** → [diagnostics checklist](#diagnostics-checklist-before-rewriting-architecture) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **Projection** = `Select` to a DTO so SQL returns only what the screen needs. **Logical reads** = pages SQL Server pulled from disk/cache — the honest cost signal in SSMS. **Query Store** = SQL Server's plan and duration history — use it before rewriting architecture.
+
+The Angular dashboard looked fine in demo data. Then a clinic turned on twelve months of appointment history, a marketplace seller exported four thousand orders, and the API started timing out at thirty seconds. Nothing changed in the controller signature.
 
 This post covers the EF Core and SQL Server performance issues I see most often in healthcare reporting, SaaS analytics endpoints, and eCommerce list screens — and the fixes that actually stick without rewriting the stack.
 
@@ -242,4 +257,12 @@ Test reports against production-scale data copies. Empty databases lie.
 
 EF Core performance in healthcare and SaaS is usually about query shape: stop N+1, project early, track only when updating, and index what your Angular screens actually filter. Reporting pain needs bounded queries, aggregation in SQL, and sometimes read paths separate from transactional writes — not a rewrite on day one.
 
-If your ASP.NET Core API is struggling with SQL Server under real data volume and you want a focused performance review, [get in touch](/contact). Interview-style concurrency and query-filter questions are [EF Core interview questions](/blog/ef-core-interview-questions) — not this URL.
+Interview-style concurrency and query-filter questions are [EF Core interview questions](/blog/ef-core-interview-questions) — not this URL.
+
+## If an interviewer asks
+
+*The dashboard was fast in staging and times out in production. Where do you start?*
+
+**30-second answer:** Measure command count, logical reads, and Query Store — not guesses. Fix N+1 with projection, stop tracking on read handlers, index the filter columns, and bound date ranges before proposing Redis or read replicas.
+
+**Strong answer:** I'd log EF commands in Development and check Application Insights dependency count on the hot endpoint. Fifty-one commands means N+1 — project the grid. One command with row count as a product of collections means cartesian explosion — split query or fewer Includes. One command, one clinic fast, hub clinic slow means parameter sniffing. Same plan, table scan means missing index on `ClinicId + date`. I'd verify with Query Store on production-scale data, not an empty database. Most "we need caching" requests disappear after projection and indexes.

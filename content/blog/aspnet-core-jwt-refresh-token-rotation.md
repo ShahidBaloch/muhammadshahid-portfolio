@@ -1,6 +1,6 @@
 ---
 title: "ASP.NET Core JWT Refresh Token Rotation"
-description: "A production guide to JWT refresh token rotation in ASP.NET Core: hashed storage, family revocation, reuse detection, and the Angular contract that keeps short-lived access tokens usable."
+description: "ASP.NET Core JWT refresh token rotation guide — hashed storage, family revocation, reuse detection, concurrency locks, and the Angular single-flight contract."
 date: "2026-08-15"
 category: "authentication"
 tags: ["ASP.NET Core", "JWT", "Security", "Angular"]
@@ -13,16 +13,19 @@ faq:
     a: "No. Hash them like passwords. A database dump should not mint sessions. Angular storage of the refresh value is a separate cookie vs localStorage decision."
 ---
 
-A login endpoint that returns a JWT is not an auth system. The first production incident I still remember from a marketplace API was quieter than a breach headline: a refresh token lived for 30 days in `localStorage`, never rotated, and was never hashed in SQL. When one seller laptop was compromised, we could not tell which sessions were legitimate. We could only wipe every refresh row and force a global re-login.
+**Refresh token rotation** means every successful refresh consumes the presented refresh token, issues a new one, and treats reuse of an old token as theft that revokes the entire token family.
 
-That is the gap this article closes. It is the **API-side refresh contract**: rotation, reuse detection, and revocation. It is not a beginner JWT tutorial.
+```text
+Login ──► refresh_A (family F1)
+              │
+Refresh with A ──► access + refresh_B (A revoked)
+              │
+Attacker uses A ──► REUSE ──► revoke ALL of family F1
+```
 
-- Angular concurrent 401s and interceptors: [401 refresh queue](/blog/angular-interceptor-401-refresh-queue) · [JWT interceptors](/blog/angular-jwt-interceptors)
-- Refresh in an httpOnly cookie: [cookie vs localStorage vs BFF](/blog/refresh-token-httponly-cookie-angular-aspnet-core)
-- Issuance, policies, and lifetimes checklist: [ASP.NET Core JWT auth](/blog/aspnet-core-jwt-auth)
-- When cookies beat SPA-held refresh tokens: [BFF with YARP](/blog/bff-pattern-aspnet-core-angular-yarp)
+Picture a **hotel key card**: each checkout issues a new card and deactivates the old one. If someone tries the old card after you already checked in with the new one, security assumes theft and locks the whole reservation.
 
-This is practitioner guidance from ASP.NET Core and Angular delivery work. It is not legal advice, and it is not a promise that any snippet makes an application “secure” or compliant by itself.
+**New to this** → stay here. **Angular concurrent 401s** → [401 refresh queue](/blog/angular-interceptor-401-refresh-queue). **HttpOnly cookie storage** → [refresh token cookie](/blog/refresh-token-httponly-cookie-angular-aspnet-core). **JWT checklist** → [ASP.NET Core JWT auth](/blog/aspnet-core-jwt-auth). **Interview prep** → [If an interviewer asks](#if-an-interviewer-asks).
 
 ## What refresh token rotation actually means
 
@@ -45,7 +48,7 @@ When reuse is detected, revoke **every row in that family**, not only the reused
 | Access JWT | 5–15 minutes for internet-facing SPAs | Not stored after issuance (stateless validation) | `Authorization: Bearer` |
 | Refresh | Hours to a few days, product-dependent | Hashed in SQL (or equivalent) with expiry + family | Body, or better: httpOnly cookie |
 
-Access tokens stay short so a leak is time-boxed. Refresh tokens stay server-tracked so you can kill a session. If you issue a 24-hour JWT “because refresh was hard,” you skipped the hard part and kept the risk.
+Access tokens stay short so a leak is time-boxed. Refresh tokens stay server-tracked so you can kill a session. If you issue a 24-hour JWT "because refresh was hard," you skipped the hard part and kept the risk.
 
 On healthcare admin portals I have shipped, access tokens were shorter than on internal ops tools behind VPN. The code pattern was the same. The **policy** was not.
 
@@ -72,7 +75,7 @@ Rules I enforce in one service, not in controllers:
 - Persist **SHA-256** (or stronger) of the refresh token plus a server-side pepper from Key Vault. If the database leaks, the raw token is not sitting in a column named `RefreshToken`.
 - Never log the raw token. Log `FamilyId` and `UserId`.
 - Index `(TokenHash)` unique, and `(FamilyId, RevokedAt)` for family revoke.
-- On password change, admin lock, or “log out everywhere,” revoke all families for that user.
+- On password change, admin lock, or "log out everywhere," revoke all families for that user.
 
 User-agent and IP are **signals**, not identity. NATs and mobile networks will lie to you. I record them for incident review. I do not auto-revoke solely because the IP changed — that trains users to hate your product.
 
@@ -108,7 +111,7 @@ public async Task<IResult> RefreshAsync(
 }
 ```
 
-I return **401** for invalid, expired, revoked, and reuse. Do not return 200 with `{ success: false }`. Do not return 403. Angular interceptors should treat this as “session is dead,” not “try a different permission.”
+I return **401** for invalid, expired, revoked, and reuse. Do not return 200 with `{ success: false }`. Do not return 403. Angular interceptors should treat this as "session is dead," not "try a different permission."
 
 On reuse detection I still return 401 to the caller, and I **revoke the family in the same transaction**. Then I write a security log event. In healthcare work that event is an audit row without PHI — session and user identifiers only.
 
@@ -137,7 +140,7 @@ var current = await db.RefreshTokens
     .SingleOrDefaultAsync(ct);
 ```
 
-If you are on PostgreSQL, use `FOR UPDATE`. If you skip the lock, you will debug “random logouts” for a week and blame Angular.
+If you are on PostgreSQL, use `FOR UPDATE`. If you skip the lock, you will debug "random logouts" for a week and blame Angular.
 
 A slightly softer approach used on one eCommerce admin: if two rotations race within a 2–3 second window and both present the **same** still-active token, issue one successor and return it to both. I only do that when product owners refuse false logouts more than they fear a tiny race. Reuse of an **already replaced** token still kills the family. Document the choice.
 
@@ -150,11 +153,11 @@ Keep access tokens boring:
 - roles or a small set of policy claims
 - `jti` — useful if you later add a short-lived denylist for logout-before-expiry
 
-Do **not** put refresh family ids, PHI, emails you do not need, or “the whole user object” in the JWT. Angular will decode it. So will every XSS bug.
+Do **not** put refresh family ids, PHI, emails you do not need, or "the whole user object" in the JWT. Angular will decode it. So will every XSS bug.
 
 Signing: asymmetric keys (RS256) once you have more than one API trusting the issuer. Symmetric keys are fine for a single API if the key lives in Key Vault and is long enough. Clock skew: one minute, not the default 5 minutes that keeps expired tokens alive.
 
-## Best practices checklist (this is the “jwt refresh token best practices” section)
+## Best practices checklist (this is the "jwt refresh token best practices" section)
 
 Use this as a go-live review, not as decoration:
 
@@ -181,7 +184,7 @@ The API should assume:
 
 If you store refresh tokens in JSON bodies, the SPA must hold them. That is why I prefer httpOnly cookies for refresh on same-site or carefully configured cross-site setups, and why a [BFF](/blog/bff-pattern-aspnet-core-angular-yarp) is the stronger long-term shape for public internet SPAs.
 
-Do not refresh on **403**. If your API uses 401 for “wrong role,” you will rotate tokens because a nurse opened an admin route. Fix status codes first.
+Do not refresh on **403**. If your API uses 401 for "wrong role," you will rotate tokens because a nurse opened an admin route. Fix status codes first.
 
 ## Example: what I test before I call it done
 
@@ -190,7 +193,7 @@ Do not refresh on **403**. If your API uses 401 for “wrong role,” you will r
 3. Two parallel refreshes with a lock → one or two successor tokens, no stuck user
 4. Expired refresh → 401, no new access token
 5. Logout → refresh 401
-6. User B’s refresh cannot be used as user A
+6. User B's refresh cannot be used as user A
 
 I test with a real Angular client, not only Swagger. Swagger does not stampede.
 
@@ -200,6 +203,16 @@ If you already need SSO, external IdPs, or multiple first-party apps, a dedicate
 
 Custom refresh is reasonable for a single ASP.NET Core API plus one Angular admin. It becomes a liability when every new app copies the token table.
 
----
+## If an interviewer asks
 
-Short-lived JWTs are easy. Honest refresh is the work. If you want this wired against an existing ASP.NET Core API and Angular SPA — including the race and reuse cases tutorials skip — [contact me](/contact).
+**"What is refresh token reuse detection?"**
+
+**Strong answer:** When a client presents a refresh token that was already rotated (revoked with `ReplacedByTokenId`), treat it as theft. Revoke the entire token family — all sessions from that login chain. Both thief and legitimate user must re-authenticate. That is the point of rotation plus reuse detection.
+
+**"Why hash refresh tokens in the database?"**
+
+**Strong answer:** Same reason as passwords. A DB dump should not mint sessions. Store SHA-256 of the token plus a server pepper. Never log raw refresh values.
+
+**"How do you handle concurrent refresh from two tabs?"**
+
+**Strong answer:** Serialize rotation per family with a database row lock (`UPDLOCK` / `FOR UPDATE`). Without a lock, two tabs can race and trigger false reuse alarms or double successors. Angular must also single-flight refresh on the client.

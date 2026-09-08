@@ -1,6 +1,6 @@
 ---
 title: "ASP.NET Core 401 vs 403: Challenge vs Forbid for Angular APIs"
-description: "ASP.NET Core 401 vs 403 — Challenge vs Forbid, JWT bearer with no token vs a failed policy, and why Angular interceptors that treat every 403 as logout are wrong."
+description: "ASP.NET Core 401 Unauthorized vs 403 Forbidden — Challenge vs Forbid, JWT bearer mapping, Angular interceptor rules, and why logging out on 403 is wrong."
 date: "2026-09-07"
 category: "authentication"
 tags: ["ASP.NET Core", "JWT", "Angular", "Authorization", "API Security"]
@@ -17,9 +17,18 @@ faq:
     a: "No token or a failed token is Challenge (401). A valid token that misses a role or policy is Forbid (403). Misconfigured schemes make both look like 401."
 ---
 
-Angular logs a clinician out because a fee-schedule endpoint returned **403**. The access JWT was valid. The user was signed in. The interceptor treated **every** non-2xx auth failure as “session dead.” That is a **401 vs 403** bug, not a refresh-token bug.
+**401 Unauthorized** means the caller is not authenticated (or the credential is unusable). **403 Forbidden** means the caller is authenticated but not allowed — two different questions the API must answer consistently.
 
-This URL is only the status-code contract: when ASP.NET Core **challenges** (401) versus **forbids** (403), and what the SPA is allowed to do. Token issuance lives in [JWT auth checklist](/blog/aspnet-core-jwt-auth). Concurrent refresh lives in [queue 401s](/blog/angular-interceptor-401-refresh-queue). Named policies live in [RBAC](/blog/aspnet-core-rbac-guide). Do not paste those articles here.
+```text
+No Bearer header        ──► 401 Challenge  ("Who are you?")
+Expired / bad signature   ──► 401 Challenge  ("Credential invalid")
+Valid JWT, wrong role     ──► 403 Forbid     ("I know you; no.")
+Valid JWT, wrong tenant   ──► 403 Forbid     ("Not your clinic.")
+```
+
+Think of a **building lobby**: 401 is the security desk saying "show your badge." 403 is the desk recognizing your badge but refusing the executive floor. Logging someone out on 403 is escorting them from the building because they tried the wrong elevator.
+
+**New to this** → stay here. **JWT setup** → [ASP.NET Core JWT checklist](/blog/aspnet-core-jwt-auth). **Angular refresh on 401 only** → [401 refresh queue](/blog/angular-interceptor-401-refresh-queue). **Policy design** → [RBAC guide](/blog/aspnet-core-rbac-guide). **Interview prep** → [If an interviewer asks](#if-an-interviewer-asks).
 
 ## What 401 and 403 mean on an API
 
@@ -148,4 +157,17 @@ Weak answer: “Make everything 401 so the interceptor is simpler.” Strong ans
 - [IDX10501 JWT kid match](/blog/aspnet-core-idx10501-jwt-kid)
 - [Auth & tokens hub](/learning/authentication)
 
-If an Angular portal is logging people out on 403s and you want the API contract reviewed, [get in touch](/contact).
+## If an interviewer asks
+
+**"What is the difference between Challenge and Forbid in ASP.NET Core?"**
+
+**Strong answer:** `ChallengeAsync()` → 401 for unauthenticated callers — missing or invalid JWT. `ForbidAsync()` → 403 for authenticated callers who fail a policy. JWT bearer maps no token and bad signature to Challenge; valid token with wrong role to Forbid.
+
+**"Should Angular refresh on 403?"**
+
+**Strong answer:** No. 403 means the session is valid but permission is missing. Refreshing will not add a role. Clear tokens only after 401 when refresh also fails. Treat 403 as UX — toast or empty state, not logout.
+
+**"Why do cookie APIs confuse this?"**
+
+**Strong answer:** Cookie authentication's default challenge redirects to login (302 HTML), not 401 JSON. Angular `HttpClient` then sees CORS errors or HTML bodies. Use JWT bearer scheme on API controllers, or name schemes explicitly with `[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]`.
+

@@ -24,10 +24,6 @@ faq:
 
 **`ConfigureAwait(false)` is a library contract:** “resume on any ThreadPool thread, do not post back to the caller’s UI.” You need it in NuGet / shared DLLs that might run inside WPF, WinForms, MAUI, or classic ASP.NET.
 
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [who has a context](#who-has-a-synchronizationcontext) · [.NET 8 options](#net-8-configureawaitoptions) · [if an interviewer asks](#if-an-interviewer-asks).
-
-**Terms used here:** **SynchronizationContext** = a rule for **which thread** continuations must run on (WPF dispatcher, Blazor circuit). **Capture** = after `await`, try to resume on that same context. **`ConfigureAwait(false)`** = do not capture; resume on a pool thread.
-
 ```text
 WPF deadlock without ConfigureAwait(false) in the library
 
@@ -39,6 +35,10 @@ WPF deadlock without ConfigureAwait(false) in the library
        │
        UI thread is still in .Result  →  deadlock
 ```
+
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [who has a context](#who-has-a-synchronizationcontext) · [.NET 8 options](#net-8-configureawaitoptions) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **SynchronizationContext** = a rule for **which thread** continuations must run on (WPF dispatcher, Blazor circuit). **Capture** = after `await`, try to resume on that same context. **`ConfigureAwait(false)`** = do not capture; resume on a pool thread.
 
 With `ConfigureAwait(false)` inside the library, the continuation can run on the pool. The UI thread is still blocked (still a bad handler) but it is not waiting on itself.
 
@@ -159,4 +159,3 @@ When is `ConfigureAwait(false)` still useful; does it help performance on Core; 
 
 **Strong answer:** “Libraries yes. ASP.NET Core app code no. It is not a `.Result` amnesty.”
 
-If you are extracting a shared parser or client SDK from an ASP.NET Core solution and need the library/app analyzer split, [contact me](/contact).

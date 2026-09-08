@@ -20,15 +20,15 @@ faq:
 
 **`TaskCompletionSource<T>`** creates a `Task` **you** control. When the legacy `Connected` event fires, you call `TrySetResult()` and anyone `await`ing that task continues. That is the bridge from **EAP** (Event-based Asynchronous Pattern: `FooCompleted`) to **TAP** (Task-based Asynchronous Pattern: `await`). **APM** is the even older `Begin`/`End` pair.
 
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [vendor connect](#one-shot-connect) · [if an interviewer asks](#if-an-interviewer-asks).
-
-**Terms used here:** **`RunContinuationsAsynchronously`** = do not run your `await` continuation **on the vendor’s event thread** (that thread can deadlock their lock).
-
 ```text
 Legacy Connected event  →  handler  →  tcs.TrySetResult()
                                           ↓
                                caller: await tcs.Task
 ```
+
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [vendor connect](#one-shot-connect) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **`RunContinuationsAsynchronously`** = do not run your `await` continuation **on the vendor’s event thread** (that thread can deadlock their lock).
 
 ## Smallest example
 
@@ -147,4 +147,4 @@ TAP; wrapping EAP; testing async code by completing a TCS in a fake.
 
 **Strong answer:** TrySet, RunContinuationsAsynchronously, unsubscribe, cancel aborts the SDK.
 
-If you are stuck with an event-only vendor SDK on a Kestrel host, [contact me](/contact). Bring the event list. One-shot vs stream is the whole design.
+. Bring the event list. One-shot vs stream is the whole design.

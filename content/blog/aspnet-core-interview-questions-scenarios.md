@@ -272,4 +272,4 @@ Partition thoughtfully: per-user or per-username on login after identity is know
 - [SOLID Principles in C# and ASP.NET Core](/blog/solid-principles-aspnet-core)
 - [Clean Architecture in ASP.NET Core](/blog/clean-architecture-aspnet-core)
 
-Preparing for a senior ASP.NET Core interview loop, or building one for your hiring team? [Contact me](/contact) — scenario practice beats memorizing property bags.
+— scenario practice beats memorizing property bags.

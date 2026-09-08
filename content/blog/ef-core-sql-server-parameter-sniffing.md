@@ -1,6 +1,6 @@
 ---
 title: "Fix SQL Server Parameter Sniffing in EF Core"
-description: "EF Core query is fast for one clinic and times out for another. How I confirm SQL Server parameter sniffing and what I change — without trusting SSMS."
+description: "SQL Server parameter sniffing in EF Core: same LINQ fast for one clinic, 30s timeout for another. How to confirm in Query Store and what to change."
 date: "2026-09-07"
 category: "ef-core"
 tags: ["EF Core", "SQL Server", "Performance", "Diagnostics"]
@@ -17,11 +17,25 @@ faq:
     a: "No. TagWith only writes a SQL comment. A DbCommandInterceptor (or Query Store) has to append the real hint."
 ---
 
+**Parameter sniffing** (parameter-sensitive plan) means SQL Server compiled an execution plan for the first `@clinicId` it saw and reused it for every tenant. A nested-loop plan that fits twelve rows becomes a thirty-second scan when the hub clinic runs the same parameterized LINQ.
+
+```text
+Same LINQ, different clinics, one cached plan
+
+  Clinic A (12 rows)  → plan: nested loop  → 50ms   ✓
+  Clinic B (2M rows)  → same cached plan   → 30s timeout ✗
+  SSMS ad-hoc         → new plan            → instant (misleading)
+```
+
 ![Two clinics sharing one sniffed SQL Server plan: small clinic 50ms, hub clinic 30s timeout](/images/blog/ef-core-parameter-sniffing.png)
 
-The appointments endpoint was **50ms** for clinic A and a **30 second timeout** for clinic B. Same LINQ. Same index. SSMS for clinic B was instant. That combination is almost always **parameter sniffing** (parameter-sensitive plan): SQL Server compiled a plan for the first `@clinicId` it saw and reused it for a tenant with a wildly different row count.
+**New to this** → stay here. **Merging a PR** → [confirm in Query Store](#confirm-in-query-store-not-ssms). **On-call / interview** → [fixes I actually ship](#fixes-i-actually-ship) · [if an interviewer asks](#if-an-interviewer-asks).
 
-This is not [N+1](/blog/ef-core-nplus1-include-vs-assplitquery). Command count is one. The plan is wrong for the sniff. If waits are `PAGELATCH_UP` on database id 2, that is [TempDB contention](/blog/sql-server-tempdb-contention), not this page.
+**Terms used here:** **Sniffed parameter** = the first parameter value SQL Server saw when it compiled the plan. **Plan cache** = stored execution plans reused across requests with different parameter values. **`OPTION (RECOMPILE)`** = force a fresh plan per execution — compile cost, use on one hot endpoint only.
+
+The appointments endpoint was **50ms** for clinic A and a **30 second timeout** for clinic B. Same LINQ. Same index. SSMS for clinic B was instant.
+
+This is not [N+1](/blog/ef-core-nplus1-include-vs-assplitquery). Command count is one. If waits are `PAGELATCH_UP` on database id 2, that is [TempDB contention](/blog/sql-server-tempdb-contention), not this page.
 
 ## Confirm in Query Store, not SSMS
 
@@ -96,6 +110,12 @@ Embedding the clinic id as a literal (`EF.Constant`) can force a fresh plan per 
 - Same plan, missing index: Query Store will show scans regardless of tenant
 - Instant after you added RCSI, then TempDB waits: different article
 
-Interview “one tenant fast, one slow” is allowed to point here. Correctness questions (filters, rowversion) stay on [EF Core interview questions](/blog/ef-core-interview-questions).
+Interview "one tenant fast, one slow" is allowed to point here. Correctness questions (filters, rowversion) stay on [EF Core interview questions](/blog/ef-core-interview-questions).
 
-If one ASP.NET Core clinic times out and the satellite clinics do not, [contact me](/contact). A Query Store screenshot of the sniffed parameter is enough to choose recompile vs PSP vs a tighter date window.
+## If an interviewer asks
+
+*Same EF Core endpoint: 50ms for clinic A, 30-second timeout for clinic B. SSMS is instant. What is wrong?*
+
+**30-second answer:** Parameter sniffing. SQL Server cached a plan compiled for one cardinality and reused it for a tenant with wildly different row counts. SSMS uses different SET options and often gets a fresh plan — that proves almost nothing.
+
+**Strong answer:** I'd find the query in Query Store using the EF shape, not the SSMS ad-hoc text. I'd check avg vs last duration and the sniffed parameter in the plan XML. First fix is often a tighter date window so "twelve months of the hub" is not the plan for "today at a satellite clinic." On SQL Server 2022 I'd check PSP optimization. For one tenant-skewed hot endpoint I'd add `OPTION (RECOMPILE)` via a `DbCommandInterceptor` — not `TagWith` alone, which only writes a comment. I would not sprinkle `EF.Constant` per tenant — that explodes the plan cache. Fifty commands is N+1; row count as a product is cartesian explosion — different posts.

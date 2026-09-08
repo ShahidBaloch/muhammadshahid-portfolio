@@ -1,6 +1,6 @@
 ---
 title: "EF Core Optimistic Concurrency with RowVersion"
-description: "Two Angular tabs, one encounter, last write wins. How I map SQL Server rowversion, return 409, and when RCSI is the wrong fix."
+description: "EF Core optimistic concurrency with RowVersion: map SQL Server rowversion as a concurrency token, return 409 on conflict, and stop last-write-wins on encounters."
 date: "2026-09-07"
 category: "ef-core"
 tags: ["EF Core", "SQL Server", "Concurrency", "ASP.NET Core"]
@@ -17,11 +17,23 @@ faq:
     a: "No. RCSI stops readers blocking writers. Two PUTs still need a concurrency token or you keep last-write-wins."
 ---
 
+**Optimistic concurrency** in EF Core adds a token column to the `WHERE` clause of every UPDATE. If another writer already saved, zero rows match and EF throws `DbUpdateConcurrencyException`. SQL Server **`rowversion`** is the token I map — the database maintains it; the app sends back what it read on GET.
+
+```text
+Two clinicians, same encounter, no token     With RowVersion token
+
+  Tab A: PATCH status = Reviewed             Tab A: PATCH + rowVersion v1 → OK (v2)
+  Tab B: PATCH status = Closed               Tab B: PATCH + rowVersion v1 → 0 rows
+  Tab B wins silently                        API returns 409, Angular refreshes
+```
+
+**New to this** → stay here. **Merging a PR** → [map the token](#map-the-token). **On-call / interview** → [GET then PUT](#get-then-put) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **Concurrency token** = a column EF includes in the UPDATE `WHERE` to detect stale writes. **`IsRowVersion()`** = fluent mapping for SQL Server `rowversion` / `timestamp`. **`DbUpdateConcurrencyException`** = EF's signal that the token did not match — map to HTTP 409, not 500.
+
 Two clinicians had the same encounter open. Both patched `status`. The second save silently overwrote the first. That is a **lost update**, not a deadlock.
 
-**Optimistic concurrency** puts a token on the row. SQL Server `rowversion` is the token I use. EF adds it to the `WHERE` of the UPDATE. Zero rows updated means someone else already saved. I map that to **409** with ProblemDetails so Angular can refresh.
-
-This URL is the implementation. The interview prompt is [EF Core interview questions](/blog/ef-core-interview-questions). [RCSI / snapshot isolation](/blog/sql-server-deadlocks-snapshot-isolation) is the **blocking** article — it will not save you from two writers on the same encounter.
+The interview prompt is [EF Core interview questions](/blog/ef-core-interview-questions). [RCSI / snapshot isolation](/blog/sql-server-deadlocks-snapshot-isolation) is the **blocking** article — it will not save you from two writers on the same encounter.
 
 ## Map the token
 
@@ -77,4 +89,10 @@ Writer/writer deadlocks on **different** rows under read committed are a locking
 
 `.IsConcurrencyToken()` on `LastModified` works if every code path stamps it. Clock resolution and a missed assignment are why I still want `rowversion` on Encounter, Order, and FeeSchedule headers. Use a datetime token only when you cannot add a column this release.
 
-If two admin tabs keep overwriting fee headers, [contact me](/contact). The GET DTO plus whether `RowVersion` is on the PUT is the review.
+## If an interviewer asks
+
+*Two Angular tabs load the same encounter. Both PATCH `status`. Last write wins. How do you fix it?*
+
+**30-second answer:** Map SQL Server `rowversion` as a concurrency token. GET returns it. PUT sends it back. Second save throws `DbUpdateConcurrencyException` — return 409 so the SPA can refresh.
+
+**Strong answer:** I'd use `.IsRowVersion()` on a `byte[]` property, copy the token from the PUT body onto `OriginalValue` before `SaveChanges`, and map the exception to ProblemDetails with 409. I'd prove it with two integration tests against real SQL — InMemory provider lies about rowversion. I would not use pessimistic `UPDLOCK` for SPA tabs left open over coffee. RCSI fixes reader/writer blocking, not two writers on the same row without a token.

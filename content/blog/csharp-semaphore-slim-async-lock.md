@@ -20,18 +20,18 @@ faq:
 
 A **semaphore** is a handful of tickets. **`SemaphoreSlim.WaitAsync`** waits for a ticket **without blocking a ThreadPool worker**. A **bulkhead** is that limit: max N outbound calls in flight so one slow partner cannot take every worker. You cannot `await` inside `lock` — that is why this exists.
 
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [DelegatingHandler](#typed-client-delegatinghandler) · [if an interviewer asks](#if-an-interviewer-asks).
-
-Read first: [lock vs Monitor](/blog/csharp-lock-statement-monitor-mutex) if `lock` is new.
-
-**Terms used here:** **Outbound** = your API calling a partner. **Inbound** = Angular calling *you* (that is [rate limiting middleware](/blog/aspnet-core-rate-limiting)). **`finally`** = runs even if an exception is thrown — put `Release()` there. **Singleton** = one instance for the whole app; **transient** = new instance per resolve.
-
 ```text
 SemaphoreSlim(10, 10)  — ten tickets
 
   [T][T][T][T][T][T][T][T][T][T]   ← in flight
   waiting: POST roster, POST roster, ...   ← WaitAsync yields the worker
 ```
+
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [DelegatingHandler](#typed-client-delegatinghandler) · [if an interviewer asks](#if-an-interviewer-asks).
+
+Read first: [lock vs Monitor](/blog/csharp-lock-statement-monitor-mutex) if `lock` is new.
+
+**Terms used here:** **Outbound** = your API calling a partner. **Inbound** = Angular calling *you* (that is [rate limiting middleware](/blog/aspnet-core-rate-limiting)). **`finally`** = runs even if an exception is thrown — put `Release()` there. **Singleton** = one instance for the whole app; **transient** = new instance per resolve.
 
 ## Smallest example
 
@@ -177,4 +177,4 @@ How to lock in async code; Mutex vs Semaphore vs Monitor; bulkhead; throttle thi
 
 **Strong answer:** `WaitAsync` + `finally Release`, singleton gate, inbound vs outbound.
 
-If a partner 429s you while your own Angular users are polite, [contact me](/contact). Bring their published limits and the typed client.
+. Bring their published limits and the typed client.

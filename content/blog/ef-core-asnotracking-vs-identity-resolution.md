@@ -1,6 +1,6 @@
 ---
 title: "AsNoTracking vs Identity Resolution in EF Core"
-description: "AsNoTracking can allocate more memory when the same Patient is on every row. When I use AsNoTrackingWithIdentityResolution on ASP.NET Core reads."
+description: "AsNoTracking vs identity resolution in EF Core: when no-tracking duplicates Patient objects on every row, and when AsNoTrackingWithIdentityResolution fixes read-only Includes."
 date: "2026-09-07"
 category: "ef-core"
 tags: ["EF Core", "Performance", "Memory", "ASP.NET Core"]
@@ -17,11 +17,24 @@ faq:
     a: "No. Cartesian explosion is extra SQL rows from two collection Includes. Identity resolution is extra CLR objects after the rows arrive."
 ---
 
-Read-only handlers should default to `AsNoTracking()`. That advice is still right for a projected grid. It is **wrong** as a religion when you `Include` a many-to-one and the same `Patient` appears on every appointment in the page.
+**`AsNoTracking()`** tells EF Core not to track entities for `SaveChanges` — and it also skips the identity map. Without that map, the same `PatientId` on two hundred appointment rows becomes two hundred separate `Patient` objects in memory. **`AsNoTrackingWithIdentityResolution()`** restores key-based instance reuse during materialization without turning change tracking back on.
 
-Without the change tracker, EF Core **does not reuse** instances by primary key. Ten thousand catalog rows and five categories become ten thousand `Category` objects. GC pays for it. The JSON can still look fine because you serialize `product.Category.Name`.
+```text
+AsNoTracking (no identity map)     AsNoTrackingWithIdentityResolution
 
-This is **not** [N+1](/blog/ef-core-nplus1-include-vs-assplitquery) (extra round-trips) and **not** [cartesian explosion](/blog/ef-core-cartesian-explosion-multiple-include) (multiplied JOIN rows). The SQL can be one cheap statement. Memory is the tax.
+  appt1 → Patient#1                  appt1 → Patient(A) ─┐
+  appt2 → Patient#2 (same Id)        appt2 → Patient(A) ─┘ same CLR object
+  appt3 → Patient#3                  appt3 → Patient(B)
+  200 rows → 200 Patient objects     200 rows → ~40 Patient objects
+```
+
+**New to this** → stay here. **Merging a PR** → [clinic list](#the-clinic-list-that-allocated-twice). **On-call / interview** → [identity resolution](#use-identity-resolution-on-that-shape) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **Identity map** = EF's short-lived dictionary that reuses one CLR object per primary key while materializing a result. **Change tracker** = the structure that tracks entities for `SaveChanges` (identity resolution borrows the idea without enabling writes). **Materialization** = turning SQL rows into .NET objects after the query returns.
+
+Read-only handlers should default to `AsNoTracking()` on projected grids. That advice is still right there. It is wrong as a religion when you `Include` a many-to-one and the same `Patient` appears on every appointment in the page. The SQL can be one cheap statement. Memory is the tax.
+
+This is not [N+1](/blog/ef-core-nplus1-include-vs-assplitquery) (extra round-trips) and not [cartesian explosion](/blog/ef-core-cartesian-explosion-multiple-include) (multiplied JOIN rows).
 
 ## The clinic list that allocated twice
 
@@ -81,4 +94,10 @@ Do not “fix” a fat JOIN with identity resolution. If SSMS shows `lines × ev
 
 “Another instance with the same key is already being tracked” on a PUT is a **write** bug: you loaded an entity, then `Update`’d a second instance from the Angular body. That story is in [EF Core interview questions](/blog/ef-core-interview-questions). This URL is **reads**.
 
-If a read-only ASP.NET Core endpoint is allocating copies of the same patient on every row, [contact me](/contact). A dump of the Include list plus working-set delta is enough to choose projection vs identity resolution.
+## If an interviewer asks
+
+*Does `AsNoTracking` always use less memory than tracking?*
+
+**30-second answer:** No. Tracking keeps an identity map so repeated foreign keys share one `Patient` instance. Plain `AsNoTracking` skips that map on purpose — faster when every row is unique, wasteful when the same reference repeats across a page.
+
+**Strong answer:** I'd project the grid to a DTO when Angular only needs names — one SQL statement, no duplicated navigations, no identity map overhead. If the handler already returns an entity graph with `Include` on a many-to-one, I'd switch to `AsNoTrackingWithIdentityResolution()`. I'd confirm with a memory snapshot or working-set delta on a realistic page size, not demo data with two patients. I would not use identity resolution to fix cartesian explosion — that is row multiplication in SQL, fixed with split queries or fewer Includes.

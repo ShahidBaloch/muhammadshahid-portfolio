@@ -227,4 +227,3 @@ Prefer incremental migration: new routes/components standalone first, shared NgM
 - [Interview questions hub](/learning/interview-questions)
 - [Angular Signals with ASP.NET Core](/blog/angular-signals-aspnet-core)
 
-Hiring for Angular + ASP.NET Core, or preparing for that loop yourself? [Contact me](/contact) — we can run scenario drills that match real production failures.

@@ -17,7 +17,21 @@ faq:
     a: "No. It is architecture and evaluation. Vendor pages sell parsers. This URL tells you what to ask before you pick one."
 ---
 
-Search results for “EDI X12 parser C#” are mostly vendor pages and GitHub READMEs. That is not an accident. Independent write-ups are rare because the work is messy, regulated-adjacent, and hard to demo with fake data.
+**X12** is a nested envelope (ISA → GS → ST) of segments — not a flat file you regex into DTOs. A production parser splits envelope integrity from transaction mapping and runs heavy work off the HTTP thread.
+
+```text
+Upload → blob → queue → worker
+                           │
+                    envelope parse
+                           │
+                    ST01 mapper (837 / 835 / …)
+                           │
+                         SQL + ack pipeline
+```
+
+**New to this** → stay here. **Merging a PR** → [what you parse](#what-you-are-actually-parsing). **On-call / interview** → [host architecture](#a-host-architecture-that-survives-the-first-ugly-file) · [what not to log](#what-not-to-log) · [if an interviewer asks](#if-an-interviewer-asks).
+
+Search results for "EDI X12 parser C#" are mostly vendor pages and GitHub READMEs. That is not an accident. Independent write-ups are rare because the work is messy, regulated-adjacent, and hard to demo with fake data.
 
 I have built and inherited .NET pipelines that ingest X12 (and related healthcare claim traffic) into SQL-backed products. This article is **architecture and evaluation**, not a product pitch and not a complete parser. I will not paste a full 837 implementation — that would be both dishonest and unsafe as a copy-paste “HIPAA solution.”
 
@@ -139,6 +153,8 @@ If you already have a licensed translator that operations knows how to run, wrap
 
 If you must own the parse because the translator cannot express a partner rule, isolate that rule in a mapper test suite with **redacted** fixtures. Those tests are the product.
 
----
+## If an interviewer asks
 
-Need a vendor-neutral intake design for X12 on ASP.NET Core — queues, mapping boundaries, and an Angular exception UI — [contact me](/contact). Bring a redacted sample file if you can; architecture without a real interchange is guesswork.
+ISA vs ST vs transaction body; should the API parse on the request thread; what belongs in logs for HIPAA-adjacent traffic.
+
+**Strong answer:** Envelope (ISA/GS/ST) is separate from transaction mapping (837 claim loops). API accepts and enqueues; worker parses. Never log segment text or NM1 names — log file id, control numbers, ST01, duration. Libraries help tokenize; you still own partner rules, idempotency, and audit storage.

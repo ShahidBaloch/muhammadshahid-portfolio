@@ -17,6 +17,18 @@ faq:
     a: "No. Compliance is contracts, access, retention, and BAAs. This page is how I keep application logs from becoming PHI."
 ---
 
+**PII redaction in Serilog** means logging only scalar metadata you allow — file id, control numbers, duration — never `{@request}`, raw X12, or member names in Application Insights.
+
+```text
+Worker parses X12
+      │
+      ▼
+Log: FileId, ST01, duration  ✓
+Log: segment text / NM1       ✗ → second copy of PHI
+```
+
+**New to this** → stay here. **Merging a PR** → [unsafe vs safe fields](#what-i-treat-as-unsafe-in-logs). **On-call / interview** → [audit vs log](#audit-vs-log) · [EDI worker rules](#edi-specific) · [if an interviewer asks](#if-an-interviewer-asks).
+
 The first production incident on a claims API is often not the parse. It is a support engineer pasting a log line that contains a member name into a ticket that is visible to a vendor. Serilog did what it was told: `{@request}`.
 
 This article is **logging architecture** for ASP.NET Core APIs that touch healthcare or EDI. It is not a HIPAA certification, not clinical advice, and not a promise that a NuGet package makes you compliant. Compliance is organizational: contracts, access control, retention, BAAs. I am describing how I keep **application logs** from becoming a second copy of the chart.
@@ -189,6 +201,8 @@ If a trading partner needs a copy of a failing interchange, they get it through 
 
 Synthetic fixtures in tests should look fake on purpose (`MEMBER-0001`, `ISA*00*...` with obviously fake names) so a leaked test log is still embarrassing, not reportable.
 
----
+## If an interviewer asks
 
-If you need a logging and intake design that keeps X12 and claim data out of developer sinks, [contact me](/contact). Bring a redacted log sample from staging; we will treat anything that looks like a person as a defect.
+How to log EDI intake without PHI in App Insights; audit vs application logs; does Serilog redaction equal HIPAA compliance.
+
+**Strong answer:** Log scalars only — file id, byte length, ISA control, ST01, issue codes. Never `{@entity}` or request bodies on intake routes. Audit table for who accessed original files; Serilog for operators with short retention. Redaction reduces risk; compliance still needs contracts, BAAs, and access control — not a NuGet package alone.

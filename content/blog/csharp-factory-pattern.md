@@ -17,9 +17,22 @@ faq:
     a: "Only for a closed set of keys. Open or config-driven sets still want a factory. That comparison is also on the keyed-services page."
 ---
 
-The **Factory Pattern in C#** is one of the most searched design-pattern topics for .NET developers — usually right after someone pastes a growing `switch (providerType)` into a service constructor. In ASP.NET Core products, the useful version of Factory is rarely a textbook UML diagram. It is a clear way to **create the right implementation at runtime** while still playing nicely with **dependency injection**.
+The **Factory Pattern** centralizes object creation behind one place so callers depend on an interface, not on `new` and a growing `switch`. In ASP.NET Core, that place is usually a factory delegate, a factory class, or keyed DI — not a UML diagram.
 
-I use factories in payment adapters, notification channels, file storage backends, and auction-style workflows (similar boundaries to marketplace work like CarBazaar). This article is the practical playbook I follow on client codebases.
+```text
+Handler needs IPaymentProcessor
+        │
+        ▼
+   Factory (one module)
+        │
+   ┌────┴────┐
+ card      wallet
+ (DI)      (DI)
+```
+
+**New to this** → stay here. **Merging a PR** → [anti-pattern switch](#anti-pattern-switch-in-every-feature). **On-call / interview** → [failure story](#a-real-failure-story-the-notification-channel-that-leaked) · [factory vs strategy](#factory-vs-strategy-vs-keyed-di-vs-service-locator) · [if an interviewer asks](#if-an-interviewer-asks).
+
+I use factories in payment adapters, notification channels, file storage backends, and auction-style workflows. This article is the practical playbook I follow on client codebases.
 
 ## What problem Factory actually solves
 
@@ -234,4 +247,9 @@ If your factory depends on request-scoped services, the factory itself should al
 - [Dependency Injection in ASP.NET Core](/blog/aspnet-core-dependency-injection)
 - [Strategy Pattern in C#](/blog/csharp-strategy-pattern)
 
-If you want these patterns applied cleanly in your codebase, [contact me](/contact).
+## If an interviewer asks
+
+When Factory beats plain DI; how keyed services differ from a factory class; why `new` inside a handler causes lifetime bugs.
+
+**Strong answer:** Factory defers and centralizes creation when the implementation depends on runtime input. Keyed DI fits a closed set of keys with no extra setup; a factory class fits merchant config, fallbacks, and logging. Never scatter `new` in feature code — the container owns lifetimes.
+

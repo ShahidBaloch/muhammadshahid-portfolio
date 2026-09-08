@@ -20,10 +20,6 @@ faq:
 
 `IAsyncEnumerable<T>` is a sequence you pull with `await foreach`. Each item can arrive after an I/O wait. **`yield return`** pauses the method and hands one item to the caller; the next pull continues from that line. `Task<List<T>>` waits until **every** row is in memory. Use the stream for exports. Use a paged list for grids.
 
-**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [HTTP stream](#http-stream-or-you-lied) · [if an interviewer asks](#if-an-interviewer-asks).
-
-**Terms used here:** **Streaming** = write/read one row (or chunk) at a time instead of a full `List<T>`. **`AsNoTracking()`** = EF does not keep entities in the change tracker (still not enough if you `ToListAsync` 200k rows). **`[EnumeratorCancellation]`** = tell the compiler to pass the caller’s cancel token into `GetAsyncEnumerator` when they `await foreach`.
-
 ```text
 ToListAsync (warehouse)              IAsyncEnumerable (conveyor)
 
@@ -31,6 +27,10 @@ ToListAsync (warehouse)              IAsyncEnumerable (conveyor)
           then first CSV line                  then next row
           App Service OOMs                     RAM stays flat
 ```
+
+**New to this** → stay here. **Merging a PR** → [wrong vs right](#wrong-vs-right). **On-call / interview** → [HTTP stream](#http-stream-or-you-lied) · [if an interviewer asks](#if-an-interviewer-asks).
+
+**Terms used here:** **Streaming** = write/read one row (or chunk) at a time instead of a full `List<T>`. **`AsNoTracking()`** = EF does not keep entities in the change tracker (still not enough if you `ToListAsync` 200k rows). **`[EnumeratorCancellation]`** = tell the compiler to pass the caller’s cancel token into `GetAsyncEnumerator` when they `await foreach`.
 
 ## Smallest example (no EF)
 
@@ -156,4 +156,4 @@ Tokens: [CancellationToken](/blog/csharp-cancellationtoken-aspnet-core). In-proc
 
 **Strong answer:** names the HTTP write path and cancellation, not only `yield return`.
 
-If a claims or catalog export OOMs at 8am, [contact me](/contact). Bring the action and the row count.
+. Bring the action and the row count.

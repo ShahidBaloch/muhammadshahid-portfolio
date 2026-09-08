@@ -17,7 +17,22 @@ faq:
     a: "Yes, but you will not see runtime reloads. That is fine for JWT signing keys you rotate with a restart, and wrong for a clinic feature flag."
 ---
 
-Teams search **IOptions vs IOptionsSnapshot vs IOptionsMonitor** after a setting change in Azure does nothing, or after a singleton starts serving the wrong clinic’s feature flag. The three interfaces look interchangeable in a tutorial. They are not.
+**IOptions** snapshots config at first resolve; **IOptionsSnapshot** rebinds per request; **IOptionsMonitor** notifies singletons when settings reload. Pick the interface to match **how long the consumer lives**, not which name you memorized.
+
+```text
+Azure App Setting changes
+        │
+   ┌────┴────────────────┐
+   ▼                     ▼
+IOptions<T>         IOptionsMonitor<T>
+(frozen)            (OnChange → cache resize)
+        │
+IOptionsSnapshot<T> (per HTTP request)
+```
+
+**New to this** → stay here. **Merging a PR** → [one-line difference table](#the-one-line-difference). **On-call / interview** → [snapshot in singleton trap](#ioptionssnapshott--once-per-request) · [validate on start](#validate-on-start) · [if an interviewer asks](#if-an-interviewer-asks).
+
+Teams search **IOptions vs IOptionsSnapshot vs IOptionsMonitor** after a setting change in Azure does nothing, or after a singleton starts serving the wrong clinic's feature flag.
 
 This sits next to the [config file guide](/blog/aspnet-core-appsettings-localappsettings). That page is which JSON files exist. This page is **how you consume them in C#** without lying about lifetime.
 
@@ -117,4 +132,9 @@ That is not a substitute for Key Vault. It is a substitute for “200 on `/healt
 
 If a setting works after recycle and fails after a portal edit, you almost always injected `IOptions<T>` into a long-lived service. Swap to monitor, or accept that this setting requires a restart and document it.
 
-If you want a second pair of eyes on options lifetimes for an ASP.NET Core API, [contact me](/contact).
+## If an interviewer asks
+
+When to use each options interface; why Azure portal edits do not reach a singleton with `IOptions`; can you inject `IOptionsSnapshot` into a singleton.
+
+**Strong answer:** `IOptions<T>` caches at first resolve — fine for startup constants. `IOptionsSnapshot<T>` is scoped — use in controllers/handlers. `IOptionsMonitor<T>` gives `CurrentValue` and `OnChange` for singletons and workers. Never inject snapshot into a singleton — captive dependency.
+

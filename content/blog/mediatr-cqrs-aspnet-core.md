@@ -17,6 +17,18 @@ faq:
     a: "Not by law. One handler per use case is the usual shape. License vs Wolverine is a separate URL."
 ---
 
+**CQRS-lite** splits commands (writes) from queries (reads) as separate request types with one handler each. **MediatR** dispatches those requests through a pipeline where cross-cutting behaviors — validation, logging, transactions — attach once.
+
+```text
+Controller → IMediator.Send(GetClaimsReportQuery)
+                    │
+            Pipeline behaviors
+                    │
+            GetClaimsReportHandler → DbContext (read)
+```
+
+**New to this** → stay here. **Merging a PR** → [what CQRS-lite means](#what-i-mean-by-cqrs-lite). **On-call / interview** → [when to add MediatR](#when-i-add-mediatr) · [when to skip](#when-i-skip-mediatr) · [if an interviewer asks](#if-an-interviewer-asks).
+
 I have introduced MediatR on greenfield SaaS APIs, inherited it on healthcare platforms with forty handlers per bounded context, and removed it from a eCommerce checkout service where the team spent more time naming folders than fixing bugs. MediatR is not good or bad. **CQRS-lite** — commands and queries as separate request types with thin controllers — is a delivery tool. It helps or hurts depending on team size, product churn, and how much cross-cutting behavior you actually need.
 
 This post is my practical line for when I add MediatR to an ASP.NET Core solution and when I keep controllers talking to application services directly.
@@ -215,4 +227,8 @@ If yes to workflows and jobs, MediatR + CQRS-lite is usually worth it. If the MV
 
 MediatR and CQRS-lite help when cross-cutting behaviors, multiple entry points, and complex use cases outweigh boilerplate cost. They hurt when every endpoint gets a handler trio out of habit. Match the pattern to how your product team actually ships — not to how a sample repository is organized.
 
-If you are structuring an ASP.NET Core API for a healthcare or SaaS product and want a second opinion on MediatR, folder layout, and pipeline behaviors, [reach out](/contact).
+## If an interviewer asks
+
+CQRS-lite vs event sourcing; when MediatR is worth it; can you do CQRS without a mediator.
+
+**Strong answer:** CQRS-lite = separate command/query types and handlers — no event store required. MediatR earns its place when pipeline behaviors and multiple entry points (HTTP, jobs) share logic. Trivial `Send` wrappers around one service call are ceremony — call the service directly. CQRS is folder and naming discipline, not a NuGet requirement.

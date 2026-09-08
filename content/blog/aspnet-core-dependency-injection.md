@@ -17,6 +17,18 @@ faq:
     a: "No. That is a service locator. Register the service. If the container cannot find it, that miss is the Unable to resolve article, not this lifetimes page."
 ---
 
+**Dependency injection** registers abstractions once; the container constructs objects and wires lifetimes (Transient, Scoped, Singleton). The hard part is not registration — it is not letting a Singleton hold a Scoped `DbContext`.
+
+```text
+Request scope
+  ┌─────────────────────────────┐
+  │ Controller → Service → DbContext (one instance)
+  └─────────────────────────────┘
+Singleton holding DbContext → captive dependency (wrong)
+```
+
+**New to this** → stay here. **Merging a PR** → [three lifetimes](#the-three-lifetimes-you-must-know). **On-call / interview** → [captive dependency story](#a-real-failure-story-the-dashboard-that-showed-yesterdays-data) · [background services](#background-services-and-scope-the-second-classic-trap) · [if an interviewer asks](#if-an-interviewer-asks).
+
 **Dependency injection in ASP.NET Core** is built into the framework — which means every team uses it, and many teams misuse lifetimes until a subtle production bug appears. Captive dependencies, accidental singletons holding `DbContext`, and "just inject `IServiceProvider` everywhere" are still common in otherwise solid codebases.
 
 This is my working guide for DI on ASP.NET Core APIs that serve Angular SPAs — the rules I apply in healthcare, SaaS, and eCommerce delivery.
@@ -229,4 +241,9 @@ When replacing services in tests, match **lifetime intent**. Replacing a scoped 
 
 Related: [Unable to resolve service for type](/blog/aspnet-core-unable-to-resolve-service), [Factory Pattern in C#](/blog/csharp-factory-pattern), [Clean Architecture in ASP.NET Core](/blog/clean-architecture-aspnet-core).
 
-Need a DI/architecture review on your .NET API? [Contact me](/contact).
+## If an interviewer asks
+
+Transient vs Scoped vs Singleton; what a captive dependency is; why `IServiceScopeFactory` appears in background workers.
+
+**Strong answer:** Scoped = one per HTTP request — default for `DbContext`. Singleton = process lifetime — never inject scoped services into singleton constructors. Captive dependency = singleton holds a scoped instance across requests. Hosted services have no HTTP scope — create one with `IServiceScopeFactory` inside `ExecuteAsync`.
+

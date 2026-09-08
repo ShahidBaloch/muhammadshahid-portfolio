@@ -1,6 +1,6 @@
 ---
 title: "EF Core N+1 vs Include vs AsSplitQuery"
-description: "EF Core N+1 is extra round-trips in a loop. Include fixes that. AsSplitQuery is for a different bug. How I tell them apart on ASP.NET Core APIs."
+description: "EF Core N+1 problem: extra SQL round-trips when a loop touches navigation properties. How Include, projection, and AsSplitQuery each fix a different bug."
 date: "2026-08-15"
 updated: "2026-09-07"
 category: "ef-core"
@@ -18,11 +18,28 @@ faq:
     a: "When you truly need two collection Includes. Split query is not the N+1 fix. N+1 is too many queries. Cartesian explosion is one query that multiplied rows."
 ---
 
+**The N+1 problem in EF Core** means one query loads a list, then the handler touches a navigation property in a loop — triggering one additional SQL round-trip **per row**. Fifty appointments become fifty-one commands. The JSON still looks correct.
+
+```text
+N+1 (too many queries)              Include one reference (one JOIN)
+
+  SELECT 50 appointments              SELECT appointments + patients
+  foreach → SELECT patient (×50)      one statement, one JOIN
+  51 round-trips                      not N+1
+
+  Two collection Includes?            That is cartesian explosion —
+  wrong fix →                         see the other post
+```
+
 ![EF Core N+1 vs Include: one list query plus a query per row, versus a single Include or projection](/images/blog/ef-core-nplus1-roundtrips.png)
 
-The Angular schedule loaded fifty appointments. SQL Server showed **fifty-one** commands. That is **N+1**: one query for the list, then one query per row when the handler touches `appointment.Patient`.
+**New to this** → stay here. **Merging a PR** → [how N+1 shows up](#how-n1-shows-up). **On-call / interview** → [quick map](#quick-map) · [if an interviewer asks](#if-an-interviewer-asks).
 
-This page is that bug. It is **not** [cartesian explosion](/blog/ef-core-cartesian-explosion-multiple-include). Cartesian is one fat JOIN when you `Include` two collections. N+1 is **too many round-trips**. If the dashboard is “generally slow,” start at the [EF Core SQL performance](/blog/ef-core-sql-performance) checklist.
+**Terms used here:** **Lazy loading** = EF issues a SQL query when you first touch an unloaded navigation. **Projection** = `Select` to a DTO in LINQ so SQL returns only the columns the screen needs. **`AsSplitQuery`** = separate SELECTs per collection — fixes cartesian explosion, not N+1.
+
+The Angular schedule loaded fifty appointments. SQL Server showed **fifty-one** commands.
+
+This page is that bug. It is not [cartesian explosion](/blog/ef-core-cartesian-explosion-multiple-include). If the dashboard is "generally slow," start at the [EF Core SQL performance](/blog/ef-core-sql-performance) checklist.
 
 ## How N+1 shows up
 
@@ -130,4 +147,10 @@ Two queries, not `1 + N`. Still not `Include` of two collections.
 
 Interview narration for concurrency tokens and query filters is [EF Core interview questions](/blog/ef-core-interview-questions), not this page.
 
-If an ASP.NET Core list endpoint is issuing one SQL command per grid row, [contact me](/contact). A command count from Application Insights plus the handler is enough to choose projection vs Include.
+## If an interviewer asks
+
+*Fifty appointments load in one query, but Application Insights shows fifty-one SQL commands. What is happening?*
+
+**30-second answer:** N+1. The handler touches `appointment.Patient` in a loop after `ToList`. Fix with a projection (`Select` to a DTO) or `Include` on the reference navigation — one JOIN, not fifty lazy loads.
+
+**Strong answer:** I'd count SQL commands for one HTTP request in Development logging, not statement duration. If count ≈ `1 + pageSize`, that is N+1. I'd project the grid in one `Select` — that is my default for list APIs. `Include` is for when I genuinely need the entity graph in the same request. `AsSplitQuery` is for two collection Includes (cartesian explosion), not for N+1 — it adds round-trips on purpose. If command count is one but SSMS row count is a product of collection sizes, I stop and read the cartesian post instead.

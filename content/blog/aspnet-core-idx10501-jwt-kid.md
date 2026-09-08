@@ -1,6 +1,6 @@
 ---
 title: "IDX10501 Unable to Match Key (kid) in ASP.NET Core JWT"
-description: "IDX10501: Signature validation failed. Unable to match key — the token kid is not in JWKS or TokenValidationParameters. Not IDX10503, not a metadata download failure."
+description: "Fix IDX10501 JWT kid mismatch in ASP.NET Core — token header kid not in JWKS, signing cert rotation overlap, Authority mismatch, and OpenIddict key refresh."
 date: "2026-09-08"
 category: "authentication"
 tags: ["JWT", "ASP.NET Core", "Security", "IdentityServer", "OpenIddict"]
@@ -17,11 +17,20 @@ faq:
     a: "Only if the issuer actually signs with a key that publishes that kid. Inventing a kid on the API side does nothing. Fix the signing credential overlap or the Authority that downloads JWKS."
 ---
 
-**IDX10501: Signature validation failed. Unable to match key: kid: '[PII is hidden]'.** IdentityModel already parsed a JWT. It read the header `kid`. It loaded keys from `TokenValidationParameters` and/or OpenID **JWKS**. None of those keys have that id. Developers paste the line and land on signature tutorials. This URL is the **kid match**, not the HMAC secret.
+**IDX10501** means IdentityModel read a `kid` in the JWT header but found no matching key in JWKS or `TokenValidationParameters` — the key set and the token disagree before signature verification even runs.
 
-Signature failures where keys *were* tried stay in [IDX10503](/blog/aspnet-core-idx10503-jwt-signature). Issuance, lifetimes, and policies stay in [the JWT checklist](/blog/aspnet-core-jwt-auth). Cookie Data Protection is [No XML encryptor found](/blog/aspnet-core-data-protection-xml-encryptor). I will not retell those.
+```text
+JWT header: kid = A1B2C3D4
+                │
+                ▼
+         Load JWKS from Authority
+                │
+    keys: [X9Y8Z7]  ──► no match ──► IDX10501
+```
 
-I hit IDX10501 on a marketplace search API the morning after we rotated the OpenIddict signing certificate on the identity host. Auction accepted the new tokens. Search still served 401s. jwt.io said the token was fine. Search’s `ConfigurationManager` still had yesterday’s JWKS.
+Picture a **locksmith with a key ring**: the token says "I need key #A1B2C3D4." JWKS only has key #X9Y8Z7. That is IDX10501 — wrong key on the ring. IDX10503 is when the right key is on the ring but the cut does not turn.
+
+**New to this** → stay here. **Signature failed after key match** → [IDX10503](/blog/aspnet-core-idx10503-jwt-signature). **JWT setup** → [ASP.NET Core JWT checklist](/blog/aspnet-core-jwt-auth). **Interview prep** → [If an interviewer asks](#if-an-interviewer-asks).
 
 ## Read the kid before you rotate anything else
 
@@ -103,4 +112,16 @@ Leaving IdentityServer4? Signing keys on the new host are the [OpenIddict migrat
 - [ASP.NET Core JWT auth checklist](/blog/aspnet-core-jwt-auth)
 - [IdentityServer4 to OpenIddict checklist](/blog/identityserver4-openiddict-migration-checklist)
 
-If only **one** API in a farm 401s after a cert rotation and jwt.io looks clean, [send the kid and both JWKS documents](/contact) — not a screenshot of the Angular network tab.
+## If an interviewer asks
+
+**"What is the difference between IDX10501 and IDX10503?"**
+
+**Strong answer:** IDX10501 — the token's `kid` is not in the loaded key set; key selection fails. IDX10503 — keys were tried and signature verification failed (wrong secret, disposed RSA, opaque token). Fix one error at a time; do not rotate signing keys for an audience mismatch.
+
+**"How do you rotate signing certs without IDX10501?"**
+
+**Strong answer:** Publish both old and new keys in JWKS during overlap. Keep the old cert until all issued access tokens expire plus clock skew. Recycle resource APIs after the identity host, or wait for `ConfigurationManager` refresh. Never rotate signing and validation on different schedules without overlap.
+
+**"Token looks fine on jwt.io but API returns 401?"**
+
+**Strong answer:** jwt.io may use a secret you typed, not the API's JWKS. Decode the header `kid`, fetch the issuer's `jwks_uri`, confirm that `kid` exists. If JWKS has it but one API fails, that API's `Authority` points at a different host or stale cached metadata.
