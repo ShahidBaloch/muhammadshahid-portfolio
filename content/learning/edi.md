@@ -37,6 +37,24 @@ File drop / SFTP / API upload
 
 Member IDs, diagnoses, and full segment payloads belong in **restricted stores** — not default Serilog sinks copied to Slack. Redact or hash identifiers in developer logs.
 
+## Segment parsing vs domain mapping
+
+Keep **parser** and **mapper** in separate assemblies:
+
+- **Parser** knows X12 delimiters, segment IDs, and control numbers — no clinic business rules.
+- **Mapper** translates `Claim837` → your `Claim` entity — no string splitting on `~` in the domain layer.
+
+That split lets you swap a clearinghouse companion guide without rewriting adjudication rules.
+
+## Idempotency and replays
+
+Trading partners **resend** files after timeouts. Your persist layer must key on:
+
+- **ISA control number** (interchange)
+- **ST control number** (transaction set)
+
+Reject duplicate processing with a clear ops dashboard — not silent double payment.
+
 ## Cross-questions
 
 1. **Parse in API request thread?** — No; stream to queue/worker; API returns 202.

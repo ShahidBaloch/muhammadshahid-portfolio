@@ -35,9 +35,28 @@ Same database often serves both — **CQRS does not require two databases**.
 
 ## Cross-questions
 
-1. **Does CQRS require two databases?** — No; separation is logical.
-2. **MediatR vs service class?** — MediatR when behaviors (validation, transactions) compose; else service is fine.
-3. **Notifications vs commands?** — Notifications fan out; do not use as hidden command chain without idempotency.
+1. **Does CQRS require two databases?** — No; separation is logical. One SQL Server database can serve both command and query handlers.
+2. **MediatR vs service class?** — MediatR when pipelines (validation, logging, transactions) compose across many use cases; else a plain service is fine.
+3. **Notifications vs commands?** — Notifications fan out to many handlers; do not chain hidden side effects without idempotency keys.
+4. **Is CQRS the same as event sourcing?** — No. Event sourcing stores events as the source of truth. CQRS-lite here is folder and handler shape only.
+5. **When is a mediator ceremony?** — When handlers are one-liners and the team spends more time navigating `IRequest` folders than reading business logic.
+
+## When I skip CQRS on a new API
+
+- Greenfield with fewer than ~15 use cases and one bounded context.
+- Team is new to .NET and has not felt pain from fat controllers yet — introduce handlers when a second developer cannot find the checkout flow.
+- Read-heavy reporting API where queries are raw SQL or Dapper and commands are rare — do not force symmetry.
+
+## Pipeline behaviors that justify MediatR
+
+| Behavior | Example |
+|---|---|
+| Validation | FluentValidation runs before handler |
+| Logging | Structured log per command name |
+| Transaction | Unit of work wraps `SaveChanges` once |
+| Authorization | Policy check on `PlaceOrderCommand` |
+
+If you only need one of these, a filter or middleware might be enough.
 
 ## Deep-dive articles
 

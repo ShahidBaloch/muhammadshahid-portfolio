@@ -40,6 +40,23 @@ Using the **directory phone** (Identity API token) at a **door that expects SSO 
 | Token works in Postman, not Angular | Wrong authority URL, CORS, or opaque vs JWT |
 | Migration broke clients | Client ids, secrets, grant types, signing keys |
 
+## Greenfield vs brownfield
+
+| Situation | Reasonable default |
+|---|---|
+| One Angular SPA + one API, no SSO | ASP.NET Core Identity + JWT you issue |
+| Multiple apps, partners, mobile | OpenIddict or managed IdP (Entra, Auth0) |
+| API behind BFF | Cookies at edge; API validates session or token exchange |
+| Legacy IS4 still running | Migration checklist — do not greenfield on dead IS4 |
+
+## Token shapes Angular must match
+
+| API expects | Angular sends |
+|---|---|
+| JWT bearer | `Authorization: Bearer <jwt>` from login or OIDC |
+| Opaque Identity API token | Not the same middleware — read MapIdentityApi article |
+| Cookie session (BFF) | `withCredentials`; no bearer in `localStorage` |
+
 ## Interview cross-questions
 
 1. **Identity vs IdentityServer?** — User store vs token issuer / SSO.

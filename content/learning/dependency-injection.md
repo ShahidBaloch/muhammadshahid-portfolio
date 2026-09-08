@@ -43,6 +43,19 @@ Putting a **scoped badge** (DbContext) in the **company safe** (Singleton) is a 
 | Wrong tenant data | Singleton service holding request state |
 | `IOptions` stale config | Using `IOptions` instead of `IOptionsSnapshot` when file reloads |
 
+## Registration smells in code review
+
+| Smell | Fix |
+|---|---|
+| `services.AddSingleton<MyDbContext>()` | Scoped — always |
+| `new HttpClient()` in a service | `IHttpClientFactory` |
+| `ServiceProvider` in a singleton | `IServiceScopeFactory` for per-message scopes |
+| Giant `Program.cs` with 200 `Add*` lines | Extension methods per bounded context |
+
+## Testing the graph
+
+Integration tests should build the **same `Program.cs` registrations** (or `WebApplicationFactory`) — not `new ServiceCollection()` with three fakes that do not match production lifetimes.
+
 ## Interview cross-questions
 
 1. **Why is DbContext scoped?** — Not thread-safe; aligns with request unit of work.
