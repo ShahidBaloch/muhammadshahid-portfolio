@@ -27,7 +27,7 @@ faq:
     a: "IMemoryCache for single-instance, fast, local object cache with size limits. Redis (IDistributedCache) when multiple API instances must share cache entries or you need a centralized TTL store."
 ---
 
-Search **in-memory cache**, **in-memory caching**, **IMemoryCache**, **java caching system**, or **java object cache** and you get Caffeine, Ehcache, and Spring `@Cacheable`. On **ASP.NET Core**, the same ideas apply with **`IMemoryCache`** (in-process) and **Redis** (distributed) — this page maps both ecosystems so the concepts transfer.
+**In-memory cache** and **IMemoryCache** are the .NET names for keeping hot objects in process. If you come from Java (Caffeine, Ehcache, Spring `@Cacheable`), the mental model is the same — this page maps both ecosystems. On **ASP.NET Core**, pair **`IMemoryCache`** (local) with **Redis** (`IDistributedCache`) when multiple instances must share entries.
 
 Start with: [what is a cache miss](/blog/what-is-a-cache-miss). Redis production patterns: [Redis caching ASP.NET Core](/blog/redis-caching-aspnet-core).
 

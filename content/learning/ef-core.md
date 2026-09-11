@@ -4,7 +4,7 @@ title: "EF Core and SQL Server"
 
 ## Introduction
 
-**Entity Framework Core** is the ORM most ASP.NET Core teams use for SQL Server. Search intent here is rarely “what is DbContext?” — it is **why my list endpoint issues 200 SQL commands**, **why two Includes made one giant JOIN**, or **why tenant B saw tenant A’s rows**. This page explains the mental model before you open a symptom-specific article.
+**Entity Framework Core** is the ORM most ASP.NET Core teams use for SQL Server. Readers rarely need “what is DbContext?” — they need **why a list endpoint issued 200 SQL commands**, **why two Includes became one giant JOIN**, or **why tenant B saw tenant A’s rows**. This page explains the mental model before you open a symptom-specific article.
 
 ## What EF Core does on the request path
 

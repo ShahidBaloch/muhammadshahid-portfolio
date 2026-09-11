@@ -4,7 +4,7 @@ title: "Caching for ASP.NET Core APIs"
 
 ## Introduction
 
-If you search **what is a cache miss**, **in-memory cache**, **IMemoryCache**, **java caching system**, **java object cache**, or **error establishing a redis connection**, you want definitions and fixes before tuning production APIs. Start here:
+Cache problems show up as **cache misses**, slow reads after a deploy, or **error establishing a Redis connection** — often before anyone tunes TTLs. Definitions and fixes start here (including how **IMemoryCache** compares to Redis on ASP.NET Core):
 
 - [What is a cache miss](/blog/what-is-a-cache-miss)
 - [Caching system in .NET (IMemoryCache + Redis)](/blog/caching-system-dotnet-imemorycache-redis)

@@ -28,7 +28,7 @@ faq:
     a: "MCQs test recall. Mid-to-senior loops test scenarios. Use this hub for the latter. If a take-home includes net questions as multiple choice, still answer with a production story — captive DbContext beats defining IoC."
 ---
 
-If you search **.NET interview questions**, **.NET Core interview questions**, **ASP.NET Core interview questions**, **web API interview questions**, or **C# interview questions and answers**, you want a **map** — not a 200-line dump copied from a PDF.
+Whether the job post says **.NET interview questions**, **ASP.NET Core**, or **Web API scenarios**, you want a **map** — not a 200-line dump copied from a PDF.
 
 This page is that map: the questions I actually ask and hear in healthcare, SaaS, and marketplace hiring loops, with links to **full scenario answers** on dedicated URLs.
 

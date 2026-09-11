@@ -26,7 +26,7 @@ Architecture is the **building code**, not the furniture:
 
 ## Configuration (`appsettings`)
 
-**Search intent:** “where does config load,” “localappsettings.json,” “Azure Key Vault.”
+Common questions: where does config load, what is `localappsettings.json`, and when to use Azure Key Vault.
 
 Rules:
 

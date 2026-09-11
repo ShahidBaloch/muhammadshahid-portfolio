@@ -46,7 +46,7 @@ If two "services" share one database and join across tables freely, you have a d
 
 ## .NET microservices vs C# microservices
 
-Search **.NET microservices**, **microservices in .NET**, or **C# microservices** and you are choosing a **process split**, not a language feature. C# does not make the network cheaper. A **C# microservice** is still an independently deployable host with its own data and failure modes.
+**Microservices in .NET** are a **process split**, not a language feature. C# does not make the network cheaper. Each service is still an independently deployable host with its own data and failure modes.
 
 Default: one ASP.NET Core host with labeled modules. Extract a service when scale, release cadence, or failure isolation is already real — see [signals you might need services](#signals-you-might-need-services).
 

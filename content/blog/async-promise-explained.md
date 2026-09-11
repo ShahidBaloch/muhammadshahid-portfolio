@@ -22,7 +22,7 @@ faq:
     a: "Conceptually the same role — deferred completion. Task is .NET's type with rich integration (CancellationToken, ConfigureAwait, WhenAll). JavaScript Promise is the browser/Node equivalent. Both avoid blocking during I/O."
 ---
 
-Search **promise** in a programming context and you get two worlds: JavaScript `Promise` and the general idea of a **deferred result** that C# expresses with `Task`. This page defines promise in async programming, compares languages, and shows how promises behave on ASP.NET Core — without treating a `Task` as a thread.
+**Promise** means two things in programming: JavaScript `Promise` and the general idea of a **deferred result** that C# expresses with `Task`. This page defines promise in async programming, compares languages, and shows how deferred work behaves on ASP.NET Core — without treating a `Task` as a thread.
 
 Start with definitions: [asynchronous meaning](/blog/asynchronous-meaning-definition). Deep dive on Task vs Thread: [Task vs Thread](/blog/csharp-task-vs-thread).
 

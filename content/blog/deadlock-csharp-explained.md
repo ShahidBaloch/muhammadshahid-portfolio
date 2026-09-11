@@ -21,7 +21,7 @@ faq:
     a: "Deadlock is circular wait — nobody can proceed. Starvation on ASP.NET Core is workers blocked on .Result while async continuations need workers — queue grows, looks like a hang, but it is not a classic lock cycle. Different fix: await instead of block."
 ---
 
-Search **deadlock**, **deadlock in operating system**, or **deadlock avoidance in os** and you get OS textbook diagrams — then you sit in a .NET interview or on-call with a hung API. This page connects **deadlock theory** to **C#, ASP.NET Core, and SQL Server** so the definitions map to real fixes.
+OS textbooks explain **deadlock** with dining philosophers — then you sit in a .NET interview or on-call with a hung API. This page connects **deadlock theory** to **C#, ASP.NET Core, and SQL Server** so the definitions map to real fixes.
 
 Related: [lock statement](/blog/csharp-lock-statement-monitor-mutex), [SQL Server deadlocks](/blog/sql-server-deadlocks-snapshot-isolation), [thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async) (not the same problem).
 

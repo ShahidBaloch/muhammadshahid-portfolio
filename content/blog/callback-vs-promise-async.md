@@ -21,7 +21,7 @@ faq:
     a: "Legacy APIs (Begin/End, events) still expose callbacks. Modern code wraps them in Task via TaskCompletionSource, then uses await. New ASP.NET Core and EF Core APIs are Task-based, not callback-based."
 ---
 
-Search **callback** in a programming context and you hit JavaScript history, Win32 delegates, and modern `async`/`await`. This page defines **callback**, compares **callback vs promise vs async/await**, and shows how **C# and Angular** teams should think about each on production APIs.
+**Callbacks** show up everywhere — JavaScript history, Win32 delegates, and modern `async`/`await`. This page defines the pattern, compares **callback vs promise vs async/await**, and shows how **C# and Angular** teams should think about each on production APIs.
 
 Related: [promise in async programming](/blog/async-promise-explained), [asynchronous meaning](/blog/asynchronous-meaning-definition), [TaskCompletionSource for legacy events](/blog/csharp-taskcompletionsource-legacy-event).
 

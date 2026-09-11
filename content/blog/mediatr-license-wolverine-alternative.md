@@ -79,9 +79,7 @@ If you have no behaviors (or one behavior that is really a filter), no notificat
 - Validation stays in [FluentValidation or endpoint filters](/blog/aspnet-core-api-validation)
 - Transactions stay in the service or a decorator you own
 
-You can still name types `GetOrderById` if that helps. CQRS is a **split of writes and reads**, not a NuGet reference.
-
-Search intent “CQRS without MediatR ASP.NET Core” is this paragraph. Do not add Wolverine to avoid naming a service.
+You can still name types `GetOrderById` if that helps. CQRS is a **split of writes and reads**, not a NuGet reference. Do not add Wolverine just to avoid naming a service.
 
 ## When Wolverine is a real upgrade (not a protest vote)
 

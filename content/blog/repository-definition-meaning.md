@@ -20,7 +20,7 @@ faq:
     a: "No. The database stores data. The repository is the code boundary that reads and writes it with a stable API for the rest of the application."
 ---
 
-Search **repository definition**, **define repository**, or just **repository** and you get mixed results — Git hosting, design patterns, and generic English. This page defines **repository in software** and connects it to **.NET and EF Core**.
+**Repository** means three different things on Google — Git hosting, a design pattern, and plain English. This page defines **repository in software** and connects it to **.NET and EF Core**.
 
 Implementation guide: [repository pattern in .NET](/blog/repository-pattern-dotnet). Query reuse: [specification pattern](/blog/ef-core-specification-pattern).
 

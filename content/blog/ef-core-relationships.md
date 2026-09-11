@@ -31,7 +31,7 @@ Provider *──* Specialty        many-to-many (skip or join entity)
 
 **New to this** → stay here. **Merging a PR** → [one-to-many](#one-to-many--the-default). **On-call / interview** → [many-to-many](#many-to-many--skip-navigation-vs-join-entity) · [owned vs 1-1](#one-to-one-vs-owned-types) · [if an interviewer asks](#if-an-interviewer-asks).
 
-Search **many to many entity relationship** or **relationship entity** and most tutorials stop at `HasMany` with a happy path. Production APIs fail on the next questions: does the join have a timestamp, can a child exist without a parent, and what does Angular receive — a graph or a DTO.
+Most **EF Core relationship** tutorials stop at `HasMany` with a happy path. Production APIs fail on the next questions: does the join have a timestamp, can a child exist without a parent, and what does Angular receive — a graph or a DTO.
 
 This page is the mapping I use on healthcare and marketplace APIs. Interview narration of the same decisions lives on [EF Core interview questions](/blog/ef-core-interview-questions). N+1 from walking those navigations is [Include vs AsSplitQuery](/blog/ef-core-nplus1-include-vs-assplitquery).
 

@@ -21,7 +21,7 @@ faq:
     a: "No. Use async factory methods (public static async Task<MyService> CreateAsync(...)) or initialize after construction via an IAsyncInitializer pattern. Constructors cannot be async."
 ---
 
-Search **asynchronous class** and results split two ways: **online education** (self-paced courses) and **programming** (types that expose async APIs). This article covers the **C# meaning** — how to design a class whose methods use `async`/`await` correctly on ASP.NET Core.
+**Asynchronous class** means two different things on Google — online education and programming. This article covers the **C# meaning**: how to design a type whose methods use `async`/`await` correctly on ASP.NET Core.
 
 Education definitions: [async vs sync](/blog/async-vs-sync-programming) (includes synchronous class meaning). Foundations: [asynchronous meaning and definition](/blog/asynchronous-meaning-definition).
 

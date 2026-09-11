@@ -4,7 +4,7 @@ title: "API Design for REST and ASP.NET Core"
 
 ## Introduction
 
-If you search **what is an API**, **API design**, **API design principles**, **Swagger**, **OpenAPI**, or **.NET API**, you want definitions and a checklist before framework tutorials. Start with [what is an API](/blog/what-is-an-api), then [API design principles](/blog/api-design-principles). For **Swagger vs OpenAPI**, **Swashbuckle**, and Angular codegen, see [Swagger vs OpenAPI in ASP.NET Core](/blog/swagger-openapi-aspnet-core).
+You are probably here for one of three things: a plain definition of **what an API is**, a practical **API design** checklist for ASP.NET Core, or **OpenAPI / Swagger** tooling for an Angular client. Start with [what is an API](/blog/what-is-an-api), then [API design principles](/blog/api-design-principles). For Swashbuckle, Scalar, NSwag, and client codegen, see [Swagger vs OpenAPI in ASP.NET Core](/blog/swagger-openapi-aspnet-core).
 
 ## What makes API design different from "just endpoints"
 
@@ -34,7 +34,7 @@ Full checklist: [API design principles](/blog/api-design-principles).
 
 ## Swagger, OpenAPI, and client contracts
 
-If you search **swagger**, **swagger vs openapi**, **swashbuckle aspnetcore**, or **swagger net**, you are usually trying to (1) understand the vocabulary, (2) pick Swashbuckle vs built-in OpenAPI vs Scalar vs NSwag, or (3) keep Angular TypeScript in sync with C# DTOs. The full guide — hybrid setup, migration from Swashbuckle, JWT in the explorer, FluentValidation in the spec, CI artifacts, and production security — is [Swagger vs OpenAPI in ASP.NET Core](/blog/swagger-openapi-aspnet-core).
+OpenAPI confusion usually falls into three buckets: vocabulary (**Swagger vs OpenAPI**), package choice (Swashbuckle vs built-in `Microsoft.AspNetCore.OpenApi` vs Scalar vs NSwag), or keeping Angular TypeScript aligned with C# DTOs. The full guide — hybrid setup, migration, JWT in the explorer, FluentValidation in the spec, CI artifacts, and production security — is [Swagger vs OpenAPI in ASP.NET Core](/blog/swagger-openapi-aspnet-core).
 
 Quick vocabulary: **OpenAPI** is the `openapi.json` contract; **Swagger UI** and **Scalar** are browsers for humans; **Swashbuckle.AspNetCore** is the legacy all-in-one NuGet package; **.NET 9+** defaults to `Microsoft.AspNetCore.OpenApi` for generation.
 

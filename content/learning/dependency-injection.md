@@ -4,7 +4,7 @@ title: "Dependency Injection in .NET"
 
 ## Introduction
 
-**Dependency injection (DI)** in ASP.NET Core wires implementations to interfaces at startup so controllers and handlers stay testable. Search intent here is usually **lifetimes**, **transient dependency**, **AddTransient vs AddScoped**, **Unable to resolve service**, or **why Singleton broke my DbContext** — not “what is IoC?”
+**Dependency injection (DI)** in ASP.NET Core wires implementations to interfaces at startup so controllers and handlers stay testable. Most readers already know what IoC is — they need **lifetimes**, **transient vs scoped**, **Unable to resolve service**, or why a **Singleton** broke their `DbContext`.
 
 ## What DI does
 

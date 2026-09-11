@@ -2,7 +2,7 @@
 title: "Swagger vs OpenAPI in ASP.NET Core — Swashbuckle, NSwag, and Scalar"
 description: "Swagger vs OpenAPI in ASP.NET Core — Swashbuckle, built-in OpenAPI (.NET 9+), Scalar, NSwag, JWT in Swagger UI, FluentValidation envelopes, and Angular codegen."
 date: "2026-09-12"
-updated: "2026-09-12"
+updated: "2026-09-13"
 category: "api-design"
 tags: ["Swagger", "OpenAPI", "ASP.NET Core", "Swashbuckle", "NSwag", "Scalar", "Web API", ".NET", "Angular"]
 related:
@@ -20,7 +20,7 @@ faq:
   - q: "OpenAPI vs Swagger — is it the same thing?"
     a: "Same comparison, words reversed. OpenAPI is the standard; Swagger is the brand and tools. The spec file is openapi.json; the lobby piano is Swagger UI."
   - q: "OpenAPI or Swagger on a README?"
-    a: "Write: We publish OpenAPI 3; browse at /scalar (Development) or import openapi.json from CI. That captures both search intents without sounding confused."
+    a: "Write: We publish OpenAPI 3; browse at /scalar (Development) or import openapi.json from CI. Name both terms so onboarding and job-post vocabulary align."
   - q: "Is Swashbuckle.AspNetCore still supported?"
     a: "Yes — Swashbuckle.AspNetCore 10.x supports .NET 10 with opt-in OpenAPI 3.1. .NET 9+ templates ship Microsoft.AspNetCore.OpenApi instead of Swashbuckle by default. You can keep full Swashbuckle, use built-in generation + Scalar, or hybrid built-in spec + Swagger UI only."
   - q: "What are Swagger alternatives in .NET?"
@@ -71,7 +71,7 @@ Your C# endpoints + DTOs
 
 **New to this** → stay here. **Migrating from Swashbuckle** → [step-by-step migration](#migrate-from-swashbuckle-to-built-in-openapi). **Angular contract** → [FluentValidation + ProblemDetails in the spec](#keep-openapi-aligned-with-fluentvalidation-and-problemdetails). **Production** → [security checklist](#production-swagger-is-not-a-feature-flag-you-forget). **Interview** → [If an interviewer asks](#if-an-interviewer-asks).
 
-Every Angular + ASP.NET Core rescue I walk into has the same Monday standup: frontend expected `{ items, totalCount }`, backend returned a bare array, and both sides pointed at Swagger like it was a signed contract. Swagger is a **printed menu** — useful only when it matches what the kitchen serves. This guide is the full stack: vocabulary, **swagger net** package choices, JWT in the explorer, keeping the spec honest when [FluentValidation](/blog/aspnet-core-api-validation) owns your error envelope, and not exposing `/swagger` on a misconfigured App Service.
+Every Angular + ASP.NET Core rescue I walk into has the same Monday standup: frontend expected `{ items, totalCount }`, backend returned a bare array, and both sides pointed at Swagger like it was a signed contract. Swagger is a **printed menu** — useful only when it matches what the kitchen serves. This guide is the full stack: vocabulary, Swagger-in-.NET package choices, JWT in the explorer, keeping the spec honest when [FluentValidation](/blog/aspnet-core-api-validation) owns your error envelope, and not exposing `/swagger` on a misconfigured App Service.
 
 ## Swagger vs OpenAPI: same family, different words
 
@@ -81,15 +81,15 @@ _Swagger vs OpenAPI vocabulary._
 |---|---|
 | **OpenAPI** | The open specification for describing HTTP APIs (**OpenAPI 3.1** on .NET 10, **3.0** on .NET 9). The file is `openapi.json` or `openapi.yaml`. |
 | **Swagger** | Brand and tools from SmartBear — **Swagger UI**, Swagger Editor, Swagger Hub. Colloquially people still say “Swagger spec” for an OpenAPI file. |
-| **Swashbuckle** | The NuGet package **`Swashbuckle.AspNetCore`** that generates OpenAPI from ASP.NET Core and can host Swagger UI. Not the same company as SmartBear, but the name everyone searches (**swashbuckle.aspnetcore**, **swashbuckle aspnetcore**, **swashbuckle asp net core**). |
+| **Swashbuckle** | The community NuGet stack **`Swashbuckle.AspNetCore`** — reflects your routes into an OpenAPI document and can host **Swagger UI**. Colloquial name from the old .NET templates; not the same company as SmartBear. Install with `dotnet add package Swashbuckle.AspNetCore`. |
 
 **Swagger vs OpenAPI** in interview rooms: OpenAPI is the standard; Swagger is the tooling ecosystem. **OpenAPI vs Swagger** is the same comparison with the words reversed.
 
-**OpenAPI or Swagger** on a README? I write: “We publish **OpenAPI 3**; browse it at `/scalar` (Development) or download `openapi.json` from CI.” That captures both search intents without sounding confused.
+**OpenAPI or Swagger** on a README? I write: “We publish **OpenAPI 3**; browse it at `/scalar` (Development) or download `openapi.json` from CI.” That names the standard and the explorer without mixing them up.
 
 ## OpenAPI 3.x vs Swagger 2.0 (swagger version)
 
-Older gateways and Power Platform imports still say **Swagger 2.0**. Modern **swagger in .NET** emits **OpenAPI 3.x**.
+Older gateways and Power Platform imports still say **Swagger 2.0**. Modern ASP.NET Core APIs emit **OpenAPI 3.x**.
 
 _OpenAPI 3.x compared with Swagger 2.0._
 
@@ -111,7 +111,7 @@ options.SwaggerDoc("v1", new OpenApiInfo { Title = "Clinic API", Version = "v1" 
 
 ## Why .NET dropped Swagger from the template (and what that means for you)
 
-For years the default **swagger net** setup was three lines everyone memorized:
+For years the default Swagger-in-.NET setup was three lines everyone memorized:
 
 1. `Swashbuckle.AspNetCore.SwaggerGen`
 2. `Swashbuckle.AspNetCore.SwaggerUI`
@@ -173,13 +173,13 @@ _Which OpenAPI stack to choose — Swashbuckle, Scalar, NSwag, or built-in only.
 | **Built-in, no UI in prod** | Built-in | None | Internal APIs, security-first | Onboarding devs who need Try it out |
 | **Redoc** | Any generator | Redoc (read-only) | Partner-facing docs portal | Interactive JWT testing |
 
-**Swagger alternatives** worth knowing as **swagger tools**: Scalar, Redoc, Postman (import OpenAPI), Visual Studio **.http** files, and **Endpoints Explorer**. None replace the machine-readable spec — they replace the lobby piano.
+Worth knowing besides Swagger UI: Scalar, Redoc, Postman (import OpenAPI), Visual Studio **.http** files, and **Endpoints Explorer**. None replace the machine-readable spec — they replace the lobby piano.
 
 My default on a new healthcare SaaS API: **built-in OpenAPI + Scalar** in Development, **`openapi.json` artifact in CI** for Angular codegen, **no public UI** on the App Service host.
 
 ## Path 0 — Hybrid: built-in OpenAPI + Swagger UI only
 
-The path Tim Deschryver and Microsoft docs recommend when your team wants **Swagger UI** but not a second generator. **Swashbuckle asp net core** searchers often need exactly this.
+The path Tim Deschryver and Microsoft docs recommend when your team wants **Swagger UI** but not a second OpenAPI generator — common when migrating from older **Swashbuckle** templates.
 
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
@@ -228,7 +228,7 @@ Environment pitfalls: [appsettings and ASPNETCORE_ENVIRONMENT](/blog/aspnet-core
 
 ## Path 1 — Swashbuckle.AspNetCore (full stack)
 
-Still the most searched **swashbuckle.aspnetcore** path. Works on **.NET 8**, **.NET 9**, and **.NET 10** when you add the package explicitly.
+Still the familiar full-**Swashbuckle** path from older templates. Works on **.NET 8**, **.NET 9**, and **.NET 10** when you add the package explicitly.
 
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
@@ -394,7 +394,7 @@ Angular searches for `{ items, totalCount }` — `PagedResult<T>` matches when t
 
 ## Path 2 — Built-in OpenAPI + Scalar (.NET 9 / .NET 10)
 
-**Swagger alternatives** Microsoft steers new projects toward:
+The stack Microsoft steers new .NET 9+ projects toward:
 
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
@@ -451,7 +451,7 @@ app.Run();
 dotnet add package Scalar.AspNetCore
 ```
 
-Scalar is a strong **Swagger UI** alternative in **swagger tools** comparisons — faster navigation, better schemas panel, same underlying **OpenAPI** file. Launch URL: `scalar/v1` in `launchSettings.json`.
+Scalar is a strong **Swagger UI** alternative — faster navigation, better schemas panel, same underlying **OpenAPI** file. Launch URL: `scalar/v1` in `launchSettings.json`.
 
 ### YAML document (.NET 10)
 
@@ -516,7 +516,7 @@ Full Minimal API patterns: [ASP.NET Core Minimal APIs](/blog/aspnet-core-minimal
 
 ## Path 3 — NSwag (spec + Angular TypeScript client)
 
-When **swagger tools** must include **code generation**, NSwag is the **.NET-native** choice.
+When your toolchain must include **code generation**, NSwag is the **.NET-native** choice.
 
 ```csharp
 builder.Services.AddControllers();
@@ -576,7 +576,7 @@ One pipeline: ASP.NET Core builds the spec, Angular gets a typed client. When th
 
 ## Path 4 — Redoc (read-only partner docs)
 
-Redoc is the right **swagger tool** when docs are **customer-facing** (Stripe-style) and you do not want Try it out on production.
+Redoc is the right read-only choice when docs are **customer-facing** (Stripe-style) and you do not want Try it out on production.
 
 ```csharp
 if (app.Environment.IsDevelopment())
@@ -707,7 +707,7 @@ Add `400` / `application/problem+json` on POST and PUT. Middleware that produces
 
 ## JWT auth in Swagger UI and Scalar
 
-**Swagger net** tutorials stop at `AddJwtBearer`. Production teams need **Authorize** to work.
+Most Swagger tutorials stop at `AddJwtBearer`. Production teams need **Authorize** to work.
 
 1. Define Bearer security scheme (examples above).
 2. Apply global security requirement or per-endpoint `[Authorize]`.

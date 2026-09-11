@@ -30,7 +30,7 @@ If you search **IHttpClientFactory ASP.NET Core**, you are usually already in tr
 
 I wire outbound HTTP from ASP.NET Core APIs constantly: identity providers, payment gateways, Azure services, EDI partners, and internal microservices. This is the practical guide I give teams so Angular-facing APIs do not melt when background jobs and user traffic both call external systems.
 
-## Why this keyword has high intent
+## Why teams land on this page mid-incident
 
 Developers are not browsing casually. They hit:
 

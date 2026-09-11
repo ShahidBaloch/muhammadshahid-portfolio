@@ -40,7 +40,7 @@ If you are rehearsing interviews, pair this with [ASP.NET Core scenario question
 
 ## C# best practices I actually enforce on PRs
 
-Search **C# best practices** and you get a 20-tips list. On ASP.NET Core PRs I enforce a shorter map — SOLID is the class-design slice, not the whole list:
+**C# best practices** listicles rarely survive a real PR review. On ASP.NET Core teams I enforce a shorter map — SOLID is the class-design slice, not the whole list:
 
 | Practice | Where the depth lives |
 |---|---|

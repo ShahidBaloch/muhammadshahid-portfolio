@@ -48,9 +48,9 @@ Since .NET 7, ASP.NET Core ships built-in rate limiting middleware. I turn it on
 
 Prefer **per-user** (or per API key) over **per-IP** when you can — corporate NAT puts many good users behind one address. Split policies: tight on `/api/auth/login`, looser on catalog reads. A search crawler should not consume the same budget as password reset.
 
-## Why this keyword converts traffic
+## What teams actually need from rate limiting
 
-Searchers want a working answer to:
+Production teams usually need a working answer to:
 
 - How do I return **429 Too Many Requests**?
 - Fixed window vs sliding window vs token bucket?
