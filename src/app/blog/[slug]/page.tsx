@@ -239,10 +239,10 @@ export default async function BlogPostPage({ params }: PageProps) {
           </section>
         ) : null}
 
-        <div className="mt-6 lg:grid lg:grid-cols-[minmax(12rem,16rem)_minmax(0,1fr)] lg:items-start lg:gap-10">
+        <div className="mt-6 xl:grid xl:grid-cols-[minmax(13rem,16rem)_minmax(0,1fr)] xl:items-start xl:gap-10">
           <OnThisPage sections={outline} />
 
-          <div id="article-body" className="prose-site mt-7 min-w-0 sm:prose-lg lg:mt-0" tabIndex={-1}>
+          <div id="article-body" className="prose-site mt-7 min-w-0 sm:prose-lg xl:mt-0" tabIndex={-1}>
             <MarkdownContent content={post.content} />
           </div>
         </div>

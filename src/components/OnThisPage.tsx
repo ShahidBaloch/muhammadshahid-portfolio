@@ -35,7 +35,7 @@ export function OnThisPage({ sections }: { sections: PostOutlineSection[] }) {
 
   return (
     <nav
-      className="card-panel mt-6 rounded-xl p-4 sm:p-5 lg:sticky lg:top-28 lg:mt-0 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto"
+      className="card-panel mt-6 rounded-xl p-4 sm:p-5 xl:sticky xl:top-28 xl:mt-0 xl:max-h-[calc(100vh-8rem)] xl:overflow-y-auto"
       aria-label="On this page"
       aria-describedby="on-this-page-hint"
     >

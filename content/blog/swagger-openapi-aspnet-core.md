@@ -81,7 +81,7 @@ _Swagger vs OpenAPI vocabulary._
 |---|---|
 | **OpenAPI** | The open specification for describing HTTP APIs (**OpenAPI 3.1** on .NET 10, **3.0** on .NET 9). The file is `openapi.json` or `openapi.yaml`. |
 | **Swagger** | Brand and tools from SmartBear — **Swagger UI**, Swagger Editor, Swagger Hub. Colloquially people still say “Swagger spec” for an OpenAPI file. |
-| **Swashbuckle** | The community NuGet stack **`Swashbuckle.AspNetCore`** — reflects your routes into an OpenAPI document and can host **Swagger UI**. Colloquial name from the old .NET templates; not the same company as SmartBear. Install with `dotnet add package Swashbuckle.AspNetCore`. |
+| **Swashbuckle** | Community NuGet package **`Swashbuckle.AspNetCore`**: generates OpenAPI from your routes and can host **Swagger UI**. Name from the old .NET templates — not SmartBear. `dotnet add package Swashbuckle.AspNetCore` |
 
 **Swagger vs OpenAPI** in interview rooms: OpenAPI is the standard; Swagger is the tooling ecosystem. **OpenAPI vs Swagger** is the same comparison with the words reversed.
 
