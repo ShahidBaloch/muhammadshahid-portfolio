@@ -4,7 +4,7 @@ description: "Thread pool starvation is queued work with no free workers. C# .Re
 date: "2026-09-07"
 updated: "2026-09-07"
 category: "async-concurrency"
-tags: ["C#", ".NET", "Asynchronous Programming", "Threading", "Concurrency", "ASP.NET Core", "Performance"]
+tags: ["C#", ".NET", "Asynchronous Programming", "Threading", "Concurrency", "ASP.NET Core", "Performance", "thread pool starvation", "sync over async"]
 related:
   - csharp-async-await-aspnet-core
   - csharp-task-run-aspnet-core

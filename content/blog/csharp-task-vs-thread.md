@@ -4,7 +4,7 @@ description: "A Task is a promise that work will finish; a Thread is an OS worke
 date: "2026-09-07"
 updated: "2026-09-07"
 category: "async-concurrency"
-tags: ["C#", ".NET", "Asynchronous Programming", "Threading", "Concurrency"]
+tags: ["C#", ".NET", "Asynchronous Programming", "Threading", "Concurrency", "Task vs Thread", "ThreadPool"]
 related:
   - asynchronous-meaning-definition
   - async-promise-explained

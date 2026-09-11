@@ -1,8 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { siteConfig } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: "Page not found",
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   return (
     <section className="section-pad flex min-h-[70vh] items-center pt-28">
+      <title>{`Page not found | ${siteConfig.name}`}</title>
+      <meta name="robots" content="noindex, follow" />
       <div className="container-narrow max-w-xl">
         <p className="eyebrow">404</p>
         <h1 className="mt-3 font-display text-4xl font-semibold text-ink">Page not found</h1>

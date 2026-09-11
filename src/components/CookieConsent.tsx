@@ -86,11 +86,11 @@ export function CookieConsent() {
       <div className="container-narrow flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="max-w-2xl text-sm text-ink-soft">
           <p id="cookie-consent-title" className="font-semibold text-ink">
-            Cookies, analytics &amp; ads
+            Cookies &amp; analytics
           </p>
           <p className="mt-1">
-            This site uses cookies for analytics and advertising if you accept. You can reject
-            non-essential cookies.{" "}
+            This site uses cookies for analytics if you accept. You can reject non-essential
+            cookies.{" "}
             <Link href="/privacy" className="font-semibold text-teal link-underline">
               Privacy
             </Link>

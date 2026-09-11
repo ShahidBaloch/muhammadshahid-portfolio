@@ -189,49 +189,120 @@ export default async function LearningTopicPage({ params }: PageProps) {
           />
         </div>
 
-        <div className="prose-site mt-8 max-w-3xl text-lg leading-relaxed text-muted">
-          <MarkdownContent content={topic.intro} />
-        </div>
+        {topic.intro ? (
+          <div className="prose-site mt-8 max-w-3xl text-lg leading-relaxed text-muted">
+            <MarkdownContent content={topic.intro} />
+          </div>
+        ) : null}
 
-        {topicBody ? (
-          <div className="prose-site mt-10 max-w-3xl border-t border-slate-line pt-10">
+        {topic.compactHub
+          ? (() => {
+              const bodyBlock = topicBody ? (
+                <div className={`prose-site max-w-3xl ${topic.intro ? "mt-10 border-t border-slate-line pt-10" : "mt-8"}`}>
+                  <MarkdownContent content={topicBody} />
+                </div>
+              ) : null;
+
+              const startHereBlock =
+                posts[0] && !topic.bodyFirst ? (
+                  <div className={`max-w-3xl ${topic.bodyFirst ? "mt-10" : "mt-8"}`}>
+                    <Link
+                      href={`/blog/${posts[0].slug}`}
+                      className="group block rounded-xl border-2 border-teal/40 bg-teal/5 p-5 transition hover:border-teal hover:bg-teal/10 sm:p-6"
+                    >
+                      <p className="text-sm font-semibold uppercase tracking-wide text-teal">Start here</p>
+                      <h2 className="mt-2 font-display text-xl font-semibold text-ink group-hover:text-teal sm:text-2xl">
+                        {posts[0].title}
+                      </h2>
+                      <p className="mt-2 text-muted">{posts[0].description}</p>
+                      <div className="mt-3">
+                        <PostDate
+                          date={posts[0].date}
+                          updated={posts[0].updated}
+                          readingTime={posts[0].readingTime}
+                        />
+                      </div>
+                    </Link>
+                  </div>
+                ) : null;
+
+              const tracksBlock =
+                topic.tracks && topic.tracks.length > 0 ? (
+                  <nav className="mt-10 max-w-3xl" aria-label={`${topic.label} tracks`}>
+                    {topic.tracks.map((track) => {
+                      const items = track.slugs
+                        .map((slug) => posts.find((post) => post.slug === slug))
+                        .filter((post): post is (typeof posts)[number] => Boolean(post));
+                      if (items.length === 0) return null;
+                      const headingId = slugifyHeading(track.title);
+                      return (
+                        <section key={track.title} className="mt-8 first:mt-0">
+                          <h2 id={headingId} className="scroll-mt-28 font-display text-xl font-semibold text-ink">
+                            {track.title}
+                          </h2>
+                          {track.blurb ? <p className="mt-2 text-muted">{track.blurb}</p> : null}
+                          <ul className="mt-4 space-y-3">
+                            {items.map((post) => (
+                              <li key={post.slug}>
+                                <Link
+                                  href={`/blog/${post.slug}`}
+                                  className="group block rounded-xl border border-slate-line bg-mist/40 p-4 transition hover:border-teal hover:bg-mist sm:p-5"
+                                >
+                                  <h3 className="font-display text-lg font-semibold text-ink group-hover:text-teal">
+                                    {post.title}
+                                  </h3>
+                                  <p className="mt-2 text-sm text-muted">{post.description}</p>
+                                  <div className="mt-3">
+                                    <PostDate
+                                      date={post.date}
+                                      updated={post.updated}
+                                      readingTime={post.readingTime}
+                                    />
+                                  </div>
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </section>
+                      );
+                    })}
+                  </nav>
+                ) : null;
+
+              const relatedBlock =
+                relatedTopics.length > 0 ? (
+                  <p className="mt-6 max-w-3xl text-sm text-muted">
+                    Related:{" "}
+                    {relatedTopics.map((item, index) => (
+                      <span key={item.slug}>
+                        {index > 0 ? " · " : null}
+                        <Link href={`/learning/${item.slug}`} className="font-medium text-teal link-underline">
+                          {item.label}
+                        </Link>
+                      </span>
+                    ))}
+                  </p>
+                ) : null;
+
+              const hubSections = topic.bodyFirst
+                ? [bodyBlock, startHereBlock, tracksBlock, relatedBlock]
+                : [startHereBlock, tracksBlock, relatedBlock, bodyBlock];
+
+              return hubSections;
+            })()
+          : null}
+
+        {!topic.compactHub && topicBody ? (
+          <div
+            className={`prose-site max-w-3xl ${
+              topic.intro || topic.tracks?.length ? "mt-10 border-t border-slate-line pt-10" : "mt-8"
+            }`}
+          >
             <MarkdownContent content={topicBody} />
           </div>
         ) : null}
 
-        {relatedTopics.length > 0 ? (
-          <p className="mt-4 max-w-3xl text-muted">
-            Related:{" "}
-            {relatedTopics.map((item, index) => (
-              <span key={item.slug}>
-                {index > 0 ? " · " : null}
-                <Link href={`/learning/${item.slug}`} className="font-medium text-teal link-underline">
-                  {item.label}
-                </Link>
-              </span>
-            ))}
-          </p>
-        ) : null}
-
-        {topic.faq && topic.faq.length > 0 ? (
-          <section className="mt-8 max-w-3xl rounded-xl border border-slate-line bg-mist p-5 sm:p-6" aria-labelledby="quick-answers">
-            <h2 id="quick-answers" className="font-display text-xl font-semibold text-ink">
-              Quick answers
-            </h2>
-            <dl className="mt-4 space-y-4">
-              {topic.faq.map((item) => (
-                <div key={item.q}>
-                  <dt className="font-semibold text-ink">{item.q}</dt>
-                  <dd className="prose-site mt-1 text-muted">
-                    <MarkdownContent content={item.a} />
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </section>
-        ) : null}
-
-        {topic.tracks && topic.tracks.length > 0 ? (
+        {!topic.compactHub && topic.tracks && topic.tracks.length > 0 ? (
           <nav className="mt-10 max-w-3xl" aria-label="Start here">
             {topic.tracks.map((track) => {
               const items = track.slugs
@@ -260,26 +331,65 @@ export default async function LearningTopicPage({ params }: PageProps) {
           </nav>
         ) : null}
 
-        <nav className="mt-8 flex flex-wrap gap-2" aria-label="Blog topics">
-          {learningTopics.map((item) => (
-            <Link
-              key={item.slug}
-              href={`/learning/${item.slug}`}
-              className={`rounded border px-3 py-1.5 text-sm transition ${
-                item.slug === topic.slug
-                  ? "chip-active"
-                  : "border-slate-line text-muted hover:border-teal hover:text-ink"
-              }`}
-              aria-current={item.slug === topic.slug ? "page" : undefined}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        {!topic.compactHub && relatedTopics.length > 0 ? (
+          <p className="mt-4 max-w-3xl text-muted">
+            Related:{" "}
+            {relatedTopics.map((item, index) => (
+              <span key={item.slug}>
+                {index > 0 ? " · " : null}
+                <Link href={`/learning/${item.slug}`} className="font-medium text-teal link-underline">
+                  {item.label}
+                </Link>
+              </span>
+            ))}
+          </p>
+        ) : null}
 
-        {posts.length === 0 ? (
+        {topic.faq && topic.faq.length > 0 ? (
+          <section
+            className={`max-w-3xl rounded-xl border border-slate-line bg-mist p-5 sm:p-6 ${
+              topic.compactHub ? "mt-10" : "mt-8"
+            }`}
+            aria-labelledby="quick-answers"
+          >
+            <h2 id="quick-answers" className="font-display text-xl font-semibold text-ink">
+              Quick answers
+            </h2>
+            <dl className="mt-4 space-y-4">
+              {topic.faq.map((item) => (
+                <div key={item.q}>
+                  <dt className="font-semibold text-ink">{item.q}</dt>
+                  <dd className="prose-site mt-1 text-muted">
+                    <MarkdownContent content={item.a} />
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        ) : null}
+
+        {!topic.compactHub ? (
+          <nav className="mt-8 flex flex-wrap gap-2" aria-label="Blog topics">
+            {learningTopics.map((item) => (
+              <Link
+                key={item.slug}
+                href={`/learning/${item.slug}`}
+                className={`rounded border px-3 py-1.5 text-sm transition ${
+                  item.slug === topic.slug
+                    ? "chip-active"
+                    : "border-slate-line text-muted hover:border-teal hover:text-ink"
+                }`}
+                aria-current={item.slug === topic.slug ? "page" : undefined}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        ) : null}
+
+        {!topic.compactHub && posts.length === 0 ? (
           <p className="mt-12 py-10 text-muted">Articles for this track are coming soon.</p>
-        ) : (
+        ) : !topic.compactHub ? (
           <div className="mt-12">
             <h2 className="font-display text-2xl font-semibold text-ink">
               All {topic.label} articles
@@ -298,7 +408,7 @@ export default async function LearningTopicPage({ params }: PageProps) {
               ))}
             </div>
           </div>
-        )}
+        ) : null}
       </div>
     </section>
   );

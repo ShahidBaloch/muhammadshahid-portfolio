@@ -4,7 +4,7 @@ description: "C# multithreading tutorial in one pass — Thread vs ThreadPool vs
 date: "2026-09-08"
 updated: "2026-09-08"
 category: "async-concurrency"
-tags: ["C#", ".NET", "Threading", "Concurrency", "Asynchronous Programming", "ASP.NET Core"]
+tags: ["C#", ".NET", "Threading", "Concurrency", "Asynchronous Programming", "ASP.NET Core", "C# multithreading", "C# multithreading tutorial"]
 related:
   - csharp-task-vs-thread
   - csharp-async-await-aspnet-core

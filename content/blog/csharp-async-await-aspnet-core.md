@@ -4,7 +4,7 @@ description: "async/await lets an ASP.NET Core API wait on SQL or HTTP without h
 date: "2026-08-12"
 updated: "2026-09-07"
 category: "async-concurrency"
-tags: ["C#", "async await", "Asynchronous Programming", "ASP.NET Core", ".NET", "Performance"]
+tags: ["C#", "async await", "Asynchronous Programming", "ASP.NET Core", ".NET", "Performance", "C# async await ASP.NET Core", "CancellationToken"]
 related:
   - asynchronous-meaning-definition
   - async-vs-sync-programming

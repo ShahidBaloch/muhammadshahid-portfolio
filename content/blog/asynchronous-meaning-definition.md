@@ -4,7 +4,7 @@ description: "Asynchronous meaning and definition explained plainly — what asy
 date: "2026-09-08"
 updated: "2026-09-08"
 category: "async-concurrency"
-tags: ["Asynchronous Programming", "C#", "async await", ".NET", "ASP.NET Core"]
+tags: ["Asynchronous Programming", "C#", "async await", ".NET", "ASP.NET Core", "asynchronous meaning", "asynchronous definition"]
 related:
   - async-vs-sync-programming
   - async-promise-explained

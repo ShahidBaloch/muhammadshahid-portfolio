@@ -4,7 +4,7 @@ description: "Task.Run queues CPU work on the ThreadPool; await yields the worke
 date: "2026-09-07"
 updated: "2026-09-07"
 category: "async-concurrency"
-tags: ["C#", ".NET", "Asynchronous Programming", "Threading", "Concurrency", "ASP.NET Core", "Performance"]
+tags: ["C#", ".NET", "Asynchronous Programming", "Threading", "Concurrency", "ASP.NET Core", "Performance", "Task.Run vs await"]
 related:
   - csharp-threadpool-starvation-sync-over-async
   - csharp-task-vs-thread

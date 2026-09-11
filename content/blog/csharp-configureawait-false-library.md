@@ -4,7 +4,7 @@ description: "If you only write ASP.NET Core APIs, skip ConfigureAwait(false). I
 date: "2026-09-07"
 updated: "2026-09-07"
 category: "async-concurrency"
-tags: ["C#", ".NET", "Asynchronous Programming", "Threading", "Concurrency"]
+tags: ["C#", ".NET", "Asynchronous Programming", "Threading", "Concurrency", "ConfigureAwait"]
 related:
   - csharp-threadpool-starvation-sync-over-async
   - csharp-async-await-interview-questions

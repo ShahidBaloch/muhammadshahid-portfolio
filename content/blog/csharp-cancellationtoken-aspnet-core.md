@@ -4,7 +4,7 @@ description: "A CancellationToken is a cooperative please-stop flag. In ASP.NET 
 date: "2026-09-07"
 updated: "2026-09-07"
 category: "async-concurrency"
-tags: ["C#", ".NET", "Asynchronous Programming", "Threading", "ASP.NET Core"]
+tags: ["C#", ".NET", "Asynchronous Programming", "Threading", "ASP.NET Core", "CancellationToken"]
 related:
   - csharp-async-await-aspnet-core
   - csharp-iasyncenumerable-yield-return

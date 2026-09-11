@@ -4,7 +4,7 @@ description: "Async vs sync explained with tables and C# examples — blocking v
 date: "2026-09-08"
 updated: "2026-09-08"
 category: "async-concurrency"
-tags: ["Asynchronous Programming", "C#", "async await", ".NET", "ASP.NET Core"]
+tags: ["Asynchronous Programming", "C#", "async await", ".NET", "ASP.NET Core", "async vs sync"]
 related:
   - asynchronous-meaning-definition
   - csharp-async-await-aspnet-core
