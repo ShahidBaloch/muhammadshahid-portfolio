@@ -14,6 +14,13 @@ function childrenToText(node: ReactNode): string {
   return "";
 }
 
+function parseTableHeaderCells(line: string): string[] {
+  return line
+    .split("|")
+    .map((cell) => cell.trim().replace(/\*\*/g, "").replace(/`/g, ""))
+    .filter(Boolean);
+}
+
 function tableCaptionsFromMarkdown(content: string): string[] {
   const lines = content.split(/\r?\n/);
   const captions: string[] = [];
@@ -22,8 +29,20 @@ function tableCaptionsFromMarkdown(content: string): string[] {
     const prev = i > 0 ? lines[i - 1].trim() : "";
     const isTableStart = line.startsWith("|") && (i === 0 || !lines[i - 1].trim().startsWith("|"));
     if (!isTableStart) continue;
+
     const italic = /^_(.+)_\s*$/.exec(prev) ?? /^\*(.+)\*\s*$/.exec(prev);
-    captions.push(italic ? italic[1].replace(/\*\*/g, "").trim() : "Data table");
+    if (italic) {
+      captions.push(italic[1].replace(/\*\*/g, "").trim());
+      continue;
+    }
+
+    const headers = parseTableHeaderCells(line);
+    const separator = lines[i + 1]?.trim() ?? "";
+    if (headers.length >= 2 && /^\|?[\s:-]+\|/.test(separator)) {
+      captions.push(`Table: ${headers.join(", ")}`);
+    } else {
+      captions.push(headers.length >= 2 ? `Table: ${headers.join(", ")}` : "Data table");
+    }
   }
   return captions;
 }
@@ -93,12 +112,12 @@ export function MarkdownContent({ content }: { content: string }) {
             <figure className="my-6">
               <figcaption className="sr-only">{caption}</figcaption>
               <div
-                className="overflow-x-auto"
+                className="table-scroll-region overflow-x-auto"
                 tabIndex={0}
                 role="region"
                 aria-label={scrollLabel}
               >
-                <table aria-label={caption}>{children}</table>
+                <table className="content-table" aria-label={caption}>{children}</table>
               </div>
             </figure>
           );

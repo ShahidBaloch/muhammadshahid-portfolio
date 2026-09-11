@@ -559,9 +559,14 @@
     hyphens: manual;
   }
 
-  /* Label column: keep terms like OpenAPI, Swagger, Swashbuckle on one line */
-  .prose-site th:first-child,
-  .prose-site td:first-child {
+  /*
+   * Two-column tables (Term | Definition): keep label cells on one line.
+   * Three+ column tables wrap normally so long first-column text does not overflow.
+   */
+  .prose-site table.content-table:has(thead th:nth-child(2):last-child) th:first-child,
+  .prose-site table.content-table:has(thead th:nth-child(2):last-child) td:first-child,
+  .prose-site table.content-table:has(tbody > tr > td:nth-child(2):last-child) th:first-child,
+  .prose-site table.content-table:has(tbody > tr > td:nth-child(2):last-child) td:first-child {
     width: 1%;
     min-width: 6.75rem;
     white-space: nowrap;
@@ -569,13 +574,26 @@
     word-break: keep-all;
   }
 
-  .prose-site figure [role="region"] {
+  .prose-site table.content-table:has(thead th:nth-child(3)),
+  .prose-site table.content-table:has(tbody > tr > td:nth-child(3)) {
+    min-width: 36rem;
+  }
+
+  .prose-site table.content-table:has(thead th:nth-child(3)) th,
+  .prose-site table.content-table:has(thead th:nth-child(3)) td,
+  .prose-site table.content-table:has(tbody > tr > td:nth-child(3)) th,
+  .prose-site table.content-table:has(tbody > tr > td:nth-child(3)) td {
+    white-space: normal;
+    min-width: 0;
+  }
+
+  .prose-site .table-scroll-region {
     -webkit-overflow-scrolling: touch;
     border-radius: 0.5rem;
     outline-offset: 2px;
   }
 
-  .prose-site figure [role="region"]:focus-visible {
+  .prose-site .table-scroll-region:focus-visible {
     outline: 2px solid var(--color-teal);
   }
 
@@ -590,6 +608,20 @@
       padding: 0.5rem 0.625rem;
       font-size: 0.875rem;
       line-height: 1.45;
+    }
+
+    .prose-site table.content-table:has(thead th:nth-child(3)),
+    .prose-site table.content-table:has(tbody > tr > td:nth-child(3)) {
+      min-width: 0;
+    }
+
+    .prose-site table.content-table:has(thead th:nth-child(2):last-child) th:first-child,
+    .prose-site table.content-table:has(thead th:nth-child(2):last-child) td:first-child,
+    .prose-site table.content-table:has(tbody > tr > td:nth-child(2):last-child) th:first-child,
+    .prose-site table.content-table:has(tbody > tr > td:nth-child(2):last-child) td:first-child {
+      white-space: normal;
+      min-width: 0;
+      width: auto;
     }
 
     .prose-site pre {
