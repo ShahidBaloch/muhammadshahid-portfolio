@@ -10,15 +10,15 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <section className="section-pad pt-28 sm:pt-32">
-      <div className="container-narrow reading-surface max-w-3xl">
+    <section className="reading-page">
+      <div className="container-narrow reading-surface content-width">
         <p className="eyebrow">Legal</p>
-        <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+        <h1 className="heading-page mt-3">
           Privacy Policy
         </h1>
         <p className="mt-4 text-muted">Last updated: September 7, 2026</p>
 
-        <div className="prose-site prose-lg mt-10">
+        <div className="prose-site prose-lg mt-6">
           <p>
             This Privacy Policy explains how {siteConfig.name} (&quot;I&quot;, &quot;me&quot;, or
             &quot;the Site&quot;) collects, uses, and protects information when you visit{" "}

@@ -9,10 +9,10 @@ export default function Error({
   reset: () => void;
 }) {
   return (
-    <section className="section-pad flex min-h-[70vh] items-center pt-28">
+    <section className="section-pad page-top flex min-h-[70vh] items-center">
       <div className="container-narrow max-w-xl">
         <p className="eyebrow">Error</p>
-        <h1 className="mt-3 font-display text-4xl font-semibold text-ink">Something went wrong</h1>
+        <h1 className="heading-page mt-3">Something went wrong</h1>
         <p className="mt-4 text-lg text-muted">
           The page failed to load. Try again, or head back home.
         </p>

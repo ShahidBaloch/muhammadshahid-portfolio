@@ -144,7 +144,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   };
 
   return (
-    <article className="section-pad pt-28 sm:pt-32">
+    <article className="reading-page">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
@@ -159,17 +159,17 @@ export default async function BlogPostPage({ params }: PageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
       ) : null}
-      <div className="container-narrow reading-surface max-w-3xl">
+      <div className="container-narrow reading-surface content-width">
         <nav className="text-sm text-muted" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
             <li>
-              <Link href="/" className="hover:text-teal">
+              <Link href="/" className="hover:text-link">
                 Home
               </Link>
             </li>
             <li aria-hidden>/</li>
             <li>
-              <Link href="/blog" className="hover:text-teal">
+              <Link href="/blog" className="hover:text-link">
                 Blog
               </Link>
             </li>
@@ -177,7 +177,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               <>
                 <li aria-hidden>/</li>
                 <li>
-                  <Link href={`/learning/${learningTopic.slug}`} className="hover:text-teal">
+                  <Link href={`/learning/${learningTopic.slug}`} className="hover:text-link">
                     {learningTopic.label}
                   </Link>
                 </li>
@@ -189,14 +189,14 @@ export default async function BlogPostPage({ params }: PageProps) {
             </li>
           </ol>
         </nav>
-        <header className="mt-6 border-b border-slate-line pb-8">
+        <header className="mt-4 border-b border-slate-line pb-6">
           <PostDate
             date={post.date}
             updated={post.updated}
             readingTime={post.readingTime}
             byline={`By ${siteConfig.name}`}
           />
-          <h1 className="mt-3 font-display text-[1.75rem] font-semibold leading-tight tracking-tight text-ink sm:text-4xl lg:text-5xl">
+          <h1 className="heading-page mt-3 lg:text-[2.85rem]">
             {post.title}
           </h1>
           <p className="mt-4 text-lg text-muted">{post.description}</p>
@@ -205,7 +205,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               Part of{" "}
               <Link
                 href={`/learning/${learningTopic.slug}`}
-                className="font-semibold text-teal link-underline"
+                className="font-semibold link-underline"
               >
                 {learningTopic.label}
               </Link>
@@ -214,8 +214,8 @@ export default async function BlogPostPage({ params }: PageProps) {
         </header>
 
         {post.faq && post.faq.length > 0 ? (
-          <section className="mt-8 rounded-xl border border-slate-line bg-mist p-5 sm:p-6" aria-labelledby="quick-answers">
-            <h2 id="quick-answers" className="font-display text-xl font-semibold text-ink">
+          <section className="card-panel mt-6 rounded-xl p-5 sm:p-6" aria-labelledby="quick-answers">
+            <h2 id="quick-answers" className="heading-subsection">
               Quick answers
             </h2>
             <dl className="mt-4 space-y-4">
@@ -231,11 +231,11 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         <OnThisPage headings={headings} />
 
-        <div className="prose-site mt-10 sm:prose-lg">
+        <div className="prose-site mt-7 sm:prose-lg">
           <MarkdownContent content={post.content} />
         </div>
 
-        <aside className="mt-14 rounded-xl border border-slate-line bg-mist p-6 sm:p-8">
+        <aside className="card-panel mt-8 rounded-xl p-5 sm:p-6">
           <p className="eyebrow">About the author</p>
           <div className="mt-4 flex items-start gap-4">
             <Portrait />
@@ -273,12 +273,12 @@ export default async function BlogPostPage({ params }: PageProps) {
         </aside>
 
         {related.length > 0 ? (
-          <aside className="mt-16 border-t border-slate-line pt-10">
-            <h2 className="font-display text-xl font-semibold text-ink">More reading</h2>
+          <aside className="mt-8 border-t border-slate-line pt-6">
+            <h2 className="heading-subsection">More reading</h2>
             <ul className="mt-4 space-y-3">
               {related.map((item) => (
                 <li key={item.slug}>
-                  <Link href={`/blog/${item.slug}`} className="font-medium text-teal link-underline">
+                  <Link href={`/blog/${item.slug}`} className="font-medium link-underline">
                     {item.title}
                   </Link>
                 </li>

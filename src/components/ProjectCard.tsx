@@ -10,17 +10,17 @@ export function ProjectCard({
   asPage?: boolean;
 }) {
   return (
-    <article className="group border-b border-slate-line py-10 first:pt-0 last:border-b-0">
+    <article className="group border-b border-slate-line py-7 first:pt-0 last:border-b-0">
       <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-2xl">
-          <p className="font-mono text-xs text-teal">{project.domain}</p>
+          <p className="font-mono text-xs text-kicker">{project.domain}</p>
           {asPage ? (
-            <h1 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">
+            <h1 className="heading-page mt-2">
               {project.title}
             </h1>
           ) : (
-            <h2 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">
-              <Link href={`/work/${project.slug}`} className="hover:text-teal">
+            <h2 className="heading-section mt-2">
+              <Link href={`/work/${project.slug}`} className="hover:text-link">
                 {project.title}
               </Link>
             </h2>
@@ -64,7 +64,7 @@ export function ProjectCard({
           </div>
           <div className="flex flex-wrap gap-4">
             {asPage ? null : (
-              <Link href={`/work/${project.slug}`} className="text-sm font-semibold text-teal link-underline">
+              <Link href={`/work/${project.slug}`} className="text-sm font-semibold link-underline">
                 Case notes →
               </Link>
             )}
@@ -73,7 +73,7 @@ export function ProjectCard({
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm font-semibold text-teal link-underline"
+                className="text-sm font-semibold link-underline"
               >
                 GitHub →
               </Link>
@@ -83,7 +83,7 @@ export function ProjectCard({
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm font-semibold text-teal link-underline"
+                className="text-sm font-semibold link-underline"
               >
                 Live demo →
               </Link>

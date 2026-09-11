@@ -112,7 +112,7 @@ export function Header() {
         <Link
           href="/"
           aria-label="Muhammad Shahid, home"
-          className="group flex min-w-0 items-center gap-2 font-display text-[0.95rem] font-semibold tracking-tight text-ink transition hover:text-teal sm:gap-2.5 sm:text-lg"
+          className="group flex min-w-0 items-center gap-2 font-display text-[0.95rem] font-semibold tracking-tight text-ink transition hover:text-link sm:gap-2.5 sm:text-lg"
         >
           <BrandMark size="sm" />
           <span className="truncate">Muhammad Shahid</span>
@@ -125,7 +125,7 @@ export function Header() {
                 <div key={link.href} className="relative flex items-center" ref={blogRef}>
                   <Link
                     href="/blog"
-                    className={`nav-link hover:text-teal ${
+                    className={`nav-link hover:text-link ${
                       blogCluster ? "nav-link-active" : "text-ink-soft"
                     }`}
                     aria-current={onBlog ? "page" : undefined}
@@ -134,7 +134,7 @@ export function Header() {
                   </Link>
                   <button
                     type="button"
-                    className={`nav-link px-1 hover:text-teal ${
+                    className={`nav-link px-1 hover:text-link ${
                       blogCluster ? "text-teal" : "text-ink-soft"
                     }`}
                     aria-expanded={blogOpen}
@@ -149,11 +149,11 @@ export function Header() {
                   </button>
                   {blogOpen ? (
                     <div id="blog-menu" role="menu" className="absolute left-0 top-full z-50 pt-2">
-                      <div className="max-h-[min(24rem,70vh)] min-w-[230px] overflow-y-auto overscroll-contain rounded-xl border border-slate-line bg-mist py-2 shadow-[0_18px_44px_rgba(0,0,0,0.42)]">
+                      <div className="max-h-[min(24rem,70vh)] min-w-[230px] overflow-y-auto overscroll-contain rounded-xl border border-slate-line bg-surface-2 py-2 shadow-[0_12px_32px_rgba(15,23,42,0.12)]">
                         <Link
                           href="/blog"
                           role="menuitem"
-                          className="block px-4 py-2.5 text-sm text-ink-soft hover:bg-paper hover:text-teal"
+                          className="block px-4 py-2.5 text-sm text-ink-soft hover:bg-paper hover:text-link"
                           onClick={() => setBlogOpen(false)}
                         >
                           All articles
@@ -167,7 +167,7 @@ export function Header() {
                             key={topic.slug}
                             href={`/learning/${topic.slug}`}
                             role="menuitem"
-                            className="block px-4 py-2.5 text-sm text-ink-soft hover:bg-paper hover:text-teal"
+                            className="block px-4 py-2.5 text-sm text-ink-soft hover:bg-paper hover:text-link"
                             onClick={() => setBlogOpen(false)}
                           >
                             {topic.label}
@@ -186,7 +186,7 @@ export function Header() {
                 key={link.href}
                 href={link.href}
                 aria-current={active ? "page" : undefined}
-                className={`nav-link hover:text-teal ${
+                className={`nav-link hover:text-link ${
                   active ? "nav-link-active" : "text-ink-soft"
                 }`}
               >
@@ -243,7 +243,7 @@ export function Header() {
                     <Link
                       href="/blog"
                       aria-current={onBlog ? "page" : undefined}
-                      className="flex min-h-12 items-center text-base font-medium text-ink hover:text-teal"
+                      className="flex min-h-12 items-center text-base font-medium text-ink hover:text-link"
                     >
                       {link.label}
                     </Link>
@@ -267,7 +267,7 @@ export function Header() {
                           <Link
                             key={topic.slug}
                             href={`/learning/${topic.slug}`}
-                            className="flex min-h-11 items-center text-sm text-muted hover:text-teal"
+                            className="flex min-h-11 items-center text-sm text-muted hover:text-link"
                           >
                             {topic.label}
                           </Link>
@@ -284,7 +284,7 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   aria-current={active ? "page" : undefined}
-                  className={`flex min-h-12 items-center border-b border-slate-line/70 text-base font-medium hover:text-teal ${
+                  className={`flex min-h-12 items-center border-b border-slate-line/70 text-base font-medium hover:text-link ${
                     active ? "text-teal" : "text-ink"
                   }`}
                 >

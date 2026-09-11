@@ -76,18 +76,18 @@ export default async function WorkCasePage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(creativeWorkJsonLd) }}
       />
-      <section className="section-pad pt-28 sm:pt-32">
+      <section className="section-pad page-top">
         <div className="container-narrow">
           <nav className="text-sm text-muted" aria-label="Breadcrumb">
             <ol className="flex flex-wrap items-center gap-2">
               <li>
-                <Link href="/" className="hover:text-teal">
+                <Link href="/" className="hover:text-link">
                   Home
                 </Link>
               </li>
               <li aria-hidden>/</li>
               <li>
-                <Link href="/work" className="hover:text-teal">
+                <Link href="/work" className="hover:text-link">
                   Work
                 </Link>
               </li>
@@ -101,19 +101,19 @@ export default async function WorkCasePage({ params }: PageProps) {
             <ProjectCard project={project} asPage />
           </div>
 
-          <div className="reading-surface mt-12 max-w-2xl space-y-5 text-lg leading-relaxed text-muted">
+          <div className="reading-surface section-stack max-w-3xl space-y-4 text-base leading-relaxed text-muted sm:text-lg">
             {project.caseNotes.map((note) => (
               <p key={note.slice(0, 48)}>{note}</p>
             ))}
           </div>
 
           {project.related.length > 0 ? (
-            <aside className="mt-12 max-w-2xl border-t border-slate-line pt-8">
-              <h2 className="font-display text-xl font-semibold text-ink">Related writing</h2>
+            <aside className="section-stack max-w-3xl border-t border-slate-line pt-6">
+              <h2 className="heading-subsection">Related writing</h2>
               <ul className="mt-4 space-y-3">
                 {project.related.map((item) => (
                   <li key={item.href}>
-                    <Link href={item.href} className="font-medium text-teal link-underline">
+                    <Link href={item.href} className="font-medium link-underline">
                       {item.title}
                     </Link>
                   </li>
@@ -124,7 +124,7 @@ export default async function WorkCasePage({ params }: PageProps) {
 
           <p className="mt-10 max-w-2xl text-sm text-muted">
             Want a similar shape for your product?{" "}
-            <Link href="/contact" className="font-semibold text-teal link-underline">
+            <Link href="/contact" className="font-semibold link-underline">
               {siteConfig.inquiryCta}
             </Link>{" "}
             and I will reply within one business day.

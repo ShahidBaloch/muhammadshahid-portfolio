@@ -22,7 +22,7 @@ export default function BlogPage() {
   const startHere = getHomepagePosts(3);
 
   return (
-    <section className="section-pad pt-28 sm:pt-32">
+    <section className="section-pad page-top">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd()) }}
@@ -35,9 +35,9 @@ export default function BlogPage() {
           level={1}
         />
 
-        <div className="mt-10">
+        <div className="section-stack">
           <p className="eyebrow">Start here</p>
-          <h2 className="mt-3 font-display text-2xl font-semibold text-ink">
+          <h2 className="heading-section mt-3">
             Pages people already find in Google
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-muted">
@@ -51,16 +51,16 @@ export default function BlogPage() {
                 href={`/blog/${post.slug}`}
                 className="surface surface-hover rounded-xl p-5 transition hover:border-ink"
               >
-                <h3 className="font-display text-lg font-semibold text-ink">{post.title}</h3>
+                <h3 className="heading-card font-semibold">{post.title}</h3>
                 <p className="mt-2 line-clamp-3 text-sm text-muted">{post.description}</p>
               </Link>
             ))}
           </div>
         </div>
 
-        <div className="mt-10">
+        <div className="section-stack">
           <p className="eyebrow">Browse by topic</p>
-          <h2 className="mt-3 font-display text-2xl font-semibold text-ink">Topic hubs</h2>
+          <h2 className="heading-section mt-3">Topic hubs</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
             {learningTopics.map((topic) => {
               const count = getPostsForTopic(topic).length;
@@ -70,9 +70,9 @@ export default function BlogPage() {
                   href={`/learning/${topic.slug}`}
                   className="surface surface-hover rounded-xl p-5 transition hover:border-ink"
                 >
-                  <h3 className="font-display text-lg font-semibold text-ink">{topic.label}</h3>
+                  <h3 className="heading-card font-semibold">{topic.label}</h3>
                   <p className="mt-2 line-clamp-2 text-sm text-muted">{topic.description}</p>
-                  <p className="mt-3 text-sm font-semibold text-teal">
+                  <p className="mt-3 text-sm font-semibold text-link">
                     {count} article{count === 1 ? "" : "s"} →
                   </p>
                 </Link>

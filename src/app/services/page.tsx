@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <>
-      <section className="section-pad pt-28 sm:pt-32">
+      <section className="section-pad page-top">
         <div className="container-narrow">
           <SectionHeading
             eyebrow="Services"
@@ -22,17 +22,17 @@ export default function ServicesPage() {
             level={1}
           />
 
-          <h2 className="mt-14 font-display text-2xl font-semibold text-ink">What I take on</h2>
+          <h2 className="heading-section mt-8">What I take on</h2>
           <div className="mt-6 grid gap-6 sm:grid-cols-2">
             {services.map((service) => (
               <article key={service.title} className="surface-hover rounded-xl p-6 sm:p-8">
-                <h3 className="font-display text-2xl font-semibold text-ink">{service.title}</h3>
+                <h3 className="heading-subsection">{service.title}</h3>
                 <p className="mt-3 leading-relaxed text-muted">{service.description}</p>
               </article>
             ))}
           </div>
 
-          <h2 className="mt-16 font-display text-2xl font-semibold text-ink">
+          <h2 className="heading-section mt-10">
             Notes from the same work
           </h2>
           <p className="mt-3 max-w-2xl text-muted">
@@ -45,7 +45,7 @@ export default function ServicesPage() {
                   href={item.href}
                   className="surface surface-hover block rounded-xl p-5 transition hover:border-ink"
                 >
-                  <p className="font-display text-lg font-semibold text-ink">{item.title}</p>
+                  <p className="heading-card font-semibold">{item.title}</p>
                   <p className="mt-2 text-sm leading-relaxed text-muted">{item.note}</p>
                 </Link>
               </li>

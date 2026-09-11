@@ -78,7 +78,7 @@ export function CookieConsent() {
   return (
     <div
       ref={bannerRef}
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-line bg-mist/95 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[0_-12px_40px_rgba(0,0,0,0.35)] sm:p-5"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-line bg-surface-2/95 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[0_-8px_30px_rgba(15,23,42,0.1)] backdrop-blur-sm sm:p-5"
       role="dialog"
       aria-modal="false"
       aria-labelledby="cookie-consent-title"
@@ -91,15 +91,15 @@ export function CookieConsent() {
           <p className="mt-1">
             This site uses cookies for analytics if you accept. You can reject non-essential
             cookies.{" "}
-            <Link href="/privacy" className="font-semibold text-teal link-underline">
+            <Link href="/privacy" className="font-semibold link-underline">
               Privacy
             </Link>
             {" · "}
-            <Link href="/terms" className="font-semibold text-teal link-underline">
+            <Link href="/terms" className="font-semibold link-underline">
               Terms
             </Link>
             {" · "}
-            <Link href="/contact" className="font-semibold text-teal link-underline">
+            <Link href="/contact" className="font-semibold link-underline">
               Contact
             </Link>
             .

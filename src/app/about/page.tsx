@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <section className="section-pad pt-28 sm:pt-32">
-        <div className="container-narrow grid gap-12 lg:grid-cols-[1.15fr_0.85fr]">
+      <section className="section-pad page-top">
+        <div className="container-narrow grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
           <div>
             <SectionHeading
               eyebrow="About"
@@ -41,39 +41,39 @@ export default function AboutPage() {
               </p>
               <p>
                 This website — including the{" "}
-                <Link href="/blog" className="text-teal link-underline">
+                <Link href="/blog" className="link-underline">
                   blog
                 </Link>{" "}
                 — is owned and written by me, {siteConfig.name}, based in {siteConfig.location}.
                 Posts share practical lessons from client and product work on ASP.NET Core, Angular,
                 Azure, and secure delivery. They are original articles, not republished or scraped
                 material. Start with{" "}
-                <Link href="/learning/interview-questions" className="text-teal link-underline">
+                <Link href="/learning/interview-questions" className="link-underline">
                   C# interview questions
                 </Link>
                 ,{" "}
                 <Link
                   href="/blog/csharp-async-await-interview-questions"
-                  className="text-teal link-underline"
+                  className="link-underline"
                 >
                   async/await interviews
                 </Link>
                 ,{" "}
                 <Link
                   href="/blog/identityserver-vs-aspnet-identity"
-                  className="text-teal link-underline"
+                  className="link-underline"
                 >
                   what an identity server is
                 </Link>
                 , or the{" "}
                 <Link
                   href="/blog/aspnet-core-appsettings-localappsettings"
-                  className="text-teal link-underline"
+                  className="link-underline"
                 >
                   ASP.NET Core config file
                 </Link>
                 . For projects, reach me via the{" "}
-                <Link href="/contact" className="text-teal link-underline">
+                <Link href="/contact" className="link-underline">
                   contact page
                 </Link>
                 .
@@ -121,17 +121,17 @@ export default function AboutPage() {
           </aside>
         </div>
 
-        <div className="container-narrow mt-16">
-          <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">Experience</h2>
+        <div className="container-narrow mt-10">
+          <h2 className="heading-section">Experience</h2>
           <ol className="mt-8 space-y-0 border-t border-slate-line">
             {experience.map((job) => (
               <li
                 key={`${job.company}-${job.period}`}
-                className="grid gap-3 border-b border-slate-line py-8 md:grid-cols-[1fr_1.4fr]"
+                className="grid gap-3 border-b border-slate-line py-6 md:grid-cols-[1fr_1.4fr]"
               >
                 <div>
                   <p className="text-sm text-muted">{job.period}</p>
-                  <h3 className="mt-2 font-display text-xl font-semibold text-ink">{job.role}</h3>
+                  <h3 className="heading-subsection mt-2">{job.role}</h3>
                   <p className="mt-1 text-muted">{job.company}</p>
                 </div>
                 <ul className="space-y-2 text-muted">

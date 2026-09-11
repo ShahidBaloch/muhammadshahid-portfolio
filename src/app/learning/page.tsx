@@ -18,9 +18,9 @@ export const metadata: Metadata = {
 
 export default function LearningPage() {
   return (
-    <section className="section-pad pt-28 sm:pt-32">
+    <section className="section-pad page-top">
       <div className="container-narrow">
-        <Link href="/blog" className="text-sm font-semibold text-teal link-underline">
+        <Link href="/blog" className="text-sm font-semibold link-underline">
           ← All articles
         </Link>
 
@@ -33,19 +33,19 @@ export default function LearningPage() {
           />
         </div>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="section-stack grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
           {learningTopics.map((topic) => {
             const count = getPostsForTopic(topic).length;
             return (
               <article key={topic.slug} className="surface-hover rounded-xl p-6">
                 <p className="eyebrow">Topic</p>
-                <h2 className="mt-3 font-display text-xl font-semibold text-ink">
-                  <Link href={`/learning/${topic.slug}`} className="hover:text-teal">
+                <h2 className="heading-subsection mt-3">
+                  <Link href={`/learning/${topic.slug}`} className="hover:text-link">
                     {topic.label}
                   </Link>
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-muted">{topic.description}</p>
-                <p className="mt-5 text-sm font-semibold text-teal">
+                <p className="mt-5 text-sm font-semibold text-link">
                   <Link href={`/learning/${topic.slug}`}>
                     {count} article{count === 1 ? "" : "s"}
                     <span aria-hidden> →</span>

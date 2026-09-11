@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function WorkPage() {
   return (
     <>
-      <section className="section-pad pt-28 sm:pt-32">
+      <section className="section-pad page-top">
         <div className="container-narrow">
           <SectionHeading
             eyebrow="Work"
@@ -26,7 +26,7 @@ export default function WorkPage() {
             description="Case-style summaries: problem, solution, stack, and result — from auction microservices to healthcare operations."
             level={1}
           />
-          <div className="mt-12">
+          <div className="section-stack">
             {projects.map((project) => (
               <ProjectCard key={project.slug} project={project} />
             ))}

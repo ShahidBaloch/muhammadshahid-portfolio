@@ -46,21 +46,21 @@ export default function HomePage() {
   return (
     <>
       <section className="hero-canvas relative" aria-labelledby="home-heading">
-        <div className="container-narrow grid items-center gap-10 px-5 pb-14 pt-28 sm:px-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 lg:px-12 lg:pb-16 lg:pt-32">
+        <div className="container-narrow page-top grid items-start gap-6 px-5 pb-10 sm:px-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8 lg:px-12 lg:pb-12">
           <div>
             <p className="eyebrow">{siteConfig.title}</p>
             <h1
               id="home-heading"
-              className="mt-5 font-display text-[1.85rem] font-semibold leading-[1.18] tracking-tight text-ink sm:text-4xl lg:text-[3.15rem] lg:leading-[1.12]"
+              className="heading-display mt-3"
             >
               I design and ship production systems on{" "}
-              <span className="text-teal">.NET + Angular</span>.
+              <span className="text-link">.NET + Angular</span>.
             </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
               {siteConfig.tagline}
             </p>
 
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link href="/contact" className="btn-primary w-full sm:w-auto">
                 {siteConfig.inquiryCta}
               </Link>
@@ -68,39 +68,39 @@ export default function HomePage() {
                 See selected work
               </Link>
             </div>
-            <p className="mt-5 text-sm text-muted">
-              Prefer WhatsApp?{" "}
+            <p className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm leading-relaxed text-muted">
+              <span>Prefer WhatsApp?</span>
               <a
                 href={siteConfig.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-semibold text-teal link-underline"
+                className="font-semibold link-underline"
               >
                 Message me
                 <span className="sr-only"> (opens in a new tab)</span>
               </a>
-              {" · "}
-              <Link href="/services" className="font-semibold text-teal link-underline">
+              <span className="text-kicker" aria-hidden>·</span>
+              <Link href="/services" className="font-semibold link-underline">
                 What I take on
               </Link>
-              {" · "}
-              <Link href="/blog" className="font-semibold text-teal link-underline">
+              <span className="text-kicker" aria-hidden>·</span>
+              <Link href="/blog" className="font-semibold link-underline">
                 Read the blog
               </Link>
             </p>
           </div>
 
-          <ProfileCard className="lg:justify-self-end" />
+          <ProfileCard />
         </div>
 
-        <dl className="border-y border-slate-line bg-mist">
-          <div className="container-narrow grid grid-cols-2 gap-6 px-5 py-8 sm:grid-cols-4 sm:px-8 lg:px-12">
+        <dl className="card-band">
+          <div className="container-narrow grid grid-cols-2 gap-4 px-5 py-5 sm:grid-cols-4 sm:gap-6 sm:px-8 sm:py-6 lg:px-12">
             {trustStats.map((item) => (
               <div key={item.label} className="flex min-w-0 flex-col-reverse text-center sm:text-left">
                 <dt className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
                   {item.label}
                 </dt>
-                <dd className="font-display text-base font-semibold text-ink sm:text-xl">
+                <dd className="font-display text-base font-bold text-heading sm:text-xl">
                   {item.value}
                 </dd>
               </div>
@@ -117,27 +117,27 @@ export default function HomePage() {
                 <p className="eyebrow">Selected work</p>
                 <h2
                   id="home-work-heading"
-                  className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl"
+                  className="heading-section mt-2"
                 >
                   Production systems with clear boundaries.
                 </h2>
               </div>
-              <Link href="/work" className="font-semibold text-teal link-underline">
+              <Link href="/work" className="font-semibold link-underline">
                 Full case notes
                 <span aria-hidden> →</span>
               </Link>
             </div>
           </Reveal>
 
-          <div className="mt-10 space-y-4">
+          <div className="section-stack space-y-3">
             {featured.map((project, index) => (
               <Reveal key={project.slug} delayMs={index * 80}>
-                <article className="surface-hover grid gap-5 rounded-xl p-6 md:grid-cols-[0.9fr_1.4fr]">
+                <article className="surface-hover grid gap-4 rounded-xl p-5 md:grid-cols-[0.9fr_1.4fr] sm:p-6">
                   <ProjectVisual project={project} />
                   <div>
                     <p className="eyebrow">{project.domain}</p>
-                    <h3 className="mt-2 font-display text-2xl font-semibold text-ink">
-                      <Link href={`/work/${project.slug}`} className="hover:text-teal">
+                    <h3 className="heading-card mt-2 text-[clamp(1.25rem,2.5vw,1.65rem)] font-bold">
+                      <Link href={`/work/${project.slug}`} className="hover:text-link">
                         {project.title}
                       </Link>
                     </h3>
@@ -157,7 +157,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section-pad !pt-0" aria-labelledby="home-blog-heading">
+      <section className="section-pad" aria-labelledby="home-blog-heading">
         <div className="container-narrow">
           <Reveal>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -165,7 +165,7 @@ export default function HomePage() {
                 <p className="eyebrow">Blog</p>
                 <h2
                   id="home-blog-heading"
-                  className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl"
+                  className="heading-section mt-2"
                 >
                   Original .NET and Angular notes from production.
                 </h2>
@@ -177,19 +177,19 @@ export default function HomePage() {
               <div className="flex flex-col gap-2 sm:items-end">
                 <Link
                   href="/learning/interview-questions"
-                  className="font-semibold text-teal link-underline"
+                  className="font-semibold link-underline"
                 >
                   Interview questions
                   <span aria-hidden> →</span>
                 </Link>
                 <Link
                   href="/learning/async-concurrency"
-                  className="font-semibold text-teal link-underline"
+                  className="font-semibold link-underline"
                 >
                   Async & Threading
                   <span aria-hidden> →</span>
                 </Link>
-                <Link href="/blog" className="font-semibold text-teal link-underline">
+                <Link href="/blog" className="font-semibold link-underline">
                   All articles
                   <span aria-hidden> →</span>
                 </Link>
@@ -197,12 +197,12 @@ export default function HomePage() {
             </div>
           </Reveal>
 
-          <div className="mt-10 divide-y divide-slate-line border-y border-slate-line">
+          <div className="section-stack divide-y divide-slate-line border-y border-slate-line">
             {homepagePosts.map((post) => (
-              <article key={post.slug} className="py-6">
+              <article key={post.slug} className="py-4 sm:py-5">
                 <PostDate date={post.date} updated={post.updated} readingTime={post.readingTime} />
-                <h3 className="mt-2 font-display text-xl font-semibold text-ink sm:text-2xl">
-                  <Link href={`/blog/${post.slug}`} className="hover:text-teal">
+                <h3 className="heading-subsection mt-2">
+                  <Link href={`/blog/${post.slug}`} className="hover:text-link">
                     {post.title}
                   </Link>
                 </h3>
@@ -213,31 +213,31 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section-pad !pt-4" aria-labelledby="home-process-heading">
+      <section className="section-pad" aria-labelledby="home-process-heading">
         <div className="container-narrow">
           <Reveal>
             <div className="max-w-2xl">
               <p className="eyebrow">How we work</p>
               <h2
                 id="home-process-heading"
-                className="mt-3 font-display text-3xl font-semibold text-ink sm:text-4xl text-balance"
+                className="heading-section mt-2"
               >
                 From discovery to production — without foggy retainers.
               </h2>
-              <p className="mt-4 text-lg leading-relaxed text-muted">
+              <p className="mt-3 text-base leading-relaxed text-muted sm:text-lg">
                 For founders, CTOs, and product teams who need senior ownership on healthcare, SaaS,
                 or marketplace systems — architecture, identity, and delivery that survives production.
               </p>
             </div>
           </Reveal>
 
-          <ol className="mt-12 grid gap-6 md:grid-cols-3">
+          <ol className="card-steps section-stack grid gap-4 md:grid-cols-3 md:gap-5">
             {engagementSteps.map((step, index) => (
               <li key={step.title} className="h-full">
                 <Reveal className="h-full" delayMs={index * 80}>
-                  <div className="h-full rounded-xl border border-slate-line bg-mist p-6">
+                  <div className="card-step rounded-xl p-5">
                     <p className="text-sm font-semibold text-ink-soft">Phase {index + 1}</p>
-                    <h3 className="mt-3 font-display text-xl font-semibold text-ink">{step.title}</h3>
+                    <h3 className="heading-subsection mt-3">{step.title}</h3>
                     <p className="mt-3 leading-relaxed text-muted">{step.text}</p>
                   </div>
                 </Reveal>
@@ -245,11 +245,11 @@ export default function HomePage() {
             ))}
           </ol>
 
-          <div className="mt-12 grid gap-6 sm:grid-cols-2">
+          <div className="section-stack grid gap-4 sm:grid-cols-2 sm:gap-5">
             {principles.map((item, index) => (
               <Reveal key={item.title} delayMs={index * 60}>
                 <article className="h-full">
-                  <h3 className="font-display text-lg font-semibold text-ink">{item.title}</h3>
+                  <h3 className="heading-card font-semibold">{item.title}</h3>
                   <p className="mt-2 leading-relaxed text-muted">{item.text}</p>
                 </article>
               </Reveal>

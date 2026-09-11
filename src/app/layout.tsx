@@ -24,8 +24,10 @@ const body = Source_Sans_3({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#10141c",
-  colorScheme: "dark",
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#f8fafc",
+  colorScheme: "light",
 };
 
 export const metadata: Metadata = {

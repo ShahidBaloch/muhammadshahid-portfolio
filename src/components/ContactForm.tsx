@@ -149,7 +149,7 @@ export function ContactForm() {
         <p className="text-sm text-danger" role="alert">
           {error}{" "}
           <a
-            className="font-semibold text-teal link-underline"
+            className="font-semibold link-underline"
             href={siteConfig.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
@@ -157,7 +157,7 @@ export function ContactForm() {
             WhatsApp
           </a>{" "}
           or{" "}
-          <a className="font-semibold text-teal link-underline" href={`mailto:${siteConfig.email}`}>
+          <a className="font-semibold link-underline" href={`mailto:${siteConfig.email}`}>
             {siteConfig.email}
           </a>
           .

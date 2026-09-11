@@ -2,7 +2,7 @@
 title: "C# Async and Await in ASP.NET Core: Stop Blocking Your API"
 description: "async/await lets an ASP.NET Core API wait on SQL or HTTP without holding a thread. Task vs async void, CancellationToken, .Result starvation, WhenAll, and HttpClient."
 date: "2026-08-12"
-updated: "2026-09-07"
+updated: "2026-09-11"
 category: "async-concurrency"
 tags: ["C#", "async await", "Asynchronous Programming", "ASP.NET Core", ".NET", "Performance", "C# async await ASP.NET Core", "CancellationToken"]
 related:
@@ -18,6 +18,8 @@ faq:
     a: "No. Query time is still indexing, the plan, and EF. Async only frees the ThreadPool worker during the wait. A 2-second query stays 2 seconds. What changes is that 5,000 concurrent waits do not pin 5,000 workers."
   - q: "Should an ASP.NET Core action WhenAll two queries on one DbContext?"
     a: "No. DbContext is not thread-safe. Two ToListAsync calls on the same instance in WhenAll is a race, not a speedup. Sequential awaits, two scopes, or one SQL shape. The WhenAll article covers caps and Parallel.ForEachAsync."
+  - q: "What happens if I use async without await in C#?"
+    a: "The method runs synchronously and the compiler warns CS4014. Remove async and return Task.FromResult(...), or await real I/O (EF, HttpClient, File.ReadAllTextAsync). Fake async still allocates a state machine for no benefit."
 ---
 
 `async`/`await` let a method wait for slow work (database, HTTP, blobs) **without holding a thread**. The ThreadPool worker goes back to the pool and serves other requests. The query is not faster. The API can take more concurrent clients.
@@ -71,6 +73,24 @@ Three non-negotiables:
 1. Return `Task` / `Task<T>` — never `async void` on request paths
 2. `await` EF Core / `HttpClient` methods that already expose async APIs
 3. Accept and **pass** `CancellationToken` so a cancelled Angular request can stop DB work
+
+## `async` with no `await` (CS4014)
+
+If you mark a method `async` but never `await`, it runs **synchronously** and the compiler warns **CS4014**. Either remove `async` and return `Task.FromResult(...)`, or await real I/O.
+
+```csharp
+// Warning CS4014 — no await inside
+public async Task<int> BadAsync() => 42;
+
+// Sync-complete shape — no state machine needed
+public Task<int> GoodAsync() => Task.FromResult(42);
+
+// Real async — await propagates cancellation to SQL
+public async Task<int> CountAsync(CancellationToken ct) =>
+    await _db.Orders.CountAsync(ct);
+```
+
+Same rule for `File.ReadAllTextAsync`, `HttpClient.SendAsync`, and blob SDK calls: the method should `await` the `*Async` API, not block with `.Result`.
 
 ### Minimal API equivalent
 
@@ -230,9 +250,10 @@ A healthcare team wrapped every EF call in `.GetAwaiter().GetResult()` “becaus
 2. No `.Result`, `.Wait()`, or `GetAwaiter().GetResult()` on request paths
 3. `CancellationToken` accepted at the edge and passed to EF / HttpClient
 4. No `async void` outside true UI events
-5. Parallel `WhenAll` only with independent resources (no shared DbContext)
-6. Side effects that must be durable use a queue/outbox — not bare fire-and-forget
-7. Logging includes correlation ids so slow awaits are findable
+5. No `async` without `await` on request paths (CS4014 — use `Task.FromResult` or real I/O)
+6. Parallel `WhenAll` only with independent resources (no shared DbContext)
+7. Side effects that must be durable use a queue/outbox — not bare fire-and-forget
+8. Logging includes correlation ids so slow awaits are findable
 
 ## What this is not
 

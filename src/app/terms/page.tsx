@@ -10,15 +10,15 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <section className="section-pad pt-28 sm:pt-32">
-      <div className="container-narrow reading-surface max-w-3xl">
+    <section className="reading-page">
+      <div className="container-narrow reading-surface content-width">
         <p className="eyebrow">Legal</p>
-        <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+        <h1 className="heading-page mt-3">
           Terms of Use
         </h1>
         <p className="mt-4 text-muted">Last updated: September 7, 2026</p>
 
-        <div className="prose-site prose-lg mt-10">
+        <div className="prose-site prose-lg mt-6">
           <p>
             By accessing {siteConfig.url} (the &quot;Site&quot;), you agree to these Terms of Use.
             If you do not agree, please do not use the Site.

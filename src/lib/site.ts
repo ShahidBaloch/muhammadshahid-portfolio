@@ -65,6 +65,8 @@ export type LearningFaq = {
 export type LearningTrack = {
   title: string;
   slugs: string[];
+  /** Shorter label for jump-to-track pills on compact hubs. */
+  shortTitle?: string;
   /** Unique copy under the H2 so tracks are not link-only lists. */
   blurb?: string;
 };
@@ -89,6 +91,10 @@ export type LearningTopic = {
   compactHub?: boolean;
   /** Render topic markdown before track cards (pillar explainer hubs). */
   bodyFirst?: boolean;
+  /** Three entry paths shown after pillar content on compact explainer hubs. */
+  hubPaths?: { label: string; description: string; href: string }[];
+  /** Collapsible checks rendered after pillar markdown on compact explainer hubs. */
+  hubCallouts?: { title: string; content: string }[];
   /** Other topic slugs rendered as real links under the intro. */
   relatedTopicSlugs?: string[];
   keywords?: string[];
@@ -130,28 +136,21 @@ export const learningTopics: LearningTopic[] = [
     faq: [
       {
         q: "Where do I start for .NET interview questions?",
-        a: "Open the [.NET interview questions and answers](/blog/dotnet-interview-questions-answers) map — it links to async, ASP.NET Core scenarios, EF Core, and Angular tracks. Mid-level: async await + ASP.NET scenarios. Staff: expert C# questions.",
+        a: "Open the [.NET interview questions and answers](/blog/dotnet-interview-questions-answers) map — it links to async, ASP.NET Core scenarios, EF Core, and Angular tracks. Mid-level: [async await interview questions](/blog/csharp-async-await-interview-questions) + [ASP.NET scenarios](/blog/aspnet-core-interview-questions-scenarios). Staff: [expert C# questions](/blog/csharp-expert-interview-questions).",
       },
       {
-        q: "What is the difference between mid-level and expert C# interview posts?",
-        a: "Mid-level loops test **async traps and API judgment** under load. Staff loops add **streams, Channels, Span, tenant maps**, and bounded concurrency — failures you see in dumps, not flashcards.",
+        q: "How should I split ASP.NET Core, EF Core, and async interview prep?",
+        a: "**Async/threading** — `.Result`, `async void`, `WhenAll`, tokens ([async hub](/learning/async-concurrency)). **ASP.NET Core** — middleware order, JWT, validation, ProblemDetails. **EF Core** — change tracker, filters, **RowVersion**, ExecuteUpdate — not N+1 tuning. Study each track separately; panels cross-link them.",
       },
       {
-        q: "Should I study ASP.NET Core and EF Core interview questions separately?",
-        a: "Yes. ASP.NET Core scenarios are **pipeline, JWT, validation, middleware order**. EF Core scenarios are **change tracker, filters, concurrency, ExecuteUpdate** — not N+1 SQL tuning (that is a separate how-to track).",
-      },
-      {
-        q: "What ASP.NET Core interview questions are asked most?",
-        a: "Captive DI, JWT with Angular, middleware order, **thread pool starvation** from `.Result`, and EF slowness misread as SQL — scenario answers on [ASP.NET Core interview questions](/blog/aspnet-core-interview-questions-scenarios).",
-      },
-      {
-        q: "What C# async interview questions should I prepare?",
-        a: "**Task vs Thread**, `.Result` starvation, `async void`, `WhenAll` on one `DbContext`, and **CancellationToken** through to SQL. Full scenarios: [C# async await interview questions](/blog/csharp-async-await-interview-questions). How-tos: [async & threading hub](/learning/async-concurrency).",
+        q: "What .NET interview scenarios come up most?",
+        a: "Captive DI, JWT with Angular, middleware order, **thread pool starvation** from `.Result`, EF slowness misread as SQL, refresh-token races, and `WhenAll` on one `DbContext`. Scenario write-ups live on the track cards below.",
       },
     ],
     tracks: [
       {
         title: "C# async and threading interview questions",
+        shortTitle: "C# async & staff",
         blurb: "Most common 3–5 year loop — `.Result`, `async void`, `WhenAll` — then **staff runtime** (Channels, Span, streams).",
         slugs: [
           "csharp-async-await-interview-questions",
@@ -160,16 +159,19 @@ export const learningTopics: LearningTopic[] = [
       },
       {
         title: "ASP.NET Core interview questions — pipeline and JWT scenarios",
+        shortTitle: "ASP.NET Core",
         blurb: "**Middleware order**, JWT, validation, ProblemDetails — pipeline judgment under load, not property-bag trivia.",
         slugs: ["aspnet-core-interview-questions-scenarios"],
       },
       {
         title: "EF Core interview questions — change tracker and concurrency",
+        shortTitle: "EF Core",
         blurb: "**SaveChanges** failures, global query filters, **RowVersion**, **ExecuteUpdate** — not an N+1 tutorial.",
         slugs: ["ef-core-interview-questions"],
       },
       {
         title: "Angular interview questions with ASP.NET Core backend",
+        shortTitle: "Angular + .NET",
         blurb: "JWT interceptors, guards, refresh races, and the SPA contract with a **.NET API**.",
         slugs: ["angular-interview-questions-aspnet-core"],
       },
@@ -178,16 +180,78 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "async-concurrency",
     label: "Async & Threading",
-    title: "C# Async vs Multithreading for ASP.NET Core",
+    title: "Async and Await in C# — Explained with Examples",
     description:
-      "C# async await vs multithreading on ASP.NET Core — Task vs Thread, sync-over-async, thread pool starvation, CancellationToken, ConfigureAwait, lock, and Channel.",
+      "What is async and await in C#? Tutorial with examples — async keyword, await keyword, difference between async and await, how to use them, and ASP.NET Core production rules.",
     intro: "",
     compactHub: true,
     bodyFirst: true,
+    hubPaths: [
+      {
+        label: "What is async/await?",
+        description: "Definition, async vs await keywords, and how they work.",
+        href: "#what-is-async-and-await-in-c",
+      },
+      {
+        label: "Concurrent I/O",
+        description: "Start tasks together — without sharing one DbContext.",
+        href: "#async-without-parallel-then-start-work-together",
+      },
+      {
+        label: "504 / idle CPU",
+        description: "Thread pool starvation from sync-over-async (.Result).",
+        href: "#thread-pool-starvation",
+      },
+      {
+        label: "Interview prep",
+        description: "Scenario answers after you know the how-tos.",
+        href: "/learning/interview-questions",
+      },
+    ],
+    hubCallouts: [
+      {
+        title: "Sync vs async — one API request under load",
+        content:
+          "**Sync:** 500 clients each block a worker for 200 ms SQL → pool exhausted, queue grows, gateway 504, CPU looks idle.\n\n**Async:** same 200 ms SQL, but workers are **returned to the pool during the wait** → the same pool serves far more concurrent waits.\n\nAsync does not shorten the query — it stops **one client = one pinned worker** during I/O.",
+      },
+      {
+        title: "Spot the bug — which PR would you reject?",
+        content:
+          "```csharp\n// A — sync-over-async in a service\npublic OrderDto Get(Guid id) => _repo.GetAsync(id).Result;\n\n// B — fake async\npublic async Task<int> CountAsync() => 42;\n\n// C — WhenAll on one DbContext\nawait Task.WhenAll(_db.A.ToListAsync(ct), _db.B.ToListAsync(ct));\n```\n\n**Answer: all three.** A starves the pool. B triggers CS4014. C races EF Core. Fixes: async end-to-end, real `await` or `Task.FromResult`, sequential awaits or two scopes.",
+      },
+      {
+        title: "Does async mean parallel?",
+        content:
+          "**No.** One thread can run `await` after `await` sequentially — that is async **without** parallel.\n\n**Parallel async** is starting **independent** I/O (two HTTP calls, two DbContext scopes) and awaiting them together.\n\n**Not parallel:** two `ToListAsync` on the same `DbContext` in `WhenAll` — that is a bug, not concurrency.",
+      },
+    ],
     matchTags: ["Asynchronous Programming", "Threading", "Concurrency"],
     keywords: [
-      "C# async await",
+      "async and await in C#",
+      "what is async and await in C#",
+      "async await c#",
+      "async await in c#",
+      "how to use async and await in c#",
+      "difference between async and await in c#",
+      "async and await keywords in c#",
+      "c# async and await explained",
+      "c# async await",
+      "async and await in c# with example",
+      "async keyword in c#",
+      "await keyword in c#",
+      "c# async await tutorial",
+      "how async and await works in c#",
+      "c# await",
+      "async await c# example",
+      "c# async",
+      "async method in c#",
+      "learn async await C#",
+      "async await syntax C#",
+      "asynchronous programming C#",
+      "Task-based asynchronous pattern",
       "C# async await ASP.NET Core",
+      "Task.WhenAll ASP.NET Core",
+      "Task.Delay C#",
       "C# async vs multithreading",
       "C# multithreading",
       "C# multithreading tutorial",
@@ -205,6 +269,9 @@ export const learningTopics: LearningTopic[] = [
       "ConfigureAwait false",
       "CancellationToken ASP.NET Core",
       "Task.Run vs await",
+      "ValueTask C#",
+      "IAsyncEnumerable ASP.NET Core",
+      "ConfigureAwait ASP.NET Core",
       "promise async programming",
       "deadlock C#",
       "callback vs promise",
@@ -225,52 +292,74 @@ export const learningTopics: LearningTopic[] = [
       "csharp-cancellationtoken-aspnet-core",
       "csharp-configureawait-false-library",
       "csharp-backgroundservice-hosted-service-async",
-      "csharp-async-await-interview-questions",
       "ihttpclientfactory-aspnet-core",
       "aspnet-core-rate-limiting",
     ],
     faq: [
       {
+        q: "What is async and await in C#?",
+        a: "**Async and await in C#** implement the Task-based Asynchronous Pattern (TAP). The **`async`** modifier marks a method that returns `Task` or `Task<T>`. The **`await`** operator pauses that method until I/O completes and **returns control to the caller** meanwhile. Use them for SQL, HTTP, and files — not to speed up a single query, but to free threads under load. Examples and rules on this hub.",
+      },
+      {
+        q: "What is the difference between async and await in C#?",
+        a: "**`async`** is a **modifier** on the method signature — it enables `await` inside and makes the method return a `Task`. **`await`** is an **operator** used inside an async method on an awaitable call. You need both: `async` declares the async method; `await` is where execution yields. They are not interchangeable keywords.",
+      },
+      {
+        q: "How do you use async and await in C# with an example?",
+        a: "Mark the method `async`, return `Task` or `Task<T>`, and `await` each I/O call. Example: `public async Task<OrderDto?> GetOrderAsync(Guid id, CancellationToken ct) { var order = await _db.Orders.FirstOrDefaultAsync(o => o.Id == id, ct); return Map(order); }` — full file, delay, and CPU examples on this hub; ASP.NET checklist: [async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).",
+      },
+      {
+        q: "How does async and await work in C#?",
+        a: "The caller gets a `Task` immediately. At `await`, the runtime **yields** the thread/worker until the operation completes, then runs the continuation. On ASP.NET Core that means the ThreadPool worker serves other clients during SQL/HTTP waits. Step-by-step diagram on this hub under **How async and await works in C#**.",
+      },
+      {
+        q: "What is an async method in C#?",
+        a: "An **async method in C#** is any method (or lambda) marked with **`async`** that returns **`Task`**, **`Task<T>`**, or in rare UI cases **`void`**. It must use **`await`** on real I/O (or return `Task.FromResult` without `async`). API controllers should return `async Task<IActionResult>`, never `async void`.",
+      },
+      {
+        q: "Does async make C# code run faster?",
+        a: "**No** — async does not shorten SQL, HTTP, or disk time. It **frees the ThreadPool worker** during the wait so one API can serve more concurrent clients. Under load, blocking sync I/O causes **thread pool starvation** (504s, idle CPU). Async improves **throughput**, not single-query speed.",
+      },
+      {
+        q: "What is Task.Delay used for in C#?",
+        a: "**`await Task.Delay(...)`** yields without blocking a worker — unlike **`Thread.Sleep`**, which pins the thread. Use it for polling/backoff with a **`CancellationToken`**. On ASP.NET Core never Sleep on a request path. See [Task vs Thread](/blog/csharp-task-vs-thread).",
+      },
+      {
+        q: "Can I use Task.WhenAll in ASP.NET Core?",
+        a: "Yes when each task uses **independent** resources — two `HttpClient` calls, or two EF queries on **separate** `DbContext` scopes. **Never** `WhenAll` two `ToListAsync` calls on the **same** `DbContext` (not thread-safe). Details: [Task.WhenAll caps](/blog/csharp-task-whenall-vs-parallel-foreach).",
+      },
+      {
         q: "What is the difference between async and multithreading in C#?",
         a: "**Async/await** yields the ThreadPool worker during I/O waits — the `Task` is a promise, not a dedicated thread. **Multithreading** runs work on multiple workers (`Task.Run`, `Parallel`, `lock`, concurrent collections). On ASP.NET Core, default to async for SQL and HTTP; use threading primitives for CPU offload, in-memory gates, and background queues.",
       },
       {
-        q: "What is the difference between async and sync?",
-        a: "**Sync** blocks the caller until each step finishes. **Async** starts I/O, frees the ThreadPool worker during the wait, and resumes on completion. On ASP.NET Core APIs, use async for EF Core and HttpClient — never `.Result` on the request path. Full comparison: [async vs sync](/blog/async-vs-sync-programming).",
-      },
-      {
         q: "Why does an ASP.NET Core API hang with idle CPU?",
-        a: "Usually **thread pool starvation**: `.Result`, `.Wait()`, or `.GetAwaiter().GetResult()` block pool workers while async continuations still need workers to finish. The queue grows, gateways return 504, and CPU stays low. Fix: async end to end, not more VMs. Details: [thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async).",
-      },
-      {
-        q: "What is the asynchronous meaning in programming?",
-        a: "**Asynchronous** means code can start slow work (SQL, HTTP) and release its worker while waiting — completion arrives later via a `Task`. See [asynchronous meaning and definition](/blog/asynchronous-meaning-definition) for the full explanation and C# examples.",
+        a: "Usually **thread pool starvation** from **sync-over-async**: `.Result`, `.Wait()`, or `.GetAwaiter().GetResult()` block pool workers while async continuations still need workers to finish. The queue grows, gateways return 504, and CPU stays low. Fix: async end to end. Details: [thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async).",
       },
       {
         q: "What is the difference between Task and Thread in C#?",
-        a: "A **Thread** is an OS worker with its own stack. A **Task** is a promise of completion — not a dedicated thread during I/O `await`. **Task.Run** uses ThreadPool workers for CPU work. Full comparison: [Task vs Thread](/blog/csharp-task-vs-thread).",
-      },
-      {
-        q: "What is sync-over-async and why does it cause 504 errors?",
-        a: "**Sync-over-async** is blocking on a `Task` with `.Result`, `.Wait()`, or `.GetAwaiter().GetResult()` on the ASP.NET Core request path. Workers stay blocked, the ThreadPool queue grows, CPU looks idle, and gateways return **504**. Fix: [thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async) — async end to end, not more VMs.",
+        a: "A **Thread** is an OS worker with its own stack. A **Task** is a promise of completion — not a dedicated thread during I/O `await`. **Task.Run** uses ThreadPool workers for CPU work. **`await Task.Delay`** yields without blocking; **`Thread.Sleep`** pins the thread. Full comparison: [Task vs Thread](/blog/csharp-task-vs-thread).",
       },
     ],
     tracks: [
       {
-        title: "Definitions: asynchronous meaning, async vs sync, promise, async class",
+        title: "Definitions",
+        shortTitle: "Definitions",
         blurb:
-          "Plain-language **asynchronous meaning**, **async vs sync**, JavaScript **promise** vs C# **Task**, and how an **asynchronous class** looks in C#.",
+          "[Asynchronous meaning](/blog/asynchronous-meaning-definition), [async vs sync](/blog/async-vs-sync-programming), [promise vs Task](/blog/async-promise-explained), [callback vs promise](/blog/callback-vs-promise-async), and [asynchronous class in C#](/blog/asynchronous-class-csharp).",
         slugs: [
           "asynchronous-meaning-definition",
           "async-vs-sync-programming",
           "async-promise-explained",
+          "callback-vs-promise-async",
           "asynchronous-class-csharp",
         ],
       },
       {
-        title: "C# multithreading primer and async await on ASP.NET Core",
+        title: "Multithreading primer",
+        shortTitle: "Multithreading",
         blurb:
-          "**C# multithreading tutorial** in one pass — **Task vs Thread**, **ThreadPool**, **async await ASP.NET Core**, **CancellationToken**, and **Task.Run vs await**.",
+          "[C# multithreading tutorial](/blog/csharp-multithreading-primer), [Task vs Thread](/blog/csharp-task-vs-thread), [async await ASP.NET Core](/blog/csharp-async-await-aspnet-core), [CancellationToken](/blog/csharp-cancellationtoken-aspnet-core), and [Task.Run vs await](/blog/csharp-task-run-aspnet-core).",
         slugs: [
           "csharp-multithreading-primer",
           "csharp-task-vs-thread",
@@ -280,9 +369,10 @@ export const learningTopics: LearningTopic[] = [
         ],
       },
       {
-        title: "Thread pool starvation and sync-over-async (.Result 504s)",
+        title: "Starvation and library context",
+        shortTitle: "Starvation",
         blurb:
-          "Idle CPU with **504 Gateway Timeout** is usually **thread pool starvation** from **sync-over-async** — then **ConfigureAwait(false)** in libraries and **AsyncLocal** after `await`.",
+          "[Sync-over-async and 504s](/blog/csharp-threadpool-starvation-sync-over-async), [ConfigureAwait(false) in libraries](/blog/csharp-configureawait-false-library), and [AsyncLocal vs ThreadLocal](/blog/csharp-asynclocal-vs-threadlocal).",
         slugs: [
           "csharp-threadpool-starvation-sync-over-async",
           "csharp-configureawait-false-library",
@@ -290,9 +380,10 @@ export const learningTopics: LearningTopic[] = [
         ],
       },
       {
-        title: "ASP.NET Core async: IAsyncEnumerable, WhenAll, SemaphoreSlim, BackgroundService",
+        title: "Request-path async",
+        shortTitle: "Request path",
         blurb:
-          "Request-path **async await** — **IAsyncEnumerable**, **Task.WhenAll**, **SemaphoreSlim WaitAsync**, and **BackgroundService** after `Ok()`. Not two EF queries on one **DbContext**.",
+          "[IAsyncEnumerable exports](/blog/csharp-iasyncenumerable-yield-return), [Task.WhenAll caps](/blog/csharp-task-whenall-vs-parallel-foreach), [SemaphoreSlim WaitAsync](/blog/csharp-semaphore-slim-async-lock), and [BackgroundService after Ok()](/blog/csharp-backgroundservice-hosted-service-async).",
         slugs: [
           "csharp-iasyncenumerable-yield-return",
           "csharp-task-whenall-vs-parallel-foreach",
@@ -301,26 +392,26 @@ export const learningTopics: LearningTopic[] = [
         ],
       },
       {
-        title: "C# threading primitives: lock, Channel, ConcurrentDictionary, Interlocked",
+        title: "Threading primitives",
+        shortTitle: "Threading",
         blurb:
-          "**C# multithreading** gates — **lock**, **Channel** producer-consumer, **ConcurrentDictionary**, **Interlocked**, **TaskCompletionSource**. **Task.Yield** is UI-only.",
+          "[Channel producer-consumer](/blog/csharp-channel-producer-consumer), [ConcurrentDictionary](/blog/csharp-concurrentdictionary-lock), [lock vs Monitor](/blog/csharp-lock-statement-monitor-mutex), [Interlocked](/blog/csharp-interlocked-compareexchange), [deadlock in C#](/blog/deadlock-csharp-explained), and [TaskCompletionSource](/blog/csharp-taskcompletionsource-legacy-event). Skip [Task.Yield](/blog/csharp-task-yield-ui-thread) on ASP.NET Core — UI only.",
         slugs: [
           "csharp-channel-producer-consumer",
           "csharp-concurrentdictionary-lock",
           "csharp-lock-statement-monitor-mutex",
           "csharp-interlocked-compareexchange",
           "csharp-taskcompletionsource-legacy-event",
+          "deadlock-csharp-explained",
           "csharp-task-yield-ui-thread",
         ],
       },
       {
-        title: "Interview rehearsal (how-tos are above)",
+        title: "Outbound HTTP and rate limits",
+        shortTitle: "HTTP limits",
         blurb:
-          "Scenario answers, not trivia. Async await questions for the common loop; expert questions for staff (streams, channels, tenant maps).",
-        slugs: [
-          "csharp-async-await-interview-questions",
-          "csharp-expert-interview-questions",
-        ],
+          "[IHttpClientFactory](/blog/ihttpclientfactory-aspnet-core) for socket exhaustion and [rate limiting middleware](/blog/aspnet-core-rate-limiting) for inbound 429s — different edges from SemaphoreSlim outbound caps.",
+        slugs: ["ihttpclientfactory-aspnet-core", "aspnet-core-rate-limiting"],
       },
     ],
   },

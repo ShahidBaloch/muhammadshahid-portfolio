@@ -9,12 +9,12 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <section className="section-pad flex min-h-[70vh] items-center pt-28">
+    <section className="section-pad page-top flex min-h-[70vh] items-center">
       <title>{`Page not found | ${siteConfig.name}`}</title>
       <meta name="robots" content="noindex, follow" />
       <div className="container-narrow max-w-xl">
         <p className="eyebrow">404</p>
-        <h1 className="mt-3 font-display text-4xl font-semibold text-ink">Page not found</h1>
+        <h1 className="heading-page mt-3">Page not found</h1>
         <p className="mt-4 text-lg text-muted">
           That page does not exist. Head back home or browse work and blog posts.
         </p>

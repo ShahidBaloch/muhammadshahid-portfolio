@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Fragment } from "react";
 import { PostDate } from "@/components/PostDate";
 import { SectionHeading } from "@/components/SectionHeading";
 import { MarkdownContent } from "@/components/MarkdownContent";
@@ -134,7 +135,7 @@ export default async function LearningTopicPage({ params }: PageProps) {
       : null;
 
   return (
-    <section className="section-pad pt-28 sm:pt-32">
+    <section className="reading-page">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
@@ -157,19 +158,19 @@ export default async function LearningTopicPage({ params }: PageProps) {
         <nav className="text-sm text-muted" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2">
             <li>
-              <Link href="/" className="hover:text-teal">
+              <Link href="/" className="hover:text-link">
                 Home
               </Link>
             </li>
             <li aria-hidden>/</li>
             <li>
-              <Link href="/blog" className="hover:text-teal">
+              <Link href="/blog" className="hover:text-link">
                 Blog
               </Link>
             </li>
             <li aria-hidden>/</li>
             <li>
-              <Link href="/learning" className="hover:text-teal">
+              <Link href="/learning" className="hover:text-link">
                 Topics
               </Link>
             </li>
@@ -180,9 +181,9 @@ export default async function LearningTopicPage({ params }: PageProps) {
           </ol>
         </nav>
 
-        <div className="mt-6">
+        <div className="mt-4">
           <SectionHeading
-            eyebrow="Blog topic"
+            eyebrow={topic.compactHub ? "Learning hub" : "Blog topic"}
             title={topic.title}
             description={topic.description}
             level={1}
@@ -190,7 +191,7 @@ export default async function LearningTopicPage({ params }: PageProps) {
         </div>
 
         {topic.intro ? (
-          <div className="prose-site mt-8 max-w-3xl text-lg leading-relaxed text-muted">
+          <div className="prose-site reading-surface mt-8 content-width rounded-xl text-lg leading-relaxed">
             <MarkdownContent content={topic.intro} />
           </div>
         ) : null}
@@ -198,20 +199,24 @@ export default async function LearningTopicPage({ params }: PageProps) {
         {topic.compactHub
           ? (() => {
               const bodyBlock = topicBody ? (
-                <div className={`prose-site max-w-3xl ${topic.intro ? "mt-10 border-t border-slate-line pt-10" : "mt-8"}`}>
+                <div
+                  className={`prose-site reading-surface content-width rounded-xl ${
+                    topic.intro ? "mt-7 border-t border-slate-line pt-7" : "mt-6"
+                  }`}
+                >
                   <MarkdownContent content={topicBody} />
                 </div>
               ) : null;
 
               const startHereBlock =
                 posts[0] && !topic.bodyFirst ? (
-                  <div className={`max-w-3xl ${topic.bodyFirst ? "mt-10" : "mt-8"}`}>
+                  <div className={`content-width ${topic.bodyFirst ? "mt-7" : "mt-6"}`}>
                     <Link
                       href={`/blog/${posts[0].slug}`}
-                      className="group block rounded-xl border-2 border-teal/40 bg-teal/5 p-5 transition hover:border-teal hover:bg-teal/10 sm:p-6"
+                      className="card-highlight group block rounded-xl p-5 sm:p-6"
                     >
-                      <p className="text-sm font-semibold uppercase tracking-wide text-teal">Start here</p>
-                      <h2 className="mt-2 font-display text-xl font-semibold text-ink group-hover:text-teal sm:text-2xl">
+                      <p className="text-sm font-semibold uppercase tracking-wide text-link">Start here</p>
+                      <h2 className="heading-subsection mt-2 group-hover:text-link">
                         {posts[0].title}
                       </h2>
                       <p className="mt-2 text-muted">{posts[0].description}</p>
@@ -226,9 +231,85 @@ export default async function LearningTopicPage({ params }: PageProps) {
                   </div>
                 ) : null;
 
+              const calloutsBlock =
+                topic.hubCallouts && topic.hubCallouts.length > 0 ? (
+                  <div className="mt-6 content-width space-y-3" aria-label="Interactive checks">
+                    <p className="text-sm font-semibold uppercase tracking-wide text-muted">
+                      Try it — tap to reveal
+                    </p>
+                    {topic.hubCallouts.map((item) => (
+                      <details
+                        key={item.title}
+                        className="card-callout group rounded-xl open:border-link/40"
+                      >
+                        <summary className="cursor-pointer list-none px-4 py-3 font-semibold text-ink marker:content-none hover:text-link [&::-webkit-details-marker]:hidden">
+                          {item.title}
+                        </summary>
+                        <div className="prose-site border-t border-slate-line px-4 pb-4 pt-3 text-muted">
+                          <MarkdownContent content={item.content} />
+                        </div>
+                      </details>
+                    ))}
+                  </div>
+                ) : null;
+
+              const pathsBlock =
+                topic.hubPaths && topic.hubPaths.length > 0 ? (
+                  <nav
+                    className="mt-6 grid content-width gap-3 sm:grid-cols-2 lg:grid-cols-4"
+                    aria-label="Pick your path"
+                  >
+                    {topic.hubPaths.map((path) => {
+                      const className =
+                        "card-feature group block rounded-xl p-4 sm:p-5";
+                      const content = (
+                        <>
+                          <p className="font-display font-semibold text-ink group-hover:text-link">
+                            {path.label}
+                          </p>
+                          <p className="mt-1 text-sm text-muted">{path.description}</p>
+                        </>
+                      );
+                      return path.href.startsWith("#") ? (
+                        <a key={path.label} href={path.href} className={className}>
+                          {content}
+                        </a>
+                      ) : (
+                        <Link key={path.label} href={path.href} className={className}>
+                          {content}
+                        </Link>
+                      );
+                    })}
+                  </nav>
+                ) : null;
+
+              const jumpNavBlock =
+                topic.tracks && topic.tracks.length > 1 ? (
+                  <nav
+                    className="mt-6 content-width border-t border-slate-line pt-6"
+                    aria-label="Jump to track"
+                  >
+                    <p className="text-sm font-semibold uppercase tracking-wide text-muted">
+                      All tracks
+                    </p>
+                    <ul className="mt-3 flex flex-wrap gap-2">
+                      {topic.tracks.map((track) => (
+                        <li key={track.title}>
+                          <a
+                            href={`#${slugifyHeading(track.title)}`}
+                            className="rounded-full border border-slate-line px-3 py-1.5 text-sm text-muted transition hover:border-link hover:text-link"
+                          >
+                            {track.shortTitle ?? track.title}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                ) : null;
+
               const tracksBlock =
                 topic.tracks && topic.tracks.length > 0 ? (
-                  <nav className="mt-10 max-w-3xl" aria-label={`${topic.label} tracks`}>
+                  <nav className="mt-6 content-width" aria-label={`${topic.label} tracks`}>
                     {topic.tracks.map((track) => {
                       const items = track.slugs
                         .map((slug) => posts.find((post) => post.slug === slug))
@@ -236,19 +317,26 @@ export default async function LearningTopicPage({ params }: PageProps) {
                       if (items.length === 0) return null;
                       const headingId = slugifyHeading(track.title);
                       return (
-                        <section key={track.title} className="mt-8 first:mt-0">
-                          <h2 id={headingId} className="scroll-mt-28 font-display text-xl font-semibold text-ink">
+                        <section key={track.title} className="mt-7 first:mt-0">
+                          <h2 id={headingId} className="heading-subsection scroll-mt-28">
                             {track.title}
+                            <span className="ml-2 text-sm font-normal text-muted">
+                              · {items.length} article{items.length === 1 ? "" : "s"}
+                            </span>
                           </h2>
-                          {track.blurb ? <p className="mt-2 text-muted">{track.blurb}</p> : null}
+                          {track.blurb ? (
+                            <div className="prose-site mt-2 max-w-none text-sm text-muted">
+                              <MarkdownContent content={track.blurb} />
+                            </div>
+                          ) : null}
                           <ul className="mt-4 space-y-3">
                             {items.map((post) => (
                               <li key={post.slug}>
                                 <Link
                                   href={`/blog/${post.slug}`}
-                                  className="group block rounded-xl border border-slate-line bg-mist/40 p-4 transition hover:border-teal hover:bg-mist sm:p-5"
+                                  className="card-feature group block rounded-xl p-4 sm:p-5"
                                 >
-                                  <h3 className="font-display text-lg font-semibold text-ink group-hover:text-teal">
+                                  <h3 className="heading-card font-semibold group-hover:text-link">
                                     {post.title}
                                   </h3>
                                   <p className="mt-2 text-sm text-muted">{post.description}</p>
@@ -271,12 +359,12 @@ export default async function LearningTopicPage({ params }: PageProps) {
 
               const relatedBlock =
                 relatedTopics.length > 0 ? (
-                  <p className="mt-6 max-w-3xl text-sm text-muted">
+                  <p className="mt-6 content-width text-sm text-muted">
                     Related:{" "}
                     {relatedTopics.map((item, index) => (
                       <span key={item.slug}>
                         {index > 0 ? " · " : null}
-                        <Link href={`/learning/${item.slug}`} className="font-medium text-teal link-underline">
+                        <Link href={`/learning/${item.slug}`} className="font-medium link-underline">
                           {item.label}
                         </Link>
                       </span>
@@ -285,17 +373,34 @@ export default async function LearningTopicPage({ params }: PageProps) {
                 ) : null;
 
               const hubSections = topic.bodyFirst
-                ? [bodyBlock, startHereBlock, tracksBlock, relatedBlock]
-                : [startHereBlock, tracksBlock, relatedBlock, bodyBlock];
+                ? [
+                    { key: "body", node: bodyBlock },
+                    { key: "callouts", node: calloutsBlock },
+                    { key: "paths", node: pathsBlock },
+                    { key: "jump-nav", node: jumpNavBlock },
+                    { key: "tracks", node: tracksBlock },
+                    { key: "related", node: relatedBlock },
+                  ]
+                : [
+                    { key: "start-here", node: startHereBlock },
+                    { key: "callouts", node: calloutsBlock },
+                    { key: "paths", node: pathsBlock },
+                    { key: "jump-nav", node: jumpNavBlock },
+                    { key: "tracks", node: tracksBlock },
+                    { key: "related", node: relatedBlock },
+                    { key: "body", node: bodyBlock },
+                  ];
 
-              return hubSections;
+              return hubSections
+                .filter((section) => section.node != null)
+                .map(({ key, node }) => <Fragment key={key}>{node}</Fragment>);
             })()
           : null}
 
         {!topic.compactHub && topicBody ? (
           <div
-            className={`prose-site max-w-3xl ${
-              topic.intro || topic.tracks?.length ? "mt-10 border-t border-slate-line pt-10" : "mt-8"
+            className={`prose-site reading-surface content-width rounded-xl ${
+              topic.intro || topic.tracks?.length ? "mt-7 border-t border-slate-line pt-7" : "mt-6"
             }`}
           >
             <MarkdownContent content={topicBody} />
@@ -303,7 +408,7 @@ export default async function LearningTopicPage({ params }: PageProps) {
         ) : null}
 
         {!topic.compactHub && topic.tracks && topic.tracks.length > 0 ? (
-          <nav className="mt-10 max-w-3xl" aria-label="Start here">
+          <nav className="mt-7 content-width" aria-label="Start here">
             {topic.tracks.map((track) => {
               const items = track.slugs
                 .map((slug) => posts.find((post) => post.slug === slug))
@@ -311,15 +416,15 @@ export default async function LearningTopicPage({ params }: PageProps) {
               if (items.length === 0) return null;
               const headingId = slugifyHeading(track.title);
               return (
-                <section key={track.title} className="mt-8 first:mt-0">
-                  <h2 id={headingId} className="scroll-mt-28 font-display text-xl font-semibold text-ink">
+                <section key={track.title} className="mt-6 first:mt-0">
+                  <h2 id={headingId} className="heading-subsection scroll-mt-28">
                     {track.title}
                   </h2>
                   {track.blurb ? <p className="mt-2 text-muted">{track.blurb}</p> : null}
                   <ul className="mt-3 list-disc space-y-2 pl-5">
                     {items.map((post) => (
                       <li key={post.slug} className="text-muted">
-                        <Link href={`/blog/${post.slug}`} className="font-medium text-teal link-underline">
+                        <Link href={`/blog/${post.slug}`} className="font-medium link-underline">
                           {post.title}
                         </Link>
                       </li>
@@ -332,12 +437,12 @@ export default async function LearningTopicPage({ params }: PageProps) {
         ) : null}
 
         {!topic.compactHub && relatedTopics.length > 0 ? (
-          <p className="mt-4 max-w-3xl text-muted">
+          <p className="mt-4 content-width text-muted">
             Related:{" "}
             {relatedTopics.map((item, index) => (
               <span key={item.slug}>
                 {index > 0 ? " · " : null}
-                <Link href={`/learning/${item.slug}`} className="font-medium text-teal link-underline">
+                <Link href={`/learning/${item.slug}`} className="font-medium link-underline">
                   {item.label}
                 </Link>
               </span>
@@ -347,24 +452,39 @@ export default async function LearningTopicPage({ params }: PageProps) {
 
         {topic.faq && topic.faq.length > 0 ? (
           <section
-            className={`max-w-3xl rounded-xl border border-slate-line bg-mist p-5 sm:p-6 ${
-              topic.compactHub ? "mt-10" : "mt-8"
+            className={`card-panel content-width rounded-xl p-5 sm:p-6 ${
+              topic.compactHub ? "mt-7" : "mt-6"
             }`}
             aria-labelledby="quick-answers"
           >
-            <h2 id="quick-answers" className="font-display text-xl font-semibold text-ink">
+            <h2 id="quick-answers" className="heading-subsection">
               Quick answers
             </h2>
-            <dl className="mt-4 space-y-4">
-              {topic.faq.map((item) => (
-                <div key={item.q}>
-                  <dt className="font-semibold text-ink">{item.q}</dt>
-                  <dd className="prose-site mt-1 text-muted">
-                    <MarkdownContent content={item.a} />
-                  </dd>
-                </div>
-              ))}
-            </dl>
+            {topic.compactHub ? (
+              <div className="mt-4 divide-y divide-slate-line">
+                {topic.faq.map((item) => (
+                  <details key={item.q} className="group py-3 first:pt-0 last:pb-0">
+                    <summary className="cursor-pointer list-none font-semibold text-ink marker:content-none [&::-webkit-details-marker]:hidden">
+                      {item.q}
+                    </summary>
+                    <div className="prose-site mt-2 text-muted">
+                      <MarkdownContent content={item.a} />
+                    </div>
+                  </details>
+                ))}
+              </div>
+            ) : (
+              <dl className="mt-4 space-y-4">
+                {topic.faq.map((item) => (
+                  <div key={item.q}>
+                    <dt className="font-semibold text-ink">{item.q}</dt>
+                    <dd className="prose-site mt-1 text-muted">
+                      <MarkdownContent content={item.a} />
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            )}
           </section>
         ) : null}
 
@@ -377,7 +497,7 @@ export default async function LearningTopicPage({ params }: PageProps) {
                 className={`rounded border px-3 py-1.5 text-sm transition ${
                   item.slug === topic.slug
                     ? "chip-active"
-                    : "border-slate-line text-muted hover:border-teal hover:text-ink"
+                    : "border-slate-line text-muted hover:border-link hover:text-ink"
                 }`}
                 aria-current={item.slug === topic.slug ? "page" : undefined}
               >
@@ -388,18 +508,18 @@ export default async function LearningTopicPage({ params }: PageProps) {
         ) : null}
 
         {!topic.compactHub && posts.length === 0 ? (
-          <p className="mt-12 py-10 text-muted">Articles for this track are coming soon.</p>
+          <p className="mt-8 py-6 text-muted">Articles for this track are coming soon.</p>
         ) : !topic.compactHub ? (
-          <div className="mt-12">
-            <h2 className="font-display text-2xl font-semibold text-ink">
+          <div className="mt-8">
+            <h2 className="heading-section">
               All {topic.label} articles
             </h2>
             <div className="mt-6 divide-y divide-slate-line border-y border-slate-line">
               {posts.map((post) => (
-                <article key={post.slug} className="py-8">
+                <article key={post.slug} className="py-5 sm:py-6">
                   <PostDate date={post.date} updated={post.updated} readingTime={post.readingTime} />
-                  <h3 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">
-                    <Link href={`/blog/${post.slug}`} className="hover:text-teal">
+                  <h3 className="heading-subsection mt-2 sm:text-[1.65rem]">
+                    <Link href={`/blog/${post.slug}`} className="hover:text-link">
                       {post.title}
                     </Link>
                   </h3>

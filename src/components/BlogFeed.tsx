@@ -26,7 +26,7 @@ export function BlogFeed({ posts }: { posts: PostMeta[] }) {
   }, [posts, query, tag]);
 
   return (
-    <div className="mt-12">
+    <div className="section-stack">
       <div className="grid gap-3 sm:grid-cols-[1fr_16rem]">
         <label className="block text-sm font-medium text-ink">
           Search
@@ -55,7 +55,7 @@ export function BlogFeed({ posts }: { posts: PostMeta[] }) {
         </label>
       </div>
 
-      <h2 className="mt-10 font-display text-2xl font-semibold text-ink">
+      <h2 className="heading-section mt-2">
         {query || tag ? "Matching articles" : "All articles"}
       </h2>
       <p className="mt-2 text-sm text-muted">
@@ -67,10 +67,10 @@ export function BlogFeed({ posts }: { posts: PostMeta[] }) {
           <p className="py-10 text-muted">No articles match that filter.</p>
         ) : (
           filtered.map((post) => (
-            <article key={post.slug} className="py-8">
+            <article key={post.slug} className="py-5 sm:py-6">
               <PostDate date={post.date} updated={post.updated} readingTime={post.readingTime} />
-              <h3 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">
-                <Link href={`/blog/${post.slug}`} className="hover:text-teal">
+              <h3 className="heading-subsection mt-2">
+                <Link href={`/blog/${post.slug}`} className="hover:text-link">
                   {post.title}
                 </Link>
               </h3>
