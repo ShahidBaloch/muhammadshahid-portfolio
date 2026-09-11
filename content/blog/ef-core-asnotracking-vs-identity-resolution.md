@@ -2,6 +2,7 @@
 title: "AsNoTracking vs Identity Resolution in EF Core"
 description: "AsNoTracking vs identity resolution in EF Core: when no-tracking duplicates Patient objects on every row, and when AsNoTrackingWithIdentityResolution fixes read-only Includes."
 date: "2026-09-07"
+updated: "2026-09-12"
 category: "ef-core"
 tags: ["EF Core", "Performance", "Memory", "ASP.NET Core"]
 related:
@@ -9,6 +10,8 @@ related:
   - ef-core-cartesian-explosion-multiple-include
   - ef-core-sql-performance
 faq:
+  - q: "When should I use AsNoTracking in EF Core?"
+    a: "On read-only queries — list endpoints, reports, anything that will not call SaveChanges on those entities. Default for projected DTOs. Skip it on PUT/PATCH load-mutate-save paths."
   - q: "Does AsNoTracking always use less memory?"
     a: "No. Without identity resolution, EF new’s a Category or Patient object for every row even when the database id is the same. Tracking (or AsNoTrackingWithIdentityResolution) reuses one instance per key."
   - q: "When should I use AsNoTrackingWithIdentityResolution?"
@@ -32,9 +35,30 @@ AsNoTracking (no identity map)     AsNoTrackingWithIdentityResolution
 
 **Terms used here:** **Identity map** = EF's short-lived dictionary that reuses one CLR object per primary key while materializing a result. **Change tracker** = the structure that tracks entities for `SaveChanges` (identity resolution borrows the idea without enabling writes). **Materialization** = turning SQL rows into .NET objects after the query returns.
 
+Picture a **photocopy**: `AsNoTracking()` hands the reader a copy and does not keep the original on the desk — cheap for a one-off list. Tracking keeps the original so you can write in the margins and `SaveChanges` files it. The trap is two hundred appointment rows that each **re-print the same patient page** because plain `AsNoTracking` skipped the identity map. `AsNoTrackingWithIdentityResolution()` keeps one master copy and two hundred pointers. A DTO `Select` never prints the patient page at all — usually the better API.
+
 Read-only handlers should default to `AsNoTracking()` on projected grids. That advice is still right there. It is wrong as a religion when you `Include` a many-to-one and the same `Patient` appears on every appointment in the page. The SQL can be one cheap statement. Memory is the tax.
 
 This is not [N+1](/blog/ef-core-nplus1-include-vs-assplitquery) (extra round-trips) and not [cartesian explosion](/blog/ef-core-cartesian-explosion-multiple-include) (multiplied JOIN rows).
+
+## When should I use AsNoTracking?
+
+**`AsNoTracking()`** is the default I want on **reads**: list endpoints, exports, anything that will not call `SaveChanges` on those instances. It skips the change tracker. It is the wrong default on a PUT that loads an entity, mutates it, and saves — you want tracking there.
+
+```csharp
+// List / report — yes
+var rows = await db.Orders.AsNoTracking()
+    .Where(o => o.TenantId == tenantId)
+    .Select(o => new OrderListItemDto(o.Id, o.Status, o.Total))
+    .ToListAsync(ct);
+
+// PUT load-mutate-save — no (keep tracking)
+var order = await db.Orders.FirstAsync(o => o.Id == id, ct);
+order.Status = body.Status;
+await db.SaveChangesAsync(ct);
+```
+
+Use **`AsNoTrackingWithIdentityResolution()`** when the read still returns an entity graph with a repeated many-to-one (`Include` patient on 200 appointments). Use a **projection** when Angular only needs names.
 
 ## The clinic list that allocated twice
 

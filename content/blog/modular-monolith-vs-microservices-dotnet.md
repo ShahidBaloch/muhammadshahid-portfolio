@@ -1,10 +1,10 @@
 ---
 title: "Modular Monolith vs Microservices in .NET"
-description: "Modular monolith vs microservices for ASP.NET Core — when to split services, module boundaries, data ownership, Angular contract stability, and migration path."
+description: ".NET microservices vs modular monolith for ASP.NET Core — when to split C# services, module boundaries, data ownership, Angular contract stability, and migration path."
 date: "2026-08-02"
-updated: "2026-09-08"
+updated: "2026-09-12"
 category: "architecture"
-tags: ["Architecture", "Microservices", "Modular Monolith", ".NET", "ASP.NET Core"]
+tags: ["Architecture", "Microservices", "Modular Monolith", ".NET", "ASP.NET Core", "C#"]
 related:
   - clean-architecture-aspnet-core
   - docker-dotnet-angular-local
@@ -12,6 +12,8 @@ related:
 faq:
   - q: "When should I choose a modular monolith over microservices in .NET?"
     a: "Until a module has an independent deploy or scale reason. Splitting before that is an ops tax Angular users never asked for."
+  - q: "When do I need .NET microservices?"
+    a: "When two parts of the C# system scale or release on different axes — search vs checkout, identity vs catalog — and you already have module boundaries and ops. Not because a blog said microservices."
   - q: "Does a module need its own database?"
     a: "Not at first. Separate schemas or tables can wait. Separate SQL servers when the team and the data already fail independently."
   - q: "Will Angular care which shape I pick?"
@@ -24,9 +26,9 @@ A **modular monolith** is one deployable ASP.NET Core application with enforced 
 
 The choice is not moral. It is which pain your organization can afford **this year**.
 
-## Analogy
+## Modular monolith vs microservices
 
-A modular monolith is a house with labeled rooms and interior walls you can later convert to separate apartments. Microservices are already separate buildings on the same street:
+A modular monolith is one deployable with labeled rooms you can later split. Microservices are separate deployables on the same street:
 
 ```text
 Modular monolith                 Microservices
@@ -41,6 +43,31 @@ labeled rooms → distributed mud
 ```
 
 If two "services" share one database and join across tables freely, you have a distributed monolith — the worst of both worlds.
+
+## .NET microservices vs C# microservices
+
+Search **.NET microservices**, **microservices in .NET**, or **C# microservices** and you are choosing a **process split**, not a language feature. C# does not make the network cheaper. A **C# microservice** is still an independently deployable host with its own data and failure modes.
+
+Default: one ASP.NET Core host with labeled modules. Extract a service when scale, release cadence, or failure isolation is already real — see [signals you might need services](#signals-you-might-need-services).
+
+**When to split a C# process:** two parts scale on different axes (search vs checkout), two teams ship weekly without coordinating, or a module’s crash must not take down login.
+
+**When not to:** one team, one database, “frontend API” vs “backend API” with cross-table joins over HTTP. That is a distributed monolith.
+
+A module boundary you can enforce **before** Kubernetes:
+
+```csharp
+// Modules/Billing/Contracts/IInvoiceReader.cs  — Providers may reference this
+public interface IInvoiceReader
+{
+    Task<InvoiceDto?> GetAsync(Guid invoiceId, CancellationToken ct);
+}
+
+// Modules/Billing/Infrastructure — Providers must NOT reference this
+public sealed class InvoiceReader(BillingDbContext db) : IInvoiceReader { /* … */ }
+```
+
+ArchUnitNET / NetArchTest in CI: `Modules.Providers` cannot import `Modules.Billing.Infrastructure`. If that test fails, splitting into microservices will only move the same coupling onto the network.
 
 ## Routing
 

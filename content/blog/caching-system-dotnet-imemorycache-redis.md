@@ -2,7 +2,7 @@
 title: "Caching System in .NET: IMemoryCache, Redis, and Object Cache"
 description: "Caching system explained for .NET and Java developers — object cache, in-memory vs distributed cache, IMemoryCache vs Redis on ASP.NET Core, compared to Java caching patterns."
 date: "2026-09-08"
-updated: "2026-09-08"
+updated: "2026-09-12"
 category: "caching"
 tags: ["Caching", "IMemoryCache", "Redis", "ASP.NET Core", ".NET", "Performance"]
 related:
@@ -13,6 +13,12 @@ related:
 faq:
   - q: "What is a caching system?"
     a: "A caching system stores copies of frequently used data in fast storage (RAM, Redis) so reads avoid slower sources like SQL or HTTP. It includes the cache store, keys, TTL, eviction, invalidation on writes, and hit/miss metrics."
+  - q: "What is IMemoryCache?"
+    a: "ASP.NET Core’s in-memory cache — an in-process object cache for one API instance. AddMemoryCache(), inject IMemoryCache, set TTL and a size limit. It is not shared across App Service instances."
+  - q: "What is in-memory cache vs Redis in ASP.NET Core?"
+    a: "In-memory cache (IMemoryCache) is local to one process. Redis is a distributed cache (IDistributedCache) shared by every instance. Use IMemoryCache alone on a single instance; add Redis when you scale out."
+  - q: "What is IMemoryCache vs IDistributedCache?"
+    a: "IMemoryCache stores CLR objects in process RAM. IDistributedCache stores bytes (usually JSON) in Redis or another shared store. Same cache-aside pattern; different scope."
   - q: "What is a Java object cache?"
     a: "In Java, an object cache holds deserialized objects in memory — e.g. Caffeine, Ehcache, or a ConcurrentHashMap with TTL. In .NET the equivalent is IMemoryCache or IDistributedCache storing serialized or in-memory objects per key."
   - q: "What is the Java caching system vs .NET?"
@@ -21,7 +27,7 @@ faq:
     a: "IMemoryCache for single-instance, fast, local object cache with size limits. Redis (IDistributedCache) when multiple API instances must share cache entries or you need a centralized TTL store."
 ---
 
-Search **java caching system** or **java object cache** and you get Caffeine, Ehcache, and Spring `@Cacheable`. On **ASP.NET Core**, the same ideas apply with **`IMemoryCache`** and **Redis** — this page maps both ecosystems so the concepts transfer.
+Search **in-memory cache**, **in-memory caching**, **IMemoryCache**, **java caching system**, or **java object cache** and you get Caffeine, Ehcache, and Spring `@Cacheable`. On **ASP.NET Core**, the same ideas apply with **`IMemoryCache`** (in-process) and **Redis** (distributed) — this page maps both ecosystems so the concepts transfer.
 
 Start with: [what is a cache miss](/blog/what-is-a-cache-miss). Redis production patterns: [Redis caching ASP.NET Core](/blog/redis-caching-aspnet-core).
 
@@ -134,6 +140,51 @@ public async Task<CatalogDto> GetCatalogAsync(Guid tenantId, CancellationToken c
 ```
 
 L1 (`IMemoryCache`) cuts Redis round-trips. L2 (Redis) shares state across App Service instances.
+
+## In-memory cache vs Redis (IMemoryCache vs IDistributedCache)
+
+`IMemoryCache` is a **sticky note on your monitor** — fast, invisible to the next desk, gone when the process recycles. **Redis** is the **whiteboard in the hallway** every App Service instance can read. Label the note with `tenantId` or another tenant inherits yesterday's fee schedule.
+
+**In-memory cache** / **in-memory caching** on ASP.NET Core means `IMemoryCache` — objects live in the process heap.
+
+**Redis as a distributed cache** means `IDistributedCache` — bytes (usually JSON) live in a shared store.
+
+```csharp
+public sealed class FeeScheduleCache(IMemoryCache memory, IDistributedCache redis)
+{
+    public async Task<FeeScheduleDto?> GetAsync(Guid tenantId, Guid id, CancellationToken ct)
+    {
+        var key = $"tenant:{tenantId}:fee:{id}:v1";
+
+        if (memory.TryGetValue(key, out FeeScheduleDto? local))
+            return local;
+
+        var json = await redis.GetStringAsync(key, ct);
+        if (json is not null)
+        {
+            var dto = JsonSerializer.Deserialize<FeeScheduleDto>(json)!;
+            memory.Set(key, dto, TimeSpan.FromMinutes(1));
+            return dto;
+        }
+
+        return null; // caller loads SQL, then SetAsync
+    }
+}
+```
+
+```text
+One API instance, small lookups     → IMemoryCache only
+Two+ instances, shared reads        → Redis (IDistributedCache)
+Need L1 speed + L2 sharing          → IMemoryCache + Redis
+```
+
+**When to use IMemoryCache only:** one API instance, small lookups, you can name a size limit.
+
+**When to add Redis:** two or more instances must share the same keys.
+
+**When not to cache at all:** per-user clinical records keyed only by URL, checkout prices that must be exact after a promo change, anything you cannot name an invalidation rule for.
+
+`IMemoryCache` vs `IDistributedCache` is that scope difference — not a quality ranking. Production Redis patterns: [Redis caching ASP.NET Core](/blog/redis-caching-aspnet-core).
 
 ## IMemoryCache — when to use object cache in-process
 

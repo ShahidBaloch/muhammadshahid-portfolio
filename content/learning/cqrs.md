@@ -4,7 +4,7 @@ title: "CQRS after MediatR licensing"
 
 ## Introduction
 
-**CQRS** (Command Query Responsibility Segregation) means **separate models or paths for reads and writes** — not necessarily event sourcing or microservices. On ASP.NET Core teams, “CQRS” often means **MediatR handlers** — one class per use case instead of fat controllers.
+**CQRS** (Command Query Responsibility Segregation) means **separate models or paths for reads and writes** — not necessarily event sourcing or microservices. On ASP.NET Core teams, “CQRS” often means **MediatR in C#** — one handler per use case. MediatR is not required; it is one dispatcher.
 
 ## What CQRS-lite looks like in .NET
 

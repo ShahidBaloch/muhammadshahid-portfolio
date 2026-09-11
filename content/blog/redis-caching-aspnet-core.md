@@ -1,8 +1,8 @@
 ---
 title: "Redis Caching in ASP.NET Core: When It Lies"
-description: "Redis caching in ASP.NET Core — IDistributedCache, cache hit vs miss, stampede control, invalidation, and fixing error establishing a Redis connection."
+description: "Redis as a distributed cache in ASP.NET Core — IDistributedCache, cache hit vs miss, stampede control, invalidation, and fixing error establishing a Redis connection."
 date: "2026-08-02"
-updated: "2026-09-08"
+updated: "2026-09-12"
 category: "caching"
 tags: ["Redis", "ASP.NET Core", "Caching", "Performance", "Azure", "IMemoryCache"]
 related:
@@ -17,6 +17,8 @@ faq:
     a: "The key is absent or expired, so the app rebuilds from SQL instead of returning cached JSON. Hits are fast; misses run the full query. Definition: [what is a cache miss](/blog/what-is-a-cache-miss)."
   - q: "When should I add Redis caching in ASP.NET Core?"
     a: "When a hot read is cheaper stale than live SQL — catalog lists, feature flags. Not for per-user clinical records keyed only by URL."
+  - q: "How do I use Redis as a distributed cache in .NET?"
+    a: "AddStackExchangeRedisCache, inject IDistributedCache, cache-aside with tenant-aware keys and an absolute TTL. Redis is the shared store; IMemoryCache is still the in-process L1 if you need it."
   - q: "Why does Redis show stale dashboard data?"
     a: "Missing invalidation or a key that ignores tenant. Caching is a freshness trade. Stampede control is not a substitute for a tenant in the key."
   - q: "Error establishing a Redis connection?"
@@ -36,11 +38,25 @@ Read path: cache get → hit? return
 Write path: update SQL → invalidate key
 ```
 
-**New to this** → stay here. **Merging a PR** → [when I add Redis](#when-i-add-redis-to-an-aspnet-core-api). **On-call / interview** → [stampede](#cache-stampede-and-tenant-keys) · [fail-open](#fail-open-vs-fail-closed) · [if an interviewer asks](#if-an-interviewer-asks).
+**New to this** → stay here. **Merging a PR** → [when I add Redis](#when-i-add-redis-to-an-aspnet-core-api). **On-call / interview** → [stampede](#get-or-set-without-a-thundering-herd) · [fail-open](#fail-open-vs-fail-closed) · [if an interviewer asks](#if-an-interviewer-asks).
 
 **Redis caching ASP.NET Core** is one of the most searched performance topics in the .NET ecosystem — and one of the easiest ways to ship a subtle production bug. Caching is not “add Redis and enjoy faster APIs.” It is a deliberate trade: freshness for latency.
 
-I add Redis to ASP.NET Core APIs that feed Angular dashboards in healthcare ops, SaaS admin panels, and catalog-heavy eCommerce. This post covers the patterns that actually reduce load, the key design that prevents collisions, and when I refuse to cache.
+## Redis as a distributed cache in ASP.NET Core
+
+**Redis as a distributed cache** is the shared store behind `IDistributedCache` when more than one Kestrel / App Service instance must see the same keys. In-process `IMemoryCache` diverges the moment you scale out — each node has its own copy. Redis is how **Redis .NET** APIs share catalog lists, feature flags, and fee-schedule snapshots.
+
+Hub for IMemoryCache vs Redis (including the scope metaphor): [caching system in .NET](/blog/caching-system-dotnet-imemorycache-redis).
+
+## When I add Redis to an ASP.NET Core API
+
+**When to use:** more than one Kestrel / App Service instance must share hot reads (catalog lists, fee schedules, feature flags) and you can name a TTL plus an invalidation rule on write.
+
+**When not to:** a single instance where `IMemoryCache` is enough; per-user clinical records keyed only by URL; prices that must be exact after every promo write; anything you cannot invalidate. Redis will not fix N+1 — it will hide it until the key expires.
+
+Scope metaphor (sticky note vs hallway whiteboard): [caching hub](/blog/caching-system-dotnet-imemorycache-redis). On this page the operational work is keys, stampede control, and fail-open.
+
+I use this on Angular dashboards in healthcare ops, SaaS admin panels, and catalog-heavy eCommerce. The rest of the page is keys, stampede control, and fail-open — not “add Redis and enjoy.”
 
 ## High-intent problem Redis solves
 

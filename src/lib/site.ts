@@ -552,9 +552,9 @@ export const learningTopics: LearningTopic[] = [
     label: "EF Core",
     title: "EF Core and SQL Server articles",
     description:
-      "N+1 versus Include versus AsSplitQuery, cartesian explosion, AsNoTracking identity, parameter sniffing, and query habits that survive real clinic and catalog data.",
+      "N+1 versus Include versus AsSplitQuery, cartesian explosion, AsNoTracking identity, 1-1 / 1-n / n-n relationships, parameter sniffing, and query habits that survive real clinic and catalog data.",
     intro:
-      "EF Core and SQL Server for ASP.NET Core APIs — N+1, cartesian explosion, tracking, query filters, and plans that fail only on real clinic or catalog data.",
+      "EF Core and SQL Server for ASP.NET Core APIs — relationships, N+1, cartesian explosion, tracking, query filters, and plans that fail only on real clinic or catalog data.",
     keywords: ["EF Core performance", "EF Core N+1", "AsSplitQuery", "EF Core global query filter", "SQL Server parameter sniffing"],
     relatedTopicSlugs: ["interview-questions", "async-concurrency"],
     faq: [
@@ -570,10 +570,15 @@ export const learningTopics: LearningTopic[] = [
         q: "When should I use AsNoTracking?",
         a: "Read-only endpoints where you will not call `SaveChanges`. For updates, use tracking or attach explicitly. Lists should often **project to DTO** in SQL instead of loading full entities.",
       },
+      {
+        q: "How do I map 1-1, 1-n, and many-to-many in EF Core?",
+        a: "Collection + FK for 1-n, unique FK or OwnsOne for 1-1, skip navigation vs join entity for n-n when the link has payload. Full mapping: the EF Core relationships article.",
+      },
     ],
     matchTags: ["EF Core", "SQL Server"],
     pinSlugs: [
       "ef-core-sql-performance",
+      "ef-core-relationships",
       "ef-core-nplus1-include-vs-assplitquery",
       "ef-core-cartesian-explosion-multiple-include",
       "ef-core-interview-questions",

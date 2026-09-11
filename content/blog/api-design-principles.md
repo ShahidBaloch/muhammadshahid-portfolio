@@ -2,7 +2,7 @@
 title: "API Design Principles for REST and ASP.NET Core"
 description: "API design principles for production REST APIs — resource naming, versioning, errors, pagination, auth, and idempotency with ASP.NET Core examples."
 date: "2026-09-08"
-updated: "2026-09-08"
+updated: "2026-09-12"
 category: "api-design"
 tags: ["API Design", "ASP.NET Core", "REST", ".NET", "Web API", "Architecture"]
 related:
@@ -14,6 +14,8 @@ related:
 faq:
   - q: "What are API design principles?"
     a: "Rules that keep HTTP APIs predictable for clients: nouns for resources, correct verbs, consistent error envelopes, versioning before breaking changes, pagination for lists, auth at the boundary, and idempotent writes where money or inventory is involved."
+  - q: "How do I start building a .NET API?"
+    a: "Pick controllers or Minimal APIs, define resource URLs, one ProblemDetails envelope, JWT at the boundary, and pagination on lists. This checklist is the contract; the Minimal APIs post is the hosting shape."
   - q: "What is good API design?"
     a: "Clients can integrate without reading your source code. URLs are stable, errors map to one shape, status codes mean what RFCs say, and breaking changes are versioned or communicated — not surprise 500s on a field rename."
   - q: "What are REST API design best practices?"
@@ -27,6 +29,49 @@ faq:
 This page is a practical checklist from healthcare, SaaS, and eCommerce APIs on ASP.NET Core — not an academic REST essay.
 
 Start with definitions: [what is an API](/blog/what-is-an-api). Error envelopes: [API validation](/blog/aspnet-core-api-validation). Auth: [JWT](/blog/aspnet-core-jwt-auth).
+
+## Building a .NET API
+
+**Building a .NET API** is this contract plus a hosting shape. Controllers or [Minimal APIs](/blog/aspnet-core-minimal-apis) are adapters. The principles below are what Angular, mobile, and partners actually depend on — resource URLs, one error envelope, pagination, auth at the boundary.
+
+Stable URLs are **room numbers on a floor plan** — `/api/orders/{id}` stays put; you version before renaming Radiology to Imaging-v2. Status codes are the signs on the doors: 404 means missing, 409 means conflict, not `{ success: false }` with HTTP 200.
+
+```csharp
+[ApiController]
+[Route("api/orders")]
+[Authorize]
+public sealed class OrdersController(IOrderService orders) : ControllerBase
+{
+    [HttpGet]
+    public async Task<ActionResult<Paged<OrderListItemDto>>> List(
+        [FromQuery] int page,
+        [FromQuery] int pageSize,
+        CancellationToken ct)
+    {
+        pageSize = Math.Clamp(pageSize <= 0 ? 50 : pageSize, 1, 100);
+        var result = await orders.ListAsync(page, pageSize, ct);
+        return Ok(result);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<OrderDto>> Create(
+        CreateOrderRequest body,
+        CancellationToken ct)
+    {
+        var created = await orders.CreateAsync(body, ct);
+        return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<OrderDto>> Get(Guid id, CancellationToken ct)
+    {
+        var order = await orders.GetAsync(id, ct);
+        return order is null ? NotFound() : Ok(order);
+    }
+}
+```
+
+That controller is the shape I expect before the checklist below: DTOs in and out, `CreatedAtAction` on POST, `NotFound` on missing ids, pagination capped at 100, `[Authorize]` at the class. A Todo `MapGet` demo is not this — see [Minimal APIs](/blog/aspnet-core-minimal-apis) for hosting only.
 
 ## API design principles at a glance
 

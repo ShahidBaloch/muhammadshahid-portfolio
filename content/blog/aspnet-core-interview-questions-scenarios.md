@@ -1,12 +1,17 @@
 ---
 title: "ASP.NET Core Interview Questions: Scenarios"
-description: "ASP.NET Core interview questions with detailed scenario answers — DI captive dependencies, JWT with Angular, middleware order, async starvation, EF Core slowness, and production tradeoffs."
+description: "ASP.NET Core and Web API interview questions with scenario answers — DI captive dependencies, JWT with Angular, middleware order, async starvation, EF Core slowness, and production tradeoffs."
 date: "2026-08-12"
+updated: "2026-09-12"
 category: "interview-questions"
 tags: ["Interview Questions", "ASP.NET Core", ".NET", "C#", "Career", "Web API"]
 faq:
   - q: "What ASP.NET Core interview questions are scenario-based?"
     a: "Hiring loops for healthcare and SaaS APIs ask production stories: captive DI, JWT that works in Postman but not Angular, middleware order, thread-pool starvation, and EF slowness — not definitions of IServiceCollection."
+  - q: "What web API interview questions should I rehearse for ASP.NET Core?"
+    a: "JWT that works in Postman but 401s in Angular, 401 vs 403, ProblemDetails envelopes Angular can bind, login rate limits, and pagination on list endpoints. Those are this page — not a controller-attribute quiz."
+  - q: "Are ASP.NET Core interview questions the same as .NET Core interview questions?"
+    a: "For API roles, yes. Panels still say .NET Core. The scenarios below are the Web API loop: pipeline, auth, DI, and EF on the request path."
   - q: "What is a captive dependency in ASP.NET Core?"
     a: "A singleton that captures a scoped service (often DbContext). The first request’s instance lives for the process. In a multi-tenant API that is a data leak, not a trivia answer."
   - q: "Should I answer EF Core N+1 in the ASP.NET Core interview?"
@@ -18,6 +23,12 @@ Interviewers hiring for healthcare, SaaS, and marketplace APIs do not care if yo
 I interview and coach .NET candidates around the same failures I fix on client systems: tenant data leaking through a singleton cache, JWTs that work in Postman but not Angular, thread pools dying under “fine looking” sync code. Below are scenario answers — what a strong candidate says, what a weak one says, and how I verify the fix.
 
 This is interview narration. Implementation depth lives in the linked how-to posts (JWT, DI, async), not in this URL.
+
+## ASP.NET Core Web API interview questions
+
+These nine scenarios are the **ASP.NET Core Web API interview questions** I actually run — the same set people bookmark as **ASP.NET Core interview questions** or **.NET Core interview questions**. Definitions of `IServiceCollection` do not appear. Production stories do: captive DI, JWT with Angular, middleware order, starvation, controller bloat, EF list slowness, Minimal APIs vs controllers, validation envelopes, and rate limits.
+
+Hub map: [.NET interview questions and answers](/blog/dotnet-interview-questions-answers).
 
 ## How to use this guide
 

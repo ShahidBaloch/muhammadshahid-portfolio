@@ -2,6 +2,10 @@
 title: "C# and ASP.NET Core Interview Questions"
 ---
 
+Hub: [.NET interview questions and answers](/blog/dotnet-interview-questions-answers). Web API scenarios: [ASP.NET Core interview questions](/blog/aspnet-core-interview-questions-scenarios). EF relationships mapping: [EF Core relationships](/blog/ef-core-relationships). EF correctness narration: [EF Core interview questions](/blog/ef-core-interview-questions).
+
+**.NET Core interview questions** and **web API interview questions** are the same loop as ASP.NET Core — use the scenarios page, not an MCQ dump.
+
 ## Cross-questions interviewers ask after your first answer
 
 Rehearse the first answer on the track posts above — panels often push into these follow-ups.

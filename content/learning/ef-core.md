@@ -38,7 +38,7 @@ EF Core is a **translator between your C# object graph and SQL tables**:
 
 **Tracking** — EF remembers entities so `SaveChanges` knows what changed. Good for updates; expensive for read-only lists.
 
-**`AsNoTracking()`** — read without tracker overhead. Still not enough if you `Include` ten related tables into 50k entities.
+**`AsNoTracking()`** — read without tracker overhead. Default for list endpoints. Still not enough if you `Include` ten related tables into 50k entities — see [when to use AsNoTracking](/blog/ef-core-asnotracking-vs-identity-resolution).
 
 **Rule:** List screens → project to DTO in SQL. Detail/edit screens → tracked entity with explicit Includes.
 
@@ -53,6 +53,7 @@ EF Core is a **translator between your C# object graph and SQL tables**:
 1. **ExecuteUpdate vs SaveChanges?** — ExecuteUpdate is one SQL UPDATE without loading entities; interceptors and audit may not run.
 2. **Optimistic concurrency?** — `RowVersion` / concurrency token; client must send token on PUT.
 3. **Specification pattern — ceremony or value?** — Value when the same filter/Include is reused; ceremony when it wraps one query once.
+4. **Entity relationships (1-1 / 1-n / n-n)?** — Owned type vs 1-1; skip a join entity until the link has payload. Mapping how-to: [EF Core relationships](/blog/ef-core-relationships). Interview narration: [EF Core interview questions](/blog/ef-core-interview-questions).
 
 Full scenarios: [EF Core interview questions](/blog/ef-core-interview-questions).
 
@@ -61,6 +62,7 @@ Full scenarios: [EF Core interview questions](/blog/ef-core-interview-questions)
 | Symptom | Article |
 |---|---|
 | General SQL checklist | [EF Core SQL performance](/blog/ef-core-sql-performance) |
+| Map 1-1 / 1-n / n-n, owned vs join | [EF Core relationships](/blog/ef-core-relationships) |
 | N+1 vs Include vs split | [N+1 vs AsSplitQuery](/blog/ef-core-nplus1-include-vs-assplitquery) |
 | Two Includes, huge JOIN | [Cartesian explosion](/blog/ef-core-cartesian-explosion-multiple-include) |
 | Duplicate entities in memory | [AsNoTracking vs identity](/blog/ef-core-asnotracking-vs-identity-resolution) |

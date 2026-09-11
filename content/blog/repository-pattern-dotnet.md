@@ -1,8 +1,8 @@
 ---
 title: "Repository Pattern in .NET — Useful vs Overkill"
-description: "Repository definition and when the repository pattern earns its place in .NET with EF Core — named queries vs generic IRepository ceremony on healthcare and eCommerce APIs."
+description: "Repository pattern in C# with EF Core — when named queries earn their keep vs generic IRepository ceremony on healthcare and eCommerce ASP.NET Core APIs."
 date: "2026-07-05"
-updated: "2026-09-08"
+updated: "2026-09-12"
 category: "design-patterns"
 tags: ["Repository Pattern", "EF Core", ".NET", "Architecture", "Data Access", "Design Patterns"]
 related:
@@ -13,6 +13,8 @@ related:
 faq:
   - q: "Should I use the repository pattern with EF Core?"
     a: "When the boundary reduces coordination — a named query the team can test. Not as IRepository<T> wrapping every DbSet."
+  - q: "What is the repository pattern in C#?"
+    a: "A persistence boundary around named read/write operations — GetDetailAsync, ReserveStockAsync — not a generic GetAll wrapper. In C# with EF Core, DbContext is already a unit of work; extra interfaces must earn their keep."
   - q: "Is DbContext already a repository?"
     a: "Yes. DbSet is a collection gateway and the context is a unit of work. Extra interfaces must earn their keep."
   - q: "When is a generic IRepository overkill?"
@@ -35,7 +37,43 @@ Early in my career, every data access class had an interface named `IRepository<
 
 EF Core **is** already a repository and unit of work. `DbContext` tracks changes; `DbSet<T>` is a collection gateway. The question is not "repository yes or no." It is **what boundary you are drawing** and **whether that boundary reduces coordination cost** for your team.
 
-This post is how I use repositories on real products — healthcare claim workflows, marketplace catalog and orders, multi-tenant SaaS — and where I leave EF Core exposed in application services.
+This post is how I use the **repository pattern in C#** on real ASP.NET Core products — healthcare claim workflows, marketplace catalog and orders, multi-tenant SaaS — and where I leave EF Core exposed in application services.
+
+## Repository pattern in C# with EF Core
+
+The **repository design pattern** in C# is a class (usually behind an interface) that hides how rows are loaded and saved. With EF Core that class talks to `DbContext`.
+
+A **named window at the bank** (“reserve stock for this SKU”) earns its keep. A **master key to every vault** (`IRepository<T>.GetAll`) is how juniors `Include` the world. Three shapes:
+
+| Shape | Example | Verdict |
+|---|---|---|
+| Generic CRUD wrapper | `IRepository<T>` + `GetAll` | Overkill — duplicates `DbSet` |
+| Named feature repository | `IOrderReadRepository.GetDetailAsync` | Useful when the query repeats |
+| Persistence port | `IReportExportStore` | Useful when you might swap Dapper / blobs |
+
+```csharp
+public interface IInventoryRepository
+{
+    Task ReserveStockAsync(Guid sku, int qty, Guid tenantId, CancellationToken ct);
+}
+
+public sealed class InventoryRepository(AppDbContext db) : IInventoryRepository
+{
+    public async Task ReserveStockAsync(Guid sku, int qty, Guid tenantId, CancellationToken ct)
+    {
+        var row = await db.Stock.SingleAsync(
+            s => s.Sku == sku && s.TenantId == tenantId, ct);
+        if (row.Available < qty)
+            throw new InsufficientStockException(sku);
+        row.Available -= qty;
+        await db.SaveChangesAsync(ct);
+    }
+}
+```
+
+**When to use:** the same complex query appears in two handlers, or tenant filters must live in one place.
+
+**When not to:** wrapping every `DbSet` in `IRepository<T>` on day one. Inject `DbContext` (or `IApplicationDbContext`) and be honest about LINQ. If you are about to add `GetByIdWithDetails2`, stop and use a [specification](/blog/ef-core-specification-pattern).
 
 ## What people mean by "repository"
 

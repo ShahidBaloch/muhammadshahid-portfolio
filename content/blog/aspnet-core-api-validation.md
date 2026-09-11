@@ -1,18 +1,23 @@
 ---
-title: "Clean API Validation and Error Envelopes in ASP.NET Core"
-description: "ASP.NET Core API validation with ProblemDetails: FluentValidation without the deprecated AspNetCore package, one error envelope, and Angular form mapping."
+title: "FluentValidation in ASP.NET Core: One Error Envelope for Angular"
+description: "FluentValidation in ASP.NET Core without the deprecated AspNetCore package — one ProblemDetails envelope, field errors Angular forms can bind, and validation in ASP.NET APIs."
 date: "2026-08-17"
+updated: "2026-09-12"
 category: "architecture"
-tags: ["ASP.NET Core", "Validation", "Problem Details", "Angular", "API Design"]
+tags: ["ASP.NET Core", "Validation", "FluentValidation", "Problem Details", "Angular", "API Design"]
 related:
   - aspnet-core-global-exception-handling
   - angular-dotnet-integration
   - aspnet-core-json-object-cycle
 faq:
+  - q: "What is FluentValidation?"
+    a: "A .NET library for writing validation rules as classes (AbstractValidator<T>) instead of attributes. In ASP.NET Core I run those validators in one pipeline and map failures to ProblemDetails errors Angular forms can bind."
+  - q: "How do I use FluentValidation in ASP.NET Core?"
+    a: "Reference FluentValidation (not FluentValidation.AspNetCore). Register validators in DI, run IValidator<T> in a MediatR behavior or endpoint filter, and return the same errors dictionary as model binding."
   - q: "How should ASP.NET Core API validation return errors?"
     a: "One ProblemDetails (or equivalent) envelope with field errors Angular forms can bind. Do not return a string from login and a nested object from checkout."
   - q: "Should FluentValidation replace DataAnnotations?"
-    a: "Use one pipeline. FluentValidation is fine for rules that are not attributes. Mixing both without a single envelope is what breaks the SPA."
+    a: "Use one pipeline, not both. FluentValidation wins for cross-field rules, collections, and async uniqueness. DataAnnotations are enough for a one-field DTO if that is the only pipeline. Domain policy after load is 409 in the handler — not a validator."
   - q: "Do 500s belong in the same envelope as 400s?"
     a: "Same family of ProblemDetails, different status. Unhandled exceptions are the global handler article. This page is expected 400s."
 ---
@@ -25,13 +30,126 @@ Conflict  → 409 ProblemDetails { detail: "..." }
 Angular   → one interceptor parser
 ```
 
-**New to this** → stay here. **Merging a PR** → [one envelope](#one-envelope-for-the-angular-client). **On-call / interview** → [FluentValidation pipeline](#fluentvalidation-without-the-deprecated-mvc-package) · [bulk import edge cases](#bulk-import-and-grid-editing-edge-cases) · [if an interviewer asks](#if-an-interviewer-asks).
+**New to this** → stay here. **Merging a PR** → [one envelope](#one-envelope-for-the-angular-client). **On-call / interview** → [FluentValidation vs DataAnnotations](#fluentvalidation-vs-dataannotations) · [when not to](#when-not-to-use-fluentvalidation) · [FluentValidation pipeline](#fluentvalidation-without-the-deprecated-mvc-package) · [if an interviewer asks](#if-an-interviewer-asks).
 
 Nothing erodes trust in an API faster than three different error shapes for the same validation failure. The login form expects `{ message: string }`. The checkout endpoint returns `{ errors: { field: ["..."] } }`. A middleware wraps 500s in yet another envelope. The Angular team builds three parsers, misses edge cases, and users see "Something went wrong" when the server actually sent a useful field error.
 
-I standardize validation and error responses early on every .NET + Angular project — healthcare patient intake forms, marketplace seller listings, admin bulk imports. The investment pays off when you add a fourth client or turn on global exception handling without breaking the SPA.
+I standardize **validation in ASP.NET** APIs early on every .NET + Angular project — healthcare patient intake forms, marketplace seller listings, admin bulk imports. The investment pays off when you add a fourth client or turn on global exception handling without breaking the SPA.
 
-This post walks through the stack I use: FluentValidation **without** the deprecated `FluentValidation.AspNetCore` MVC package, `ProblemDetails`, a consistent validation envelope, and Angular consumption patterns that stay boring in a good way.
+**FluentValidation** is the library I use for those rules. This post walks through the stack: FluentValidation **without** the deprecated `FluentValidation.AspNetCore` MVC package, `ProblemDetails`, a consistent validation envelope, and Angular consumption patterns that stay boring in a good way.
+
+## FluentValidation vs DataAnnotations
+
+Same command, two styles. This is the comparison people searching **FluentValidation** actually want.
+
+DataAnnotations are **sticky notes on the form** — `[Required]`, `[MaxLength(120)]`. Fine when the rule lives on one field and never looks at another field or the database.
+
+FluentValidation is a **building inspector with a clipboard** — cross-field rules, collections, async uniqueness checks. The inspector still does not decide whether this seller is *allowed* to list in a category. That is domain policy after you load state — 409, not 400.
+
+```csharp
+public sealed record CreateListingCommand(
+    Guid SellerId,
+    string Title,
+    decimal Price,
+    bool IsFreeListing,
+    string Sku,
+    Guid CategoryId,
+    IReadOnlyList<ImageRef> Images);
+```
+
+**DataAnnotations** (what you outgrow):
+
+```csharp
+public sealed class CreateListingRequest
+{
+    [Required, MaxLength(120)]
+    public string Title { get; set; } = "";
+
+    [Range(0.01, 1_000_000)]
+    public decimal Price { get; set; }
+
+    [Required]
+    public string Sku { get; set; } = "";
+}
+```
+
+That covers empty title and a naive price floor. It does **not** cover:
+
+- “Price must be greater than 0 **and** less than the category cap”
+- “SKU unique for this seller” (needs the database)
+- “Each image URL is https and ≤ 2 MB metadata”
+- Conditional: “If `Price` is 0, `IsFreeListing` must be true”
+
+**FluentValidation** (what I ship on command models):
+
+```csharp
+public sealed class CreateListingValidator : AbstractValidator<CreateListingCommand>
+{
+    public CreateListingValidator(ISkuLookup skus)
+    {
+        RuleFor(x => x.Title)
+            .NotEmpty()
+            .MaximumLength(120);
+
+        RuleFor(x => x.Price)
+            .GreaterThan(0)
+            .When(x => !x.IsFreeListing)
+            .WithMessage("Paid listings need a price greater than 0.");
+
+        RuleFor(x => x.Sku)
+            .NotEmpty()
+            .MaximumLength(40)
+            .MustAsync(async (cmd, sku, ct) =>
+                !await skus.ExistsForSellerAsync(cmd.SellerId, sku, ct))
+            .WithMessage("SKU already exists for this seller.");
+
+        RuleForEach(x => x.Images)
+            .SetValidator(new ImageRefValidator());
+    }
+}
+
+public sealed record ImageRef(string Url);
+
+public interface ISkuLookup
+{
+    Task<bool> ExistsForSellerAsync(Guid sellerId, string sku, CancellationToken ct);
+}
+
+public sealed class ImageRefValidator : AbstractValidator<ImageRef>
+{
+    public ImageRefValidator()
+    {
+        RuleFor(x => x.Url)
+            .NotEmpty()
+            .Must(u => u.StartsWith("https://", StringComparison.OrdinalIgnoreCase));
+    }
+}
+```
+
+| Need | DataAnnotations | FluentValidation |
+|---|---|---|
+| Required / max length / range | Yes — keep if the DTO is trivial | Yes |
+| Cross-field rules | Awkward (`IValidatableObject`) | First-class `When` / `Must` |
+| Collections (`RuleForEach`) | Painful | Native |
+| Async uniqueness (NPI, SKU) | Not the right tool | `MustAsync` |
+| Test the rules without HTTP | Attribute soup | `new CreateListingValidator(fake).Validate(cmd)` |
+| Same rules from a worker / import | Attributes tied to MVC | Call `IValidator<T>` anywhere |
+
+I do **not** stack both on the same DTO. Two pipelines → two error shapes → Angular writes two parsers. Pick one front door.
+
+## When to use FluentValidation
+
+- Command / request models that Angular posts (create listing, enroll provider, checkout)
+- Collection and cross-field rules
+- Async checks that are still **input shape** (unique SKU) — not authorization
+- You want the same validator from HTTP, a CSV import, and a test
+
+## When not to use FluentValidation
+
+- **Domain policy after load:** “seller is not approved for this category.” That is 409 in the handler, not a field error on `categoryId` unless the UI is correcting input.
+- **Trivial DTOs** with one `[Required]` string and no collections — DataAnnotations on the request type is enough *if* that is your only pipeline.
+- **Replacing authorization.** `MustAsync` that checks “current user owns this clinic” is a policy, not validation. Use `[Authorize]` / resource handlers.
+- **The deprecated `FluentValidation.AspNetCore` auto-validation package.** Call `IValidator<T>` yourself.
 
 ## One envelope for the Angular client
 
@@ -81,6 +199,8 @@ public class CreateListingValidator : AbstractValidator<CreateListingCommand>
 
 Register validators in DI (`AddValidatorsFromAssembly...` from the **FluentValidation** package, not the old AspNetCore integration). Run them in **one** front door: a MediatR pipeline behavior, an endpoint filter, or an `IActionFilter`. Not two of those silently, and not automatic MVC validation from `FluentValidation.AspNetCore`.
 
+## FluentValidation without the deprecated MVC package
+
 ### FluentValidation.AspNetCore is the wrong package now
 
 Jeremy Skinner deprecated **FluentValidation.AspNetCore** (the package that hooked automatic validation into ASP.NET Core MVC). The library authors want you to call `IValidator<T>` yourself. Automatic integration fought model binding, `ProblemDetails`, and endpoint routing in ways that produced two error shapes for one request.
@@ -96,21 +216,77 @@ If an old template still calls `services.AddFluentValidation()`, treat that as t
 Pick one front door, not both silently.
 
 ```csharp
-public class ValidationBehavior<TRequest, TResponse>
+builder.Services.AddValidatorsFromAssemblyContaining<CreateListingValidator>();
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+```
+
+```csharp
+public sealed class ValidationBehavior<TRequest, TResponse>(
+    IEnumerable<IValidator<TRequest>> validators)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
 {
     public async Task<TResponse> Handle(
         TRequest request,
         RequestHandlerDelegate<TResponse> next,
-        CancellationToken ct)
+        CancellationToken cancellationToken)
     {
-        var failures = /* run all IValidator<TRequest> */;
+        if (!validators.Any())
+            return await next();
+
+        var context = new ValidationContext<TRequest>(request);
+        var results = await Task.WhenAll(
+            validators.Select(v => v.ValidateAsync(context, cancellationToken)));
+
+        var failures = results.SelectMany(r => r.Errors).Where(f => f is not null).ToList();
         if (failures.Count != 0)
             throw new ValidationException(failures);
 
         return await next();
     }
+}
+```
+
+Map `ValidationException` to the same `errors` dictionary as model binding (below). For Minimal APIs without MediatR, an endpoint filter does the same work:
+
+```csharp
+public sealed class FluentValidationFilter<T> : IEndpointFilter where T : class
+{
+    public async ValueTask<object?> InvokeAsync(
+        EndpointFilterInvocationContext context,
+        EndpointFilterDelegate next)
+    {
+        var validator = context.HttpContext.RequestServices.GetService<IValidator<T>>();
+        var model = context.Arguments.OfType<T>().FirstOrDefault();
+        if (validator is null || model is null)
+            return await next(context);
+
+        var result = await validator.ValidateAsync(model, context.HttpContext.RequestAborted);
+        if (result.IsValid)
+            return await next(context);
+
+        var errors = result.Errors
+            .GroupBy(e => e.PropertyName)
+            .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
+
+        return Results.ValidationProblem(errors);
+    }
+}
+```
+
+Unit test the inspector without spinning Kestrel:
+
+```csharp
+[Fact]
+public async Task Rejects_duplicate_sku()
+{
+    var skus = Substitute.For<ISkuLookup>();
+    skus.ExistsForSellerAsync(default, "SKU-1", default).ReturnsForAnyArgs(true);
+
+    var result = await new CreateListingValidator(skus).ValidateAsync(
+        new CreateListingCommand(sellerId, "Chair", 12m, false, "SKU-1", categoryId, []));
+
+    Assert.Contains(result.Errors, e => e.PropertyName == "Sku");
 }
 ```
 
@@ -265,6 +441,6 @@ Consistent validation envelopes turn API errors from a front-end guessing game i
 
 ## If an interviewer asks
 
-ProblemDetails vs custom error JSON; FluentValidation vs DataAnnotations; should 500s use the same envelope as 400s.
+ProblemDetails vs custom error JSON; FluentValidation vs DataAnnotations; when not to use FluentValidation; should 500s use the same envelope as 400s.
 
-**Strong answer:** One ProblemDetails family for the SPA — 400 carries `errors` dictionary with field keys matching form paths; 409 for business conflicts with `detail`; 500 generic detail plus `traceId` in logs. Validation is expected failure — not exception middleware. FluentValidation in a single pipeline beats mixing attribute and manual checks with different shapes.
+**Strong answer:** One ProblemDetails family for the SPA — 400 carries `errors` dictionary with field keys matching form paths; 409 for business conflicts with `detail`; 500 generic detail plus `traceId` in logs. FluentValidation for command models with collections, cross-field, or async uniqueness. DataAnnotations only if they are the *only* pipeline. Do not validate authorization or loaded-state policy in `MustAsync`. Call `IValidator<T>` yourself — skip `FluentValidation.AspNetCore` auto-validation.

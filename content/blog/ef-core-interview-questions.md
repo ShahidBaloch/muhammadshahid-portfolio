@@ -1,12 +1,20 @@
 ---
 title: "EF Core Interview Questions"
-description: "EF Core interview questions with production answers — RowVersion concurrency, global query filters, ExecuteUpdate vs SaveChanges, and tenant leaks."
+description: "EF Core interview questions with production answers — entity relationships, RowVersion concurrency, global query filters, ExecuteUpdate vs SaveChanges, and tenant leaks."
 date: "2026-09-07"
+updated: "2026-09-11"
 category: "interview-questions"
 tags: ["Interview Questions", "EF Core", "SQL Server", "ASP.NET Core", ".NET", "Career"]
+related:
+  - ef-core-relationships
+  - ef-core-optimistic-concurrency-token
+  - ef-core-global-query-filters-soft-delete
+  - ef-core-asnotracking-vs-identity-resolution
 faq:
   - q: "What EF Core interview questions get asked at senior level?"
     a: "Correctness, not Include trivia: two users saving the same row, a global query filter that leaked a tenant, SaveChanges in a foreach, two tracked instances of one key, and a singleton holding a DbContext."
+  - q: "What entity relationship interview questions come up with EF Core?"
+    a: "How you map 1-1, 1-n, and n-n without leaking join tables into Angular; required vs optional dependents; and when owned types beat a fake 1-1. Rapid-fire table below — full mapping with code: EF Core relationships."
   - q: "How do you stop last-write-wins on an encounter?"
     a: "Map SQL Server rowversion as a concurrency token. GET returns it, PUT sends it back, second save throws DbUpdateConcurrencyException. Map that to 409, not 500. The how-to is the RowVersion article."
   - q: "Are query filters a security boundary?"
@@ -195,12 +203,27 @@ Pending model changes at runtime means someone edited entities and skipped `dotn
 | Compiled queries | Hot path with a stable shape; not a substitute for indexes |
 | Returning `IQueryable` from a repository | Callers can still `IgnoreQueryFilters` and `Include` the world |
 | `AsNoTracking` on a write | You will reattach; usually the wrong default for PUT |
+| 1-1 vs owned type | Owned type when the child has no independent identity (address on a clinic). Separate entity + FK when you query the child alone |
+| 1-n | Required dependent with `HasMany` / `WithOne` and a real FK. Optional when the child can exist without the parent |
+| Many-to-many | Skip a hand-rolled join entity until you need payload on the link (assigned-at, role). EF can hide the join table |
+
+## Entity relationship interview questions
+
+**Entity relationship interview questions** on EF Core panels are mapping questions, not ERD trivia:
+
+1. **One-to-one** — optional dependent (`HasOne` / `WithOne` + unique FK) vs owned type (`OwnsOne`) when the child never lives alone.
+2. **One-to-many** — collection navigation + FK. Required vs optional is a nullability decision that leaks into Angular forms (`clinicId` required on create).
+3. **Many-to-many** — skip an explicit join entity until the link has data (who assigned the clinician, when). A payload-free n-n is a skip-level navigation; a join with `AssignedAt` is a first-class entity.
+4. **Delete behavior** — `Restrict` on healthcare FKs until you have an explicit cascade story. Silent `Cascade` on a clinic wipe is a compliance incident.
+
+If they draw a diagram and ask you to write `OnModelCreating`, talk FK, required/optional, and indexes — not "I would add a repository." Working mappings, delete behavior, and Angular DTOs: [EF Core relationships](/blog/ef-core-relationships).
 
 ---
 
 ## How this differs from the other EF posts
 
 - **This page:** correctness under concurrent writes, tenant filters, `SaveChanges` shape
+- **[EF Core relationships](/blog/ef-core-relationships):** 1-1 vs owned, 1-n, skip n-n vs join entity with payload
 - **[EF Core SQL performance](/blog/ef-core-sql-performance):** N+1, projections, indexes
 - **[N+1 vs Include vs AsSplitQuery](/blog/ef-core-nplus1-include-vs-assplitquery):** which SQL you meant
 - **[Cartesian explosion](/blog/ef-core-cartesian-explosion-multiple-include):** two collection Includes
@@ -211,6 +234,7 @@ Pending model changes at runtime means someone edited entities and skipped `dotn
 
 ## Related reading
 
+- [EF Core relationships (1-1 / 1-n / n-n)](/blog/ef-core-relationships)
 - [ASP.NET Core interview scenarios](/blog/aspnet-core-interview-questions-scenarios)
 - [C# expert-level interview questions](/blog/csharp-expert-interview-questions)
 - [Interview questions hub](/learning/interview-questions)

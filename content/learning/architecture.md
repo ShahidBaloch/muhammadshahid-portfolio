@@ -21,8 +21,8 @@ Architecture articles here focus on the **API boundary and hosting shape** — n
 Architecture is the **building code**, not the furniture:
 
 - **Middleware order** — which inspection happens before the elevator (CORS before auth vs after).
-- **Clean Architecture** — fire doors between floors so a kitchen fire (domain rule) does not burn the lobby (controllers).
-- **Modular monolith** — one building with labeled wings vs separate buildings (microservices) and their own plumbing bills.
+- **Clean Architecture** — fire doors between floors so a kitchen fire (domain rule) does not burn the lobby (controllers). Search “onion architecture” and you are looking at the same inward-dependency idea under another name.
+- **Modular monolith** — one building with labeled wings vs separate buildings (**.NET microservices** / **C# microservices**) and their own plumbing bills.
 
 ## Configuration (`appsettings`)
 

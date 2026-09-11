@@ -1,9 +1,10 @@
 ---
 title: "MediatR and CQRS-Lite in ASP.NET Core — Ceremony vs Delivery"
-description: "When MediatR and a CQRS-lite structure help a product team ship faster in ASP.NET Core — and when extra handlers, behaviors, and folders slow healthcare and SaaS delivery down."
+description: "MediatR in C# / ASP.NET Core — when CQRS-lite handlers and pipeline behaviors help a product team ship faster, and when extra folders slow healthcare and SaaS delivery down."
 date: "2026-04-28"
+updated: "2026-09-12"
 category: "cqrs"
-tags: ["MediatR", "CQRS", "ASP.NET Core", ".NET"]
+tags: ["MediatR", "CQRS", "ASP.NET Core", ".NET", "C#"]
 related:
   - mediatr-license-wolverine-alternative
   - clean-architecture-aspnet-core
@@ -11,6 +12,10 @@ related:
 faq:
   - q: "When should I use MediatR in ASP.NET Core?"
     a: "When you have real cross-cutting behaviors and many use cases. Skip it when the team spends more time naming folders than shipping checkout."
+  - q: "Is MediatR required for CQRS?"
+    a: "No. CQRS-lite is commands and queries as separate requests. MediatR is one dispatcher. A handler class plus a service is still CQRS-lite. License vs Wolverine is a separate URL."
+  - q: "What is MediatR in C#?"
+    a: "A library that sends IRequest<T> to one IRequestHandler<T> through optional IPipelineBehavior middleware — validation, logging, transactions — so controllers stay thin."
   - q: "Is CQRS-lite the same as event sourcing?"
     a: "No. CQRS-lite is commands and queries as separate requests. Event sourcing is a different bet. This page is the first, not the second."
   - q: "Do I need a handler per controller action?"
@@ -27,11 +32,21 @@ Controller → IMediator.Send(GetClaimsReportQuery)
             GetClaimsReportHandler → DbContext (read)
 ```
 
-**New to this** → stay here. **Merging a PR** → [what CQRS-lite means](#what-i-mean-by-cqrs-lite). **On-call / interview** → [when to add MediatR](#when-i-add-mediatr) · [when to skip](#when-i-skip-mediatr) · [if an interviewer asks](#if-an-interviewer-asks).
+**New to this** → stay here. **Merging a PR** → [what CQRS-lite means](#what-i-mean-by-cqrs-lite). **On-call / interview** → [when to add MediatR](#what-mediatr-buys-a-product-team) · [when to skip](#when-ceremony-starts-costing-delivery) · [if an interviewer asks](#if-an-interviewer-asks).
 
 I have introduced MediatR on greenfield SaaS APIs, inherited it on healthcare platforms with forty handlers per bounded context, and removed it from a eCommerce checkout service where the team spent more time naming folders than fixing bugs. MediatR is not good or bad. **CQRS-lite** — commands and queries as separate request types with thin controllers — is a delivery tool. It helps or hurts depending on team size, product churn, and how much cross-cutting behavior you actually need.
 
-This post is my practical line for when I add MediatR to an ASP.NET Core solution and when I keep controllers talking to application services directly.
+This post is my practical line for when I add MediatR to an ASP.NET Core solution and when I keep controllers talking to application services directly. **CQRS-lite** is the rule that writes and reads are separate request types. **MediatR** is one dispatcher — you can have the rule without the library.
+
+## MediatR in C# / ASP.NET Core
+
+**MediatR in C#** is a dispatcher: `IMediator.Send(request)` finds one `IRequestHandler<TRequest, TResponse>` and runs optional `IPipelineBehavior` middleware first. That is all. It is not required for CQRS, not a substitute for Clean Architecture, and not a reason to wrap `GetById` in three files.
+
+```csharp
+await _mediator.Send(new GetClaimsReportQuery(from, to, clinicId), ct);
+```
+
+Controllers stay HTTP adapters. The handler owns the use case. Behaviors own validation / logging / transactions once.
 
 ## What I mean by CQRS-lite
 
@@ -53,7 +68,17 @@ public sealed class GetClaimsReportHandler : IRequestHandler<GetClaimsReportQuer
 
     public async Task<ClaimsReportDto> Handle(GetClaimsReportQuery request, CancellationToken ct)
     {
-        // projection query, AsNoTracking, etc.
+        var rows = await _db.Claims.AsNoTracking()
+            .Where(c => c.ClinicId == request.ClinicId
+                        && c.ServiceDate >= request.From
+                        && c.ServiceDate <= request.To)
+            .GroupBy(_ => 1)
+            .Select(g => new ClaimsReportDto(
+                g.Count(),
+                g.Sum(c => c.Amount)))
+            .FirstOrDefaultAsync(ct);
+
+        return rows ?? new ClaimsReportDto(0, 0);
     }
 }
 ```
@@ -64,34 +89,29 @@ No event store. No mandatory read database. Just a consistent place to put use-c
 
 MediatR shines when several forces align.
 
-**Cross-cutting pipeline behaviors.** Validation, logging, transactions, and authorization checks fit cleanly as `IPipelineBehavior` implementations:
+**Cross-cutting pipeline behaviors.** Validation, logging, transactions, and authorization checks fit cleanly as `IPipelineBehavior` implementations. For FluentValidation wiring and a full `ValidationBehavior`, see the [ASP.NET Core validation guide](/blog/aspnet-core-api-validation#fluentvalidation-without-the-deprecated-mvc-package). Here is a logging behavior that shows the same pattern without duplicating validation code:
 
 ```csharp
-public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public sealed class LoggingBehavior<TRequest, TResponse>(
+    ILogger<LoggingBehavior<TRequest, TResponse>> logger)
+    : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    private readonly IEnumerable<IValidator<TRequest>> _validators;
-
     public async Task<TResponse> Handle(
         TRequest request,
         RequestHandlerDelegate<TResponse> next,
         CancellationToken ct)
     {
-        var failures = _validators
-            .Select(v => v.Validate(request))
-            .SelectMany(r => r.Errors)
-            .Where(f => f != null)
-            .ToList();
-
-        if (failures.Count != 0)
-            throw new ValidationException(failures);
-
-        return await next();
+        var name = typeof(TRequest).Name;
+        logger.LogInformation("Handling {Command}", name);
+        var response = await next();
+        logger.LogInformation("Handled {Command}", name);
+        return response;
     }
 }
 ```
 
-One behavior applies to every command with a FluentValidation validator. Controllers do not repeat `if (!ModelState.IsValid)`.
+Register once; every command gets structured logs. Controllers do not repeat `if (!ModelState.IsValid)` when validation lives in its own behavior.
 
 **Consistent unit testing.** Handlers are plain classes. Tests call `Handle` with a fake `DbContext` or repository. No `TestServer` required for business rules.
 
@@ -107,6 +127,8 @@ That matters when Azure Service Bus or Hangfire jobs duplicate logic that used t
 
 ## When ceremony starts costing delivery
 
+MediatR is a **hospital paging operator** — page “approve this claim” when the message needs a checklist (validation, logging, a worker replay). Do not page “get chart for room 12”; walk to the nurse (`GetById` on a service).
+
 MediatR becomes drag when the team treats every CRUD endpoint as a three-file ceremony (command, handler, validator) without shared behavior or complex rules.
 
 Warning signs I watch for:
@@ -116,7 +138,28 @@ Warning signs I watch for:
 - **Deep folder trees** where finding a handler takes longer than writing the feature
 - **Junior developers copying boilerplate** incorrectly — wrong generic constraints, missing validators, duplicate DTOs
 
-For a simple catalog API with list/get/create/update/delete on five entities, a well-structured `ProductService` and thin controllers often ships faster. You can add MediatR later when cross-cutting behaviors appear — not on day one because a blog post said to.
+**When to use MediatR:** several use cases, shared pipeline (FluentValidation, logging), HTTP **and** a worker calling the same command.
+
+**When not to:** wrap `GetById` in `IRequest` + handler + folder because a sample repo did. Call the service:
+
+```csharp
+// Ceremony — skip
+public sealed record GetProductByIdQuery(Guid Id) : IRequest<ProductDto?>;
+public sealed class GetProductByIdHandler(AppDbContext db)
+    : IRequestHandler<GetProductByIdQuery, ProductDto?>
+{
+    public Task<ProductDto?> Handle(GetProductByIdQuery q, CancellationToken ct)
+        => db.Products.AsNoTracking()
+            .Where(p => p.Id == q.Id)
+            .Select(p => new ProductDto(p.Id, p.Name))
+            .FirstOrDefaultAsync(ct);
+}
+
+// Enough
+[HttpGet("{id:guid}")]
+public Task<ProductDto?> Get(Guid id, CancellationToken ct)
+    => _products.GetByIdAsync(id, ct);
+```
 
 ## Decision rubric I use with teams
 
@@ -171,7 +214,7 @@ Features/
       GetClaimsReportHandler.cs
   Shared/
     Behaviors/
-      ValidationBehavior.cs
+      LoggingBehavior.cs
       TransactionBehavior.cs
 ```
 
@@ -183,7 +226,8 @@ Register MediatR once:
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(ApproveClaimHandler).Assembly));
 builder.Services.AddValidatorsFromAssembly(typeof(ApproveClaimValidator).Assembly);
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+// ValidationBehavior registration: see validation guide linked above
 ```
 
 ## Transactions and side effects
@@ -229,6 +273,6 @@ MediatR and CQRS-lite help when cross-cutting behaviors, multiple entry points, 
 
 ## If an interviewer asks
 
-CQRS-lite vs event sourcing; when MediatR is worth it; can you do CQRS without a mediator.
+CQRS-lite vs event sourcing; when MediatR is worth it in C#; is MediatR required for CQRS.
 
-**Strong answer:** CQRS-lite = separate command/query types and handlers — no event store required. MediatR earns its place when pipeline behaviors and multiple entry points (HTTP, jobs) share logic. Trivial `Send` wrappers around one service call are ceremony — call the service directly. CQRS is folder and naming discipline, not a NuGet requirement.
+**Strong answer:** CQRS-lite = separate command/query types and handlers — no event store required. MediatR in C# is a dispatcher with optional pipeline behaviors. It is **not** required for CQRS — a handler class plus a service is still CQRS-lite. MediatR earns its place when behaviors and multiple entry points (HTTP, jobs) share logic. Trivial `Send` wrappers around one service call are ceremony — call the service directly.

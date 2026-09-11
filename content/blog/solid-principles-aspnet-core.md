@@ -2,6 +2,7 @@
 title: "SOLID Principles in C# and ASP.NET Core"
 description: "SOLID principles in C# for ASP.NET Core — detailed SRP, OCP, LSP, ISP, DIP examples with DI, Angular-facing APIs, anti-patterns, and refactor checklists from production systems."
 date: "2026-08-11"
+updated: "2026-09-12"
 category: "design-patterns"
 tags: ["SOLID", "C#", "ASP.NET Core", "Design Patterns", ".NET", "Architecture"]
 related:
@@ -11,6 +12,8 @@ related:
 faq:
   - q: "What are SOLID principles in ASP.NET Core?"
     a: "A PR review lens: small services, open to new behaviors, honest subtypes, slim interfaces, and dependencies on abstractions you actually inject."
+  - q: "What C# best practices do you actually enforce on PRs?"
+    a: "Async all the way on I/O, DI lifetimes without captive DbContext, one validation envelope, tenant-aware cache keys, and policies instead of a god Admin role. SOLID is the class-design slice of that list — not a 20-tips dump."
   - q: "Does DIP mean an interface for every class?"
     a: "No. DIP is not newing SqlConnection next to a Razor page. A 30-method IPatientService is not ISP either."
   - q: "Is SOLID the same as Clean Architecture?"
@@ -35,6 +38,21 @@ This is a practical walkthrough for ASP.NET Core APIs that serve Angular SPAs. E
 
 If you are rehearsing interviews, pair this with [ASP.NET Core scenario questions](/blog/aspnet-core-interview-questions-scenarios). If you are choosing a pattern for a live change, use [Factory](/blog/csharp-factory-pattern) or [Strategy](/blog/csharp-strategy-pattern) instead of this overview.
 
+## C# best practices I actually enforce on PRs
+
+Search **C# best practices** and you get a 20-tips list. On ASP.NET Core PRs I enforce a shorter map — SOLID is the class-design slice, not the whole list:
+
+| Practice | Where the depth lives |
+|---|---|
+| Async I/O, no `.Result` on the request path | [Async/await](/blog/csharp-async-await-aspnet-core) |
+| DI lifetimes — no captive `DbContext` | [Dependency injection](/blog/aspnet-core-dependency-injection) |
+| One validation envelope for Angular | [FluentValidation](/blog/aspnet-core-api-validation) |
+| Tenant-aware cache keys | [Caching](/blog/caching-system-dotnet-imemorycache-redis) |
+| Policies over a god `Admin` role | [JWT checklist](/blog/aspnet-core-jwt-auth) |
+| Thin controllers, strategies for variants | this page + [Strategy](/blog/csharp-strategy-pattern) |
+
+If a tip is not on that map, it is style, not a merge blocker.
+
 ## The five principles (working definitions)
 
 | Letter | Name | Meaning on a real API |
@@ -45,7 +63,7 @@ If you are rehearsing interviews, pair this with [ASP.NET Core scenario question
 | **I** | Interface Segregation | Clients should not depend on methods they do not use |
 | **D** | Dependency Inversion | High-level policy depends on abstractions; details plug in via DI |
 
-SOLID is a **compass**, not a mandate to create an interface for every line of code.
+SOLID is a **compass**, not a mandate to create an interface for every line of code. Use it on PRs where a class has two reasons to change, a switch on partner codes, or a controller that news up infrastructure — not on a 40-line feature with one implementation and no second path yet.
 
 ---
 

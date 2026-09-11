@@ -48,16 +48,15 @@ My baseline for any API:
 - **Fail fast on startup.** If a required setting is missing, throw during host build. A 503 at startup is easier to diagnose than partial success where auth works but reporting does not.
 
 ```csharp
-var authority = builder.Configuration["IdentityServer:Authority"]
-    ?? throw new InvalidOperationException("IdentityServer:Authority is not configured.");
+var connectionString = builder.Configuration.GetConnectionString("Default")
+    ?? throw new InvalidOperationException(
+        "Connection string 'Default' is missing — set ConnectionStrings__Default in App Service.");
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.Authority = authority;
-        options.Audience = "orders-api";
-    });
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(connectionString));
 ```
+
+JWT authority binding and the same fail-fast pattern for `IdentityServer:Authority` are in the [appsettings and local override guide](/blog/aspnet-core-appsettings-localappsettings#fail-if-the-config-file-is-incomplete).
 
 Healthcare clients often ask for an audit trail of who changed production settings. Document that App Service configuration changes belong in Infrastructure as Code or a controlled pipeline, not ad hoc portal edits.
 

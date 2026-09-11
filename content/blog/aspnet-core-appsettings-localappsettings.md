@@ -1,16 +1,20 @@
 ---
-title: "What is the ASP.NET Core config file?"
-description: "ASP.NET Core config files explained — appsettings.json, appsettings.{Environment}.json, user secrets, and why localappsettings.json is not a real framework file."
+title: "appsettings.json and ASP.NET Core Configuration"
+description: "What is appsettings.json in ASP.NET Core — appsettings.{Environment}.json, ASPNETCORE_ENVIRONMENT, user secrets, and why localappsettings.json is not a real framework file."
 date: "2026-09-03"
-updated: "2026-09-08"
+updated: "2026-09-12"
 category: "architecture"
 tags: ["ASP.NET Core", "Configuration", "appsettings", "Azure", ".NET"]
 related:
   - aspnet-core-ioptions-snapshot-monitor
   - azure-app-service-aspnet-core
 faq:
+  - q: "What is appsettings.json?"
+    a: "The base JSON config file the ASP.NET Core host loads first. Environment overlays (appsettings.Development.json), user secrets, and environment variables stack on top. Last source wins."
   - q: "What is the ASP.NET Core config file?"
     a: "The host loads appsettings.json, then appsettings.{Environment}.json, then user secrets in Development, then environment variables. Last source wins. A JSON file in the project does nothing until CreateBuilder or AddJsonFile loads it."
+  - q: "What is ASPNETCORE_ENVIRONMENT?"
+    a: "The environment name the host uses to pick appsettings.{Environment}.json and to set IHostEnvironment.EnvironmentName. Development, Staging, and Production are the usual values. Unset in Azure often means Production — or a surprise Development leak."
   - q: "Is localappsettings.json a real ASP.NET Core file?"
     a: "No. ASP.NET Core does not load localappsettings.json unless you add it yourself. Teams usually mean appsettings.Development.json, user secrets, a gitignored appsettings.Local.json, or Azure Functions local.settings.json."
   - q: "Where should local secrets go?"
@@ -21,9 +25,64 @@ faq:
 
 The **ASP.NET Core config file** is not one file — it is a layered configuration pipeline. The host loads `appsettings.json`, then `appsettings.{Environment}.json`, then user secrets (Development only), then environment variables. **Last source wins.** A JSON file sitting in the project folder does nothing until `WebApplication.CreateBuilder` or `AddJsonFile` registers it.
 
-People search **config file**, **appsettings.json**, and **localappsettings.json** when a setting works on one laptop and dies in Azure. The file name in the search box is often wrong.
+## What is appsettings.json?
 
-## Analogy
+**`appsettings.json`** is the base JSON file the host loads first: log levels, feature names, connection-string *keys* (not production values), CORS policy names. It ships to every environment. It is not the only config file — `appsettings.{Environment}.json` overlays it, then secrets and environment variables.
+
+People search **appsettings**, **config file**, and **localappsettings.json** when a setting works on one laptop and dies in Azure. The file name in the search box is often wrong.
+
+## ASPNETCORE_ENVIRONMENT
+
+**`ASPNETCORE_ENVIRONMENT`** (and the older `DOTNET_ENVIRONMENT`) is the name the host uses to pick `appsettings.{Environment}.json` and to set `IHostEnvironment.EnvironmentName`. Usual values: `Development`, `Staging`, `Production`.
+
+| Where it is set | What happens |
+|---|---|
+| Launch profile / `launchSettings.json` | Laptop uses `Development` → `appsettings.Development.json` + user secrets |
+| Azure App Service application setting | Portal value wins; JSON is defaults only |
+| Unset | Host treats the app as Production — or you leak a developer exception page if you assumed Development |
+
+Wrong environment is why Swagger is public in a slot, or why a laptop connection string never appears in Azure. Verify the setting in the portal, not in a committed JSON file.
+
+```json
+// Properties/launchSettings.json (laptop only — not what Azure reads)
+{
+  "profiles": {
+    "ClinicApi": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
+```
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+var env = builder.Environment;
+
+if (env.IsDevelopment())
+{
+    builder.Services.AddEndpointsApiExplorer();
+    // Swagger UI stays off Production — environment is the switch, not a JSON flag you forget
+}
+
+var app = builder.Build();
+
+if (!app.Environment.IsDevelopment())
+    app.UseHsts();
+
+app.MapGet("/api/health", (IHostEnvironment host) =>
+    Results.Ok(new { env = host.EnvironmentName }));
+```
+
+**When to set `Development`:** laptops, local Docker compose with user secrets.
+
+**When not to:** Azure slots, staging, or a shared demo. `ASPNETCORE_ENVIRONMENT=Development` on App Service enables developer exception pages and often Swagger. Set `Production` (or `Staging` with the same secret rules as Production) in application settings.
+
+Read the value from `IHostEnvironment`, not from `appsettings.json` pretending to store `"Environment": "Production"` — the host name comes from the process, not that key.
+
+## Configuration layering
 
 Configuration is a stack of transparencies on a light table:
 

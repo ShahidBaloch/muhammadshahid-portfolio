@@ -8,6 +8,13 @@
     <atom:link href="https://www.muhammadshahid.dev/rss.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title><![CDATA[EF Core Relationships: One-to-One, One-to-Many, Many-to-Many]]></title>
+      <link>https://www.muhammadshahid.dev/blog/ef-core-relationships</link>
+      <guid>https://www.muhammadshahid.dev/blog/ef-core-relationships</guid>
+      <pubDate>Fri, 11 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Map one-to-one, one-to-many, and many-to-many in EF Core — owned types vs FK, skip-level n-n vs a join entity with payload, delete behavior, and the Angular DTOs I actually return.]]></description>
+    </item>
+    <item>
       <title><![CDATA[What Is an API? (Definition With REST and ASP.NET Core Examples)]]></title>
       <link>https://www.muhammadshahid.dev/blog/what-is-an-api</link>
       <guid>https://www.muhammadshahid.dev/blog/what-is-an-api</guid>
@@ -40,7 +47,7 @@
       <link>https://www.muhammadshahid.dev/blog/dotnet-interview-questions-answers</link>
       <guid>https://www.muhammadshahid.dev/blog/dotnet-interview-questions-answers</guid>
       <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[.NET interview questions and answers for mid-to-senior roles — C# async, ASP.NET Core scenarios, EF Core, Angular integration, with links to full scenario write-ups.]]></description>
+      <description><![CDATA[.NET interview questions and answers for mid-to-senior roles — .NET Core, ASP.NET Core Web API, C# async, EF Core, Angular integration, with links to full scenario write-ups.]]></description>
     </item>
     <item>
       <title><![CDATA[Deadlock in C# and Operating Systems (Avoidance Explained)]]></title>
@@ -159,7 +166,7 @@
       <link>https://www.muhammadshahid.dev/blog/ef-core-interview-questions</link>
       <guid>https://www.muhammadshahid.dev/blog/ef-core-interview-questions</guid>
       <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[EF Core interview questions with production answers — RowVersion concurrency, global query filters, ExecuteUpdate vs SaveChanges, and tenant leaks.]]></description>
+      <description><![CDATA[EF Core interview questions with production answers — entity relationships, RowVersion concurrency, global query filters, ExecuteUpdate vs SaveChanges, and tenant leaks.]]></description>
     </item>
     <item>
       <title><![CDATA[EF Core SaveChanges Interceptors for Audit Logs]]></title>
@@ -355,7 +362,7 @@
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-ioptions-snapshot-monitor</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-ioptions-snapshot-monitor</guid>
       <pubDate>Sat, 05 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[When to inject IOptions, IOptionsSnapshot, or IOptionsMonitor — lifetimes, reload, named options, and the production bugs I see when teams pick the wrong one.]]></description>
+      <description><![CDATA[Options pattern in C# — when to inject IOptions, IOptionsSnapshot, or IOptionsMonitor, AddOptions vs Configure, named options, and the production bugs I see when teams pick the wrong one.]]></description>
     </item>
     <item>
       <title><![CDATA[C# Expert-Level Interview Questions]]></title>
@@ -365,11 +372,11 @@
       <description><![CDATA[C# expert level interview questions with production answers — IAsyncEnumerable exports, cancellation across MediatR, ConcurrentDictionary caches, Span parsers, and bounded Channels.]]></description>
     </item>
     <item>
-      <title><![CDATA[What is the ASP.NET Core config file?]]></title>
+      <title><![CDATA[appsettings.json and ASP.NET Core Configuration]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-appsettings-localappsettings</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-appsettings-localappsettings</guid>
       <pubDate>Thu, 03 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[ASP.NET Core config files explained — appsettings.json, appsettings.{Environment}.json, user secrets, and why localappsettings.json is not a real framework file.]]></description>
+      <description><![CDATA[What is appsettings.json in ASP.NET Core — appsettings.{Environment}.json, ASPNETCORE_ENVIRONMENT, user secrets, and why localappsettings.json is not a real framework file.]]></description>
     </item>
     <item>
       <title><![CDATA[Serilog PII Redaction for Healthcare ASP.NET Core APIs]]></title>
@@ -400,11 +407,11 @@
       <description><![CDATA[Duende BFF vs custom YARP BFF for Angular ASP.NET Core — buy vs build, OIDC session, CSRF, licensing tradeoffs, and failure modes at 2 a.m.]]></description>
     </item>
     <item>
-      <title><![CDATA[Clean API Validation and Error Envelopes in ASP.NET Core]]></title>
+      <title><![CDATA[FluentValidation in ASP.NET Core: One Error Envelope for Angular]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-api-validation</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-api-validation</guid>
       <pubDate>Mon, 17 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[ASP.NET Core API validation with ProblemDetails: FluentValidation without the deprecated AspNetCore package, one error envelope, and Angular form mapping.]]></description>
+      <description><![CDATA[FluentValidation in ASP.NET Core without the deprecated AspNetCore package — one ProblemDetails envelope, field errors Angular forms can bind, and validation in ASP.NET APIs.]]></description>
     </item>
     <item>
       <title><![CDATA[HttpOnly Cookie for Angular Refresh Tokens]]></title>
@@ -502,7 +509,7 @@
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-interview-questions-scenarios</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-interview-questions-scenarios</guid>
       <pubDate>Wed, 12 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[ASP.NET Core interview questions with detailed scenario answers — DI captive dependencies, JWT with Angular, middleware order, async starvation, EF Core slowness, and production tradeoffs.]]></description>
+      <description><![CDATA[ASP.NET Core and Web API interview questions with scenario answers — DI captive dependencies, JWT with Angular, middleware order, async starvation, EF Core slowness, and production tradeoffs.]]></description>
     </item>
     <item>
       <title><![CDATA[SOLID Principles in C# and ASP.NET Core]]></title>
@@ -537,7 +544,7 @@
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-rate-limiting</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-rate-limiting</guid>
       <pubDate>Tue, 04 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Implement ASP.NET Core rate limiting middleware for Web APIs — fixed/sliding windows, per-user policies, 429 responses for Angular clients, and multi-instance pitfalls.]]></description>
+      <description><![CDATA[Microsoft.AspNetCore.RateLimiting in ASP.NET Core — fixed/sliding windows, per-user policies, 429 responses for Angular clients, and multi-instance pitfalls.]]></description>
     </item>
     <item>
       <title><![CDATA[ASP.NET Core Global Exception Handling for Angular APIs]]></title>
@@ -558,14 +565,14 @@
       <link>https://www.muhammadshahid.dev/blog/redis-caching-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/redis-caching-aspnet-core</guid>
       <pubDate>Sun, 02 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Redis caching in ASP.NET Core — IDistributedCache, cache hit vs miss, stampede control, invalidation, and fixing error establishing a Redis connection.]]></description>
+      <description><![CDATA[Redis as a distributed cache in ASP.NET Core — IDistributedCache, cache hit vs miss, stampede control, invalidation, and fixing error establishing a Redis connection.]]></description>
     </item>
     <item>
       <title><![CDATA[Modular Monolith vs Microservices in .NET]]></title>
       <link>https://www.muhammadshahid.dev/blog/modular-monolith-vs-microservices-dotnet</link>
       <guid>https://www.muhammadshahid.dev/blog/modular-monolith-vs-microservices-dotnet</guid>
       <pubDate>Sun, 02 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Modular monolith vs microservices for ASP.NET Core — when to split services, module boundaries, data ownership, Angular contract stability, and migration path.]]></description>
+      <description><![CDATA[.NET microservices vs modular monolith for ASP.NET Core — when to split C# services, module boundaries, data ownership, Angular contract stability, and migration path.]]></description>
     </item>
     <item>
       <title><![CDATA[Strategy Pattern in C#: Replace If-Else With Clean Behavior Swaps]]></title>
@@ -582,11 +589,11 @@
       <description><![CDATA[Angular auth guard and CanActivateFn with ASP.NET Core JWT — route protection, role guards, token expiry checks, returnUrl safety, and why guards are UX not API security.]]></description>
     </item>
     <item>
-      <title><![CDATA[Dependency Injection in ASP.NET Core: Lifetimes Done Right]]></title>
+      <title><![CDATA[Dependency Injection in C# and ASP.NET Core: Lifetimes Done Right]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-dependency-injection</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-dependency-injection</guid>
       <pubDate>Fri, 31 Jul 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[ASP.NET Core dependency injection explained for real apps — Singleton vs Scoped vs Transient, captive dependencies, factory registration, and habits that keep .NET APIs testable.]]></description>
+      <description><![CDATA[C# dependency injection in ASP.NET Core — AddTransient vs AddScoped vs AddSingleton, what a transient dependency is, captive dependencies, and habits that keep .NET APIs testable.]]></description>
     </item>
     <item>
       <title><![CDATA[Factory Pattern in C# with ASP.NET Core Dependency Injection]]></title>
@@ -607,7 +614,7 @@
       <link>https://www.muhammadshahid.dev/blog/repository-pattern-dotnet</link>
       <guid>https://www.muhammadshahid.dev/blog/repository-pattern-dotnet</guid>
       <pubDate>Sun, 05 Jul 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Repository definition and when the repository pattern earns its place in .NET with EF Core — named queries vs generic IRepository ceremony on healthcare and eCommerce APIs.]]></description>
+      <description><![CDATA[Repository pattern in C# with EF Core — when named queries earn their keep vs generic IRepository ceremony on healthcare and eCommerce ASP.NET Core APIs.]]></description>
     </item>
     <item>
       <title><![CDATA[Azure Blob Storage with ASP.NET Core File Uploads]]></title>
@@ -631,11 +638,11 @@
       <description><![CDATA[Production ASP.NET Core JWT authentication checklist — token lifetimes, refresh rotation, authorization policies, Angular client habits, and go-live security review.]]></description>
     </item>
     <item>
-      <title><![CDATA[Clean Architecture in ASP.NET Core Without Over-Engineering]]></title>
+      <title><![CDATA[Clean Architecture in C# and ASP.NET Core Without Over-Engineering]]></title>
       <link>https://www.muhammadshahid.dev/blog/clean-architecture-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/clean-architecture-aspnet-core</guid>
       <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Pragmatic Clean Architecture in ASP.NET Core — domain boundaries, three-project layout, repository patterns, and when to skip ceremony on SaaS and eCommerce APIs.]]></description>
+      <description><![CDATA[Pragmatic Clean Architecture in C# / ASP.NET Core — Onion vs Clean, domain boundaries, three-project layout, and when to skip ceremony on SaaS and eCommerce APIs.]]></description>
     </item>
     <item>
       <title><![CDATA[EF Core and SQL Server Performance]]></title>
@@ -649,7 +656,7 @@
       <link>https://www.muhammadshahid.dev/blog/mediatr-cqrs-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/mediatr-cqrs-aspnet-core</guid>
       <pubDate>Tue, 28 Apr 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[When MediatR and a CQRS-lite structure help a product team ship faster in ASP.NET Core — and when extra handlers, behaviors, and folders slow healthcare and SaaS delivery down.]]></description>
+      <description><![CDATA[MediatR in C# / ASP.NET Core — when CQRS-lite handlers and pipeline behaviors help a product team ship faster, and when extra folders slow healthcare and SaaS delivery down.]]></description>
     </item>
     <item>
       <title><![CDATA[Angular + .NET: Integration Habits That Reduce Rework]]></title>

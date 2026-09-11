@@ -1,7 +1,8 @@
 ---
 title: "ASP.NET Core Rate Limiting for APIs"
-description: "Implement ASP.NET Core rate limiting middleware for Web APIs — fixed/sliding windows, per-user policies, 429 responses for Angular clients, and multi-instance pitfalls."
+description: "Microsoft.AspNetCore.RateLimiting in ASP.NET Core — fixed/sliding windows, per-user policies, 429 responses for Angular clients, and multi-instance pitfalls."
 date: "2026-08-04"
+updated: "2026-09-12"
 tags: ["Rate Limiting", "ASP.NET Core", "API Security", ".NET", "Performance"]
 related:
   - csharp-semaphore-slim-async-lock
@@ -9,14 +10,18 @@ related:
   - aspnet-core-jwt-auth
 faq:
   - q: "How do I add rate limiting in ASP.NET Core?"
-    a: "Use the built-in middleware with named policies on login, search, and export. Return 429 with a body Angular can show. Place it after auth so you can limit per user."
+    a: "Use the built-in Microsoft.AspNetCore.RateLimiting middleware with named policies on login, search, and export. Return 429 with a body Angular can show. Place it after auth so you can limit per user."
+  - q: "How do I use Microsoft.AspNetCore.RateLimiting?"
+    a: "AddRateLimiter in Program.cs, UseRateLimiter in the pipeline, then RequireRateLimiting or [EnableRateLimiting] on endpoints. The package ships in the shared framework from .NET 7 — you usually reference Microsoft.AspNetCore.App, not a separate NuGet for the types."
   - q: "Does in-memory rate limiting work on multiple App Service instances?"
     a: "No. Each instance has its own counters. Use a distributed store or accept that limits are per instance."
   - q: "Should login and search share one limiter?"
-    a: "No. Auth is abuse-shaped. Search is expensive SQL. Separate partitions so a catalog crawl does not lock clinicians out of login."
+    a: "No. Auth is abuse-shaped. Search is expensive SQL. Separate partitions so a catalog crawl cannot exhaust the login policy."
 ---
 
 **Rate limiting** caps how many requests a partition (IP, user, API key) can make per time window; ASP.NET Core returns **429** when the limit is exceeded. In-memory limiters are per process — not shared across App Service instances.
+
+Since .NET 7 the types live in **`Microsoft.AspNetCore.RateLimiting`** (shared framework). You `using Microsoft.AspNetCore.RateLimiting;` and call `AddRateLimiter` — you typically do not add a separate NuGet for a new ASP.NET Core web app.
 
 ```text
 Request → partition key (user / IP)
@@ -32,6 +37,16 @@ Request → partition key (user / IP)
 **ASP.NET Core rate limiting** is a high-intent topic because it sits at the intersection of security, cost control, and uptime. Bots hammer login endpoints. A buggy Angular retry loop fans out hundreds of calls. One tenant floods a shared SaaS API. Without limits, you pay in CPU, SQL, and support tickets.
 
 Since .NET 7, ASP.NET Core ships built-in rate limiting middleware. I turn it on for public and partner APIs — especially auth, search, and export endpoints that are expensive or attractive to abuse.
+
+## When to enable rate limiting
+
+| Enable | Skip |
+|---|---|
+| Public login, password reset, registration | Internal tool behind VPN with a handful of users |
+| Export and expensive search endpoints | Every authenticated read on the same policy as login |
+| Partner APIs with API keys you can partition on | Expecting one in-memory limiter to be global across App Service instances without Redis |
+
+Prefer **per-user** (or per API key) over **per-IP** when you can — corporate NAT puts many good users behind one address. Split policies: tight on `/api/auth/login`, looser on catalog reads. A search crawler should not consume the same budget as password reset.
 
 ## Why this keyword converts traffic
 
@@ -91,7 +106,7 @@ Place `UseRateLimiter` correctly in the pipeline (after routing; for user-based 
 
 ## Partition by user when you can
 
-IP limits are blunt. On corporate NATs, many good users share one IP. Prefer authenticated identity when present:
+**Per-user** is “this patient gets three walk-in slots per hour.” **Per-IP** is “this waiting-room door.” A whole office behind one NAT looks like one patient to an IP limiter — morning rush, mass 429s for staff who share the same egress IP. Prefer authenticated identity when present:
 
 ```csharp
 options.AddPolicy("per-user", httpContext =>

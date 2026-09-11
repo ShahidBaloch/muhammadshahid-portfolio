@@ -2,12 +2,14 @@
 title: "ASP.NET Core JWT Auth: A Practical Checklist"
 description: "Production ASP.NET Core JWT authentication checklist — token lifetimes, refresh rotation, authorization policies, Angular client habits, and go-live security review."
 date: "2026-06-12"
-updated: "2026-09-07"
+updated: "2026-09-12"
 category: "authentication"
-tags: ["ASP.NET Core", "JWT", "Security", "Angular"]
+tags: ["ASP.NET Core", "JWT", "Security", "Angular", "SaaS"]
 faq:
   - q: "How do I set up JWT auth in ASP.NET Core?"
     a: "Add JwtBearer, validate issuer, audience, signing key, and lifetime, then protect endpoints with policies. A token endpoint alone is not a production auth system."
+  - q: "What belongs in a SaaS JWT implementation?"
+    a: "Short-lived access tokens, refresh rotation with server-side revocation, named policies (not a single Admin role), httpOnly refresh for Angular, and tenant/org claims that authorization actually uses. A boilerplate login endpoint is not enough."
   - q: "How long should an ASP.NET Core JWT live?"
     a: "Access tokens should be short — minutes, not days. Stay signed in with a refresh contract, not a 30-day JWT in localStorage."
   - q: "Is JWT auth enough without refresh tokens?"
@@ -28,8 +30,6 @@ Login ──► access JWT (short) + refresh (long, server-tracked)
          401 ──► SPA refresh ──► retry or logout
 ```
 
-Think of JWT auth as a **theme park wristband system**: the wristband (access token) gets you through rides for a few hours; the season pass record (refresh token) at guest services lets you get a new wristband — but guest services can revoke the pass if it is stolen.
-
 **New to this** → stay here. **Angular interceptors** → [JWT interceptors](/blog/angular-jwt-interceptors). **Route guards** → [auth guards](/blog/angular-auth-guard-aspnet-core). **Refresh rotation** → [refresh token rotation](/blog/aspnet-core-jwt-refresh-token-rotation). **Interview prep** → [If an interviewer asks](#if-an-interviewer-asks).
 
 ## What "JWT auth" actually includes
@@ -43,6 +43,51 @@ Treat auth as a **system**, not a NuGet package:
 5. **Operational hygiene** — secret rotation, HTTPS, logging without leaking credentials
 
 Skip any one of those and you do not have production auth. You have a demo that returns 200 on `/api/me`.
+
+## JWT in a SaaS API checklist
+
+A **SaaS boilerplate JWT implementation** is a login endpoint and a `[Authorize]` attribute. A SaaS API that survives a second tenant still needs this list — the rest of the article is how:
+
+1. Access JWT measured in **minutes**, not days
+2. Refresh **rotation** + server-side revocation (password reset, lockout, logout everywhere)
+3. **Named policies** (and resource/tenant checks) — not one `Admin` role for every write
+4. Angular: one interceptor, one refresh path, httpOnly refresh cookie when you can
+5. Claims carry `sub` + tenant/org — **not** PHI the SPA does not need
+6. Secrets in Key Vault / app settings — never committed `appsettings.json`
+7. 401 vs 403 distinguishable so the SPA knows whether to refresh or show "ask admin"
+
+Deep dives: [refresh rotation](/blog/aspnet-core-jwt-refresh-token-rotation), [HttpOnly refresh cookie](/blog/refresh-token-httponly-cookie-angular-aspnet-core), [401 vs 403](/blog/aspnet-core-401-vs-403).
+
+## JWT vs BFF + cookie
+
+Think **theme-park wristbands**: the access JWT gets you through rides for a few hours; the refresh record at guest services issues a new wristband and can revoke a stolen pass. A 30-day JWT in `localStorage` is a wristband that never expires — taped to the guest's phone.
+
+| Use JWT (short-lived access + rotated refresh) | Prefer BFF + httpOnly cookie session |
+|---|---|
+| Mobile app or partner API that cannot share a site cookie | First-party Angular SPA on the same origin |
+| Multiple resource APIs behind one gateway | You want zero bearer token in `localStorage` |
+| Existing Bearer contract across services | A boilerplate issued 30-day JWTs — that is the bug to fix |
+
+Access tokens should live in **minutes**. Refresh tokens are server-tracked and revocable. If the SPA only needs “stay signed in,” rotation or a BFF beats a long-lived JWT in browser storage.
+
+```csharp
+// SaaS API — short access JWT, validate everything
+options.TokenValidationParameters = new TokenValidationParameters
+{
+    ValidateIssuer = true,
+    ValidIssuer = jwt.Issuer,
+    ValidateAudience = true,
+    ValidAudience = jwt.Audience,
+    ValidateIssuerSigningKey = true,
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key)),
+    ValidateLifetime = true,
+    ClockSkew = TimeSpan.FromMinutes(1),
+};
+
+options.AddPolicy("ClinicRead", p =>
+    p.RequireClaim("tenant")
+     .AddRequirements(new SameClinicRequirement()));
+```
 
 ## API-side essentials in ASP.NET Core
 

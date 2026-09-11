@@ -1,14 +1,19 @@
 ---
 title: "IOptions vs IOptionsSnapshot vs IOptionsMonitor in ASP.NET Core"
-description: "When to inject IOptions, IOptionsSnapshot, or IOptionsMonitor — lifetimes, reload, named options, and the production bugs I see when teams pick the wrong one."
+description: "Options pattern in C# — when to inject IOptions, IOptionsSnapshot, or IOptionsMonitor, AddOptions vs Configure, named options, and the production bugs I see when teams pick the wrong one."
 date: "2026-09-05"
+updated: "2026-09-12"
 category: "dependency-injection"
-tags: ["ASP.NET Core", "Configuration", "Dependency Injection", "IOptions", ".NET"]
+tags: ["ASP.NET Core", "Configuration", "Dependency Injection", "IOptions", ".NET", "C#"]
 related:
   - aspnet-core-appsettings-localappsettings
   - aspnet-core-dependency-injection
   - azure-app-service-aspnet-core
 faq:
+  - q: "What is the options pattern in C#?"
+    a: "Bind a configuration section to a POCO and inject IOptions<T>, IOptionsSnapshot<T>, or IOptionsMonitor<T>. You stop fishing IConfiguration[\"Jwt:Key\"] out of every service."
+  - q: "What is AddOptions vs Configure?"
+    a: "Configure<T>(section) is the short bind. AddOptions<T>().BindConfiguration(\"Section\").ValidateOnStart() is the same bind plus validation at boot. Prefer AddOptions when a missing key should fail the process."
   - q: "When should I use IOptions vs IOptionsSnapshot vs IOptionsMonitor?"
     a: "IOptions is a singleton snapshot at first resolve. IOptionsSnapshot is per request. IOptionsMonitor notifies on reload. Pick the lifetime, not the tutorial default."
   - q: "Why did an Azure App Setting change do nothing?"
@@ -36,7 +41,46 @@ Teams search **IOptions vs IOptionsSnapshot vs IOptionsMonitor** after a setting
 
 This sits next to the [config file guide](/blog/aspnet-core-appsettings-localappsettings). That page is which JSON files exist. This page is **how you consume them in C#** without lying about lifetime.
 
-## The one-line difference
+## Options pattern in C#
+
+The **options pattern in C#** is: bind a section to a POCO, inject `IOptions<T>` / `IOptionsSnapshot<T>` / `IOptionsMonitor<T>`, never sprinkle `IConfiguration["Jwt:Key"]` through handlers. The three interfaces below are the lifetime choice, not three ways to spell the same thing.
+
+## AddOptions vs Configure
+
+```csharp
+public sealed class IdentityServerOptions
+{
+    [Required]
+    public string Authority { get; set; } = "";
+
+    [Required]
+    public string Audience { get; set; } = "";
+}
+
+// Short bind — fine for non-critical sections with documented defaults
+builder.Services.Configure<FeatureFlags>(
+    builder.Configuration.GetSection("Features"));
+
+// Bind + fail the process if the section is junk
+builder.Services.AddOptions<IdentityServerOptions>()
+    .BindConfiguration("IdentityServer")
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+```
+
+**When to use `Configure<T>`:** optional flags, log levels, anything that can boot with a default.
+
+**When to use `AddOptions<T>().ValidateOnStart()`:** authority, connection string, JWT issuer — a missing key should be a **failed deployment**, not a 500 on first Angular login.
+
+**When not to `ValidateOnStart`:** a section that is legitimately absent in a worker that does not use Identity. Do not fail a migrator job because `Jwt:Audience` is empty.
+
+`AddOptions` does not change which of the three interfaces you inject. That is still the table below.
+
+## The one-line difference (which interface to inject)
+
+`IOptions<T>` freezes at first resolve. `IOptionsSnapshot<T>` rebinds per HTTP request. `IOptionsMonitor<T>` notifies singletons when Azure App Settings change. If a portal edit does nothing, you picked the wrong one — not a broken config file.
+
+`appsettings.json` is the **menu board in the kitchen**. `IOptions<T>` is the **laminated sheet at the host station** — specials can change; your sheet will not. `IOptionsSnapshot<T>` is a **fresh printout per table** (per HTTP request). `IOptionsMonitor<T>` is the **pager** to singleton caches when Azure flips a flag mid-process.
 
 | Type | Lifetime of the wrapper | Sees file / Azure reloads? | Typical inject site |
 | --- | --- | --- | --- |
@@ -110,16 +154,7 @@ On healthcare fee-schedule publishes I still prefer an **explicit version stamp*
 
 ## Validate on start
 
-A missing `IdentityServer:Authority` should fail the process at boot, not on the first Angular login. I add:
-
-```csharp
-builder.Services.AddOptions<IdentityServerOptions>()
-    .BindConfiguration("IdentityServer")
-    .ValidateDataAnnotations()
-    .ValidateOnStart();
-```
-
-That is not a substitute for Key Vault. It is a substitute for “200 on `/health` and 500 on `/connect`.” File names and Azure overlays stay in the [config file guide](/blog/aspnet-core-appsettings-localappsettings). DI lifetimes stay in [DI lifetimes](/blog/aspnet-core-dependency-injection). This page is which **options interface** you inject.
+A missing `IdentityServer:Authority` should fail the process at boot, not on the first Angular login. That is the `AddOptions` + `ValidateOnStart` chain in [AddOptions vs Configure](#addoptions-vs-configure). File names and Azure overlays stay in the [config file guide](/blog/aspnet-core-appsettings-localappsettings). DI lifetimes stay in [DI lifetimes](/blog/aspnet-core-dependency-injection). This page is which **options interface** you inject.
 
 ## Checklist
 

@@ -4,7 +4,7 @@ title: "API Design for REST and ASP.NET Core"
 
 ## Introduction
 
-If you search **what is an API**, **API design**, or **API design principles**, you want definitions and a checklist before framework tutorials. Start with [what is an API](/blog/what-is-an-api), then [API design principles](/blog/api-design-principles) for production REST contracts on ASP.NET Core.
+If you search **what is an API**, **API design**, **API design principles**, or **.NET API**, you want definitions and a checklist before framework tutorials. Start with [what is an API](/blog/what-is-an-api), then [API design principles](/blog/api-design-principles) for production REST contracts on ASP.NET Core.
 
 ## What makes API design different from "just endpoints"
 

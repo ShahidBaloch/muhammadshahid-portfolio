@@ -2,7 +2,7 @@
 title: "ASP.NET Core Minimal APIs: When to Use Them (and When Not To)"
 description: "ASP.NET Core Minimal APIs guide — MapGet, MapGroup, DI, validation, OpenAPI, JWT auth, and when controllers still win for Angular-backed products."
 date: "2026-08-10"
-updated: "2026-09-08"
+updated: "2026-09-12"
 category: "architecture"
 tags: ["Minimal APIs", "ASP.NET Core", ".NET", "Web API", "C#", "Architecture"]
 related:
@@ -12,6 +12,8 @@ related:
 faq:
   - q: "When should I use ASP.NET Core Minimal APIs?"
     a: "Thin gateways, internal tools, and vertical slices. Keep controllers when an Angular admin has many actions and shared filters."
+  - q: "What is a Minimal API in C#?"
+    a: "MapGet / MapPost endpoints with DI parameter binding and IResult helpers — less ceremony than a controller class. Production still means endpoint groups, handlers, JWT, and ProblemDetails, not a 2,000-line Program.cs."
   - q: "Can Minimal APIs use JWT and validation?"
     a: "Yes. MapGroup, filters, and ProblemDetails work. Dumping business rules into Program.cs is the failure, not Minimal APIs themselves."
   - q: "Should everything live in Program.cs?"
@@ -22,19 +24,13 @@ faq:
 
 **ASP.NET Core Minimal APIs** are a first-class way to define HTTP endpoints with less ceremony than MVC controllers — `MapGet`, `MapPost`, route groups, and automatic DI parameter binding. They are not a toy for demos. They are a valid production choice for thin gateways, webhooks, health checks, and vertical slices — when you organize endpoints into classes instead of dumping logic into `Program.cs`.
 
-## Analogy
+| Signal | Lean Minimal APIs | Lean controllers |
+|---|---|---|
+| Route count | Few (health, webhook, BFF slice) | Many actions on one Angular admin |
+| Shared filters / conventions | One `MapGroup` + endpoint class | Base controller, action filters |
+| Team familiarity | Greenfield slice or internal tool | Hiring loop expects MVC |
 
-Controllers are a full restaurant kitchen with stations, prep lists, and a head chef. Minimal APIs are a food truck:
-
-```text
-Controllers (full kitchen)          Minimal APIs (food truck)
-─────────────────────────          ──────────────────────────
-Many dishes, shared prep           Few menu items, fast setup
-Filters, base classes, conventions  MapGroup + endpoint class
-Best for large admin surfaces       Best for gateways, webhooks, health
-```
-
-You would not run a banquet from a food truck. You would not build a food truck inside a stadium kitchen either. Pick the shape that matches the menu size.
+**Food truck vs full kitchen:** a few menu items, fast setup — not a banquet. You would not run a 40-action Angular admin from a food truck; you would not build a food truck inside a stadium kitchen either.
 
 ## Routing
 
@@ -78,6 +74,59 @@ app.Run();
 ```
 
 DI parameters bind automatically. Return `IResult` helpers (`Results.Ok`, `Results.NotFound`, `Results.ValidationProblem`).
+
+## Minimal API in C# (Todo that would survive a PR)
+
+A **Minimal API in C#** is `MapGet` / `MapPost` with DI parameter binding — not a new runtime. The sample people search for is a Todo list. The version I would merge still keeps HTTP in an endpoint class, validates input, and does not store state in a static `List<T>`.
+
+```csharp
+public sealed record Todo(int Id, string Title, bool Done);
+public sealed record CreateTodo(string Title);
+
+public sealed class CreateTodoValidator : AbstractValidator<CreateTodo>
+{
+    public CreateTodoValidator()
+    {
+        RuleFor(x => x.Title).NotEmpty().MaximumLength(200);
+    }
+}
+
+public static class TodoEndpoints
+{
+    public static RouteGroupBuilder MapTodos(this WebApplication app)
+    {
+        var group = app.MapGroup("/api/todos");
+        group.MapGet("/", ListAsync);
+        group.MapGet("/{id:int}", GetByIdAsync);
+        group.MapPost("/", CreateAsync).AddEndpointFilter<FluentValidationFilter<CreateTodo>>();
+        return group;
+    }
+
+    private static async Task<IResult> ListAsync(ITodoStore store, CancellationToken ct)
+        => Results.Ok(await store.ListAsync(ct));
+
+    private static async Task<IResult> GetByIdAsync(int id, ITodoStore store, CancellationToken ct)
+    {
+        var todo = await store.GetAsync(id, ct);
+        return todo is null ? Results.NotFound() : Results.Ok(todo);
+    }
+
+    private static async Task<IResult> CreateAsync(
+        CreateTodo body,
+        ITodoStore store,
+        CancellationToken ct)
+    {
+        var created = await store.AddAsync(body.Title, ct);
+        return Results.Created($"/api/todos/{created.Id}", created);
+    }
+}
+
+app.MapTodos();
+```
+
+**When to use Minimal APIs:** health, webhooks, a thin BFF, a vertical slice with a handful of routes.
+
+**When not to:** a 40-action Angular admin with shared filters and a hiring funnel that already knows controllers. Also not: 40 `Map*` lambdas and EF queries in `Program.cs`. Handlers, validation, and JWT still exist — filter code: [FluentValidation](/blog/aspnet-core-api-validation).
 
 ### Organize so Program.cs does not become a landfill
 
