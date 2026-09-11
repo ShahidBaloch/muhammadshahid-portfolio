@@ -402,6 +402,8 @@ Optional: log `traceId` to Application Insights from the client on 500s so users
 
 ## OpenAPI and code generation
 
+Swashbuckle vs built-in OpenAPI, Scalar, NSwag, JWT in the explorer, and Angular client pipelines: [Swagger vs OpenAPI in ASP.NET Core](/blog/swagger-openapi-aspnet-core).
+
 Document error responses on endpoints:
 
 ```csharp

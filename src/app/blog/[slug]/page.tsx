@@ -5,7 +5,7 @@ import { Portrait } from "@/components/Portrait";
 import { PostDate } from "@/components/PostDate";
 import { MarkdownContent } from "@/components/MarkdownContent";
 import { OnThisPage } from "@/components/OnThisPage";
-import { getPostH2Headings } from "@/lib/headings";
+import { getPostH2Headings, getPostOutline } from "@/lib/headings";
 import { getPostBySlug, getPostSlugs, getRelatedPosts } from "@/lib/posts";
 import { personId } from "@/lib/seo";
 import { getLearningTopic, siteConfig } from "@/lib/site";
@@ -70,6 +70,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   const post = getPostBySlug(slug);
   const related = getRelatedPosts(slug, 5);
   const headings = getPostH2Headings(post.content);
+  const outline = getPostOutline(post.content);
   const learningTopic = post.category ? getLearningTopic(post.category) : undefined;
   const pageUrl = `${siteConfig.url}/blog/${post.slug}`;
 
@@ -213,6 +214,15 @@ export default async function BlogPostPage({ params }: PageProps) {
           ) : null}
         </header>
 
+        {post.faq && post.faq.length > 5 ? (
+          <p className="mt-6 text-sm">
+            <a href="#article-body" className="font-semibold link-underline">
+              Skip to article
+              <span className="sr-only"> (bypass quick answers)</span>
+            </a>
+          </p>
+        ) : null}
+
         {post.faq && post.faq.length > 0 ? (
           <section className="card-panel mt-6 rounded-xl p-5 sm:p-6" aria-labelledby="quick-answers">
             <h2 id="quick-answers" className="heading-subsection">
@@ -229,10 +239,12 @@ export default async function BlogPostPage({ params }: PageProps) {
           </section>
         ) : null}
 
-        <OnThisPage headings={headings} />
+        <div className="mt-6 lg:grid lg:grid-cols-[minmax(12rem,16rem)_minmax(0,1fr)] lg:items-start lg:gap-10">
+          <OnThisPage sections={outline} />
 
-        <div className="prose-site mt-7 sm:prose-lg">
-          <MarkdownContent content={post.content} />
+          <div id="article-body" className="prose-site mt-7 min-w-0 sm:prose-lg lg:mt-0" tabIndex={-1}>
+            <MarkdownContent content={post.content} />
+          </div>
         </div>
 
         <aside className="card-panel mt-8 rounded-xl p-5 sm:p-6">
@@ -255,6 +267,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   className="btn-secondary !py-2 !text-xs"
                 >
                   LinkedIn
+                  <span className="sr-only"> (opens in a new tab)</span>
                 </a>
                 <a
                   href={siteConfig.github}
@@ -263,6 +276,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   className="btn-secondary !py-2 !text-xs"
                 >
                   GitHub
+                  <span className="sr-only"> (opens in a new tab)</span>
                 </a>
                 <Link href="/contact" className="btn-primary !py-2 !text-xs">
                   Contact

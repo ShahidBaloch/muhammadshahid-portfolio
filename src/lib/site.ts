@@ -701,6 +701,9 @@ export const learningTopics: LearningTopic[] = [
       "what is an API",
       "api design",
       "api design principles",
+      "swagger",
+      "openapi",
+      "swashbuckle aspnetcore",
       "REST API design",
       "ASP.NET Core Web API",
     ],
@@ -709,6 +712,7 @@ export const learningTopics: LearningTopic[] = [
     pinSlugs: [
       "what-is-an-api",
       "api-design-principles",
+      "swagger-openapi-aspnet-core",
       "aspnet-core-api-validation",
       "aspnet-core-global-exception-handling",
       "aspnet-core-minimal-apis",
@@ -736,10 +740,11 @@ export const learningTopics: LearningTopic[] = [
         slugs: ["what-is-an-api", "api-design-principles"],
       },
       {
-        title: "Errors, validation, and client contracts",
+        title: "OpenAPI, validation, and client contracts",
         blurb:
-          "ProblemDetails, FluentValidation, and global exception handling so Angular parses one envelope.",
+          "Swagger vs OpenAPI, Swashbuckle and Scalar, FluentValidation envelopes, and ProblemDetails Angular can parse.",
         slugs: [
+          "swagger-openapi-aspnet-core",
           "aspnet-core-api-validation",
           "aspnet-core-global-exception-handling",
           "aspnet-core-json-object-cycle",

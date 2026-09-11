@@ -190,6 +190,8 @@ Angular forms need stable problem details — same as MVC.
 
 ### Auth, OpenAPI, and versioning
 
+Swashbuckle vs built-in OpenAPI, Scalar, NSwag, and Angular codegen: [Swagger vs OpenAPI in ASP.NET Core](/blog/swagger-openapi-aspnet-core).
+
 ```csharp
 builder.Services.AddAuthentication().AddJwtBearer(...);
 builder.Services.AddAuthorization();

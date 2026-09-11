@@ -551,8 +551,19 @@
     vertical-align: top;
   }
 
-  .prose-site figure.overflow-x-auto {
+  .prose-site figure [role="region"] {
     -webkit-overflow-scrolling: touch;
+    border-radius: 0.5rem;
+    outline-offset: 2px;
+  }
+
+  .prose-site figure [role="region"]:focus-visible {
+    outline: 2px solid var(--color-teal);
+  }
+
+  .prose-site pre:focus-visible {
+    outline: 2px solid var(--color-teal);
+    outline-offset: 2px;
   }
 
   @media (max-width: 639px) {
@@ -597,12 +608,34 @@
     font-family: inherit;
     font-size: inherit;
     line-height: inherit;
-    color: #e2e8f0;
+    color: #f1f5f9;
+  }
+
+  /* WCAG-friendly token contrast on #1e293b — overrides vs2015 dim defaults */
+  .prose-site .hljs-comment,
+  .prose-site .hljs-quote {
+    color: #94a3b8 !important;
+  }
+
+  .prose-site .hljs-keyword,
+  .prose-site .hljs-selector-tag {
+    color: #93c5fd !important;
+  }
+
+  .prose-site .hljs-string,
+  .prose-site .hljs-regexp,
+  .prose-site .hljs-symbol {
+    color: #86efac !important;
+  }
+
+  .prose-site .hljs-number,
+  .prose-site .hljs-literal {
+    color: #fca5a5 !important;
   }
 
   .prose-site .hljs-title,
   .prose-site .hljs-title.function_ {
-    color: #fcd34d !important;
+    color: #fde047 !important;
   }
 
   .prose-site .hljs-params {
@@ -613,6 +646,11 @@
   .prose-site .hljs-type,
   .prose-site .hljs-class .hljs-title {
     color: #5eead4 !important;
+  }
+
+  .prose-site .hljs-attr,
+  .prose-site .hljs-attribute {
+    color: #c4b5fd !important;
   }
 
   .prose-site pre:has(code.language-csharp)::before,

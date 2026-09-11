@@ -8,6 +8,13 @@
     <atom:link href="https://www.muhammadshahid.dev/rss.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title><![CDATA[Swagger vs OpenAPI in ASP.NET Core — Swashbuckle, NSwag, and Scalar]]></title>
+      <link>https://www.muhammadshahid.dev/blog/swagger-openapi-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/swagger-openapi-aspnet-core</guid>
+      <pubDate>Sat, 12 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Swagger vs OpenAPI in ASP.NET Core — Swashbuckle, built-in OpenAPI (.NET 9+), Scalar, NSwag, JWT in Swagger UI, FluentValidation envelopes, and Angular codegen.]]></description>
+    </item>
+    <item>
       <title><![CDATA[EF Core Relationships: One-to-One, One-to-Many, Many-to-Many]]></title>
       <link>https://www.muhammadshahid.dev/blog/ef-core-relationships</link>
       <guid>https://www.muhammadshahid.dev/blog/ef-core-relationships</guid>

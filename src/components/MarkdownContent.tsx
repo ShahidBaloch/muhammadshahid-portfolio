@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import remarkGfm from "remark-gfm";
 import "highlight.js/styles/vs2015.css";
-import { getPostH2Headings, headingTextFromMarkdown, slugifyHeading } from "@/lib/headings";
+import { getContentHeadings, headingTextFromMarkdown } from "@/lib/headings";
 
 function childrenToText(node: ReactNode): string {
   if (typeof node === "string" || typeof node === "number") return String(node);
@@ -38,22 +38,29 @@ function fenceLanguage(children: ReactNode): string | undefined {
 function codeBlockLabel(language: string | undefined): string {
   const key = (language ?? "").toLowerCase();
   if (key === "csharp" || key === "cs" || key === "c#") return "C# example";
-  if (key === "bash" || key === "sh" || key === "shell" || key === "text") {
-    return key === "text" ? "Code example" : "Shell commands";
-  }
+  if (key === "text") return "Text diagram";
+  if (key === "bash" || key === "sh" || key === "shell") return "Shell commands";
   if (key === "json") return "JSON example";
   if (!key) return "Code example";
   return `${language} example`;
 }
 
 export function MarkdownContent({ content }: { content: string }) {
-  const h2Ids = new Map(
-    getPostH2Headings(content).map((heading) => [heading.text, heading.id] as const),
-  );
+  const contentHeadings = getContentHeadings(content);
+  let headingIndex = 0;
   const captions = tableCaptionsFromMarkdown(content);
-  const h3Used = new Map<string, number>();
-  const takenIds = new Set(h2Ids.values());
   let tableIndex = 0;
+
+  function nextHeadingId(level: 2 | 3, text: string): string | undefined {
+    while (headingIndex < contentHeadings.length) {
+      const candidate = contentHeadings[headingIndex];
+      headingIndex += 1;
+      if (candidate.level === level && candidate.text === text) {
+        return candidate.id;
+      }
+    }
+    return undefined;
+  }
 
   return (
     <ReactMarkdown
@@ -62,7 +69,7 @@ export function MarkdownContent({ content }: { content: string }) {
       components={{
         h2: ({ children }) => {
           const text = headingTextFromMarkdown(childrenToText(children));
-          const id = h2Ids.get(text) ?? slugifyHeading(text);
+          const id = nextHeadingId(2, text);
           return (
             <h2 id={id} className="scroll-mt-28">
               {children}
@@ -71,12 +78,7 @@ export function MarkdownContent({ content }: { content: string }) {
         },
         h3: ({ children }) => {
           const text = headingTextFromMarkdown(childrenToText(children));
-          const base = slugifyHeading(text) || "section";
-          const count = h3Used.get(base) ?? 0;
-          h3Used.set(base, count + 1);
-          let id = count === 0 ? base : `${base}-${count + 1}`;
-          if (takenIds.has(id)) id = `${id}-h3`;
-          takenIds.add(id);
+          const id = nextHeadingId(3, text);
           return (
             <h3 id={id} className="scroll-mt-28">
               {children}
@@ -86,25 +88,60 @@ export function MarkdownContent({ content }: { content: string }) {
         table: ({ children }) => {
           const caption = captions[tableIndex] ?? "Data table";
           tableIndex += 1;
+          const scrollLabel = `${caption}. Scroll horizontally to view all columns.`;
           return (
-            <figure className="my-6 overflow-x-auto">
+            <figure className="my-6">
               <figcaption className="sr-only">{caption}</figcaption>
-              <table>{children}</table>
+              <div
+                className="overflow-x-auto"
+                tabIndex={0}
+                role="region"
+                aria-label={scrollLabel}
+              >
+                <table aria-label={caption}>{children}</table>
+              </div>
             </figure>
           );
         },
+        th: ({ children, ...props }) => (
+          <th scope="col" {...props}>
+            {children}
+          </th>
+        ),
         pre: ({
           children,
           node: _node,
           ...props
-        }: ComponentPropsWithoutRef<"pre"> & { "data-language"?: string; node?: unknown }) => (
-          <pre
-            {...props}
-            aria-label={codeBlockLabel(fenceLanguage(children) ?? props["data-language"])}
-          >
-            {children}
-          </pre>
-        ),
+        }: ComponentPropsWithoutRef<"pre"> & { "data-language"?: string; node?: unknown }) => {
+          const label = codeBlockLabel(fenceLanguage(children) ?? props["data-language"]);
+          return (
+            <pre
+              {...props}
+              tabIndex={0}
+              aria-label={`${label}. Scroll horizontally for long lines.`}
+            >
+              {children}
+            </pre>
+          );
+        },
+        a: ({ href, children, ...props }) => {
+          const external =
+            typeof href === "string" &&
+            (href.startsWith("http://") || href.startsWith("https://"));
+          if (external) {
+            return (
+              <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+                {children}
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            );
+          }
+          return (
+            <a href={href} {...props}>
+              {children}
+            </a>
+          );
+        },
         img: ({ src, alt }) => {
           const url = typeof src === "string" ? src : "";
           if (!url) return null;

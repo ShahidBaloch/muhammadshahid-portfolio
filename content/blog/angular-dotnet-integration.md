@@ -37,7 +37,7 @@ Menu lists "Grilled Salmon"    Recipe card says "Atlantic Salmon, grilled"
               if not → wrong plate, angry customer
 ```
 
-The menu is not decoration. It is the handshake. Swagger/OpenAPI is the printed menu — useful only when it matches what the kitchen actually makes.
+The menu is not decoration. It is the handshake. Swagger/OpenAPI is the printed menu — useful only when it matches what the kitchen actually makes. Tooling choices (Swashbuckle, Scalar, NSwag, codegen): [Swagger vs OpenAPI in ASP.NET Core](/blog/swagger-openapi-aspnet-core).
 
 ## Routing
 

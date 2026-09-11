@@ -206,7 +206,7 @@ Server stores key → result mapping. Same key returns the original `201` withou
 
 ## 8. Documentation and discovery
 
-**OpenAPI (Swagger)** is not optional for teams with more than one client. Generate from attributes or Minimal API metadata. Keep examples realistic — not `string` for every field.
+**OpenAPI (Swagger)** is not optional for teams with more than one client. Generate from attributes or Minimal API metadata. Keep examples realistic — not `string` for every field. Full stack comparison (Swashbuckle, built-in OpenAPI, NSwag, Scalar, JWT, Angular codegen): [Swagger vs OpenAPI in ASP.NET Core](/blog/swagger-openapi-aspnet-core).
 
 ## 9. Performance as design
 
