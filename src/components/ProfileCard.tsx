@@ -24,20 +24,20 @@ export function ProfileCard({ className = "" }: ProfileCardProps) {
         </div>
       </div>
 
-      <dl className="relative mt-5 grid gap-2.5 border-t border-slate-line pt-4 sm:grid-cols-2 sm:gap-3 sm:pt-4">
-        <div>
+      <dl className="relative mt-5 grid gap-2.5 border-t border-slate-line pt-4 sm:grid-cols-2 sm:gap-3">
+        <div className="min-w-0">
           <dt className="eyebrow">Focus</dt>
           <dd className="mt-1 text-sm leading-snug text-ink-soft">Healthcare · SaaS · eCommerce</dd>
         </div>
-        <div>
+        <div className="min-w-0">
           <dt className="eyebrow">Stack</dt>
           <dd className="mt-1 text-sm leading-snug text-ink-soft">.NET · Angular · Azure · Identity</dd>
         </div>
-        <div>
+        <div className="min-w-0">
           <dt className="eyebrow">Based in</dt>
           <dd className="mt-1 text-sm leading-snug text-ink-soft">{siteConfig.location}</dd>
         </div>
-        <div>
+        <div className="min-w-0">
           <dt className="eyebrow">Engagement</dt>
           <dd className="mt-1 text-sm leading-snug text-ink-soft">Freelance &amp; contract · remote</dd>
         </div>

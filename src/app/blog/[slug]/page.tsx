@@ -249,9 +249,9 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         <aside className="card-panel mt-8 rounded-xl p-5 sm:p-6">
           <p className="eyebrow">About the author</p>
-          <div className="mt-4 flex items-start gap-4">
+          <div className="mt-4 flex items-start gap-3 sm:gap-4">
             <Portrait />
-            <div>
+            <div className="min-w-0">
               <p className="font-display text-xl font-semibold text-ink">{siteConfig.name}</p>
               <p className="mt-2 text-muted">
                 {siteConfig.title}. {siteConfig.tagline} Based in {siteConfig.location}.

@@ -99,16 +99,24 @@ export function Header() {
     onBlog || pathname === "/learning" || pathname.startsWith("/learning/");
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-[60] flex flex-col pt-[env(safe-area-inset-top)] transition duration-300 ${
-        open ? "h-dvh bg-paper" : ""
-      } ${
-        scrolled || open
-          ? "border-b border-slate-line/80 bg-paper/95 backdrop-blur-md"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="container-narrow flex h-14 shrink-0 items-center justify-between gap-3 px-4 sm:h-16 sm:gap-4 sm:px-8 lg:px-12">
+    <>
+      {open ? (
+        <button
+          type="button"
+          className="fixed inset-0 z-[55] bg-navy/60 lg:hidden"
+          aria-label="Close menu"
+          tabIndex={-1}
+          onClick={() => setOpen(false)}
+        />
+      ) : null}
+      <header
+        className={`fixed inset-x-0 top-0 z-[60] h-[calc(3.5rem+env(safe-area-inset-top))] overflow-visible pt-[env(safe-area-inset-top)] transition duration-300 sm:h-[calc(4rem+env(safe-area-inset-top))] ${
+          scrolled || open
+            ? "border-b border-slate-line/80 bg-paper/95 backdrop-blur-md"
+            : "bg-transparent"
+        }`}
+      >
+      <div className="container-narrow flex h-14 items-center justify-between gap-3 px-4 sm:h-16 sm:gap-4 sm:px-8 lg:px-12">
         <Link
           href="/"
           aria-label="Muhammad Shahid, home"
@@ -229,35 +237,39 @@ export function Header() {
         </button>
       </div>
 
+      </header>
       {open ? (
         <div
           ref={mobileRef}
           id="mobile-nav"
-          className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain border-t border-slate-line bg-paper px-4 pb-[max(1.25rem,env(safe-area-inset-bottom),var(--cookie-banner-space,0px))] pt-2 lg:hidden"
+          className="fixed inset-x-0 top-[calc(3.5rem+env(safe-area-inset-top))] z-[60] h-auto max-h-[min(70dvh,calc(100dvh-3.5rem-env(safe-area-inset-top)))] overflow-y-auto overscroll-contain border-b border-slate-line bg-paper px-4 pb-4 pt-1 shadow-[0_18px_40px_rgba(15,23,42,0.18)] sm:top-[calc(4rem+env(safe-area-inset-top))] sm:max-h-[min(70dvh,calc(100dvh-4rem-env(safe-area-inset-top)))] lg:hidden"
         >
-          <nav className="flex flex-col" aria-label="Mobile">
+          <nav className="flex h-auto flex-col" aria-label="Mobile">
             {navLinks.map((link) => {
               if (link.href === "/blog") {
                 return (
                   <div key={link.href} className="border-b border-slate-line/70">
-                    <Link
-                      href="/blog"
-                      aria-current={onBlog ? "page" : undefined}
-                      className="flex min-h-12 items-center text-base font-medium text-ink hover:text-link"
-                    >
-                      {link.label}
-                    </Link>
-                    <button
-                      type="button"
-                      className="flex min-h-11 w-full items-center justify-between text-sm font-medium text-muted"
-                      aria-expanded={topicsOpen}
-                      aria-controls="mobile-topics"
-                      aria-label="Blog topics"
-                      onClick={() => setTopicsOpen((value) => !value)}
-                    >
-                      Topics
-                      <span aria-hidden>{topicsOpen ? "–" : "+"}</span>
-                    </button>
+                    <div className="flex items-center gap-1">
+                      <Link
+                        href="/blog"
+                        aria-current={onBlog ? "page" : undefined}
+                        className={`flex min-h-12 min-w-0 flex-1 items-center text-base font-medium hover:text-link ${
+                          blogCluster ? "text-teal" : "text-ink"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                      <button
+                        type="button"
+                        className="inline-flex h-11 w-11 shrink-0 items-center justify-center text-muted hover:text-link"
+                        aria-expanded={topicsOpen}
+                        aria-controls="mobile-topics"
+                        aria-label="Blog topics"
+                        onClick={() => setTopicsOpen((value) => !value)}
+                      >
+                        <span aria-hidden>{topicsOpen ? "–" : "+"}</span>
+                      </button>
+                    </div>
                     {topicsOpen ? (
                       <div
                         id="mobile-topics"
@@ -292,12 +304,12 @@ export function Header() {
                 </Link>
               );
             })}
-            <Link href="/contact" className="btn-primary mt-6 w-full">
+            <Link href="/contact" className="btn-primary mt-4 w-full">
               {siteConfig.inquiryCta}
             </Link>
           </nav>
         </div>
       ) : null}
-    </header>
+    </>
   );
 }

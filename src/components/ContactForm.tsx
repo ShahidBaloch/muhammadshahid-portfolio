@@ -141,7 +141,11 @@ export function ContactForm() {
         </label>
       </div>
 
-      <button type="submit" className="btn-primary" disabled={status === "submitting"}>
+      <button
+        type="submit"
+        className="btn-primary w-full sm:w-auto"
+        disabled={status === "submitting"}
+      >
         {status === "submitting" ? "Sending — typically one business day…" : siteConfig.inquiryCta}
       </button>
 

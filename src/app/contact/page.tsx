@@ -68,7 +68,7 @@ export default function ContactPage() {
             Project inquiry
           </h2>
           <p className="mt-2 text-sm text-muted">
-            Prefer email or WhatsApp? Use the links on the left — I typically reply within one
+            Prefer email or WhatsApp? Use the contact options above — I typically reply within one
             business day.
           </p>
           <div className="mt-6">
