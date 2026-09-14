@@ -14,7 +14,7 @@ faq:
   - q: "Should I use the repository pattern with EF Core?"
     a: "When the boundary reduces coordination — a named query the team can test. Not as IRepository<T> wrapping every DbSet."
   - q: "What is the repository pattern in C#?"
-    a: "A persistence boundary around named read/write operations — GetDetailAsync, ReserveStockAsync — not a generic GetAll wrapper. In C# with EF Core, DbContext is already a unit of work; extra interfaces must earn their keep."
+    a: "Plain definition: [repository definition](/blog/repository-definition-meaning). This page covers when EF Core teams should add a repository vs skip ceremony."
   - q: "Is DbContext already a repository?"
     a: "Yes. DbSet is a collection gateway and the context is a unit of work. Extra interfaces must earn their keep."
   - q: "When is a generic IRepository overkill?"

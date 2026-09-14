@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageSocial } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
+const title = "Disclaimer";
+const description = `Content disclaimer for ${siteConfig.name}'s website.`;
+
 export const metadata: Metadata = {
-  title: "Disclaimer",
-  description: `Content disclaimer for ${siteConfig.name}'s website.`,
+  title,
+  description,
   alternates: { canonical: "/disclaimer" },
+  ...pageSocial({ title, description, path: "/disclaimer" }),
 };
 
 export default function DisclaimerPage() {

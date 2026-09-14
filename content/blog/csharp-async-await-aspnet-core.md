@@ -5,21 +5,20 @@ date: "2026-08-12"
 updated: "2026-09-14"
 category: "async-concurrency"
 tags: ["C#", "async await", "Asynchronous Programming", "ASP.NET Core", ".NET", "Performance", "C# async await ASP.NET Core", "CancellationToken"]
+faq:
+  - q: "How should I use async and await in ASP.NET Core?"
+    a: "Await I/O end to end: EF Core, HttpClient, blobs, and anything else that returns a Task. Do not block with .Result or .Wait(). Pass the action CancellationToken all the way to ToListAsync and SendAsync. That keeps ThreadPool workers free for other Angular clients. Async does not make SQL faster; it stops the lobby from backing up."
+  - q: "Does async make a SQL query faster?"
+    a: "No. Query time is still indexing, the plan, and EF. Async only frees the ThreadPool worker during the wait. A 2-second query stays 2 seconds. What changes is that 5,000 concurrent waits do not pin 5,000 workers."
+  - q: "What happens if I use async without await in C#?"
+    a: "The method runs synchronously and the compiler warns CS4014. Remove async and return Task.FromResult(...), or await real I/O (EF, HttpClient, File.ReadAllTextAsync). Fake async still allocates a state machine for no benefit."
 related:
   - asynchronous-meaning-definition
   - async-vs-sync-programming
   - csharp-threadpool-starvation-sync-over-async
   - csharp-task-run-aspnet-core
   - csharp-cancellationtoken-aspnet-core
-faq:
-  - q: "How should I use async and await in ASP.NET Core?"
-    a: "Await I/O end to end: EF Core, HttpClient, blobs, and anything else that returns a Task. Do not block with .Result or .Wait(). Pass the action CancellationToken all the way to ToListAsync and SendAsync. That keeps ThreadPool workers free for other Angular clients. Async does not make SQL faster; it stops the lobby from backing up."
-  - q: "Does async make a SQL query faster?"
-    a: "No. Query time is still indexing, the plan, and EF. Async only frees the ThreadPool worker during the wait. A 2-second query stays 2 seconds. What changes is that 5,000 concurrent waits do not pin 5,000 workers."
-  - q: "Should an ASP.NET Core action WhenAll two queries on one DbContext?"
-    a: "No. DbContext is not thread-safe. Two ToListAsync calls on the same instance in WhenAll is a race, not a speedup. Sequential awaits, two scopes, or one SQL shape. The WhenAll article covers caps and Parallel.ForEachAsync."
-  - q: "What happens if I use async without await in C#?"
-    a: "The method runs synchronously and the compiler warns CS4014. Remove async and return Task.FromResult(...), or await real I/O (EF, HttpClient, File.ReadAllTextAsync). Fake async still allocates a state machine for no benefit."
+  - csharp-task-whenall-vs-parallel-foreach
 ---
 
 `async`/`await` let a method wait for slow work (database, HTTP, blobs) **without holding a thread**. The ThreadPool worker goes back to the pool and serves other requests. The query is not faster. The API can take more concurrent clients.

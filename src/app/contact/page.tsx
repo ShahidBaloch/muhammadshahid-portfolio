@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
 import { SectionHeading } from "@/components/SectionHeading";
+import { pageSocial } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
+const title = "Contact — .NET + Angular Project Inquiry";
+const description =
+  "Contact Muhammad Shahid for .NET + Angular freelance and contract work. Email, WhatsApp, LinkedIn, or project inquiry form.";
+
 export const metadata: Metadata = {
-  title: "Contact Muhammad Shahid",
-  description:
-    "Contact Muhammad Shahid for .NET + Angular freelance and contract work. Email, WhatsApp, LinkedIn, or project inquiry form.",
+  title: { absolute: `${title} | ${siteConfig.name}` },
+  description,
   alternates: { canonical: "/contact" },
+  ...pageSocial({ title, description, path: "/contact" }),
 };
 
 export default function ContactPage() {
@@ -17,7 +22,7 @@ export default function ContactPage() {
         <div>
           <SectionHeading
             eyebrow="Contact"
-            title="Contact Muhammad Shahid"
+            title="Contact for .NET + Angular work"
             description="Share the problem, constraints, and timeline. I typically reply within one business day with a clear next step."
             level={1}
           />

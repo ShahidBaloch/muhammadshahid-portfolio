@@ -1,8 +1,8 @@
 ---
 title: "Async vs Sync: What's the Difference in Programming?"
-description: "Async vs sync explained with tables and C# examples — blocking vs non-blocking I/O, when to use each on ASP.NET Core, and how synchronous learning differs from asynchronous in plain English."
+description: "Async vs sync explained with tables and C# examples — blocking vs non-blocking I/O and when to use each on ASP.NET Core."
 date: "2026-09-08"
-updated: "2026-09-08"
+updated: "2026-09-14"
 category: "async-concurrency"
 tags: ["Asynchronous Programming", "C#", "async await", ".NET", "ASP.NET Core", "async vs sync"]
 related:
@@ -10,15 +10,12 @@ related:
   - csharp-async-await-aspnet-core
   - csharp-threadpool-starvation-sync-over-async
   - csharp-task-vs-thread
+  - asynchronous-class-csharp
 faq:
   - q: "What is the difference between async and sync?"
     a: "Sync code blocks the caller until each step finishes. Async code starts I/O, releases the worker during the wait, and continues when the operation completes. On ASP.NET Core APIs, async I/O prevents thread pool starvation under concurrent clients."
   - q: "When should I use async vs sync in C#?"
     a: "Use async for I/O — EF Core, HttpClient, blobs, messaging. Use sync for trivial in-memory work or when the entire call stack is genuinely CPU-only and fast. Never block on Task with .Result on a web request path."
-  - q: "What is synchronous learning vs asynchronous learning?"
-    a: "Synchronous learning is live instruction at a fixed time. Asynchronous learning is self-paced — lectures and assignments on your schedule. In software, sync vs async refers to blocking vs non-blocking code, not course format."
-  - q: "What is synchronous class meaning?"
-    a: "In education, a synchronous class meets live at scheduled times. In C#, a synchronous method blocks until it returns. An asynchronous class is a type whose methods return Task and use await for I/O — see the asynchronous class guide."
 ---
 
 **Async vs sync** is one of the first comparisons developers look up — and one of the most misunderstood under load. This page explains the difference in plain terms, shows C# examples, and maps when each model belongs on an ASP.NET Core API.

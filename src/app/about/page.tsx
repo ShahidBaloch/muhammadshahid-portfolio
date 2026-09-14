@@ -2,13 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Portrait } from "@/components/Portrait";
 import { CtaBand, SectionHeading } from "@/components/SectionHeading";
+import { pageSocial } from "@/lib/seo";
 import { experience, siteConfig, skills } from "@/lib/site";
 
+const title = "About — Senior .NET + Angular Engineer";
+const description =
+  "Muhammad Shahid is a senior .NET + Angular engineer with 5+ years designing and shipping healthcare, SaaS, and eCommerce systems.";
+
 export const metadata: Metadata = {
-  title: "About Muhammad Shahid, .NET + Angular Engineer",
-  description:
-    "Muhammad Shahid is a senior .NET + Angular engineer with 5+ years designing and shipping healthcare, SaaS, and eCommerce systems.",
+  title: { absolute: `${title} | ${siteConfig.name}` },
+  description,
   alternates: { canonical: "/about" },
+  ...pageSocial({ title, description, path: "/about" }),
 };
 
 export default function AboutPage() {
@@ -19,7 +24,7 @@ export default function AboutPage() {
           <div>
             <SectionHeading
               eyebrow="About"
-              title="About Muhammad Shahid, .NET + Angular Engineer"
+              title="Senior .NET + Angular engineer"
               description="I care about boundaries, security, data, and delivery — the decisions that keep products healthy after launch."
               level={1}
             />
@@ -113,11 +118,16 @@ export default function AboutPage() {
                 <p className="mt-1 text-sm text-muted">{siteConfig.title}</p>
               </div>
             </div>
-            <SkillBlock title="Architecture" items={skills.architecture} />
-            <SkillBlock title="Backend" items={skills.backend} />
-            <SkillBlock title="Frontend" items={skills.frontend} />
-            <SkillBlock title="Data & cloud" items={skills.dataCloud} />
-            <SkillBlock title="Security" items={skills.security} />
+            <div>
+              <h2 className="heading-subsection">Skills</h2>
+              <div className="mt-6 space-y-8">
+                <SkillBlock title="Architecture" items={skills.architecture} />
+                <SkillBlock title="Backend" items={skills.backend} />
+                <SkillBlock title="Frontend" items={skills.frontend} />
+                <SkillBlock title="Data & cloud" items={skills.dataCloud} />
+                <SkillBlock title="Security" items={skills.security} />
+              </div>
+            </div>
           </aside>
         </div>
 
@@ -154,7 +164,7 @@ export default function AboutPage() {
 function SkillBlock({ title, items }: { title: string; items: readonly string[] }) {
   return (
     <div>
-      <h3 className="eyebrow">{title}</h3>
+      <h3 className="text-sm font-semibold uppercase tracking-wide text-muted">{title}</h3>
       <ul className="mt-3 flex flex-wrap gap-2">
         {items.map((item) => (
           <li

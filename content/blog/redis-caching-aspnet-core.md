@@ -13,14 +13,14 @@ related:
   - aspnet-core-rate-limiting
   - azure-app-service-aspnet-core
 faq:
-  - q: "When should I add Redis caching in ASP.NET Core?"
-    a: "When a hot read is cheaper stale than live SQL — catalog lists, feature flags. Not for per-user clinical records keyed only by URL. Hit vs miss vocabulary: [what is a cache miss](/blog/what-is-a-cache-miss)."
+  - q: "How do I avoid Redis stampede and stale keys in ASP.NET Core?"
+    a: "Cache-aside with tenant-aware keys, absolute TTL, single-flight rebuild on miss, and invalidate on writes. This page owns stampede and invalidation — layer choice (IMemoryCache vs Redis): [caching system in .NET](/blog/caching-system-dotnet-imemorycache-redis)."
   - q: "How do I use Redis as a distributed cache in .NET?"
-    a: "AddStackExchangeRedisCache, inject IDistributedCache, cache-aside with tenant-aware keys and an absolute TTL. Redis is the shared store; IMemoryCache is still the in-process L1 if you need it."
+    a: "AddStackExchangeRedisCache, inject IDistributedCache, cache-aside with tenant-aware keys and an absolute TTL. This page covers stampede control and invalidation — not the IMemoryCache vs Redis decision tree."
   - q: "Why does Redis show stale dashboard data?"
     a: "Missing invalidation or a key that ignores tenant. Caching is a freshness trade. Stampede control is not a substitute for a tenant in the key."
   - q: "Error establishing a Redis connection?"
-    a: "Wrong host/port, TLS mismatch on Azure, Docker hostname, or firewall. Full fix guide: [Redis connection error](/blog/redis-connection-error-aspnet-core)."
+    a: "Connection/TLS/Docker/Azure fixes: [Redis connection error](/blog/redis-connection-error-aspnet-core)."
   - q: "Is Redis the same as SQL performance tuning?"
     a: "No. Redis hides a slow query until the cache misses. N+1 and sniffed plans still need the EF SQL articles."
 ---

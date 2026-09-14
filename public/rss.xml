@@ -40,7 +40,7 @@
       <link>https://www.muhammadshahid.dev/blog/repository-definition-meaning</link>
       <guid>https://www.muhammadshahid.dev/blog/repository-definition-meaning</guid>
       <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Repository definition and meaning explained — what a repository is in software, define repository in plain English, and how the repository pattern applies to EF Core and ASP.NET Core.]]></description>
+      <description><![CDATA[Repository definition and meaning explained — what a repository is in software and in .NET. When to use the pattern with EF Core: see the repository pattern guide.]]></description>
     </item>
     <item>
       <title><![CDATA[Error Establishing a Redis Connection in ASP.NET Core (Fix Guide)]]></title>
@@ -61,7 +61,7 @@
       <link>https://www.muhammadshahid.dev/blog/deadlock-csharp-explained</link>
       <guid>https://www.muhammadshahid.dev/blog/deadlock-csharp-explained</guid>
       <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Deadlock definition, deadlock in operating system terms, deadlock avoidance in OS and C# — lock ordering, async deadlocks, and SQL Server reader/writer deadlocks on ASP.NET Core.]]></description>
+      <description><![CDATA[Deadlock definition and avoidance in OS and C# — lock ordering, async deadlocks, and how that differs from SQL Server reader/writer deadlocks (linked separately).]]></description>
     </item>
     <item>
       <title><![CDATA[C# Multithreading Primer for ASP.NET Core]]></title>
@@ -82,14 +82,14 @@
       <link>https://www.muhammadshahid.dev/blog/caching-system-dotnet-imemorycache-redis</link>
       <guid>https://www.muhammadshahid.dev/blog/caching-system-dotnet-imemorycache-redis</guid>
       <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Caching system explained for .NET and Java developers — object cache, in-memory vs distributed cache, IMemoryCache vs Redis on ASP.NET Core, compared to Java caching patterns.]]></description>
+      <description><![CDATA[Caching system layers for .NET — object cache, in-memory vs distributed, IMemoryCache vs Redis on ASP.NET Core, mapped for Java developers. Cache-miss definition lives on its own page.]]></description>
     </item>
     <item>
       <title><![CDATA[Asynchronous Meaning and Definition (With C# Examples)]]></title>
       <link>https://www.muhammadshahid.dev/blog/asynchronous-meaning-definition</link>
       <guid>https://www.muhammadshahid.dev/blog/asynchronous-meaning-definition</guid>
       <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Asynchronous meaning and definition explained plainly — what asynchronous means in programming, how it differs from synchronous, and how C# async/await applies it on ASP.NET Core APIs.]]></description>
+      <description><![CDATA[Asynchronous meaning and definition explained plainly — what asynchronous means in programming. Side-by-side async vs sync tables: see the comparison guide.]]></description>
     </item>
     <item>
       <title><![CDATA[Asynchronous Class in C#: Writing Async Methods on a Type]]></title>
@@ -103,7 +103,7 @@
       <link>https://www.muhammadshahid.dev/blog/async-vs-sync-programming</link>
       <guid>https://www.muhammadshahid.dev/blog/async-vs-sync-programming</guid>
       <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Async vs sync explained with tables and C# examples — blocking vs non-blocking I/O, when to use each on ASP.NET Core, and how synchronous learning differs from asynchronous in plain English.]]></description>
+      <description><![CDATA[Async vs sync explained with tables and C# examples — blocking vs non-blocking I/O and when to use each on ASP.NET Core. Education 'class' meaning: see the asynchronous class guide.]]></description>
     </item>
     <item>
       <title><![CDATA[What Is a Promise in Async Programming? (Task, Promise, Future)]]></title>
@@ -509,7 +509,7 @@
       <link>https://www.muhammadshahid.dev/blog/csharp-async-await-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/csharp-async-await-aspnet-core</guid>
       <pubDate>Wed, 12 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[async/await lets an ASP.NET Core API wait on SQL or HTTP without holding a thread. Task vs async void, CancellationToken, .Result starvation, WhenAll, and HttpClient.]]></description>
+      <description><![CDATA[C# async/await on ASP.NET Core request paths — stop .Result blocking, pass CancellationToken, avoid WhenAll on one DbContext. Language primer: see the async learning hub.]]></description>
     </item>
     <item>
       <title><![CDATA[ASP.NET Core Interview Questions: Scenarios]]></title>
@@ -572,7 +572,7 @@
       <link>https://www.muhammadshahid.dev/blog/redis-caching-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/redis-caching-aspnet-core</guid>
       <pubDate>Sun, 02 Aug 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Redis as a distributed cache in ASP.NET Core — IDistributedCache, cache hit vs miss, stampede control, invalidation, and fixing error establishing a Redis connection.]]></description>
+      <description><![CDATA[Redis as a distributed cache in ASP.NET Core — IDistributedCache, stampede control, invalidation, and tenant-aware keys. Connection failures: see the Redis connection fix guide.]]></description>
     </item>
     <item>
       <title><![CDATA[Modular Monolith vs Microservices in .NET]]></title>
@@ -698,7 +698,7 @@
       <link>https://www.muhammadshahid.dev/blog/angular-jwt-interceptors</link>
       <guid>https://www.muhammadshahid.dev/blog/angular-jwt-interceptors</guid>
       <pubDate>Sun, 22 Feb 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Angular HTTP interceptors for ASP.NET Core JWT — bearer attach, in-memory token storage, single-flight refresh, 401 vs 403 handling, and IdentityServer CORS coordination.]]></description>
+      <description><![CDATA[Angular HTTP interceptors for ASP.NET Core JWT — bearer attach, in-memory access tokens, and single-flight refresh overview. Concurrent 401 queues and 401 vs 403 have dedicated guides.]]></description>
     </item>
     <item>
       <title><![CDATA[EF Core Specification Pattern for Catalog Queries]]></title>

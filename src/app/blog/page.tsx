@@ -36,13 +36,11 @@ export default function BlogPage() {
         />
 
         <div className="section-stack">
-          <p className="eyebrow">Start here</p>
-          <h2 className="heading-section mt-3">
-            Pages people already find in Google
-          </h2>
+          <p className="eyebrow">Featured</p>
+          <h2 className="heading-section mt-3">Start here</h2>
           <p className="mt-2 max-w-2xl text-sm text-muted">
             C# async/await interview questions, what an identity server is in ASP.NET Core, and the
-            ASP.NET Core config file — the queries this site already ranks for.
+            ASP.NET Core config file — strong entry points into the feed.
           </p>
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
             {startHere.map((post) => (
@@ -60,7 +58,9 @@ export default function BlogPage() {
 
         <div className="section-stack">
           <p className="eyebrow">Browse by topic</p>
-          <h2 className="heading-section mt-3">Topic hubs</h2>
+          <h2 id="topics" className="heading-section mt-3 scroll-mt-24">
+            Browse by topic
+          </h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
             {learningTopics.map((topic) => {
               const count = getPostsForTopic(topic).length;

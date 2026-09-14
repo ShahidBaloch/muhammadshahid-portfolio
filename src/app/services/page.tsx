@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CtaBand, SectionHeading } from "@/components/SectionHeading";
+import { pageSocial } from "@/lib/seo";
 import { services } from "@/lib/site";
 
+const title = "Hire a Senior .NET + Angular Engineer";
+const description =
+  "Freelance and contract .NET + Angular engineering for healthcare, SaaS, and eCommerce teams — APIs, Angular SPAs, identity/SSO, Azure, and production delivery.";
+
 export const metadata: Metadata = {
-  title: "Hire a Senior .NET + Angular Engineer",
-  description:
-    "Freelance and contract .NET + Angular engineering for healthcare, SaaS, and eCommerce teams — APIs, Angular SPAs, identity/SSO, Azure, and production delivery.",
+  title,
+  description,
   alternates: { canonical: "/services" },
+  ...pageSocial({ title, description, path: "/services" }),
 };
 
 export default function ServicesPage() {
@@ -45,7 +50,7 @@ export default function ServicesPage() {
                   href={item.href}
                   className="surface surface-hover block rounded-xl p-5 transition hover:border-ink"
                 >
-                  <p className="heading-card font-semibold">{item.title}</p>
+                  <h3 className="heading-card font-semibold">{item.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">{item.note}</p>
                 </Link>
               </li>

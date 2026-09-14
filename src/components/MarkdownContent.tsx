@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import remarkGfm from "remark-gfm";
 import "highlight.js/styles/vs2015.css";
-import { getContentHeadings, headingTextFromMarkdown } from "@/lib/headings";
+import { getContentHeadings, headingTextFromMarkdown, slugifyHeading } from "@/lib/headings";
 
 function childrenToText(node: ReactNode): string {
   if (typeof node === "string" || typeof node === "number") return String(node);
@@ -86,6 +86,16 @@ export function MarkdownContent({ content }: { content: string }) {
       remarkPlugins={[remarkGfm]}
       rehypePlugins={[[rehypeHighlight, { detect: true, ignoreMissing: true }]]}
       components={{
+        // Page template already owns the document h1 — never emit a second one from MD.
+        h1: ({ children }) => {
+          const text = headingTextFromMarkdown(childrenToText(children));
+          const id = slugifyHeading(text) || undefined;
+          return (
+            <h2 id={id} className="scroll-mt-28">
+              {children}
+            </h2>
+          );
+        },
         h2: ({ children }) => {
           const text = headingTextFromMarkdown(childrenToText(children));
           const id = nextHeadingId(2, text);

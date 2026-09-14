@@ -64,20 +64,20 @@ export function OnThisPage({ sections }: { sections: PostOutlineSection[] }) {
             {list}
           </details>
           <div className="hidden xl:block">
-            <h2 className="heading-card text-sm font-bold uppercase tracking-[0.14em] text-kicker">
+            <p className="heading-card text-sm font-bold uppercase tracking-[0.14em] text-kicker">
               On this page
               <span className="ml-2 rounded-full bg-mist px-2 py-0.5 text-[0.65rem] font-semibold normal-case tracking-normal text-muted">
                 {count}
               </span>
-            </h2>
+            </p>
             {list}
           </div>
         </>
       ) : (
         <>
-          <h2 className="heading-card text-sm font-bold uppercase tracking-[0.14em] text-kicker">
+          <p className="heading-card text-sm font-bold uppercase tracking-[0.14em] text-kicker">
             On this page
-          </h2>
+          </p>
           {list}
         </>
       )}

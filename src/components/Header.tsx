@@ -95,8 +95,7 @@ export function Header() {
   }, [open]);
 
   const onBlog = pathname === "/blog" || pathname.startsWith("/blog/");
-  const blogCluster =
-    onBlog || pathname === "/learning" || pathname.startsWith("/learning/");
+  const blogCluster = onBlog || pathname.startsWith("/learning/");
 
   return (
     <>

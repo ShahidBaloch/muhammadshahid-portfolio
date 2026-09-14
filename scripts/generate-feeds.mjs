@@ -19,7 +19,6 @@ const STATIC_PATHS = [
   "",
   "/work",
   "/services",
-  "/learning",
   "/about",
   "/blog",
   "/contact",

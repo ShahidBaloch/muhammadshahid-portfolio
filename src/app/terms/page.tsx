@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageSocial } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
+const title = "Terms of Use";
+const description = `Terms of Use for ${siteConfig.name}'s website at ${siteConfig.url}.`;
+
 export const metadata: Metadata = {
-  title: "Terms of Use",
-  description: `Terms of Use for ${siteConfig.name}'s website at ${siteConfig.url}.`,
+  title,
+  description,
   alternates: { canonical: "/terms" },
+  ...pageSocial({ title, description, path: "/terms" }),
 };
 
 export default function TermsPage() {

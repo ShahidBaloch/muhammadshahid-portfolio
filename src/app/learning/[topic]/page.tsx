@@ -88,13 +88,9 @@ export default async function LearningTopicPage({ params }: PageProps) {
     publisher: { "@id": personId },
     inLanguage: "en",
     hasPart: posts.map((post) => ({
-      "@type": "BlogPosting",
-      headline: post.title,
-      description: post.description,
+      "@type": "WebPage",
+      name: post.title,
       url: `${siteConfig.url}/blog/${post.slug}`,
-      datePublished: post.date,
-      dateModified: post.updated ?? post.date,
-      author: { "@id": personId },
     })),
   };
   const itemListJsonLd = {
@@ -114,7 +110,7 @@ export default async function LearningTopicPage({ params }: PageProps) {
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.url },
       { "@type": "ListItem", position: 2, name: "Blog", item: `${siteConfig.url}/blog` },
-      { "@type": "ListItem", position: 3, name: "Topics", item: `${siteConfig.url}/learning` },
+      { "@type": "ListItem", position: 3, name: "Topics", item: `${siteConfig.url}/blog#topics` },
       { "@type": "ListItem", position: 4, name: topic.label, item: pageUrl },
     ],
   };
@@ -170,7 +166,7 @@ export default async function LearningTopicPage({ params }: PageProps) {
             </li>
             <li aria-hidden>/</li>
             <li>
-              <Link href="/learning" className="hover:text-link">
+              <Link href="/blog#topics" className="hover:text-link">
                 Topics
               </Link>
             </li>

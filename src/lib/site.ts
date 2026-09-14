@@ -186,14 +186,14 @@ export const learningTopics: LearningTopic[] = [
         href: "#what-is-async-and-await-in-c",
       },
       {
-        label: "Concurrent I/O",
-        description: "Start independent work together — then open the WhenAll article.",
-        href: "#async-without-parallel-then-start-work-together",
+        label: "Examples",
+        description: "File I/O, Delay vs Sleep map, console/UI notes.",
+        href: "#more-async-await-c-examples-file-i-o-delay-and-cpu-offload",
       },
       {
-        label: "504 / idle CPU",
-        description: "Short symptom map — full fix on the starvation article.",
-        href: "#thread-pool-starvation",
+        label: "Spoke guides",
+        description: "Production checklist, starvation, WhenAll — on their own URLs.",
+        href: "#spoke-guides-not-this-primer",
       },
       {
         label: "Interview prep",
@@ -205,17 +205,17 @@ export const learningTopics: LearningTopic[] = [
       {
         title: "Sync vs async — one API request under load",
         content:
-          "**Sync:** 500 clients each block a worker for 200 ms SQL → pool exhausted, queue grows, gateway 504, CPU looks idle.\n\n**Async:** same 200 ms SQL, but workers are **returned to the pool during the wait** → the same pool serves far more concurrent waits.\n\nAsync does not shorten the query — it stops **one client = one pinned worker** during I/O. Side-by-side tables: [async vs sync](/blog/async-vs-sync-programming).",
+          "Async frees the worker during I/O; sync pins it. Full side-by-side tables: [async vs sync](/blog/async-vs-sync-programming).",
       },
       {
         title: "Spot the bug — which PR would you reject?",
         content:
-          "```csharp\n// A — sync-over-async in a service\npublic OrderDto Get(Guid id) => _repo.GetAsync(id).Result;\n\n// B — fake async\npublic async Task<int> CountAsync() => 42;\n\n// C — WhenAll on one DbContext\nawait Task.WhenAll(_db.A.ToListAsync(ct), _db.B.ToListAsync(ct));\n```\n\n**Answer: all three.** A starves the pool. B triggers CS4014. C races EF Core. Production checklist: [async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).",
+          "`.Result` on a service, fake `async`, and `WhenAll` on one `DbContext` are all wrong. Production checklist: [async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core). WhenAll deep dive: [Task.WhenAll](/blog/csharp-task-whenall-vs-parallel-foreach).",
       },
       {
         title: "Does async mean parallel?",
         content:
-          "**No.** One thread can run `await` after `await` sequentially — that is async **without** parallel.\n\n**Parallel async** is starting **independent** I/O (two HTTP calls, two DbContext scopes) and awaiting them together.\n\n**Not parallel:** two `ToListAsync` on the same `DbContext` in `WhenAll` — that is a bug, not concurrency. Caps: [Task.WhenAll](/blog/csharp-task-whenall-vs-parallel-foreach).",
+          "**No.** Sequential `await`s are async without parallel. Independent I/O can run together — never two `ToListAsync` on one `DbContext`. Caps: [Task.WhenAll](/blog/csharp-task-whenall-vs-parallel-foreach).",
       },
     ],
     matchTags: ["Asynchronous Programming", "Threading", "Concurrency"],

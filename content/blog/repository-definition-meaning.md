@@ -1,8 +1,8 @@
 ---
 title: "Repository Definition and Meaning (With .NET Examples)"
-description: "Repository definition and meaning explained — what a repository is in software, define repository in plain English, and how the repository pattern applies to EF Core and ASP.NET Core."
+description: "Repository definition and meaning explained — what a repository is in software and in .NET. When to use the pattern with EF Core: see the repository pattern guide."
 date: "2026-09-08"
-updated: "2026-09-08"
+updated: "2026-09-14"
 category: "design-patterns"
 tags: ["Repository Pattern", "EF Core", ".NET", "Architecture", "Data Access", "Design Patterns"]
 related:
@@ -15,7 +15,7 @@ faq:
   - q: "Define repository in simple terms."
     a: "A repository is a collection-like gateway to persisted objects. You ask for Orders by status; it runs the query. Callers think in business terms, not table joins."
   - q: "What does repository mean in .NET?"
-    a: "Usually IOrderRepository or similar — methods like GetDetailForInvoiceAsync backed by DbContext. DbContext itself is already a unit-of-work repository; extra layers must earn their keep."
+    a: "Usually IOrderRepository or similar — methods like GetDetailForInvoiceAsync backed by DbContext. When to add one vs skip: [repository pattern in .NET](/blog/repository-pattern-dotnet)."
   - q: "Is a repository the same as a database?"
     a: "No. The database stores data. The repository is the code boundary that reads and writes it with a stable API for the rest of the application."
 ---

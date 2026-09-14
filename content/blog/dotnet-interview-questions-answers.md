@@ -13,19 +13,19 @@ related:
   - angular-interview-questions-aspnet-core
 faq:
   - q: "What are common .NET interview questions?"
-    a: "Mid-level loops cover C# async await (.Result starvation, async void, WhenAll on one DbContext), ASP.NET Core DI lifetimes, JWT with Angular, middleware order, and EF Core N+1. Senior loops add IAsyncEnumerable exports, tenant-safe caches, Channels, and SQL deadlocks under load."
+    a: "This page is the map. Pick a track: [async await interview](/blog/csharp-async-await-interview-questions), [ASP.NET Core scenarios](/blog/aspnet-core-interview-questions-scenarios), [EF Core interview](/blog/ef-core-interview-questions), [Angular + .NET](/blog/angular-interview-questions-aspnet-core), or [expert C#](/blog/csharp-expert-interview-questions)."
   - q: "What ASP.NET Core interview questions are asked most?"
-    a: "Captive dependencies (singleton holding DbContext), 401 vs 403, thread pool starvation from sync-over-async, validation envelopes for SPAs, and middleware order (CORS before auth failures). Scenario answers live on the ASP.NET Core interview questions page."
+    a: "Full scenario answers: [ASP.NET Core interview questions](/blog/aspnet-core-interview-questions-scenarios). This page only routes you there."
   - q: "What .NET Core interview questions should I prepare?"
-    a: "The same production stories as ASP.NET Core Web API loops — DI lifetimes, JWT, middleware, and EF N+1. .NET Core is the old product name; interviewers still say it. Use the Web API scenarios page, not a Framework-era dump."
+    a: "Same loops as ASP.NET Core Web API — use [ASP.NET Core scenarios](/blog/aspnet-core-interview-questions-scenarios). .NET Core is the old product name."
   - q: "What web API interview questions come up on .NET panels?"
-    a: "JWT that works in Postman but not Angular, 401 vs 403, ProblemDetails validation envelopes, rate limits on login, and pagination instead of unbounded lists. Full answers: ASP.NET Core interview questions scenarios."
+    a: "JWT, 401 vs 403, ProblemDetails, rate limits, pagination — answered on [ASP.NET Core interview scenarios](/blog/aspnet-core-interview-questions-scenarios)."
   - q: "What C# interview questions and answers should I prepare?"
-    a: "Task vs Thread, async vs multithreading, lock vs SemaphoreSlim, ConfigureAwait in libraries, and production failure stories — not syntax trivia. Start with async await interview questions, then expert scenarios for staff loops."
+    a: "Start with [async await interview questions](/blog/csharp-async-await-interview-questions), then [expert C#](/blog/csharp-expert-interview-questions) for staff loops."
   - q: "How do I study .NET interview questions efficiently?"
-    a: "Pick one track: async, ASP.NET Core scenarios, EF Core, or Angular integration. Read the scenario prompt, answer aloud, then compare to the strong answer. Link to how-to articles for merge-checklist depth."
+    a: "Pick one track from the links above. Read the scenario prompt, answer aloud, then compare to the strong answer."
   - q: "Are .NET test questions and MCQs enough?"
-    a: "MCQs test recall. Mid-to-senior loops test scenarios. Use this hub for the latter. If a take-home includes net questions as multiple choice, still answer with a production story — captive DbContext beats defining IoC."
+    a: "MCQs test recall. Mid-to-senior loops test scenarios — use the track articles linked from this map."
 ---
 
 Whether the job post says **.NET interview questions**, **ASP.NET Core**, or **Web API scenarios**, you want a **map** — not a 200-line dump copied from a PDF.

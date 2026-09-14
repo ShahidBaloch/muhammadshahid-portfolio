@@ -36,7 +36,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/learning" className="transition hover:text-link-bright">
+                <Link href="/blog#topics" className="transition hover:text-link-bright">
                   Blog topics
                 </Link>
               </li>

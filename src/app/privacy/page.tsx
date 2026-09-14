@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageSocial } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
+const title = "Privacy Policy";
+const description = `Privacy Policy for ${siteConfig.name} (${siteConfig.url}). How personal data, cookies, analytics, and advertising are handled.`;
+
 export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description: `Privacy Policy for ${siteConfig.name} (${siteConfig.url}). How personal data, cookies, analytics, and advertising are handled.`,
+  title,
+  description,
   alternates: { canonical: "/privacy" },
+  ...pageSocial({ title, description, path: "/privacy" }),
 };
 
 export default function PrivacyPage() {

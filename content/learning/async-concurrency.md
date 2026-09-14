@@ -2,7 +2,7 @@
 title: "Async and Await in C# — Explained with Examples"
 ---
 
-> **How this hub is indexed:** This page owns the **C# language primer** (async/await keywords, TAP examples). Dictionary SERPs and ASP.NET production failure modes live on dedicated articles — linked inline and in the tracks below.
+> **How this hub is indexed:** This page owns the **C# language primer** (async/await keywords, TAP examples). Dictionary SERPs and ASP.NET production failure modes live on dedicated articles — linked below.
 
 | You want… | Open |
 |---|---|
@@ -13,6 +13,8 @@ title: "Async and Await in C# — Explained with Examples"
 | **ASP.NET Core production checklist** | [Async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core) |
 | **504 / idle CPU starvation** | [Thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async) |
 | **Task vs Thread** | [Task vs Thread](/blog/csharp-task-vs-thread) |
+| **Task.WhenAll caps** | [WhenAll vs WaitAll](/blog/csharp-task-whenall-vs-parallel-foreach) |
+| **Multithreading map** | [C# multithreading primer](/blog/csharp-multithreading-primer) |
 
 ## What is async and await in C#?
 
@@ -20,7 +22,7 @@ title: "Async and Await in C# — Explained with Examples"
 
 An **async method in C#** is marked with the **`async`** modifier and returns **`Task`** or **`Task<T>`** so callers can observe completion and exceptions. **`await`** is used **inside** that method on awaitable work (`FirstOrDefaultAsync`, `ReadToEndAsync`, `SendAsync`, …).
 
-This hub is a **C# async and await explained** primer with examples — keywords, mechanics, and a map to production articles. For request-path rules (`.Result`, `CancellationToken`, `WhenAll` on `DbContext`), use the [ASP.NET Core async checklist](/blog/csharp-async-await-aspnet-core).
+This hub is a **C# async and await explained** primer with examples — keywords and mechanics. For request-path rules (`.Result`, `CancellationToken`, `WhenAll` on `DbContext`), use the [ASP.NET Core async checklist](/blog/csharp-async-await-aspnet-core).
 
 ## Difference between async and await in C#
 
@@ -81,21 +83,18 @@ Name I/O methods with an **`Async` suffix** (`GetOrderAsync`, `ReadConfigAsync`)
 
 ## What async and await give you
 
-_Comparison: why teams adopt TAP over blocking code and callbacks._
+| Benefit | Meaning |
+|---|---|
+| **Non-blocking I/O** | Worker free during SQL/HTTP waits |
+| **Readable flow** | Linear code instead of nested callbacks |
+| **Composition** | `await` step A, then step B |
+| **Not magic speed** | I/O duration unchanged — throughput improves |
 
-| Benefit | Generic C# | ASP.NET Core API (this hub’s focus) |
-|---|---|---|
-| **Non-blocking I/O** | UI stays responsive; console can do other work | ThreadPool workers serve other clients during SQL/HTTP waits |
-| **Readable flow** | Linear code instead of nested callbacks | Controllers read top-to-bottom like sync code — easier review than APM `Begin/End` |
-| **Composition** | `await` step A, then step B | Service awaits EF, then `HttpClient`, then maps DTO — each step is still async |
-| **Exceptions** | Faulted `Task` throws on `await` — same `try/catch` shape | Unhandled faults become 500s your [exception handler](/blog/aspnet-core-global-exception-handling) can turn into ProblemDetails |
-| **Not magic speed** | I/O duration unchanged | A 200 ms query stays 200 ms — you stop **pinning** one worker per wait |
-
-For callback history and promises, see [callback vs promise](/blog/callback-vs-promise-async) and [promise vs Task](/blog/async-promise-explained).
+For callback history and promises: [callback vs promise](/blog/callback-vs-promise-async) · [promise vs Task](/blog/async-promise-explained).
 
 ## More async await C# examples: file I/O, delay, and CPU offload
 
-### Async file read (StreamReader or one-shot API)
+### Async file read
 
 ```csharp
 public async Task<string> ReadConfigAsync(string path, CancellationToken ct)
@@ -104,162 +103,47 @@ public async Task<string> ReadConfigAsync(string path, CancellationToken ct)
     return await reader.ReadToEndAsync(ct);
 }
 
-// Same idea — one call when you do not need a stream
 public Task<string> ReadConfigFastAsync(string path, CancellationToken ct) =>
     File.ReadAllTextAsync(path, ct);
 ```
 
-Azure blobs use the same rule: `await` the SDK’s `*Async` methods ([blob uploads](/blog/azure-blob-aspnet-core-uploads)).
+### `Task.Delay` vs `Thread.Sleep` (language note)
 
-### `Task.Delay` — non-blocking wait (not `Thread.Sleep`)
+`await Task.Delay(...)` yields without blocking a worker; `Thread.Sleep` pins it. Full Sleep vs Delay and Task vs Thread: [Task vs Thread](/blog/csharp-task-vs-thread).
 
-```csharp
-public async Task<OrderStatusDto> PollPartnerAsync(Guid id, CancellationToken ct)
-{
-    for (var attempt = 0; attempt < 5; attempt++)
-    {
-        var status = await _partner.GetStatusAsync(id, ct);
-        if (status.IsFinal) return status;
-        await Task.Delay(TimeSpan.FromSeconds(2), ct); // yields the worker — Sleep would block it
-    }
-    throw new TimeoutException("Partner did not finalize in time.");
-}
-```
+### CPU offload (`Task.Run`) — map only
 
-On APIs always pass **`CancellationToken`** into `Task.Delay`. Full `Sleep` vs `Delay`: [Task vs Thread](/blog/csharp-task-vs-thread).
+Use `Task.Run` for CPU-bound work, not to wrap EF I/O. When **not** to use it on ASP.NET Core: [Task.Run vs await](/blog/csharp-task-run-aspnet-core).
 
-### CPU work on a pool thread (`Task.Run`)
+### Console and UI
 
-```csharp
-public async Task<int> HashReportAsync(byte[] payload, CancellationToken ct)
-{
-    return await Task.Run(() => ComputeHash(payload), ct); // CPU-bound — not for wrapping EF I/O
-}
-```
-
-When **not** to use `Task.Run`: [Task.Run vs await](/blog/csharp-task-run-aspnet-core).
-
-### Console and UI — same `async`/`await` syntax
-
-Console apps use the same keywords; the win is **not blocking** the main thread while I/O runs:
-
-```csharp
-static async Task Main(string[] args)
-{
-    Console.WriteLine("Reading config…");
-    var json = await File.ReadAllTextAsync("appsettings.json");
-    Console.WriteLine($"Loaded {json.Length} chars.");
-}
-```
-
-Desktop UI uses the same pattern so the **message loop stays responsive** — buttons stay clickable while downloads run. The one exception: **`async void`** is only for UI event handlers that cannot return `Task`. Never use `async void` on ASP.NET Core actions. UI-only detail: [Task.Yield and the UI thread](/blog/csharp-task-yield-ui-thread).
+Same `async`/`await` syntax. **`async void`** is only for UI event handlers — never ASP.NET Core actions. UI-only: [Task.Yield](/blog/csharp-task-yield-ui-thread).
 
 ## Async without parallel — then start work together
 
-**Async is not multithreading.** One thread can `await` SQL, then `await` HTTP, sequentially — no extra workers during the waits.
+**Async is not multithreading.** One thread can `await` SQL, then `await` HTTP, sequentially.
 
-**Concurrent async** means starting multiple independent I/O operations, then awaiting them — like a clinic portal that loads **patient header** and **open appointments** at the same time instead of waiting for each query to finish before starting the next.
+**Concurrent async** means starting independent I/O, then awaiting together. **Never** `Task.WhenAll` two `ToListAsync` calls on the **same** `DbContext`. Caps and patterns: [Task.WhenAll](/blog/csharp-task-whenall-vs-parallel-foreach).
 
-```csharp
-// Sequential — simple, safe on one DbContext
-var order = await _db.Orders.AsNoTracking().FirstOrDefaultAsync(o => o.Id == id, ct);
-var lines = await _db.Lines.AsNoTracking().Where(l => l.OrderId == id).ToListAsync(ct);
+## Async vs multithreading (map)
 
-// Concurrent — only when resources are independent (separate scopes or HTTP calls)
-var orderTask = _orders.GetHeaderAsync(id, ct);
-var linesTask = _lines.ListForOrderAsync(id, ct);
-await Task.WhenAll(orderTask, linesTask);
-var dto = Map(await orderTask, await linesTask);
-```
+Async frees the worker during I/O. Multithreading coordinates CPU work and shared memory. Full map: [C# multithreading primer](/blog/csharp-multithreading-primer).
 
-**Never** `Task.WhenAll` two `ToListAsync` calls on the **same** `DbContext` — it is not thread-safe. Pattern details: [Task.WhenAll caps](/blog/csharp-task-whenall-vs-parallel-foreach).
+## Spoke guides (not this primer)
 
-If one awaited call throws, the `Task` is **faulted** and the exception surfaces at the `await` — same mental model as sync `try/catch`.
-
-## Async vs multithreading
-
-| | Asynchronous (`async`/`await`) | Multithreading |
-|---|---|---|
-| **Goal** | Non-blocking I/O waits | Parallel workers or in-memory gates |
-| **ASP.NET use** | `ToListAsync`, `HttpClient`, blobs, `File.ReadAllTextAsync` | `Task.Run` (CPU), `lock`, `Channel` |
-| **Thread per I/O wait?** | No | `Task.Run` uses ThreadPool workers |
-| **Wrong pattern** | `.Result` / `.Wait()` (sync-over-async) | `new Thread()` per request, `await` in `lock` |
-
-Async frees the ThreadPool worker during SQL/HTTP/files. Multithreading coordinates CPU work and shared in-memory state. They are not interchangeable.
-
-## When to use which
-
-| Situation | Use |
+| Topic | Winner article |
 |---|---|
-| SQL, HTTP, local files, blobs, messaging | `async`/`await` end to end |
-| Two independent I/O sources (two scopes or HTTP clients) | Start both, `await Task.WhenAll` |
-| CPU-bound hash/encode on the API | `Task.Run` with a cap — rarely every request |
-| Two threads could corrupt memory | `lock` or `Interlocked` |
-| Work after `return Ok()` | `Channel` + `BackgroundService` |
-| Outbound partner API flood | `SemaphoreSlim.WaitAsync` or `IHttpClientFactory` |
+| Request-path checklist | [Async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core) |
+| 504 / idle CPU / `.Result` | [Thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async) |
+| ConfigureAwait / ValueTask / IAsyncEnumerable | [ConfigureAwait](/blog/csharp-configureawait-false-library) · [Task vs Thread](/blog/csharp-task-vs-thread) · [IAsyncEnumerable](/blog/csharp-iasyncenumerable-yield-return) |
 
-## Example: async I/O on ASP.NET Core
+## Common mistakes (language → spoke)
 
-```csharp
-public async Task<OrderDto?> GetOrderAsync(Guid id, CancellationToken ct)
-{
-    var order = await _db.Orders
-        .AsNoTracking()
-        .FirstOrDefaultAsync(o => o.Id == id, ct);
-    return order is null ? null : Map(order);
-}
-```
+| Mistake | Where to fix |
+|---|---|
+| `async` with no `await` | This primer (CS4014) |
+| `.Result` on request path | [Starvation](/blog/csharp-threadpool-starvation-sync-over-async) |
+| `WhenAll` on one `DbContext` | [WhenAll](/blog/csharp-task-whenall-vs-parallel-foreach) |
+| `async void` controller | [ASP.NET checklist](/blog/csharp-async-await-aspnet-core) |
 
-The worker is free while SQL runs. The query is not faster — the API serves more concurrent clients.
-
-## Thread pool starvation
-
-**Symptom:** gateway **504** timeouts, Angular spinners, **CPU looks idle**, SQL metrics healthy.
-
-**Cause (short):** sync-over-async — `.Result` / `.Wait()` / `GetAwaiter().GetResult()` on the request path.
-
-```csharp
-// Wrong — blocks a worker until EF completes
-var order = _orders.GetByIdAsync(id).Result;
-
-// Right — worker returns to the pool during SQL
-var order = await _orders.GetByIdAsync(id, ct);
-```
-
-Full dumps, failure story, and search checklist: [thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async). Related how-tos in the **Starvation and library context** track below.
-
-## ASP.NET Core rules (summary)
-
-Request-path rules belong on the production checklist — keep this as a map, not a second full guide:
-
-1. Await EF Core, `HttpClient`, storage, and `File.*Async` end to end.
-2. Never `.Result`, `.Wait()`, or `.GetAwaiter().GetResult()` on hot paths.
-3. Do not wrap `ToListAsync` in `Task.Run`.
-4. Pass `CancellationToken` through to SQL, HTTP, files, and `Task.Delay`.
-5. `Task.WhenAll` only with **independent** resources (not one shared `DbContext`).
-
-Deep dive: [async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).
-
-## Beyond basics — ConfigureAwait, ValueTask, and IAsyncEnumerable
-
-These show up after syntax clicks — brief map to deeper articles:
-
-| Topic | Rule of thumb on ASP.NET Core | Deep dive |
-|---|---|---|
-| **`ConfigureAwait(false)`** | Skip in app controllers — no UI sync context. **Do** use in shared NuGet libraries. | [ConfigureAwait in libraries](/blog/csharp-configureawait-false-library) |
-| **`ValueTask` / `ValueTask<T>`** | For **measured** hot paths that often complete synchronously (cache hit). Default to `Task` until profiling proves a win. Await once. | [Task vs Thread — ValueTask](/blog/csharp-task-vs-thread) |
-| **`IAsyncEnumerable<T>`** | Stream large exports/report rows without loading everything into memory — `await foreach` with `CancellationToken`. | [IAsyncEnumerable exports](/blog/csharp-iasyncenumerable-yield-return) |
-
-## Common mistakes
-
-| Mistake | Symptom | Fix |
-|---|---|---|
-| `async` with no `await` | CS4014 warning; fake async | `Task.FromResult` or real `await` |
-| `.Result` in services | Idle CPU, 504s | Async to the controller |
-| `Task.Run(() => ToListAsync())` | Worse p95 | `await ToListAsync(ct)` |
-| `async void` controller | Lost exceptions | `async Task<IActionResult>` |
-| `WhenAll` on one `DbContext` | EF corruption | Sequential or two scopes |
-| `await` inside `lock` | Deadlock / CS1996 | `SemaphoreSlim.WaitAsync` |
-| Email after `Ok()` | Lost on recycle | `Channel` + `BackgroundService` |
-
-Pick a path below, tap **Try it** to self-check, or jump to a track.
+Pick a track below, tap **Try it** to self-check, or open a spoke article from the table at the top.

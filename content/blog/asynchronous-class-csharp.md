@@ -23,7 +23,7 @@ faq:
 
 **Asynchronous class** means two different things on Google — online education and programming. This article covers the **C# meaning**: how to design a type whose methods use `async`/`await` correctly on ASP.NET Core.
 
-Education definitions: [async vs sync](/blog/async-vs-sync-programming) (includes synchronous class meaning). Foundations: [asynchronous meaning and definition](/blog/asynchronous-meaning-definition).
+Education definitions: this page owns education **and** C# “asynchronous class.” Programming async vs sync comparison: [async vs sync](/blog/async-vs-sync-programming). Foundations: [asynchronous meaning](/blog/asynchronous-meaning-definition).
 
 ## Asynchronous class in C# (programming)
 

@@ -13,8 +13,6 @@ faq:
     a: "Only if the license does not fit. Many teams stay. Others delete the bus. A three-week namespace swap is not an architecture decision."
   - q: "Is Wolverine a drop-in for MediatR?"
     a: "No. Handlers look similar; pipeline, messaging, and ops do not. Read current licenses for your company size before you migrate."
-  - q: "Can I do CQRS without a mediator?"
-    a: "Yes. Thin controllers calling application services is CQRS-lite. When to add MediatR at all is the ceremony article, not this license page."
 ---
 
 After MediatR's commercial license, teams have three honest paths: **pay and stay**, **delete the bus** and call application services, or **migrate** to Wolverine when messaging/outbox — not license avoidance — is the real need.
