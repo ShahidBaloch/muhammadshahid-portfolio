@@ -1,8 +1,8 @@
 ---
 title: "C# Async and Await in ASP.NET Core: Stop Blocking Your API"
-description: "async/await lets an ASP.NET Core API wait on SQL or HTTP without holding a thread. Task vs async void, CancellationToken, .Result starvation, WhenAll, and HttpClient."
+description: "C# async/await on ASP.NET Core request paths — stop .Result blocking, pass CancellationToken, avoid WhenAll on one DbContext. Language primer: see the async learning hub."
 date: "2026-08-12"
-updated: "2026-09-11"
+updated: "2026-09-14"
 category: "async-concurrency"
 tags: ["C#", "async await", "Asynchronous Programming", "ASP.NET Core", ".NET", "Performance", "C# async await ASP.NET Core", "CancellationToken"]
 related:

@@ -1,34 +1,34 @@
 ---
-title: "Caching for ASP.NET Core APIs"
+title: "Caching Articles for ASP.NET Core APIs"
 ---
 
 ## Introduction
 
-Cache problems show up as **cache misses**, slow reads after a deploy, or **error establishing a Redis connection** — often before anyone tunes TTLs. Definitions and fixes start here (including how **IMemoryCache** compares to Redis on ASP.NET Core):
+This page is the **article map** for caching on ASP.NET Core. Definitions, Redis production patterns, and connection fixes each have their own URL — open those for ranking and deep answers.
 
-- [What is a cache miss](/blog/what-is-a-cache-miss)
-- [Caching system in .NET (IMemoryCache + Redis)](/blog/caching-system-dotnet-imemorycache-redis)
-- [Redis connection errors](/blog/redis-connection-error-aspnet-core)
-- [Redis caching patterns](/blog/redis-caching-aspnet-core)
+| You want… | Open |
+|---|---|
+| **What is a cache miss** | [Cache miss definition](/blog/what-is-a-cache-miss) |
+| **IMemoryCache vs Redis layers** | [Caching system in .NET](/blog/caching-system-dotnet-imemorycache-redis) |
+| **Redis production patterns** | [Redis caching ASP.NET Core](/blog/redis-caching-aspnet-core) |
+| **Error establishing a Redis connection** | [Redis connection fix](/blog/redis-connection-error-aspnet-core) |
 
-## Cache hit vs miss (summary)
+## Cache hit vs miss (one-line map)
 
 ```text
 HIT  → key in cache → fast return
 MISS → key absent   → SQL/HTTP rebuild → store → return
 ```
 
-A high miss rate under load spikes SQL. Fix queries first, then cache slim DTOs with TTL and stampede control.
+Full definition and miss-path design: [what is a cache miss](/blog/what-is-a-cache-miss).
 
-## Caching layers on .NET APIs
+## Caching layers (quick map)
 
-| Layer | Tool | When |
+| Layer | Tool | Deep dive |
 |---|---|---|
-| In-process object cache | `IMemoryCache` | Single instance, short TTL |
-| Distributed cache | Redis + `IDistributedCache` | Multiple App Service instances |
-| HTTP cache | `Cache-Control`, ETag | Public static assets |
-
-Java developers: Caffeine/Ehcache ≈ `IMemoryCache`; Redis patterns are the same — cache-aside, TTL, invalidation.
+| In-process object cache | `IMemoryCache` | [Caching system](/blog/caching-system-dotnet-imemorycache-redis) |
+| Distributed cache | Redis + `IDistributedCache` | [Redis caching](/blog/redis-caching-aspnet-core) |
+| Connection / TLS failures | StackExchange.Redis | [Connection error fix](/blog/redis-connection-error-aspnet-core) |
 
 ## Deep-dive articles
 
@@ -38,5 +38,3 @@ Java developers: Caffeine/Ehcache ≈ `IMemoryCache`; Redis patterns are the sam
 | Choose **IMemoryCache vs Redis** | [Caching system in .NET](/blog/caching-system-dotnet-imemorycache-redis) |
 | Fix **Redis connection errors** | [Redis connection error fix](/blog/redis-connection-error-aspnet-core) |
 | Design production Redis cache | [Redis caching ASP.NET Core](/blog/redis-caching-aspnet-core) |
-| SQL still slow on miss | [EF Core SQL performance](/blog/ef-core-sql-performance) |
-| Tenant-safe in-memory maps | [ConcurrentDictionary](/blog/csharp-concurrentdictionary-lock) |

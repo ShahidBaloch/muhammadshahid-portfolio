@@ -1,6 +1,6 @@
 ---
 title: "Angular JWT Interceptors for ASP.NET Core APIs"
-description: "Angular HTTP interceptors for ASP.NET Core JWT — bearer attach, in-memory token storage, single-flight refresh, 401 vs 403 handling, and IdentityServer CORS coordination."
+description: "Angular HTTP interceptors for ASP.NET Core JWT — bearer attach, in-memory access tokens, and single-flight refresh overview. Concurrent 401 queues and 401 vs 403 have dedicated guides."
 date: "2026-02-22"
 category: "authentication"
 tags: ["Angular", "JWT", "ASP.NET Core", "Security"]

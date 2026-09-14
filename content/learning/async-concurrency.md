@@ -2,13 +2,25 @@
 title: "Async and Await in C# — Explained with Examples"
 ---
 
+> **How this hub is indexed:** This page owns the **C# language primer** (async/await keywords, TAP examples). Dictionary SERPs and ASP.NET production failure modes live on dedicated articles — linked inline and in the tracks below.
+
+| You want… | Open |
+|---|---|
+| **asynchronous meaning / definition** | [Asynchronous meaning](/blog/asynchronous-meaning-definition) |
+| **async vs sync tables** | [Async vs sync](/blog/async-vs-sync-programming) |
+| **promise / Task / Future** | [What is a promise](/blog/async-promise-explained) |
+| **callback vs promise** | [Callback vs promise](/blog/callback-vs-promise-async) |
+| **ASP.NET Core production checklist** | [Async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core) |
+| **504 / idle CPU starvation** | [Thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async) |
+| **Task vs Thread** | [Task vs Thread](/blog/csharp-task-vs-thread) |
+
 ## What is async and await in C#?
 
 **Async and await in C#** are language features for the **Task-based Asynchronous Pattern (TAP)**. You write code as a normal sequence of statements, but **`await`** lets the runtime **release the current thread** while I/O (SQL, HTTP, files) finishes instead of blocking.
 
 An **async method in C#** is marked with the **`async`** modifier and returns **`Task`** or **`Task<T>`** so callers can observe completion and exceptions. **`await`** is used **inside** that method on awaitable work (`FirstOrDefaultAsync`, `ReadToEndAsync`, `SendAsync`, …).
 
-This hub is a **C# async and await explained** tutorial with examples — from the **async and await keywords in C#** through production **ASP.NET Core** rules.
+This hub is a **C# async and await explained** primer with examples — keywords, mechanics, and a map to production articles. For request-path rules (`.Result`, `CancellationToken`, `WhenAll` on `DbContext`), use the [ASP.NET Core async checklist](/blog/csharp-async-await-aspnet-core).
 
 ## Difference between async and await in C#
 
@@ -204,7 +216,7 @@ The worker is free while SQL runs. The query is not faster — the API serves mo
 
 **Symptom:** gateway **504** timeouts, Angular spinners, **CPU looks idle**, SQL metrics healthy.
 
-**Cause:** **Sync-over-async** — `.Result`, `.Wait()`, or `.GetAwaiter().GetResult()` on `Task` in controllers or services. Pool workers block while async continuations still need workers to finish. The queue grows until Kestrel stops accepting work.
+**Cause (short):** sync-over-async — `.Result` / `.Wait()` / `GetAwaiter().GetResult()` on the request path.
 
 ```csharp
 // Wrong — blocks a worker until EF completes
@@ -214,26 +226,19 @@ var order = _orders.GetByIdAsync(id).Result;
 var order = await _orders.GetByIdAsync(id, ct);
 ```
 
-**Fix:** async end to end on the request path. Search the repo for `.Result`, `.Wait(`, and `GetAwaiter().GetResult()` before shipping.
+Full dumps, failure story, and search checklist: [thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async). Related how-tos in the **Starvation and library context** track below.
 
-Full failure story and dumps: [thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async). Related how-tos in the **Starvation and library context** track below.
+## ASP.NET Core rules (summary)
 
-## ASP.NET Core rules
-
-```text
-Healthy:  action → await ToListAsync → worker returns to pool → SQL done → Ok()
-
-Starved:  action → .Result on ToListAsync → sync-over-async → queue → 504, CPU idle
-```
+Request-path rules belong on the production checklist — keep this as a map, not a second full guide:
 
 1. Await EF Core, `HttpClient`, storage, and `File.*Async` end to end.
 2. Never `.Result`, `.Wait()`, or `.GetAwaiter().GetResult()` on hot paths.
 3. Do not wrap `ToListAsync` in `Task.Run`.
 4. Pass `CancellationToken` through to SQL, HTTP, files, and `Task.Delay`.
-5. Use `lock` / `Interlocked` for short in-memory gates — not around EF or HTTP.
-6. Use `Channel` + `BackgroundService` for work after `Ok()`.
-7. Do not mark a method `async` without `await` — it runs synchronously and triggers **CS4014**; remove `async` or return `Task.FromResult(...)`.
-8. `Task.WhenAll` only when each task uses **independent** resources (not one shared `DbContext`).
+5. `Task.WhenAll` only with **independent** resources (not one shared `DbContext`).
+
+Deep dive: [async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).
 
 ## Beyond basics — ConfigureAwait, ValueTask, and IAsyncEnumerable
 

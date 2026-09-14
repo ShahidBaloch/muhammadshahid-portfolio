@@ -1,8 +1,17 @@
 ---
-title: "C# and ASP.NET Core Interview Questions"
+title: "Interview Question Tracks for .NET and Angular"
 ---
 
-Hub: [.NET interview questions and answers](/blog/dotnet-interview-questions-answers). Web API scenarios: [ASP.NET Core interview questions](/blog/aspnet-core-interview-questions-scenarios). EF relationships mapping: [EF Core relationships](/blog/ef-core-relationships). EF correctness narration: [EF Core interview questions](/blog/ef-core-interview-questions).
+This page is a **track index** — not the question bank. Full answers live on the linked articles.
+
+| Track | Article |
+|---|---|
+| **.NET interview map** | [.NET interview questions and answers](/blog/dotnet-interview-questions-answers) |
+| **Async / threading oral** | [C# async await interview questions](/blog/csharp-async-await-interview-questions) |
+| **Staff runtime** | [C# expert interview questions](/blog/csharp-expert-interview-questions) |
+| **ASP.NET Core scenarios** | [ASP.NET Core interview questions](/blog/aspnet-core-interview-questions-scenarios) |
+| **EF Core correctness** | [EF Core interview questions](/blog/ef-core-interview-questions) |
+| **Angular + .NET** | [Angular interview questions](/blog/angular-interview-questions-aspnet-core) |
 
 **.NET Core interview questions** and **web API interview questions** are the same loop as ASP.NET Core — use the scenarios page, not an MCQ dump.
 
@@ -18,4 +27,4 @@ Rehearse the first answer on the track posts above — panels often push into th
 | “RowVersion on PUT” | “What if the client never sends the token back?” |
 | “Refresh token rotation” | “What if two tabs refresh at once?” |
 
-Need implementation depth first? See [async & threading](/learning/async-concurrency) for **C# async await** and **multithreading** how-tos before rehearsing oral answers.
+Need implementation depth first? See [async & threading](/learning/async-concurrency) for the language primer, then rehearse oral answers on the interview articles above.

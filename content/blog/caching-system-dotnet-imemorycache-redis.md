@@ -1,8 +1,8 @@
 ---
 title: "Caching System in .NET: IMemoryCache, Redis, and Object Cache"
-description: "Caching system explained for .NET and Java developers — object cache, in-memory vs distributed cache, IMemoryCache vs Redis on ASP.NET Core, compared to Java caching patterns."
+description: "Caching system layers for .NET — object cache, in-memory vs distributed, IMemoryCache vs Redis on ASP.NET Core, mapped for Java developers. Cache-miss definition lives on its own page."
 date: "2026-09-08"
-updated: "2026-09-12"
+updated: "2026-09-14"
 category: "caching"
 tags: ["Caching", "IMemoryCache", "Redis", "ASP.NET Core", ".NET", "Performance"]
 related:
@@ -12,7 +12,7 @@ related:
   - ef-core-sql-performance
 faq:
   - q: "What is a caching system?"
-    a: "A caching system stores copies of frequently used data in fast storage (RAM, Redis) so reads avoid slower sources like SQL or HTTP. It includes the cache store, keys, TTL, eviction, invalidation on writes, and hit/miss metrics."
+    a: "A caching system stores copies of frequently used data in fast storage (RAM, Redis) so reads avoid slower sources like SQL or HTTP. It includes the cache store, keys, TTL, eviction, invalidation on writes, and hit/miss metrics. Hit vs miss vocabulary: [what is a cache miss](/blog/what-is-a-cache-miss)."
   - q: "What is IMemoryCache?"
     a: "ASP.NET Core’s in-memory cache — an in-process object cache for one API instance. AddMemoryCache(), inject IMemoryCache, set TTL and a size limit. It is not shared across App Service instances."
   - q: "What is in-memory cache vs Redis in ASP.NET Core?"

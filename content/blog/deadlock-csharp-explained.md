@@ -1,10 +1,10 @@
 ---
 title: "Deadlock in C# and Operating Systems (Avoidance Explained)"
-description: "Deadlock definition, deadlock in operating system terms, deadlock avoidance in OS and C# — lock ordering, async deadlocks, and SQL Server reader/writer deadlocks on ASP.NET Core."
+description: "Deadlock definition and avoidance in OS and C# — lock ordering, async deadlocks, and how that differs from SQL Server reader/writer deadlocks (linked separately)."
 date: "2026-09-08"
-updated: "2026-09-08"
+updated: "2026-09-14"
 category: "async-concurrency"
-tags: ["Deadlock", "Threading", "Concurrency", "C#", ".NET", "ASP.NET Core", "SQL Server"]
+tags: ["Deadlock", "Threading", "Concurrency", "C#", ".NET", "ASP.NET Core"]
 related:
   - csharp-lock-statement-monitor-mutex
   - csharp-threadpool-starvation-sync-over-async
@@ -12,18 +12,20 @@ related:
   - csharp-async-await-interview-questions
 faq:
   - q: "What is a deadlock?"
-    a: "A deadlock is when two or more threads (or transactions) each hold a resource the other needs, and all wait forever. In C#: thread A holds lock 1 and waits for lock 2 while thread B holds lock 2 and waits for lock 1. In SQL: session A locked row 1 and waits on row 2 while session B did the opposite."
+    a: "A deadlock is when two or more threads (or transactions) each hold a resource the other needs, and all wait forever. In C#: thread A holds lock 1 and waits for lock 2 while thread B holds lock 2 and waits for lock 1."
   - q: "What is deadlock in operating system?"
-    a: "In OS terms, deadlock requires four conditions (Coffman): mutual exclusion, hold and wait, no preemption, and circular wait. The OS scheduler cannot make progress until one victim is aborted. Databases and .NET apps hit the same circular-wait shape with locks instead of only CPU threads."
+    a: "In OS terms, deadlock requires four conditions (Coffman): mutual exclusion, hold and wait, no preemption, and circular wait. The OS scheduler cannot make progress until one victim is aborted."
   - q: "What is deadlock avoidance in OS?"
     a: "Prevention strategies: impose lock ordering (always acquire A before B), use timeouts (Monitor.TryEnter), avoid nested locks, use lock-free structures (Interlocked), or break cycles with banker's-algorithm-style resource ordering. In apps: design APIs async end-to-end instead of blocking on Tasks."
   - q: "What is the difference between deadlock and thread pool starvation?"
     a: "Deadlock is circular wait — nobody can proceed. Starvation on ASP.NET Core is workers blocked on .Result while async continuations need workers — queue grows, looks like a hang, but it is not a classic lock cycle. Different fix: await instead of block."
+  - q: "Where are SQL Server reader/writer deadlocks covered?"
+    a: "RCSI and snapshot isolation: [SQL Server deadlocks](/blog/sql-server-deadlocks-snapshot-isolation) — different SERP from C# lock-order deadlocks."
 ---
 
-OS textbooks explain **deadlock** with dining philosophers — then you sit in a .NET interview or on-call with a hung API. This page connects **deadlock theory** to **C#, ASP.NET Core, and SQL Server** so the definitions map to real fixes.
+OS textbooks explain **deadlock** with dining philosophers — then you sit in a .NET interview or on-call with a hung API. This page connects **deadlock theory** to **C# and ASP.NET Core lock/async deadlocks**. SQL Server reader/writer deadlocks and RCSI are a different SERP: [SQL Server deadlocks](/blog/sql-server-deadlocks-snapshot-isolation).
 
-Related: [lock statement](/blog/csharp-lock-statement-monitor-mutex), [SQL Server deadlocks](/blog/sql-server-deadlocks-snapshot-isolation), [thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async) (not the same problem).
+Related: [lock statement](/blog/csharp-lock-statement-monitor-mutex), [thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async) (not the same problem).
 
 ## Deadlock definition
 

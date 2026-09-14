@@ -106,23 +106,16 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "interview-questions",
     label: "Interview Questions",
-    title: "C# and ASP.NET Core Interview Questions",
+    title: "Interview Question Tracks for .NET and Angular",
     description:
-      "C# and ASP.NET Core interview questions — scenario-based prep for async, EF Core, Angular, and staff runtime. Pick a track and rehearse production answers.",
+      "Topic index for .NET interview prep — pick async, ASP.NET Core, EF Core, or Angular tracks. Full question banks live on the linked articles, not this page.",
     intro: "",
     compactHub: true,
     matchTags: ["Interview Questions"],
     keywords: [
-      "C# interview questions",
-      "ASP.NET Core interview questions",
-      ".NET interview questions and answers",
-      "EF Core interview questions",
-      "Angular interview questions",
-      "C# async await interview questions",
-      "scenario-based interview questions",
-      "senior .NET interview questions",
-      "staff engineer interview C#",
-      "ASP.NET Core interview scenarios",
+      "NET interview prep tracks",
+      "ASP.NET Core interview tracks",
+      "scenario-based interview prep .NET",
     ],
     relatedTopicSlugs: ["async-concurrency", "ef-core", "authentication"],
     pinSlugs: [
@@ -136,15 +129,15 @@ export const learningTopics: LearningTopic[] = [
     faq: [
       {
         q: "Where do I start for .NET interview questions?",
-        a: "Open the [.NET interview questions and answers](/blog/dotnet-interview-questions-answers) map — it links to async, ASP.NET Core scenarios, EF Core, and Angular tracks. Mid-level: [async await interview questions](/blog/csharp-async-await-interview-questions) + [ASP.NET scenarios](/blog/aspnet-core-interview-questions-scenarios). Staff: [expert C# questions](/blog/csharp-expert-interview-questions).",
+        a: "Use the [.NET interview questions and answers](/blog/dotnet-interview-questions-answers) article as the question bank. This page only routes you into async, ASP.NET Core, EF Core, and Angular tracks.",
       },
       {
         q: "How should I split ASP.NET Core, EF Core, and async interview prep?",
-        a: "**Async/threading** — `.Result`, `async void`, `WhenAll`, tokens ([async hub](/learning/async-concurrency)). **ASP.NET Core** — middleware order, JWT, validation, ProblemDetails. **EF Core** — change tracker, filters, **RowVersion**, ExecuteUpdate — not N+1 tuning. Study each track separately; panels cross-link them.",
+        a: "Study one track at a time from the cards below. Implementation depth: [async hub](/learning/async-concurrency). Oral answers: the linked interview articles under each track.",
       },
       {
         q: "What .NET interview scenarios come up most?",
-        a: "Captive DI, JWT with Angular, middleware order, **thread pool starvation** from `.Result`, EF slowness misread as SQL, refresh-token races, and `WhenAll` on one `DbContext`. Scenario write-ups live on the track cards below.",
+        a: "Captive DI, JWT with Angular, middleware order, thread-pool starvation, EF slowness, refresh races, and `WhenAll` on one `DbContext`. Full write-ups are on the track articles — not this index.",
       },
     ],
     tracks: [
@@ -182,24 +175,24 @@ export const learningTopics: LearningTopic[] = [
     label: "Async & Threading",
     title: "Async and Await in C# — Explained with Examples",
     description:
-      "What is async and await in C#? Tutorial with examples — async keyword, await keyword, difference between async and await, how to use them, and ASP.NET Core production rules.",
+      "C# async and await language primer — async vs await keywords, TAP examples, then links to ASP.NET Core production articles.",
     intro: "",
     compactHub: true,
     bodyFirst: true,
     hubPaths: [
       {
         label: "What is async/await?",
-        description: "Definition, async vs await keywords, and how they work.",
+        description: "Language primer: async vs await keywords and how they work.",
         href: "#what-is-async-and-await-in-c",
       },
       {
         label: "Concurrent I/O",
-        description: "Start tasks together — without sharing one DbContext.",
+        description: "Start independent work together — then open the WhenAll article.",
         href: "#async-without-parallel-then-start-work-together",
       },
       {
         label: "504 / idle CPU",
-        description: "Thread pool starvation from sync-over-async (.Result).",
+        description: "Short symptom map — full fix on the starvation article.",
         href: "#thread-pool-starvation",
       },
       {
@@ -212,69 +205,33 @@ export const learningTopics: LearningTopic[] = [
       {
         title: "Sync vs async — one API request under load",
         content:
-          "**Sync:** 500 clients each block a worker for 200 ms SQL → pool exhausted, queue grows, gateway 504, CPU looks idle.\n\n**Async:** same 200 ms SQL, but workers are **returned to the pool during the wait** → the same pool serves far more concurrent waits.\n\nAsync does not shorten the query — it stops **one client = one pinned worker** during I/O.",
+          "**Sync:** 500 clients each block a worker for 200 ms SQL → pool exhausted, queue grows, gateway 504, CPU looks idle.\n\n**Async:** same 200 ms SQL, but workers are **returned to the pool during the wait** → the same pool serves far more concurrent waits.\n\nAsync does not shorten the query — it stops **one client = one pinned worker** during I/O. Side-by-side tables: [async vs sync](/blog/async-vs-sync-programming).",
       },
       {
         title: "Spot the bug — which PR would you reject?",
         content:
-          "```csharp\n// A — sync-over-async in a service\npublic OrderDto Get(Guid id) => _repo.GetAsync(id).Result;\n\n// B — fake async\npublic async Task<int> CountAsync() => 42;\n\n// C — WhenAll on one DbContext\nawait Task.WhenAll(_db.A.ToListAsync(ct), _db.B.ToListAsync(ct));\n```\n\n**Answer: all three.** A starves the pool. B triggers CS4014. C races EF Core. Fixes: async end-to-end, real `await` or `Task.FromResult`, sequential awaits or two scopes.",
+          "```csharp\n// A — sync-over-async in a service\npublic OrderDto Get(Guid id) => _repo.GetAsync(id).Result;\n\n// B — fake async\npublic async Task<int> CountAsync() => 42;\n\n// C — WhenAll on one DbContext\nawait Task.WhenAll(_db.A.ToListAsync(ct), _db.B.ToListAsync(ct));\n```\n\n**Answer: all three.** A starves the pool. B triggers CS4014. C races EF Core. Production checklist: [async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).",
       },
       {
         title: "Does async mean parallel?",
         content:
-          "**No.** One thread can run `await` after `await` sequentially — that is async **without** parallel.\n\n**Parallel async** is starting **independent** I/O (two HTTP calls, two DbContext scopes) and awaiting them together.\n\n**Not parallel:** two `ToListAsync` on the same `DbContext` in `WhenAll` — that is a bug, not concurrency.",
+          "**No.** One thread can run `await` after `await` sequentially — that is async **without** parallel.\n\n**Parallel async** is starting **independent** I/O (two HTTP calls, two DbContext scopes) and awaiting them together.\n\n**Not parallel:** two `ToListAsync` on the same `DbContext` in `WhenAll` — that is a bug, not concurrency. Caps: [Task.WhenAll](/blog/csharp-task-whenall-vs-parallel-foreach).",
       },
     ],
     matchTags: ["Asynchronous Programming", "Threading", "Concurrency"],
+    // Hub-level only — do not list spoke primaries (Google ignores meta keywords,
+    // but title/desc/FAQ still must not claim those SERPs).
     keywords: [
       "async and await in C#",
       "what is async and await in C#",
       "async await c#",
-      "async await in c#",
-      "how to use async and await in c#",
+      "c# async and await explained",
       "difference between async and await in c#",
       "async and await keywords in c#",
-      "c# async and await explained",
-      "c# async await",
-      "async and await in c# with example",
-      "async keyword in c#",
-      "await keyword in c#",
       "c# async await tutorial",
-      "how async and await works in c#",
-      "c# await",
-      "async await c# example",
-      "c# async",
       "async method in c#",
-      "learn async await C#",
-      "async await syntax C#",
-      "asynchronous programming C#",
       "Task-based asynchronous pattern",
-      "C# async await ASP.NET Core",
-      "Task.WhenAll ASP.NET Core",
-      "Task.Delay C#",
-      "C# async vs multithreading",
-      "C# multithreading",
-      "C# multithreading tutorial",
-      "ASP.NET Core threading",
-      "C# concurrency",
-      "Task vs Thread",
-      "C# ThreadPool",
-      "thread pool starvation",
-      "sync over async",
-      "sync-over-async",
-      "async vs sync",
-      "asynchronous meaning",
-      "asynchronous definition",
-      "async void C#",
-      "ConfigureAwait false",
-      "CancellationToken ASP.NET Core",
-      "Task.Run vs await",
-      "ValueTask C#",
-      "IAsyncEnumerable ASP.NET Core",
-      "ConfigureAwait ASP.NET Core",
-      "promise async programming",
-      "deadlock C#",
-      "callback vs promise",
+      "asynchronous programming C#",
     ],
     relatedTopicSlugs: ["interview-questions", "ef-core"],
     pinSlugs: [
@@ -295,10 +252,11 @@ export const learningTopics: LearningTopic[] = [
       "ihttpclientfactory-aspnet-core",
       "aspnet-core-rate-limiting",
     ],
+    // FAQPage JSON-LD: only hub-intent questions. Spoke PAA lives on child URLs.
     faq: [
       {
         q: "What is async and await in C#?",
-        a: "**Async and await in C#** implement the Task-based Asynchronous Pattern (TAP). The **`async`** modifier marks a method that returns `Task` or `Task<T>`. The **`await`** operator pauses that method until I/O completes and **returns control to the caller** meanwhile. Use them for SQL, HTTP, and files — not to speed up a single query, but to free threads under load. Examples and rules on this hub.",
+        a: "**Async and await in C#** implement the Task-based Asynchronous Pattern (TAP). The **`async`** modifier marks a method that returns `Task` or `Task<T>`. The **`await`** operator pauses that method until I/O completes and **returns control to the caller** meanwhile. Use them for SQL, HTTP, and files — not to speed up a single query, but to free threads under load. Language examples on this hub; ASP.NET production checklist: [async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).",
       },
       {
         q: "What is the difference between async and await in C#?",
@@ -306,11 +264,11 @@ export const learningTopics: LearningTopic[] = [
       },
       {
         q: "How do you use async and await in C# with an example?",
-        a: "Mark the method `async`, return `Task` or `Task<T>`, and `await` each I/O call. Example: `public async Task<OrderDto?> GetOrderAsync(Guid id, CancellationToken ct) { var order = await _db.Orders.FirstOrDefaultAsync(o => o.Id == id, ct); return Map(order); }` — full file, delay, and CPU examples on this hub; ASP.NET checklist: [async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).",
+        a: "Mark the method `async`, return `Task` or `Task<T>`, and `await` each I/O call. Example: `public async Task<OrderDto?> GetOrderAsync(Guid id, CancellationToken ct) { var order = await _db.Orders.FirstOrDefaultAsync(o => o.Id == id, ct); return Map(order); }` — more examples on this hub. Dictionary terms: [asynchronous meaning](/blog/asynchronous-meaning-definition). Request-path rules: [async/await in ASP.NET Core](/blog/csharp-async-await-aspnet-core).",
       },
       {
         q: "How does async and await work in C#?",
-        a: "The caller gets a `Task` immediately. At `await`, the runtime **yields** the thread/worker until the operation completes, then runs the continuation. On ASP.NET Core that means the ThreadPool worker serves other clients during SQL/HTTP waits. Step-by-step diagram on this hub under **How async and await works in C#**.",
+        a: "The caller gets a `Task` immediately. At `await`, the runtime **yields** the thread/worker until the operation completes, then runs the continuation. On ASP.NET Core that means the ThreadPool worker serves other clients during SQL/HTTP waits. Step-by-step on this hub under **How async and await works in C#**.",
       },
       {
         q: "What is an async method in C#?",
@@ -318,27 +276,11 @@ export const learningTopics: LearningTopic[] = [
       },
       {
         q: "Does async make C# code run faster?",
-        a: "**No** — async does not shorten SQL, HTTP, or disk time. It **frees the ThreadPool worker** during the wait so one API can serve more concurrent clients. Under load, blocking sync I/O causes **thread pool starvation** (504s, idle CPU). Async improves **throughput**, not single-query speed.",
+        a: "**No** — async does not shorten SQL, HTTP, or disk time. It **frees the ThreadPool worker** during the wait so one API can serve more concurrent clients. Async improves **throughput**, not single-query speed. 504 / idle-CPU failure mode: [thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async).",
       },
       {
-        q: "What is Task.Delay used for in C#?",
-        a: "**`await Task.Delay(...)`** yields without blocking a worker — unlike **`Thread.Sleep`**, which pins the thread. Use it for polling/backoff with a **`CancellationToken`**. On ASP.NET Core never Sleep on a request path. See [Task vs Thread](/blog/csharp-task-vs-thread).",
-      },
-      {
-        q: "Can I use Task.WhenAll in ASP.NET Core?",
-        a: "Yes when each task uses **independent** resources — two `HttpClient` calls, or two EF queries on **separate** `DbContext` scopes. **Never** `WhenAll` two `ToListAsync` calls on the **same** `DbContext` (not thread-safe). Details: [Task.WhenAll caps](/blog/csharp-task-whenall-vs-parallel-foreach).",
-      },
-      {
-        q: "What is the difference between async and multithreading in C#?",
-        a: "**Async/await** yields the ThreadPool worker during I/O waits — the `Task` is a promise, not a dedicated thread. **Multithreading** runs work on multiple workers (`Task.Run`, `Parallel`, `lock`, concurrent collections). On ASP.NET Core, default to async for SQL and HTTP; use threading primitives for CPU offload, in-memory gates, and background queues.",
-      },
-      {
-        q: "Why does an ASP.NET Core API hang with idle CPU?",
-        a: "Usually **thread pool starvation** from **sync-over-async**: `.Result`, `.Wait()`, or `.GetAwaiter().GetResult()` block pool workers while async continuations still need workers to finish. The queue grows, gateways return 504, and CPU stays low. Fix: async end to end. Details: [thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async).",
-      },
-      {
-        q: "What is the difference between Task and Thread in C#?",
-        a: "A **Thread** is an OS worker with its own stack. A **Task** is a promise of completion — not a dedicated thread during I/O `await`. **Task.Run** uses ThreadPool workers for CPU work. **`await Task.Delay`** yields without blocking; **`Thread.Sleep`** pins the thread. Full comparison: [Task vs Thread](/blog/csharp-task-vs-thread).",
+        q: "Where do Task vs Thread, WhenAll, and starvation guides live?",
+        a: "This hub is the language primer and article map. Open [Task vs Thread](/blog/csharp-task-vs-thread), [Task.WhenAll](/blog/csharp-task-whenall-vs-parallel-foreach), [thread pool starvation](/blog/csharp-threadpool-starvation-sync-over-async), or the tracks below — each owns that SERP.",
       },
     ],
     tracks: [
@@ -418,25 +360,29 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "design-patterns",
     label: "C# Design Patterns",
-    title: "C# Design Patterns",
+    title: "C# Design Pattern Articles",
     description:
-      "Practical C# design patterns for real ASP.NET Core products — Factory, Strategy, and patterns that reduce switch-statement sprawl without ceremony.",
+      "Article map for practical C# design patterns on ASP.NET Core — Factory, Strategy, Repository, and SOLID deep dives.",
     intro:
-      "Named patterns for real ASP.NET Core APIs — when Factory, Strategy, Repository, and SOLID actually reduce change cost, and when they are ceremony.",
-    keywords: ["C# design patterns", "repository definition", "define repository", "Factory pattern C#", "Strategy pattern ASP.NET Core", "Repository pattern .NET", "SOLID principles"],
+      "Named patterns for real ASP.NET Core APIs — open the linked article for each pattern. This page is the index.",
+    keywords: [
+      "C# design patterns articles",
+      "ASP.NET Core design patterns hub",
+      "Factory Strategy SOLID article map",
+    ],
     relatedTopicSlugs: ["dependency-injection", "ef-core"],
     faq: [
       {
-        q: "Which C# design pattern should I learn first for interviews?",
-        a: "**SOLID** as a review lens, then **Factory** when construction branches grow, then **Strategy** when behavior swaps by tenant or product line. Repository only when query shape is reused — not as a default wrapper over DbContext.",
+        q: "Which design-pattern article should I open first?",
+        a: "Interview lens: [SOLID](/blog/solid-principles-aspnet-core). Construction branches: [Factory](/blog/csharp-factory-pattern). Behavior swaps: [Strategy](/blog/csharp-strategy-pattern). This page indexes them.",
       },
       {
-        q: "Is the Repository pattern required with EF Core?",
-        a: "No. Use it when a named query or command is reused across handlers and tests. A pass-through repository over `DbContext` is ceremony.",
+        q: "Where is repository definition vs pattern?",
+        a: "Dictionary: [repository definition](/blog/repository-definition-meaning). When to use with EF: [repository pattern in .NET](/blog/repository-pattern-dotnet).",
       },
       {
-        q: "Strategy vs Factory — what is the difference?",
-        a: "**Factory** chooses *which object to construct*. **Strategy** swaps *how an operation runs* after construction. Both beat giant `switch` statements when variants keep growing.",
+        q: "Strategy vs Factory — which article?",
+        a: "Both have dedicated posts linked above. Short split: Factory chooses *what to construct*; Strategy swaps *how an operation runs*.",
       },
     ],
     matchTags: [
@@ -454,25 +400,29 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "dependency-injection",
     label: "Dependency Injection",
-    title: "Dependency Injection in .NET",
+    title: "Dependency Injection Articles for .NET",
     description:
-      "ASP.NET Core DI lifetimes, registration habits, and factory delegates — how senior teams keep services testable and avoid captive dependencies.",
+      "Topic index for ASP.NET Core DI — links to lifetimes, Unable to resolve service, and IOptions deep dives.",
     intro:
-      "ASP.NET Core dependency injection — lifetimes, captive dependencies, and registration mistakes that only show up under load or in Azure.",
-    keywords: ["ASP.NET Core dependency injection", "DI lifetimes", "Unable to resolve service", "IOptions Snapshot"],
+      "ASP.NET Core dependency injection — start with [DI lifetimes](/blog/aspnet-core-dependency-injection), then troubleshooting and options articles linked below.",
+    keywords: [
+      "ASP.NET Core dependency injection articles",
+      "DI topic hub .NET",
+      ".NET DI lifetimes overview",
+    ],
     relatedTopicSlugs: ["design-patterns"],
     faq: [
       {
-        q: "What are ASP.NET Core DI lifetimes?",
-        a: "**Singleton** — one instance per application. **Scoped** — one per HTTP request (DbContext). **Transient** — new instance every resolve. Never inject scoped into singleton without a scope factory.",
+        q: "Where should I start with ASP.NET Core DI?",
+        a: "Read [Dependency Injection in ASP.NET Core](/blog/aspnet-core-dependency-injection) for lifetimes and captive dependencies. This page is the article index.",
       },
       {
-        q: "Why cannot I inject DbContext into a Singleton?",
-        a: "DbContext is scoped and not thread-safe. A singleton holding it becomes a **captive dependency** — stale context, wrong tenant, or `ObjectDisposedException`.",
+        q: "Where is the Unable to resolve service fix?",
+        a: "Registration and resolve failures: [Unable to resolve service](/blog/aspnet-core-unable-to-resolve-service).",
       },
       {
-        q: "IOptions vs IOptionsSnapshot vs IOptionsMonitor?",
-        a: "**IOptions** — singleton snapshot at first use. **Snapshot** — reloads per scope when config changes. **Monitor** — change notifications for singletons that must react to config updates.",
+        q: "Where do IOptions vs Snapshot vs Monitor live?",
+        a: "Full comparison: [IOptions vs IOptionsSnapshot vs IOptionsMonitor](/blog/aspnet-core-ioptions-snapshot-monitor).",
       },
     ],
     matchTags: ["Dependency Injection", "IoC", "DI"],
@@ -485,25 +435,29 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "authentication",
     label: "Auth & Tokens",
-    title: "ASP.NET Core + Angular Authentication",
+    title: "ASP.NET Core + Angular Authentication Articles",
     description:
-      "JWT refresh, Angular interceptors, BFF/YARP, cookies, CORS with credentials, and the production failures that look like “flaky auth.”",
+      "Article map for JWT, Angular interceptors, refresh rotation, BFF/YARP, and CORS — open the linked guide for each failure mode.",
     intro:
-      "JWT, refresh tokens, Angular interceptors, CORS with credentials, and BFF patterns — definitions and failure modes before the deep-dive articles.",
-    keywords: ["ASP.NET Core JWT", "Angular JWT interceptor", "refresh token rotation", "BFF pattern ASP.NET Core"],
+      "Auth deep dives live on the articles below. Start with [JWT checklist](/blog/aspnet-core-jwt-auth), then interceptors, rotation, and BFF as needed.",
+    keywords: [
+      "ASP.NET Core Angular authentication articles",
+      "JWT auth topic hub",
+      "SPA auth article map .NET",
+    ],
     relatedTopicSlugs: ["identity", "interview-questions"],
     faq: [
       {
-        q: "What is the difference between 401 and 403 for an Angular SPA?",
-        a: "**401** — not authenticated or token invalid/expired; re-login or refresh. **403** — authenticated but forbidden; show an access-denied UI, do not automatically log the user out unless that is your product rule.",
+        q: "Where do I start for Angular + ASP.NET Core auth?",
+        a: "API checklist: [JWT auth](/blog/aspnet-core-jwt-auth). SPA attach/refresh: [Angular JWT interceptors](/blog/angular-jwt-interceptors). This page only indexes the cluster.",
       },
       {
-        q: "Should refresh tokens live in localStorage?",
-        a: "High-risk SPAs prefer **httpOnly cookies** and often a **BFF** so refresh tokens never sit in JavaScript-accessible storage. Trade-off: CSRF protection and CORS credentials configuration.",
+        q: "Where is 401 vs 403 explained?",
+        a: "Challenge vs Forbid and Angular logout mistakes: [401 vs 403](/blog/aspnet-core-401-vs-403).",
       },
       {
-        q: "Why does JWT validate on jwt.io but API returns 401?",
-        a: "Wrong issuer/audience, clock skew, signing key disposed, or **`kid` missing from JWKS** after key rotation. Validate against the API's authority metadata, not jwt.io alone.",
+        q: "Where are BFF and refresh-token guides?",
+        a: "[BFF with YARP](/blog/bff-pattern-aspnet-core-angular-yarp), [refresh rotation](/blog/aspnet-core-jwt-refresh-token-rotation), [HttpOnly cookie refresh](/blog/refresh-token-httponly-cookie-angular-aspnet-core).",
       },
     ],
     matchTags: ["JWT", "CORS", "YARP"],
@@ -518,25 +472,29 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "identity",
     label: "Identity",
-    title: "Identity articles for ASP.NET Core",
+    title: "Identity Articles for ASP.NET Core",
     description:
-      "IdentityServer, OpenIddict, ASP.NET Identity, and MapIdentityApi notes — the product choice, not interceptor plumbing.",
+      "Article index for IdentityServer, OpenIddict, ASP.NET Identity, and MapIdentityApi — product choice and migration links.",
     intro:
-      "IdentityServer, OpenIddict, ASP.NET Core Identity, and MapIdentityApi — product choice and migration, not interceptor plumbing.",
-    keywords: ["IdentityServer vs ASP.NET Identity", "OpenIddict migration", "OIDC redirect URI", "MapIdentityApi JWT"],
+      "Identity product choice and migration live on the articles below — not interceptor plumbing (see the authentication hub for JWT/SPA).",
+    keywords: [
+      "ASP.NET Core identity articles",
+      "IdentityServer OpenIddict topic hub",
+      "OIDC identity article map",
+    ],
     relatedTopicSlugs: ["authentication"],
     faq: [
       {
-        q: "IdentityServer vs ASP.NET Core Identity?",
-        a: "**Identity** is a user store in your app. **IdentityServer/OpenIddict** is an OAuth/OIDC **token issuer** for SSO across clients. APIs usually validate JWTs; they do not replace an identity server for multi-app login.",
+        q: "Where is IdentityServer vs ASP.NET Identity?",
+        a: "Product choice write-up: [What is an identity server in ASP.NET Core?](/blog/identityserver-vs-aspnet-identity).",
       },
       {
-        q: "Why am I stuck in an OIDC redirect loop?",
-        a: "**redirect_uri** must match the client registration exactly — scheme, host, path, trailing slash. One character mismatch causes endless redirects.",
+        q: "Where is the OIDC redirect-loop fix?",
+        a: "[IdentityServer redirect URI mismatch](/blog/identityserver-redirect-uri-login-loop).",
       },
       {
-        q: "MapIdentityApi vs AddJwtBearer?",
-        a: "**MapIdentityApi** issues Identity API tokens (often opaque). **JWT bearer** expects a signed JWT with issuer/audience your API trusts. Angular must send the token type your API is configured for.",
+        q: "Where is MapIdentityApi vs JWT?",
+        a: "[MapIdentityApi opaque tokens vs JWT](/blog/mapidentityapi-opaque-token-vs-jwt).",
       },
     ],
     matchTags: ["IdentityServer", "OpenIddict", "OIDC", "ASP.NET Core Identity", "SSO"],
@@ -550,29 +508,29 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "ef-core",
     label: "EF Core",
-    title: "EF Core and SQL Server articles",
+    title: "EF Core and SQL Server Articles",
     description:
-      "N+1 versus Include versus AsSplitQuery, cartesian explosion, AsNoTracking identity, 1-1 / 1-n / n-n relationships, parameter sniffing, and query habits that survive real clinic and catalog data.",
+      "Article map for EF Core on ASP.NET Core — links to the performance checklist, N+1, cartesian explosion, relationships, and SQL Server plans.",
     intro:
-      "EF Core and SQL Server for ASP.NET Core APIs — relationships, N+1, cartesian explosion, tracking, query filters, and plans that fail only on real clinic or catalog data.",
-    keywords: ["EF Core performance", "EF Core N+1", "AsSplitQuery", "EF Core global query filter", "SQL Server parameter sniffing"],
+      "Start with the [EF Core performance checklist](/blog/ef-core-sql-performance), then open the failure-mode article that matches your symptom.",
+    keywords: [
+      "EF Core SQL Server articles",
+      "EF Core topic hub ASP.NET Core",
+      "EF Core performance article map",
+    ],
     relatedTopicSlugs: ["interview-questions", "async-concurrency"],
     faq: [
       {
-        q: "What is EF Core N+1?",
-        a: "One query for the parent list plus **one query per row** for a related entity — often from lazy loading or a loop calling the database. Fix with projection, Include, or a single SQL shape.",
+        q: "Where should I start with EF Core performance?",
+        a: "Checklist first: [EF Core and SQL Server performance](/blog/ef-core-sql-performance). This page indexes the deeper failure modes.",
       },
       {
-        q: "Include vs AsSplitQuery?",
-        a: "**Include** can create one large JOIN (cartesian explosion). **AsSplitQuery** runs multiple SQL statements without duplicating parent rows in memory.",
+        q: "Where is the N+1 vs Include vs AsSplitQuery guide?",
+        a: "[EF Core N+1 vs Include vs AsSplitQuery](/blog/ef-core-nplus1-include-vs-assplitquery).",
       },
       {
-        q: "When should I use AsNoTracking?",
-        a: "Read-only endpoints where you will not call `SaveChanges`. For updates, use tracking or attach explicitly. Lists should often **project to DTO** in SQL instead of loading full entities.",
-      },
-      {
-        q: "How do I map 1-1, 1-n, and many-to-many in EF Core?",
-        a: "Collection + FK for 1-n, unique FK or OwnsOne for 1-1, skip navigation vs join entity for n-n when the link has payload. Full mapping: the EF Core relationships article.",
+        q: "Where are relationships and AsNoTracking covered?",
+        a: "[EF Core relationships](/blog/ef-core-relationships) and [AsNoTracking vs identity resolution](/blog/ef-core-asnotracking-vs-identity-resolution).",
       },
     ],
     matchTags: ["EF Core", "SQL Server"],
@@ -587,25 +545,29 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "cqrs",
     label: "CQRS",
-    title: "CQRS after MediatR licensing",
+    title: "CQRS and MediatR Articles for ASP.NET Core",
     description:
-      "CQRS-lite in ASP.NET Core — when MediatR is worth a license, when Wolverine is a real upgrade, and when a mediator is ceremony.",
+      "Article index for CQRS-lite — when MediatR helps delivery, license vs Wolverine, and when a mediator is ceremony.",
     intro:
-      "CQRS-lite on ASP.NET Core — commands vs queries, when MediatR earns its license, and when a mediator is ceremony.",
-    keywords: ["CQRS ASP.NET Core", "MediatR license", "Wolverine .NET", "IMediator"],
+      "CQRS-lite on ASP.NET Core — start with [MediatR and CQRS-lite](/blog/mediatr-cqrs-aspnet-core), then the [license vs Wolverine](/blog/mediatr-license-wolverine-alternative) decision.",
+    keywords: [
+      "CQRS ASP.NET Core articles",
+      "MediatR topic hub",
+      "CQRS-lite article map .NET",
+    ],
     relatedTopicSlugs: ["design-patterns", "architecture"],
     faq: [
       {
-        q: "What is CQRS in ASP.NET Core?",
-        a: "Separating **commands** (writes) from **queries** (reads) — often as MediatR handlers. It does not require two databases or event sourcing.",
+        q: "Where should I start with CQRS in ASP.NET Core?",
+        a: "Ceremony vs delivery: [MediatR and CQRS-lite](/blog/mediatr-cqrs-aspnet-core). This page is the index.",
       },
       {
-        q: "MediatR vs calling a service directly?",
-        a: "MediatR when pipelines (validation, logging, transactions) compose across many use cases. A plain service class is fine when handlers stay thin and few.",
+        q: "Where is the MediatR license vs Wolverine guide?",
+        a: "[MediatR commercial license vs Wolverine](/blog/mediatr-license-wolverine-alternative).",
       },
       {
-        q: "Should I migrate from MediatR to Wolverine?",
-        a: "Depends on handler count, notification usage, and license cost — not brand preference. See the licensing article for a slice-level migration lens.",
+        q: "Do I need a mediator for CQRS?",
+        a: "No — commands and queries as separate requests can be plain services. See the CQRS-lite article for when MediatR earns its keep.",
       },
     ],
     matchTags: ["MediatR", "CQRS", "Wolverine"],
@@ -613,25 +575,29 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "edi",
     label: "Healthcare EDI",
-    title: "Healthcare EDI on .NET",
+    title: "Healthcare EDI Articles on .NET",
     description:
-      "Vendor-neutral X12 intake on ASP.NET Core — envelopes, 837-shaped pipelines, and what not to log. Not a product pitch and not a compliance certificate.",
+      "Article map for X12 EDI on ASP.NET Core — parsers, intake pipelines, and PHI-safe logging. Not a compliance certificate.",
     intro:
-      "X12 EDI on .NET — intake pipelines, mapping boundaries, and PHI-safe logging for healthcare integrations.",
-    keywords: ["X12 EDI C#", "healthcare EDI ASP.NET Core", "837 parser .NET", "PHI logging Serilog"],
+      "X12 EDI on .NET — start with [EDI X12 parsers](/blog/edi-x12-parser-csharp-dotnet), then [Serilog PII redaction](/blog/serilog-pii-redaction-healthcare-aspnet-core).",
+    keywords: [
+      "healthcare EDI .NET articles",
+      "X12 ASP.NET Core topic hub",
+      "EDI article map C#",
+    ],
     relatedTopicSlugs: ["architecture"],
     faq: [
       {
-        q: "How do you parse X12 in ASP.NET Core?",
-        a: "Stream segments — do not load multi-gigabyte interchanges into a single string. Validate envelope and transaction control numbers, map to domain models, persist **idempotently**, ACK with 997/999.",
+        q: "Where should I start with EDI on .NET?",
+        a: "Parser notes: [EDI X12 parsers in C#](/blog/edi-x12-parser-csharp-dotnet). This page is the index.",
       },
       {
-        q: "Can EDI parsing run on the HTTP request thread?",
-        a: "No for production volume. Accept upload, enqueue, return **202**. Workers parse with bounded memory and retry policy.",
+        q: "Where is PHI-safe logging covered?",
+        a: "[Serilog PII redaction for healthcare APIs](/blog/serilog-pii-redaction-healthcare-aspnet-core).",
       },
       {
-        q: "What EDI data should never hit default logs?",
-        a: "Member identifiers, diagnoses, and full segment payloads. Use redaction or restricted sinks — see the Serilog PII article.",
+        q: "Should EDI parse on the HTTP request thread?",
+        a: "No for production volume — accept, enqueue, return **202**. Details in the X12 parser article.",
       },
     ],
     matchTags: ["EDI", "X12", "Serilog"],
@@ -639,18 +605,15 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "caching",
     label: "Caching",
-    title: "Caching for ASP.NET Core APIs",
+    title: "Caching Articles for ASP.NET Core APIs",
     description:
-      "What is a cache miss, caching system design with IMemoryCache and Redis, object cache patterns, and fixing error establishing a Redis connection on ASP.NET Core.",
+      "Article map for ASP.NET Core caching — links to cache-miss, IMemoryCache vs Redis, production Redis, and connection-error guides.",
     intro:
       "Caching trades freshness for latency — but only on **cache hits**. Start with [what is a cache miss](/blog/what-is-a-cache-miss), then [caching system in .NET](/blog/caching-system-dotnet-imemorycache-redis) and [Redis production patterns](/blog/redis-caching-aspnet-core).",
     keywords: [
-      "what is a cache miss",
-      "java caching system",
-      "java object cache",
-      "error establishing a redis connection",
-      "IMemoryCache ASP.NET Core",
-      "Redis caching",
+      "ASP.NET Core caching articles",
+      "Redis IMemoryCache topic hub",
+      ".NET caching article map",
     ],
     relatedTopicSlugs: ["architecture", "ef-core", "async-concurrency"],
     matchTags: ["Caching", "Redis", "IMemoryCache", "Performance"],
@@ -662,16 +625,16 @@ export const learningTopics: LearningTopic[] = [
     ],
     faq: [
       {
-        q: "What is a cache miss?",
-        a: "The requested key is not in the cache (or expired), so the app loads from SQL or HTTP — slower than a hit. Definition: [what is a cache miss](/blog/what-is-a-cache-miss).",
+        q: "Which caching article should I read first?",
+        a: "Definitions: [what is a cache miss](/blog/what-is-a-cache-miss). Layers: [caching system in .NET](/blog/caching-system-dotnet-imemorycache-redis). This page is the index only.",
       },
       {
-        q: "What is a Java object cache vs .NET?",
-        a: "Java uses Caffeine/Ehcache in heap; .NET uses **IMemoryCache** for in-process object cache. Both mirror the same cache-aside pattern. Distributed layer: Redis in both stacks. Guide: [caching system in .NET](/blog/caching-system-dotnet-imemorycache-redis).",
+        q: "Where is Redis production caching covered?",
+        a: "[Redis caching in ASP.NET Core](/blog/redis-caching-aspnet-core) — stampede control, invalidation, tenant keys.",
       },
       {
-        q: "How do I fix error establishing a Redis connection?",
-        a: "Check host, port (6380 + SSL on Azure), password, Docker service name vs localhost, and firewall. Fail-open to SQL if cache is optional. [Redis connection fix](/blog/redis-connection-error-aspnet-core).",
+        q: "Where is the Redis connection error fix?",
+        a: "[Error establishing a Redis connection](/blog/redis-connection-error-aspnet-core).",
       },
     ],
     tracks: [
@@ -692,20 +655,15 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "api-design",
     label: "API Design",
-    title: "API Design for REST and ASP.NET Core",
+    title: "API Design Articles for REST and ASP.NET Core",
     description:
-      "What is an API, API design principles, REST resource naming, versioning, error envelopes, pagination, and auth — practical checklists for ASP.NET Core APIs consumed by Angular clients.",
+      "Article map for REST API design on ASP.NET Core — links to definitions, principles checklist, OpenAPI/Swagger, and Angular contracts.",
     intro:
-      "API design is the contract Angular, mobile, and partner clients depend on — URLs, status codes, ProblemDetails, versioning, and auth at the boundary. Start with [what is an API](/blog/what-is-an-api), then [API design principles](/blog/api-design-principles).",
+      "API design is the contract Angular, mobile, and partner clients depend on. Start with [what is an API](/blog/what-is-an-api), then [API design principles](/blog/api-design-principles).",
     keywords: [
-      "what is an API",
-      "api design",
-      "api design principles",
-      "swagger",
-      "openapi",
-      "swashbuckle aspnetcore",
-      "REST API design",
-      "ASP.NET Core Web API",
+      "ASP.NET Core API design articles",
+      "REST API topic hub",
+      "Web API article map .NET",
     ],
     relatedTopicSlugs: ["architecture", "authentication", "interview-questions"],
     matchTags: ["API Design", "REST", "Web API"],
@@ -720,16 +678,16 @@ export const learningTopics: LearningTopic[] = [
     ],
     faq: [
       {
-        q: "What is an API?",
-        a: "An Application Programming Interface — a contract for one program to request data or actions from another. Web APIs use HTTP, JSON, and status codes. Definition and example: [what is an API](/blog/what-is-an-api).",
+        q: "Which API design article should I read first?",
+        a: "Plain definition: [what is an API](/blog/what-is-an-api). Production checklist: [API design principles](/blog/api-design-principles). This page indexes the cluster.",
       },
       {
-        q: "What are API design principles?",
-        a: "Resource URLs (nouns), correct HTTP verbs, consistent ProblemDetails errors, pagination, versioning before breaking changes, auth at the boundary, and idempotent writes for payments. Checklist: [API design principles](/blog/api-design-principles).",
+        q: "Where is Swagger vs OpenAPI covered?",
+        a: "[Swagger vs OpenAPI in ASP.NET Core](/blog/swagger-openapi-aspnet-core).",
       },
       {
-        q: "How do I design APIs for Angular?",
-        a: "One validation envelope, CORS with credentials if using cookies, stable JSON field names, and refresh-token flow that matches your interceptor. See [API validation](/blog/aspnet-core-api-validation) and [Angular + .NET integration](/blog/angular-dotnet-integration).",
+        q: "Where are validation and Angular contract guides?",
+        a: "[FluentValidation envelope](/blog/aspnet-core-api-validation) and [Angular + .NET integration](/blog/angular-dotnet-integration).",
       },
     ],
     tracks: [
@@ -766,25 +724,29 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "architecture",
     label: "Architecture",
-    title: "Software Architecture",
+    title: "Software Architecture Articles for .NET",
     description:
-      "Architecture notes for .NET + Angular systems — config files, Clean Architecture, modular monolith vs services, Minimal APIs, and boundaries that survive healthcare, SaaS, and eCommerce delivery.",
+      "Article map for .NET + Angular architecture — Clean Architecture, modular monolith, middleware order, configuration, and Minimal APIs.",
     intro:
-      "Architecture for .NET + Angular products — configuration, middleware, JSON contracts, Clean Architecture, and boundaries that survive the first production incident.",
-    keywords: ["Clean Architecture ASP.NET Core", "appsettings ASP.NET Core", "middleware order", "modular monolith .NET"],
+      "Architecture for .NET + Angular products — open the linked article for each topic. Start with [Clean Architecture](/blog/clean-architecture-aspnet-core) when boundaries are the question.",
+    keywords: [
+      "ASP.NET Core architecture articles",
+      ".NET architecture topic hub",
+      "Clean Architecture article map",
+    ],
     relatedTopicSlugs: ["dependency-injection", "authentication", "ef-core", "api-design", "caching"],
     faq: [
       {
-        q: "What is Clean Architecture in ASP.NET Core?",
-        a: "Domain and application rules at the center; infrastructure and UI at the edges. Controllers stay thin. The goal is testable boundaries — not a folder template copied without domain complexity.",
+        q: "Where is Clean Architecture covered?",
+        a: "[Clean Architecture in ASP.NET Core](/blog/clean-architecture-aspnet-core). This page indexes related architecture posts.",
       },
       {
-        q: "Why does middleware order matter?",
-        a: "**CORS** must run before the browser gives up on a 401 without headers. **Authentication** before **authorization**. **Exception handling** cannot fix responses that already started writing.",
+        q: "Where is middleware order explained?",
+        a: "[ASP.NET Core middleware order](/blog/aspnet-core-middleware-order).",
       },
       {
-        q: "Modular monolith vs microservices?",
-        a: "Start monolith with **clear module boundaries**. Split services when independent deploy/scale is proven necessary — not because diagrams looked cleaner.",
+        q: "Where is modular monolith vs microservices?",
+        a: "[Modular monolith vs microservices in .NET](/blog/modular-monolith-vs-microservices-dotnet).",
       },
     ],
     matchTags: [],
