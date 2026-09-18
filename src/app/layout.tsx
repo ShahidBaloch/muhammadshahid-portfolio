@@ -5,6 +5,7 @@ import { Analytics } from "@/components/Analytics";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { ADSENSE_CLIENT_ID } from "@/lib/adsense";
 import { personJsonLd, websiteJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
@@ -123,6 +124,14 @@ export default function RootLayout({
         <Footer />
         <CookieConsent />
         <Analytics />
+        {ADSENSE_CLIENT_ID && (
+          <Script
+            id="adsense-loader"
+            strategy="afterInteractive"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+            crossOrigin="anonymous"
+          />
+        )}
       </body>
     </html>
   );
