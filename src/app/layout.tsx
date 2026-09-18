@@ -92,6 +92,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth" className={`${display.variable} ${body.variable}`}>
+      <head>
+        {ADSENSE_CLIENT_ID && (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+            crossOrigin="anonymous"
+          />
+        )}
+      </head>
       <body className="min-h-screen font-body">
         <Script id="consent-default" strategy="beforeInteractive">
           {`
@@ -124,14 +133,6 @@ export default function RootLayout({
         <Footer />
         <CookieConsent />
         <Analytics />
-        {ADSENSE_CLIENT_ID && (
-          <Script
-            id="adsense-loader"
-            strategy="afterInteractive"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
-            crossOrigin="anonymous"
-          />
-        )}
       </body>
     </html>
   );
