@@ -2,9 +2,10 @@
 
 import Script from "next/script";
 import { useEffect, useState } from "react";
+import { GA_MEASUREMENT_ID } from "@/lib/analytics";
 import { getStoredConsent } from "@/lib/consent";
 
-const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+const gaId = GA_MEASUREMENT_ID;
 
 export function Analytics() {
   const [allowed, setAllowed] = useState(false);
