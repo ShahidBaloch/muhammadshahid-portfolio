@@ -1,10 +1,20 @@
 ---
-title: ".NET Interview Questions and Answers (C# and ASP.NET Core)"
-description: ".NET interview questions and answers for mid-to-senior roles — .NET Core, ASP.NET Core Web API, C# async, EF Core, Angular integration, with links to full scenario write-ups."
+title: ".NET Interview Questions and Answers (C#, ASP.NET Core, .NET Core)"
+description: ".NET interview questions and answers for mid-to-senior roles — net interview questions, .NET Core interview questions, ASP.NET Core Web API, C# async, EF Core, and Angular scenarios with strong answers and red flags."
 date: "2026-09-08"
-updated: "2026-09-11"
+updated: "2026-09-14"
 category: "interview-questions"
-tags: ["Interview Questions", "C#", "ASP.NET Core", ".NET", "Career", "Web API"]
+tags:
+  [
+    ".NET Interview Questions",
+    ".NET Core Interview Questions",
+    "Interview Questions",
+    "C#",
+    "ASP.NET Core",
+    ".NET",
+    "Web API",
+    "Career",
+  ]
 related:
   - csharp-async-await-interview-questions
   - aspnet-core-interview-questions-scenarios
@@ -12,34 +22,34 @@ related:
   - ef-core-interview-questions
   - angular-interview-questions-aspnet-core
 faq:
-  - q: "What are common .NET interview questions?"
-    a: "This page is the map. Pick a track: [async await interview](/blog/csharp-async-await-interview-questions), [ASP.NET Core scenarios](/blog/aspnet-core-interview-questions-scenarios), [EF Core interview](/blog/ef-core-interview-questions), [Angular + .NET](/blog/angular-interview-questions-aspnet-core), or [expert C#](/blog/csharp-expert-interview-questions)."
-  - q: "What ASP.NET Core interview questions are asked most?"
-    a: "Full scenario answers: [ASP.NET Core interview questions](/blog/aspnet-core-interview-questions-scenarios). This page only routes you there."
+  - q: "What are the most common .NET interview questions?"
+    a: "Panels cluster around async/await pitfalls, DI lifetimes (captive dependencies), middleware order, JWT vs Angular, EF Core N+1 and concurrency, and API design (401 vs 403, ProblemDetails). Use the topic tables on this page, then open the linked scenario articles for full answers."
   - q: "What .NET Core interview questions should I prepare?"
-    a: "Same loops as ASP.NET Core Web API — use [ASP.NET Core scenarios](/blog/aspnet-core-interview-questions-scenarios). .NET Core is the old product name."
-  - q: "What web API interview questions come up on .NET panels?"
-    a: "JWT, 401 vs 403, ProblemDetails, rate limits, pagination — answered on [ASP.NET Core interview scenarios](/blog/aspnet-core-interview-questions-scenarios)."
-  - q: "What C# interview questions and answers should I prepare?"
-    a: "Start with [async await interview questions](/blog/csharp-async-await-interview-questions), then [expert C#](/blog/csharp-expert-interview-questions) for staff loops."
+    a: ".NET Core interview questions are the same loop as ASP.NET Core Web API today — pipeline, auth, hosting, and EF in request scope. Start with the ASP.NET Core scenarios section here, then [ASP.NET Core interview questions](/blog/aspnet-core-interview-questions-scenarios)."
+  - q: "What are net interview questions vs MCQs?"
+    a: "Net interview questions on mid-to-senior panels are scenario prompts (production failures, tradeoffs). Net test questions and MCQs belong on screenings — map each tick-box to a scenario on this guide instead of memorizing a PDF."
+  - q: "What ASP.NET Core interview questions are asked most?"
+    a: "Captive DI, middleware order, 401 vs 403, JWT that works in Postman but not Angular, and idle-CPU 504s from sync-over-async. Full narratives: [ASP.NET Core interview questions](/blog/aspnet-core-interview-questions-scenarios)."
+  - q: "What C# interview questions and answers should I rehearse first?"
+    a: "Start with [async await interview questions](/blog/csharp-async-await-interview-questions) (`.Result`, `async void`, `WhenAll` + one `DbContext`), then [expert C#](/blog/csharp-expert-interview-questions) for staff runtime loops."
   - q: "How do I study .NET interview questions efficiently?"
-    a: "Pick one track from the links above. Read the scenario prompt, answer aloud, then compare to the strong answer."
-  - q: "Are .NET test questions and MCQs enough?"
-    a: "MCQs test recall. Mid-to-senior loops test scenarios — use the track articles linked from this map."
+    a: "Pick one track below. Read the prompt, answer aloud (symptom → cause → fix), then compare to the strong answer and red flag. Depth lives on the linked how-to posts."
+  - q: "Where is the full .NET interview question bank on this site?"
+    a: "This article is the bank and map. The [interview questions hub](/learning/interview-questions) only routes into async, ASP.NET Core, EF Core, and Angular tracks."
 ---
 
-Whether the job post says **.NET interview questions**, **ASP.NET Core**, or **Web API scenarios**, you want a **map** — not a 200-line dump copied from a PDF.
+Whether the job post says **.NET interview questions**, **net interview questions**, **.NET Core interview questions**, or **ASP.NET Core Web API**, hiring loops test the same thing: can you diagnose production failures and defend a fix?
 
-This page is that map: the questions I actually ask and hear in healthcare, SaaS, and marketplace hiring loops, with links to **full scenario answers** on dedicated URLs.
+This guide is the question bank for that loop — topic tables, on-page sample answers with **strong answer / red flag**, and links to full scenario write-ups. It is not a 300-line MCQ dump.
 
-## How to use this guide
+Hub index: [interview questions](/learning/interview-questions).
+
+## How to use these .NET interview questions
 
 1. Pick your level (mid vs staff)
-2. Open the linked article for each topic
-3. Rehearse **out loud** — definition, production symptom, fix
-4. Read the how-to post when you need merge-checklist depth
-
-Hub: [interview questions](/learning/interview-questions).
+2. Rehearse the sample answers on this page out loud
+3. Open the linked article when you need the full scenario
+4. Read the how-to post when you need a merge checklist
 
 ## .NET interview questions by topic
 
@@ -56,7 +66,7 @@ Hub: [interview questions](/learning/interview-questions).
 
 Definitions: [asynchronous meaning](/blog/asynchronous-meaning-definition), [async vs sync](/blog/async-vs-sync-programming).
 
-### ASP.NET Core interview questions
+### ASP.NET Core / .NET Core interview questions
 
 | Question | Short answer | Full scenario |
 |---|---|---|
@@ -66,7 +76,7 @@ Definitions: [asynchronous meaning](/blog/asynchronous-meaning-definition), [asy
 | JWT works in Postman, not Angular? | CORS, cookie vs bearer, clock skew | [JWT auth](/blog/aspnet-core-jwt-auth) |
 | Why idle CPU and 504s? | Sync-over-async starving pool | [Starvation](/blog/csharp-threadpool-starvation-sync-over-async) |
 
-Full narrative answers: [ASP.NET Core interview questions scenarios](/blog/aspnet-core-interview-questions-scenarios).
+**.NET Core interview questions** and **ASP.NET Core Web API interview questions** are the same panel under two names. Interviewers still say ".NET Core." Full narratives: [ASP.NET Core interview questions scenarios](/blog/aspnet-core-interview-questions-scenarios).
 
 ### C# interview questions and answers (staff / expert)
 
@@ -97,29 +107,55 @@ Full narrative answers: [ASP.NET Core interview questions scenarios](/blog/aspne
 
 Full list: [Angular interview questions](/blog/angular-interview-questions-aspnet-core).
 
-## ASP.NET Core / .NET Core / Web API interview questions
+## Sample .NET interview questions and answers
 
-**.NET Core interview questions** and **ASP.NET Core Web API interview questions** are the same loop under two names. Interviewers still say ".NET Core." Rehearse the scenarios page, then EF relationships, then Angular refresh races.
-
-**Net questions**, **net test questions**, and **dot net MCQs** belong on a screening quiz, not a senior panel. If you get them, map each tick-box to a scenario on this hub instead of memorizing a PDF.
-
-## Sample C# interview questions and answers
+Use this format in the room: **symptom → cause → fix**. Red flags are what junior dumps sound like.
 
 ### Q: What is the difference between `async` and `multithreading`?
 
-**Answer:** `async/await` frees the ThreadPool worker during I/O waits — the `Task` is a promise, not a dedicated thread. Multithreading runs work on multiple workers (`Task.Run`, `Parallel`, `lock`). On ASP.NET Core APIs, default to async for SQL and HTTP; use threading for CPU offload and in-memory gates.
+**Strong answer:** `async/await` frees the ThreadPool worker during I/O waits — the `Task` is a promise, not a dedicated thread. Multithreading runs work on multiple workers (`Task.Run`, `Parallel`, `lock`). On ASP.NET Core APIs, default to async for SQL and HTTP; use threading for CPU offload and in-memory gates.
 
-### Q: What is dependency injection?
+**Red flag:** "Async creates a new thread for every call" or "always wrap DB calls in `Task.Run`."
 
-**Answer:** Inversion of control — the framework constructs services and injects them. Lifetimes matter: **Singleton** (one per app), **Scoped** (per request — `DbContext`), **Transient** (every resolve). Never inject scoped into singleton without a scope factory.
+### Q: What is dependency injection in .NET?
 
-### Q: What is Clean Architecture?
+**Strong answer:** Inversion of control — the container constructs services and injects them. Lifetimes matter: **Singleton** (one per app), **Scoped** (per request — `DbContext`), **Transient** (every resolve). Never inject scoped into singleton without an `IServiceScopeFactory`.
 
-**Answer:** Domain and application rules at the center; infrastructure and UI at the edges. Controllers stay thin. Goal is testable boundaries — not copying folder templates without domain complexity. [Clean Architecture guide](/blog/clean-architecture-aspnet-core).
+**Red flag:** Listing lifetimes without naming captive dependency or why `DbContext` is scoped.
+
+### Q: Captive dependency — what breaks in production?
+
+**Strong answer:** A singleton service that holds a scoped `DbContext` (or other scoped dependency). Under load you see cross-request data leaks, disposed-context exceptions, or stale tenants. Fix: inject a factory, create a scope per operation, or demote the consumer to scoped.
+
+**Red flag:** "Just make everything singleton" or "DbContext is fine as a singleton because EF is thread-safe" (it is not).
+
+### Q: 401 vs 403 on a Web API?
+
+**Strong answer:** **401** — not authenticated (missing/invalid token). **403** — authenticated but not authorized. SPA interceptors that treat every 403 as "log out" create false logout storms.
+
+**Red flag:** Using 401 for both missing login and missing permission.
 
 ### Q: Repository pattern — yes or no?
 
-**Answer:** `DbContext` is already a unit of work. Add repositories for **named, reused queries** — not generic `IRepository<T>` on every entity. [Repository definition](/blog/repository-definition-meaning).
+**Strong answer:** `DbContext` is already a unit of work. Add repositories for **named, reused queries** — not generic `IRepository<T>` on every entity. Prefer query objects or application services when the "repository" is a thin wrapper over `Set<T>()`.
+
+**Red flag:** "Always wrap EF in a generic repository for Clean Architecture" with no named query examples. Details: [repository definition](/blog/repository-definition-meaning).
+
+### Q: What is Clean Architecture in ASP.NET Core?
+
+**Strong answer:** Domain and application rules at the center; infrastructure and UI at the edges. Controllers stay thin. Goal is testable boundaries — not copying folder templates without domain complexity. [Clean Architecture guide](/blog/clean-architecture-aspnet-core).
+
+**Red flag:** Equating Clean Architecture with "lots of folders" and no domain invariants.
+
+### Q: N+1 in EF Core — how do you prove it?
+
+**Strong answer:** Loop that triggers lazy loads or missing `Include`/`Select` projections. Prove with SQL logging or a profiler (many round-trips). Fix with includes, split queries, or projecting only needed columns. [EF Core interview questions](/blog/ef-core-interview-questions).
+
+**Red flag:** "Always use `Include` on every navigation" without talking about cartesian explosion or `AsSplitQuery`.
+
+## Net interview questions vs MCQs
+
+**Net questions**, **net test questions**, and **dot net MCQs** belong on a screening quiz, not a senior panel. If you get them, map each tick-box to a scenario on this guide instead of memorizing a PDF.
 
 ## Study order (recommended)
 
@@ -127,7 +163,7 @@ Full list: [Angular interview questions](/blog/angular-interview-questions-aspne
 Week 1 — Async track
   asynchronous meaning → async await interview questions → starvation how-to
 
-Week 2 — ASP.NET Core track
+Week 2 — ASP.NET Core / .NET Core track
   ASP.NET Core scenarios → DI lifetimes → JWT + Angular interceptors
 
 Week 3 — Data track
@@ -144,5 +180,8 @@ Production failures: tenant cache leaks, starvation dumps, JWT rotation, EF conc
 
 **"ASP.NET Core vs .NET interview questions?"**  
 .NET is the runtime and language. ASP.NET Core / Web API questions are web-specific: pipeline, auth, hosting, EF in request scope. ".NET Core" in a job spec almost always means that web loop, not Framework.
+
+**"Where should I start tonight?"**  
+One async scenario + one captive-DI scenario + one EF concurrency scenario. Answer aloud, then open the linked full article.
 
 All tracks: [interview questions hub](/learning/interview-questions).

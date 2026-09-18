@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CtaBand, SectionHeading } from "@/components/SectionHeading";
-import { pageSocial } from "@/lib/seo";
+import { pageSocial, servicesJsonLd } from "@/lib/seo";
 import { services } from "@/lib/site";
 
 const title = "Hire a Senior .NET + Angular Engineer";
@@ -17,7 +17,11 @@ export const metadata: Metadata = {
 
 export default function ServicesPage() {
   return (
-    <>
+<>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesJsonLd()) }}
+      />
       <section className="section-pad page-top">
         <div className="container-narrow">
           <SectionHeading
@@ -55,6 +59,25 @@ export default function ServicesPage() {
                 </Link>
               </li>
             ))}
+          </ul>
+        </div>
+      </section>
+      <section className="section-pad">
+        <div className="container-narrow">
+          <h2 className="heading-section">Selected work</h2>
+          <p className="mt-3 max-w-2xl text-muted">
+            Three products shipped on this stack. The write-ups stay on the work pages.
+          </p>
+          <ul className="mt-6 grid gap-4 sm:grid-cols-3">
+            <li>
+              <Link href="/work/carbazaar" className="font-semibold link-underline">CarBazaar</Link>
+            </li>
+            <li>
+              <Link href="/work/ecom-net10" className="font-semibold link-underline">Ecom_NET10</Link>
+            </li>
+            <li>
+              <Link href="/work/healthcare-saas" className="font-semibold link-underline">Healthcare SaaS</Link>
+            </li>
           </ul>
         </div>
       </section>

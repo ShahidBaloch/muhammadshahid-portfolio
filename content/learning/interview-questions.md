@@ -1,19 +1,19 @@
 ---
-title: "Interview Question Tracks for .NET and Angular"
+title: ".NET Interview Questions — Tracks for C#, ASP.NET Core, and Angular"
 ---
 
-This page is a **track index** — not the question bank. Full answers live on the linked articles.
+This page is a **track index**. The full **.NET interview questions** bank — topic tables, strong answers, and red flags — lives on [.NET interview questions and answers](/blog/dotnet-interview-questions-answers).
 
 | Track | Article |
 |---|---|
-| **.NET interview map** | [.NET interview questions and answers](/blog/dotnet-interview-questions-answers) |
+| **.NET interview bank** | [.NET interview questions and answers](/blog/dotnet-interview-questions-answers) |
 | **Async / threading oral** | [C# async await interview questions](/blog/csharp-async-await-interview-questions) |
 | **Staff runtime** | [C# expert interview questions](/blog/csharp-expert-interview-questions) |
-| **ASP.NET Core scenarios** | [ASP.NET Core interview questions](/blog/aspnet-core-interview-questions-scenarios) |
+| **ASP.NET Core / .NET Core** | [ASP.NET Core interview questions](/blog/aspnet-core-interview-questions-scenarios) |
 | **EF Core correctness** | [EF Core interview questions](/blog/ef-core-interview-questions) |
 | **Angular + .NET** | [Angular interview questions](/blog/angular-interview-questions-aspnet-core) |
 
-**.NET Core interview questions** and **web API interview questions** are the same loop as ASP.NET Core — use the scenarios page, not an MCQ dump.
+**.NET Core interview questions**, **net interview questions**, and **web API interview questions** are the same loop as ASP.NET Core — use the bank + scenarios pages, not an MCQ dump.
 
 ## Cross-questions interviewers ask after your first answer
 

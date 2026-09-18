@@ -1,5 +1,5 @@
 import { getHomepagePosts } from "@/lib/posts";
-import { siteConfig } from "@/lib/site";
+import { services, siteConfig } from "@/lib/site";
 
 export const personId = `${siteConfig.url}/#person`;
 
@@ -133,5 +133,29 @@ export function blogJsonLd() {
       datePublished: post.date,
       dateModified: post.updated ?? post.date,
     })),
+  };
+}
+export function servicesJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": `${siteConfig.url}/services#professional-service`,
+    name: "Freelance .NET and Angular engineering",
+    url: `${siteConfig.url}/services`,
+    image: `${siteConfig.url}/images/profile.png`,
+    areaServed: ["Remote", "Lahore"],
+    provider: { "@id": personId },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Engagements",
+      itemListElement: services.map((service) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: service.title,
+          description: service.description,
+        },
+      })),
+    },
   };
 }

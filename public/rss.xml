@@ -8,6 +8,188 @@
     <atom:link href="https://www.muhammadshahid.dev/rss.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title><![CDATA[Vertical Slice vs Clean Architecture in ASP.NET Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/vertical-slice-vs-clean-architecture</link>
+      <guid>https://www.muhammadshahid.dev/blog/vertical-slice-vs-clean-architecture</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[When an ASP.NET Core API should use vertical slice architecture instead of Clean Architecture, and how to keep one DbContext without four projects per feature.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Transactional Outbox in EF Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/transactional-outbox-ef-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/transactional-outbox-ef-core</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Publish a message only if the EF Core save committed. The transactional outbox writes the event in the same transaction as the order, then a background worker sends it.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[LINQ Interview Questions for C# and EF Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/linq-interview-questions</link>
+      <guid>https://www.muhammadshahid.dev/blog/linq-interview-questions</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[LINQ interview questions with scenario answers for C# and EF Core: deferred execution, IQueryable SQL, client evaluation, and queries that look fine in memory and fail in production.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[IEnumerable vs IQueryable vs ICollection in EF Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/ienumerable-vs-iqueryable-ef-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/ienumerable-vs-iqueryable-ef-core</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[IEnumerable vs IQueryable vs ICollection in EF Core: which one still builds SQL, which one loads the table, and which one is only a navigation collection.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Idempotency Keys for ASP.NET Core POST APIs]]></title>
+      <link>https://www.muhammadshahid.dev/blog/idempotency-key-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/idempotency-key-aspnet-core</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Stop double submits from creating two ASP.NET Core orders. Store the Idempotency-Key with the response and replay it. An Angular exhaustMap only covers one browser session.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Git Merge vs Rebase]]></title>
+      <link>https://www.muhammadshahid.dev/blog/git-merge-vs-rebase</link>
+      <guid>https://www.muhammadshahid.dev/blog/git-merge-vs-rebase</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Git merge vs rebase for a feature branch: merge keeps the join, rebase replays your commits on the new base. Do not rebase a branch other people have already pulled.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Git Checkout a Remote Branch]]></title>
+      <link>https://www.muhammadshahid.dev/blog/git-checkout-remote-branch</link>
+      <guid>https://www.muhammadshahid.dev/blog/git-checkout-remote-branch</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How to check out a remote Git branch that does not exist locally yet: fetch, then create a local branch that tracks origin. A name by itself is not enough.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Microsoft Entra ID for Angular and ASP.NET Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/entra-id-angular-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/entra-id-angular-aspnet-core</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How an Angular app and an ASP.NET Core API use Microsoft Entra ID: which token the API accepts, the audience and scope checks that cause 401s, and when a BFF is the better shape.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[EF Core: A Second Operation Was Started on This Context]]></title>
+      <link>https://www.muhammadshahid.dev/blog/ef-core-second-operation-dbcontext</link>
+      <guid>https://www.muhammadshahid.dev/blog/ef-core-second-operation-dbcontext</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[The ASP.NET Core error 'A second operation was started on this context' means one DbContext is running two queries. The usual causes are a missing await, a parallel task, or a context stored in a singleton.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[EF Core Migrations in Production]]></title>
+      <link>https://www.muhammadshahid.dev/blog/ef-core-migrations-production</link>
+      <guid>https://www.muhammadshahid.dev/blog/ef-core-migrations-production</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How to run EF Core migrations in production without a startup race: generate a SQL script, apply it once in the pipeline, and use expand and contract when the app is already live.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[EF Core SQL Retry with EnableRetryOnFailure]]></title>
+      <link>https://www.muhammadshahid.dev/blog/ef-core-connection-resiliency</link>
+      <guid>https://www.muhammadshahid.dev/blog/ef-core-connection-resiliency</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[EnableRetryOnFailure retries a transient SQL error in EF Core. It does not retry a bug, and a user-started transaction needs the execution strategy or the retry never runs.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[.NET Framework vs .NET Core vs .NET 10]]></title>
+      <link>https://www.muhammadshahid.dev/blog/dotnet-framework-vs-dotnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/dotnet-framework-vs-dotnet-core</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[.NET Framework, .NET Core, and current .NET are not three competing frameworks. What each name means, which versions still get patches, and which TargetFramework to pick in 2026.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Dapper vs EF Core: When to Use Each]]></title>
+      <link>https://www.muhammadshahid.dev/blog/dapper-vs-ef-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/dapper-vs-ef-core</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Dapper vs EF Core for ASP.NET Core: EF Core for the model and writes, Dapper for one hot read that must be a specific SQL statement. Do not pick a side for the whole database.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Cursor vs Offset Pagination in ASP.NET Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/cursor-vs-offset-pagination-aspnet-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/cursor-vs-offset-pagination-aspnet-core</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Offset page numbers skip and duplicate rows when the table changes. Cursor pagination for an ASP.NET Core list API is a key, a stable order, and a next link Angular can follow.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# OOP Interview Questions]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-oop-interview-questions</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-oop-interview-questions</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[C# OOP interview questions with scenario answers: abstract class vs interface, records, virtual and sealed, composition over inheritance, and what to say when the interviewer asks why.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# Nullable Reference Types]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-nullable-reference-types</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-nullable-reference-types</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[What C# nullable reference types actually check, when string? is the right type, and why the null-forgiving operator hides the bug instead of fixing it.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[ASP.NET Core Integration Tests with WebApplicationFactory]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-webapplicationfactory</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-webapplicationfactory</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Test an ASP.NET Core API through its real pipeline with WebApplicationFactory: replace the database, send HTTP, and check status codes instead of calling controllers as classes.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Security Headers in ASP.NET Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-security-headers</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-security-headers</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Which security headers an ASP.NET Core app should send: nosniff, frame, referrer, and HSTS. What each one stops, and when HSTS on a first response is a mistake.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[ASP.NET Core Output Caching vs IMemoryCache]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-output-caching</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-output-caching</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Output caching stores a finished HTTP response. IMemoryCache stores a value inside the process. Use output cache for a public GET. Do not use it for a response that depends on the logged-in user unless you vary by that user.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[ASP.NET Core Health Checks: Liveness vs Readiness]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-health-checks</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-health-checks</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[ASP.NET Core health checks that Azure and Kubernetes can trust: split liveness from readiness, check SQL only on ready, and do not let a slow dependency restart the process.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[ASP.NET Core Forwarded Headers Behind Azure and YARP]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-forwarded-headers</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-forwarded-headers</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Fix ASP.NET Core redirecting to http, dropping the real client IP, or looping on HTTPS when it sits behind Azure App Service or YARP. The proxy is untrusted until you say so.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Correlation IDs in ASP.NET Core]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-correlation-id</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-correlation-id</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How to set one request id on an ASP.NET Core response and on every log line, so an Angular error report matches one server trace. Other posts mention the id. This page is how to create it.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[ASP.NET Core API Versioning for Angular Clients]]></title>
+      <link>https://www.muhammadshahid.dev/blog/aspnet-core-api-versioning</link>
+      <guid>https://www.muhammadshahid.dev/blog/aspnet-core-api-versioning</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How to version an ASP.NET Core API that an Angular app calls: URL versus header, what to do with old clients, and how generated clients stay in sync.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[switchMap vs exhaustMap vs concatMap in Angular]]></title>
+      <link>https://www.muhammadshahid.dev/blog/angular-switchmap-exhaustmap-concatmap</link>
+      <guid>https://www.muhammadshahid.dev/blog/angular-switchmap-exhaustmap-concatmap</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Which RxJS map to use when Angular calls an ASP.NET Core API: switchMap for search, exhaustMap for submit, concatMap when order matters. The wrong one drops or doubles the request.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Angular Standalone Components vs NgModules]]></title>
+      <link>https://www.muhammadshahid.dev/blog/angular-standalone-components</link>
+      <guid>https://www.muhammadshahid.dev/blog/angular-standalone-components</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[When an Angular app should bootstrap with standalone components instead of NgModules, and how provideHttpClient and provideRouter replace the old imports.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Angular OnPush Change Detection]]></title>
+      <link>https://www.muhammadshahid.dev/blog/angular-onpush-change-detection</link>
+      <guid>https://www.muhammadshahid.dev/blog/angular-onpush-change-detection</guid>
+      <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[OnPush rerenders a component when an input identity changes, an event fires, or a signal updates. Mutating an object in place does not. This is the change-detection page, not the signals guide and not the interview list.]]></description>
+    </item>
+    <item>
       <title><![CDATA[Swagger vs OpenAPI in ASP.NET Core — Swashbuckle, NSwag, and Scalar]]></title>
       <link>https://www.muhammadshahid.dev/blog/swagger-openapi-aspnet-core</link>
       <guid>https://www.muhammadshahid.dev/blog/swagger-openapi-aspnet-core</guid>
@@ -50,11 +232,11 @@
       <description><![CDATA[Fix 'error establishing a Redis connection' in ASP.NET Core — connection string, TLS, Azure Cache for Redis, Docker networking, timeout, and fail-open IDistributedCache patterns.]]></description>
     </item>
     <item>
-      <title><![CDATA[.NET Interview Questions and Answers (C# and ASP.NET Core)]]></title>
+      <title><![CDATA[.NET Interview Questions and Answers (C#, ASP.NET Core, .NET Core)]]></title>
       <link>https://www.muhammadshahid.dev/blog/dotnet-interview-questions-answers</link>
       <guid>https://www.muhammadshahid.dev/blog/dotnet-interview-questions-answers</guid>
       <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[.NET interview questions and answers for mid-to-senior roles — .NET Core, ASP.NET Core Web API, C# async, EF Core, Angular integration, with links to full scenario write-ups.]]></description>
+      <description><![CDATA[.NET interview questions and answers for mid-to-senior roles — net interview questions, .NET Core interview questions, ASP.NET Core Web API, C# async, EF Core, and Angular scenarios with strong answers and red flags.]]></description>
     </item>
     <item>
       <title><![CDATA[Deadlock in C# and Operating Systems (Avoidance Explained)]]></title>
@@ -103,7 +285,7 @@
       <link>https://www.muhammadshahid.dev/blog/async-vs-sync-programming</link>
       <guid>https://www.muhammadshahid.dev/blog/async-vs-sync-programming</guid>
       <pubDate>Tue, 08 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Async vs sync explained with tables and C# examples — blocking vs non-blocking I/O and when to use each on ASP.NET Core. Education 'class' meaning: see the asynchronous class guide.]]></description>
+      <description><![CDATA[Async vs sync explained with tables and C# examples — blocking vs non-blocking I/O and when to use each on ASP.NET Core.]]></description>
     </item>
     <item>
       <title><![CDATA[What Is a Promise in Async Programming? (Task, Promise, Future)]]></title>

@@ -189,6 +189,18 @@ export default function HomePage() {
                   Async & Threading
                   <span aria-hidden> →</span>
                 </Link>
+                <Link href="/learning/ef-core" className="font-semibold link-underline">
+                  EF Core
+                </Link>
+                <Link href="/learning/identity" className="font-semibold link-underline">
+                  Identity
+                </Link>
+                <Link href="/learning/authentication" className="font-semibold link-underline">
+                  Authentication
+                </Link>
+                <Link href="/learning/api-design" className="font-semibold link-underline">
+                  API design
+                </Link>
                 <Link href="/blog" className="font-semibold link-underline">
                   All articles
                   <span aria-hidden> →</span>

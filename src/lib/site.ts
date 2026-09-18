@@ -106,16 +106,18 @@ export const learningTopics: LearningTopic[] = [
   {
     slug: "interview-questions",
     label: "Interview Questions",
-    title: "Interview Question Tracks for .NET and Angular",
+    title: ".NET Interview Questions — Tracks for C#, ASP.NET Core, and Angular",
     description:
-      "Topic index for .NET interview prep — pick async, ASP.NET Core, EF Core, or Angular tracks. Full question banks live on the linked articles, not this page.",
+      ".NET interview questions hub — route into async, ASP.NET Core / .NET Core, EF Core, and Angular tracks. The full question bank is the linked .NET interview questions and answers article.",
     intro: "",
     compactHub: true,
-    matchTags: ["Interview Questions"],
+    matchTags: ["Interview Questions", ".NET Interview Questions"],
     keywords: [
-      "NET interview prep tracks",
-      "ASP.NET Core interview tracks",
-      "scenario-based interview prep .NET",
+      ".NET interview questions",
+      ".NET Core interview questions",
+      "net interview questions",
+      "ASP.NET Core interview questions",
+      "C# interview questions",
     ],
     relatedTopicSlugs: ["async-concurrency", "ef-core", "authentication"],
     pinSlugs: [
@@ -129,7 +131,11 @@ export const learningTopics: LearningTopic[] = [
     faq: [
       {
         q: "Where do I start for .NET interview questions?",
-        a: "Use the [.NET interview questions and answers](/blog/dotnet-interview-questions-answers) article as the question bank. This page only routes you into async, ASP.NET Core, EF Core, and Angular tracks.",
+        a: "Open [.NET interview questions and answers](/blog/dotnet-interview-questions-answers) — that page is the bank (topic tables + strong answers / red flags). This hub only routes you into async, ASP.NET Core, EF Core, and Angular tracks.",
+      },
+      {
+        q: "What about .NET Core interview questions or net interview questions?",
+        a: "Same panel as ASP.NET Core Web API under older names. Use the bank article above, then the ASP.NET Core scenarios track below.",
       },
       {
         q: "How should I split ASP.NET Core, EF Core, and async interview prep?",
