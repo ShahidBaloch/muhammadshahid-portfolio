@@ -93,20 +93,20 @@ export default function HomePage() {
           <ProfileCard />
         </div>
 
-        <dl className="card-band">
+        <div className="card-band" role="region" aria-label="Key statistics">
           <div className="container-narrow grid grid-cols-2 gap-4 px-5 py-5 sm:grid-cols-4 sm:gap-6 sm:px-8 sm:py-6 lg:px-12">
             {trustStats.map((item) => (
               <div key={item.label} className="flex min-w-0 flex-col-reverse text-center sm:text-left">
-                <dt className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
                   {item.label}
-                </dt>
-                <dd className="font-display text-base font-bold text-heading sm:text-xl">
+                </p>
+                <p className="font-display text-base font-bold text-heading sm:text-xl">
                   {item.value}
-                </dd>
+                </p>
               </div>
             ))}
           </div>
-        </dl>
+        </div>
       </section>
 
       <section className="section-pad" aria-labelledby="home-work-heading">

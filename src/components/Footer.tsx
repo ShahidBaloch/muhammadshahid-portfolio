@@ -18,7 +18,7 @@ export function Footer() {
           </div>
 
           <nav aria-label="Footer">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Explore</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-300">Explore</p>
             <ul className="mt-4 space-y-2 text-sm text-slate-300">
               <li>
                 <Link href="/work" className="transition hover:text-link-bright">
@@ -54,7 +54,7 @@ export function Footer() {
           </nav>
 
           <nav aria-label="Social">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Connect</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-300">Connect</p>
             <ul className="mt-4 space-y-2 text-sm text-slate-300">
               <li>
                 <a
