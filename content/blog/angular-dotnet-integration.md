@@ -3,7 +3,7 @@ title: "Angular + .NET: Integration Habits That Reduce Rework"
 description: "Angular and ASP.NET Core integration habits — DTO contracts, error envelopes, pagination metadata, datetime policy, and CORS decisions that stop frontend-backend rework."
 date: "2026-04-20"
 updated: "2026-09-08"
-category: "architecture"
+category: "angular"
 tags: ["Angular", ".NET", "APIs", "Delivery"]
 related:
   - aspnet-core-api-validation

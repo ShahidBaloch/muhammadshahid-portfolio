@@ -3,7 +3,7 @@ title: "switchMap vs exhaustMap vs concatMap in Angular"
 description: "Which RxJS map to use when Angular calls an ASP.NET Core API: switchMap for search, exhaustMap for submit, concatMap when order matters. The wrong one drops or doubles the request."
 date: "2026-09-18"
 updated: "2026-09-18"
-category: "architecture"
+category: "angular"
 tags: ["Angular", "RxJS", "HttpClient", "ASP.NET Core"]
 related:
   - angular-signals-aspnet-core

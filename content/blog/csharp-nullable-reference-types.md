@@ -1,5 +1,5 @@
 ---
-title: "C# Nullable Reference Types"
+title: "C# Nullable Reference Types: Compiler Warnings & Patterns"
 description: "What C# nullable reference types actually check, when string? is the right type, and why the null-forgiving operator hides the bug instead of fixing it."
 date: "2026-09-18"
 updated: "2026-09-18"

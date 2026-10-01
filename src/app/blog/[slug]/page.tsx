@@ -83,8 +83,19 @@ export default async function BlogPostPage({ params }: PageProps) {
     dateModified: post.updated ?? post.date,
     url: pageUrl,
     image: [`${siteConfig.url}/blog/${post.slug}/opengraph-image`],
-    author: { "@id": personId },
-    publisher: { "@id": personId },
+    author: {
+      "@type": "Person",
+      "@id": personId,
+      name: siteConfig.name,
+      url: siteConfig.url,
+      sameAs: [siteConfig.linkedin, siteConfig.github],
+    },
+    publisher: {
+      "@type": "Person",
+      "@id": personId,
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": pageUrl,

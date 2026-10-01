@@ -1,5 +1,5 @@
 ---
-title: "Git Merge vs Rebase"
+title: "Git Merge vs Rebase: Workflows, History, and Clean PRs"
 description: "Git merge vs rebase for a feature branch: merge keeps the join, rebase replays your commits on the new base. Do not rebase a branch other people have already pulled."
 date: "2026-09-18"
 updated: "2026-09-18"

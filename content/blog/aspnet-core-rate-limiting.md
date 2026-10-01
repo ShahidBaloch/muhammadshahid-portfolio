@@ -2,6 +2,7 @@
 title: "ASP.NET Core Rate Limiting for APIs"
 description: "Microsoft.AspNetCore.RateLimiting in ASP.NET Core — fixed/sliding windows, per-user policies, 429 responses for Angular clients, and multi-instance pitfalls."
 date: "2026-08-04"
+category: "api-design"
 updated: "2026-09-12"
 tags: ["Rate Limiting", "ASP.NET Core", "API Security", ".NET", "Performance"]
 related:

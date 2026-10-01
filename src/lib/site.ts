@@ -766,6 +766,265 @@ export const learningTopics: LearningTopic[] = [
       "aspnet-core-data-protection-xml-encryptor",
     ],
   },
+  {
+    slug: "angular",
+    label: "Angular",
+    title: "Angular for ASP.NET Core Enterprise SPAs",
+    description:
+      "Enterprise Angular guides for .NET developers — Signals, NgRx, SSR, Reactive Forms validation with ProblemDetails, OnPush change detection, and RxJS.",
+    intro:
+      "Practical Angular guides built for enterprise SPAs backed by ASP.NET Core APIs. Start with [Angular and .NET integration](/blog/angular-dotnet-integration) or dive into state, SSR, and reactive forms below.",
+    keywords: [
+      "Angular ASP.NET Core",
+      "Angular enterprise SPA",
+      "Angular signals .NET",
+      "Angular reactive forms problemdetails",
+      "Angular SSR ASP.NET Core",
+    ],
+    relatedTopicSlugs: ["authentication", "api-design", "architecture"],
+    pinSlugs: [
+      "angular-dotnet-integration",
+      "angular-reactive-forms-validation-problemdetails",
+      "angular-signals-aspnet-core",
+      "angular-onpush-change-detection",
+      "angular-ssr-hosted-aspnet-core",
+      "ngrx-vs-signals-vs-signalstore-angular",
+      "angular-switchmap-exhaustmap-concatmap",
+      "angular-standalone-components",
+    ],
+    matchTags: ["Angular", "RxJS", "Signals", "NgRx", "SignalStore", "SSR", "Reactive Forms"],
+    faq: [
+      {
+        q: "Where do I start with Angular for ASP.NET Core?",
+        a: "Start with [Angular and .NET integration](/blog/angular-dotnet-integration) for contract alignment, DTO mapping, and error envelopes.",
+      },
+      {
+        q: "How do I validate Angular forms against ASP.NET Core errors?",
+        a: "See [Angular Reactive Forms validation with ProblemDetails](/blog/angular-reactive-forms-validation-problemdetails) for field-level error binding.",
+      },
+      {
+        q: "Should I use Signals or NgRx for state management?",
+        a: "Read [NgRx vs Signals vs SignalStore](/blog/ngrx-vs-signals-vs-signalstore-angular) for a complete decision guide.",
+      },
+    ],
+    tracks: [
+      {
+        title: "Architecture & Integration",
+        blurb: "Contracts, DTOs, standalone components, and server-side rendering with ASP.NET Core.",
+        slugs: [
+          "angular-dotnet-integration",
+          "angular-standalone-components",
+          "angular-ssr-hosted-aspnet-core",
+        ],
+      },
+      {
+        title: "Reactivity & State",
+        blurb: "Signals, OnPush change detection, NgRx vs SignalStore, and RxJS operators.",
+        slugs: [
+          "angular-signals-aspnet-core",
+          "angular-onpush-change-detection",
+          "ngrx-vs-signals-vs-signalstore-angular",
+          "angular-switchmap-exhaustmap-concatmap",
+        ],
+      },
+      {
+        title: "Forms & Error Handling",
+        blurb: "Reactive forms, RFC 9457 ProblemDetails field mapping, and submit UX.",
+        slugs: ["angular-reactive-forms-validation-problemdetails"],
+      },
+    ],
+  },
+  {
+    slug: "azure",
+    label: "Azure & Cloud",
+    title: "Azure Cloud Engineering for ASP.NET Core",
+    description:
+      "Production Azure architectures for .NET — App Service, Managed Identity, Key Vault, Service Bus, and Azure Functions isolated worker.",
+    intro:
+      "Cloud-native .NET on Azure without credential leaks or configuration debt. Start with [Managed Identity on Azure](/blog/managed-identity-aspnet-core-azure) or [Key Vault secrets in ASP.NET Core](/blog/azure-key-vault-secrets-aspnet-core).",
+    keywords: [
+      "Azure ASP.NET Core",
+      "Azure Managed Identity .NET",
+      "Azure Key Vault ASP.NET Core",
+      "Azure App Service deploy",
+      "Azure Service Bus .NET",
+      "Azure Functions isolated worker",
+    ],
+    relatedTopicSlugs: ["security", "architecture", "devops"],
+    pinSlugs: [
+      "managed-identity-aspnet-core-azure",
+      "azure-key-vault-secrets-aspnet-core",
+      "azure-app-service-aspnet-core",
+      "azure-service-bus-aspnet-core",
+      "azure-functions-isolated-worker-dotnet-api",
+      "azure-blob-aspnet-core-uploads",
+    ],
+    matchTags: ["Azure", "App Service", "Key Vault", "Managed Identity", "Azure Functions", "Service Bus", "Blob Storage"],
+    faq: [
+      {
+        q: "How do I connect ASP.NET Core to Azure SQL without passwords?",
+        a: "Use [Managed Identity on Azure](/blog/managed-identity-aspnet-core-azure) with DefaultAzureCredential to eliminate connection string credentials.",
+      },
+      {
+        q: "How do I load secrets securely into ASP.NET Core?",
+        a: "Configure Azure Key Vault as an IConfiguration provider: [Key Vault secrets in ASP.NET Core](/blog/azure-key-vault-secrets-aspnet-core).",
+      },
+      {
+        q: "How should I structure Azure background jobs?",
+        a: "Compare [Azure Service Bus](/blog/azure-service-bus-aspnet-core) messaging with [Azure Functions isolated worker](/blog/azure-functions-isolated-worker-dotnet-api).",
+      },
+    ],
+    tracks: [
+      {
+        title: "Identity & Configuration",
+        blurb: "Passwordless authentication and secret management without committing keys.",
+        slugs: [
+          "managed-identity-aspnet-core-azure",
+          "azure-key-vault-secrets-aspnet-core",
+        ],
+      },
+      {
+        title: "Hosting & Storage",
+        blurb: "App Service deployment slots, health checks, and secure Blob uploads.",
+        slugs: [
+          "azure-app-service-aspnet-core",
+          "azure-blob-aspnet-core-uploads",
+        ],
+      },
+      {
+        title: "Messaging & Serverless",
+        blurb: "Enterprise Service Bus pub/sub and isolated worker Azure Functions.",
+        slugs: [
+          "azure-service-bus-aspnet-core",
+          "azure-functions-isolated-worker-dotnet-api",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "security",
+    label: "API Security",
+    title: "API Security and Threat Modeling for ASP.NET Core",
+    description:
+      "Hardening ASP.NET Core APIs and Angular SPAs — OWASP API Security Top 10, BOLA/IDOR prevention, CSP nonces, STRIDE threat modeling, and security headers.",
+    intro:
+      "Security controls built directly into your ASP.NET Core and Angular pipelines. Start with [OWASP API Security Top 10](/blog/owasp-api-security-top-10-aspnet-core) or learn to [prevent BOLA/IDOR](/blog/prevent-bola-idor-aspnet-core).",
+    keywords: [
+      "ASP.NET Core API security",
+      "OWASP API Top 10 .NET",
+      "prevent BOLA IDOR ASP.NET Core",
+      "Content Security Policy Angular",
+      "STRIDE threat modeling API",
+    ],
+    relatedTopicSlugs: ["authentication", "azure", "api-design"],
+    pinSlugs: [
+      "owasp-api-security-top-10-aspnet-core",
+      "prevent-bola-idor-aspnet-core",
+      "content-security-policy-angular-aspnet-core",
+      "stride-threat-modeling-aspnet-core-apis",
+      "aspnet-core-security-headers",
+    ],
+    matchTags: ["Security", "OWASP", "BOLA", "CSP", "Threat Modeling", "STRIDE", "Headers"],
+    faq: [
+      {
+        q: "What is the biggest security vulnerability in ASP.NET Core APIs?",
+        a: "Broken Object-Level Authorization (BOLA/IDOR). Mitigate it using resource-based authorization handlers: [Prevent BOLA/IDOR in ASP.NET Core](/blog/prevent-bola-idor-aspnet-core).",
+      },
+      {
+        q: "How do I configure Content Security Policy (CSP) for Angular?",
+        a: "Use nonce-based middleware in ASP.NET Core: [Content Security Policy for Angular](/blog/content-security-policy-angular-aspnet-core).",
+      },
+      {
+        q: "How do I run threat modeling for an API endpoint?",
+        a: "Follow the 6-step walkthrough: [STRIDE threat modeling for ASP.NET Core APIs](/blog/stride-threat-modeling-aspnet-core-apis).",
+      },
+    ],
+    tracks: [
+      {
+        title: "Threat Modeling & Standards",
+        blurb: "OWASP API Top 10 mitigations and STRIDE threat modeling worksheets.",
+        slugs: [
+          "owasp-api-security-top-10-aspnet-core",
+          "stride-threat-modeling-aspnet-core-apis",
+        ],
+      },
+      {
+        title: "Authorization & Access Control",
+        blurb: "Preventing BOLA/IDOR with resource authorization handlers.",
+        slugs: ["prevent-bola-idor-aspnet-core"],
+      },
+      {
+        title: "Browser & Edge Hardening",
+        blurb: "Nonce-based CSP and HTTP security headers for production ASP.NET Core.",
+        slugs: [
+          "content-security-policy-angular-aspnet-core",
+          "aspnet-core-security-headers",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "devops",
+    label: "DevOps & CI/CD",
+    title: "DevOps and CI/CD for ASP.NET Core and Angular",
+    description:
+      "Production deployment pipelines, Docker environments, and GitHub Actions workflows for full-stack .NET and Angular systems.",
+    intro:
+      "Reliable builds, test gates, containerization, and automated deployments for .NET and Angular apps. Start with [GitHub Actions CI/CD](/blog/github-actions-cicd-aspnet-core-angular).",
+    keywords: [
+      "GitHub Actions ASP.NET Core Angular",
+      "Docker .NET Angular local",
+      "CI/CD pipeline .NET",
+      "automated deployment Azure App Service",
+    ],
+    relatedTopicSlugs: ["azure", "testing", "architecture"],
+    pinSlugs: [
+      "github-actions-cicd-aspnet-core-angular",
+      "docker-dotnet-angular-local",
+    ],
+    matchTags: ["DevOps", "CI/CD", "GitHub Actions", "Docker"],
+    faq: [
+      {
+        q: "How do I build a CI/CD pipeline for ASP.NET Core + Angular?",
+        a: "Follow the complete multi-stage workflow in [GitHub Actions CI/CD for ASP.NET Core + Angular](/blog/github-actions-cicd-aspnet-core-angular).",
+      },
+      {
+        q: "How do I containerize .NET and Angular for local development?",
+        a: "See [Docker for .NET + Angular local development](/blog/docker-dotnet-angular-local).",
+      },
+    ],
+  },
+  {
+    slug: "testing",
+    label: "Testing",
+    title: "Integration and API Testing for ASP.NET Core",
+    description:
+      "Real database and service testing for ASP.NET Core — Testcontainers for SQL Server and Redis, and WebApplicationFactory integration tests.",
+    intro:
+      "Fast, reliable integration testing without mocking your database away. Start with [Testcontainers for ASP.NET Core](/blog/testcontainers-aspnet-core-sql-redis) or [WebApplicationFactory integration testing](/blog/aspnet-core-webapplicationfactory).",
+    keywords: [
+      "Testcontainers ASP.NET Core",
+      "WebApplicationFactory integration testing",
+      "ASP.NET Core integration tests SQL Redis",
+      "xUnit .NET API testing",
+    ],
+    relatedTopicSlugs: ["devops", "ef-core", "api-design"],
+    pinSlugs: [
+      "testcontainers-aspnet-core-sql-redis",
+      "aspnet-core-webapplicationfactory",
+    ],
+    matchTags: ["Testing", "Testcontainers", "WebApplicationFactory", "Integration Testing", "xUnit"],
+    faq: [
+      {
+        q: "Why use Testcontainers instead of InMemory EF Core database?",
+        a: "InMemory does not execute raw SQL, foreign keys, transactions, or concurrency tokens. Testcontainers boots real SQL Server in Docker for 100% fidelity: [Testcontainers for ASP.NET Core](/blog/testcontainers-aspnet-core-sql-redis).",
+      },
+      {
+        q: "How do I test an ASP.NET Core API pipeline?",
+        a: "Use WebApplicationFactory to send real HTTP requests through middleware: [ASP.NET Core integration tests with WebApplicationFactory](/blog/aspnet-core-webapplicationfactory).",
+      },
+    ],
+  },
 ];
 
 export function getLearningTopic(slug: string): LearningTopic | undefined {

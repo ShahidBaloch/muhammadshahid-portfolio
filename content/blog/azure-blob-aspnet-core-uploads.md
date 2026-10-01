@@ -2,6 +2,7 @@
 title: "Azure Blob Storage with ASP.NET Core File Uploads"
 description: "Practical ASP.NET Core patterns for uploading files to Azure Blob Storage — validation, private containers, SAS, metadata, and Angular-friendly APIs."
 date: "2026-06-20"
+category: "azure"
 tags: ["Azure", "Blob Storage", "ASP.NET Core", "Files"]
 related:
   - azure-app-service-aspnet-core

@@ -3,7 +3,7 @@ title: "Security Headers in ASP.NET Core"
 description: "Which security headers an ASP.NET Core app should send: nosniff, frame, referrer, and HSTS. What each one stops, and when HSTS on a first response is a mistake."
 date: "2026-09-18"
 updated: "2026-09-18"
-category: "architecture"
+category: "security"
 tags: ["ASP.NET Core", "Security", "HTTPS", "HSTS"]
 related:
   - aspnet-core-forwarded-headers

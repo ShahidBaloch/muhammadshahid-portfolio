@@ -3,7 +3,7 @@ title: "Angular OnPush Change Detection"
 description: "OnPush rerenders a component when an input identity changes, an event fires, or a signal updates. Mutating an object in place does not. This is the change-detection page, not the signals guide and not the interview list."
 date: "2026-09-18"
 updated: "2026-09-18"
-category: "architecture"
+category: "angular"
 tags: ["Angular", "OnPush", "Change Detection", "TypeScript"]
 related:
   - angular-signals-aspnet-core

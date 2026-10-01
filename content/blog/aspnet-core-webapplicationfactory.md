@@ -3,7 +3,7 @@ title: "ASP.NET Core Integration Tests with WebApplicationFactory"
 description: "Test an ASP.NET Core API through its real pipeline with WebApplicationFactory: replace the database, send HTTP, and check status codes instead of calling controllers as classes."
 date: "2026-09-18"
 updated: "2026-09-18"
-category: "api-design"
+category: "testing"
 tags: ["ASP.NET Core", "Testing", "WebApplicationFactory", "xUnit"]
 related:
   - aspnet-core-api-validation

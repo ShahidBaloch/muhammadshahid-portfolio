@@ -42,6 +42,11 @@ const LEARNING_SLUGS = [
   "api-design",
   "caching",
   "architecture",
+  "angular",
+  "azure",
+  "security",
+  "devops",
+  "testing",
 ];
 
 function xmlEscape(value) {
@@ -351,6 +356,32 @@ const ALL_BLOG_SLUGS = [
   "serilog-pii-redaction-healthcare-aspnet-core",
   "signalr-aspnet-core-realtime",
   "transactional-outbox-ef-core",
+  // Angular (new)
+  "angular-reactive-forms-validation-problemdetails",
+  "angular-ssr-hosted-aspnet-core",
+  "ngrx-vs-signals-vs-signalstore-angular",
+  // Azure (new)
+  "azure-functions-isolated-worker-dotnet-api",
+  "azure-key-vault-secrets-aspnet-core",
+  "azure-service-bus-aspnet-core",
+  "managed-identity-aspnet-core-azure",
+  // Security (new)
+  "content-security-policy-angular-aspnet-core",
+  "owasp-api-security-top-10-aspnet-core",
+  "prevent-bola-idor-aspnet-core",
+  "stride-threat-modeling-aspnet-core-apis",
+  // DevOps (new)
+  "github-actions-cicd-aspnet-core-angular",
+  // Testing (new)
+  "testcontainers-aspnet-core-sql-redis",
+  // Architecture / API (new)
+  "dotnet-aspire-aspnet-core-angular",
+  "grpc-vs-rest-aspnet-core",
+  "hangfire-vs-quartz-vs-channel-workers-aspnet-core",
+  "hot-chocolate-graphql-aspnet-core",
+  "multi-tenancy-aspnet-core-beyond-query-filters",
+  "opentelemetry-aspnet-core-traces-metrics-logs",
+  "rfc-9457-problem-details-aspnet-core",
 ];
 
 const ALL_LEARNING_SLUGS_INDEXNOW = [
@@ -366,6 +397,11 @@ const ALL_LEARNING_SLUGS_INDEXNOW = [
   "api-design",
   "caching",
   "architecture",
+  "angular",
+  "azure",
+  "security",
+  "devops",
+  "testing",
 ];
 
 const ALL_STATIC_PATHS_INDEXNOW = [

@@ -2,6 +2,7 @@
 title: "IHttpClientFactory: Stop Socket Exhaustion"
 description: "Use IHttpClientFactory in ASP.NET Core to avoid HttpClient socket exhaustion and stale DNS — named clients, typed clients, Polly retries, and mistakes that still break production APIs."
 date: "2026-08-03"
+category: "api-design"
 tags: ["IHttpClientFactory", "HttpClient", "ASP.NET Core", ".NET", "Performance"]
 related:
   - csharp-async-await-aspnet-core

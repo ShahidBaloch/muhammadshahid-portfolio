@@ -2,6 +2,7 @@
 title: "Dockerizing .NET API and Angular for Reproducible Local Dev"
 description: "How I Docker Compose a .NET API, Angular SPA, and SQL Server for marketplace and eCommerce stacks — reproducible local environments without the 'works on my machine' tax."
 date: "2026-04-02"
+category: "devops"
 tags: ["Docker", ".NET", "Angular", "Docker Compose"]
 related:
   - azure-app-service-aspnet-core

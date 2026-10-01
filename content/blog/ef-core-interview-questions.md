@@ -1,5 +1,5 @@
 ---
-title: "EF Core Interview Questions"
+title: "EF Core Interview Questions and Answers for .NET Developers"
 description: "EF Core interview questions with production answers — entity relationships, RowVersion concurrency, global query filters, ExecuteUpdate vs SaveChanges, and tenant leaks."
 date: "2026-09-07"
 updated: "2026-09-11"

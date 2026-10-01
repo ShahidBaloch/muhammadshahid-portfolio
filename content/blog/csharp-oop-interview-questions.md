@@ -1,5 +1,5 @@
 ---
-title: "C# OOP Interview Questions"
+title: "C# OOP Interview Questions and Answers for .NET Developers"
 description: "C# OOP interview questions with scenario answers: abstract class vs interface, records, virtual and sealed, composition over inheritance, and what to say when the interviewer asks why."
 date: "2026-09-18"
 updated: "2026-09-18"

@@ -1,5 +1,5 @@
 ---
-title: "Git Checkout a Remote Branch"
+title: "Git Checkout a Remote Branch: Local Tracking and Fetch"
 description: "How to check out a remote Git branch that does not exist locally yet: fetch, then create a local branch that tracks origin. A name by itself is not enough."
 date: "2026-09-18"
 updated: "2026-09-18"

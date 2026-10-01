@@ -3,7 +3,7 @@ title: "Angular Standalone Components vs NgModules"
 description: "When an Angular app should bootstrap with standalone components instead of NgModules, and how provideHttpClient and provideRouter replace the old imports."
 date: "2026-09-18"
 updated: "2026-09-18"
-category: "architecture"
+category: "angular"
 tags: ["Angular", "Standalone", "TypeScript", "ASP.NET Core"]
 related:
   - angular-dotnet-integration

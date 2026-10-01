@@ -2,6 +2,7 @@
 title: "AI in .NET with Semantic Kernel"
 description: "Use Semantic Kernel and LLMs in ASP.NET Core — prompts, plugins, safety, caching, and how Angular clients call AI features without leaking secrets or burning tokens."
 date: "2026-08-12"
+category: "architecture"
 tags: ["AI", "Semantic Kernel", ".NET", "ASP.NET Core", "LLM", "C#"]
 related:
   - aspnet-core-jwt-auth
