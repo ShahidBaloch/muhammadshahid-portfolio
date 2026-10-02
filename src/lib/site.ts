@@ -100,6 +100,27 @@ export type LearningTopic = {
   keywords?: string[];
 };
 
+/** Lightweight nav-only representation of learning topics for client components (Header) */
+export const learningNavTopics = [
+  { slug: "interview-questions", label: "Interview Questions" },
+  { slug: "async-concurrency", label: "Async & Threading" },
+  { slug: "design-patterns", label: "C# Design Patterns" },
+  { slug: "dependency-injection", label: "Dependency Injection" },
+  { slug: "authentication", label: "Auth & Tokens" },
+  { slug: "identity", label: "Identity" },
+  { slug: "ef-core", label: "EF Core" },
+  { slug: "cqrs", label: "CQRS" },
+  { slug: "edi", label: "Healthcare EDI" },
+  { slug: "caching", label: "Caching" },
+  { slug: "api-design", label: "API Design" },
+  { slug: "architecture", label: "Architecture" },
+  { slug: "angular", label: "Angular" },
+  { slug: "azure", label: "Azure & Cloud" },
+  { slug: "security", label: "API Security" },
+  { slug: "devops", label: "DevOps & CI/CD" },
+  { slug: "testing", label: "Testing" },
+] as const;
+
 /** Topic hubs under Blog — SEO landing pages that group related articles.
  *  If you add a topic slug, also add it to LEARNING_SLUGS in scripts/generate-feeds.mjs. */
 export const learningTopics: LearningTopic[] = [

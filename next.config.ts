@@ -2,6 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  compress: true,
+  poweredByHeader: false,
+  images: {
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 31536000,
+  },
   // Markdown posts are read with fs at build. Include them in every trace so
   // blog/learning pages cannot 500 if a function ever reads content at runtime.
   // sitemap.xml and rss.xml are static files generated in prebuild.

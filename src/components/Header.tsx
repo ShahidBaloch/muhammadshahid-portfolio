@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { BrandMark } from "@/components/BrandMark";
-import { learningTopics, navLinks, siteConfig } from "@/lib/site";
+import { learningNavTopics, navLinks, siteConfig } from "@/lib/site";
 
 export function Header() {
   const pathname = usePathname();
@@ -169,7 +169,7 @@ export function Header() {
                         <p className="px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">
                           Topics
                         </p>
-                        {learningTopics.map((topic) => (
+                        {learningNavTopics.map((topic) => (
                           <Link
                             key={topic.slug}
                             href={`/learning/${topic.slug}`}
@@ -274,7 +274,7 @@ export function Header() {
                         id="mobile-topics"
                         className="mb-3 flex flex-col border-l border-slate-line pl-3"
                       >
-                        {learningTopics.map((topic) => (
+                        {learningNavTopics.map((topic) => (
                           <Link
                             key={topic.slug}
                             href={`/learning/${topic.slug}`}

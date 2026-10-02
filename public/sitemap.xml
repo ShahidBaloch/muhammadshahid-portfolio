@@ -2,295 +2,295 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.muhammadshahid.dev</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/work</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/services</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/about</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/contact</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/privacy</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/terms</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/disclaimer</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/work/carbazaar</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/work/ecom-net10</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/work/healthcare-saas</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/interview-questions</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/async-concurrency</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/design-patterns</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/dependency-injection</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/authentication</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/identity</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/ef-core</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/cqrs</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/edi</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/api-design</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/caching</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/architecture</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/angular</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/azure</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/security</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/devops</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/learning/testing</loc>
-    <lastmod>2026-10-01T18:38:37.696Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.55</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/testcontainers-aspnet-core-sql-redis</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/stride-threat-modeling-aspnet-core-apis</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/rfc-9457-problem-details-aspnet-core</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/prevent-bola-idor-aspnet-core</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/owasp-api-security-top-10-aspnet-core</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/opentelemetry-aspnet-core-traces-metrics-logs</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/ngrx-vs-signals-vs-signalstore-angular</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/multi-tenancy-aspnet-core-beyond-query-filters</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/managed-identity-aspnet-core-azure</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/hot-chocolate-graphql-aspnet-core</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/hangfire-vs-quartz-vs-channel-workers-aspnet-core</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/grpc-vs-rest-aspnet-core</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/github-actions-cicd-aspnet-core-angular</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/dotnet-aspire-aspnet-core-angular</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/content-security-policy-angular-aspnet-core</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/azure-service-bus-aspnet-core</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/azure-key-vault-secrets-aspnet-core</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/azure-functions-isolated-worker-dotnet-api</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/angular-ssr-hosted-aspnet-core</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.muhammadshahid.dev/blog/angular-reactive-forms-validation-problemdetails</loc>
-    <lastmod>2026-10-01T18:38:37.697Z</lastmod>
+    <lastmod>2026-10-01T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

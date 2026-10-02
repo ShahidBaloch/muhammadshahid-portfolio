@@ -66,7 +66,7 @@
     z-index: 0;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
+  @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
     body::before {
       animation: glow-drift 16s ease-in-out infinite;
     }
