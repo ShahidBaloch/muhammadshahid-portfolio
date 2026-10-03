@@ -1,6 +1,6 @@
 ---
-title: "Getting Started with .NET Aspire for ASP.NET Core and Angular"
-description: "Getting started with .NET Aspire for ASP.NET Core and Angular — AppHost basics, service defaults, adding an API and Angular frontend, dashboard overview, and how Aspire differs from Docker Compose local. Not a production Azure Aspire volume claim."
+title: "Getting Started with .NET Aspire: AppHost, API, and Angular"
+description: "Getting started with .NET Aspire: the AppHost, service defaults, and adding the ASP.NET Core API and the Angular app. That is the whole scope of this page."
 date: "2026-10-01"
 category: "architecture"
 tags: [".NET Aspire", "ASP.NET Core", "Angular", "Docker", "Cloud Native"]
@@ -18,7 +18,7 @@ faq:
     a: "No. Aspire improves inner-loop orchestration and cloud-ready defaults. Production deployment targets vary; treat Aspire as the local/cloud-native developer story unless you deliberately adopt its deployment patterns."
 ---
 
-**.NET Aspire for ASP.NET Core and Angular** is a code-first AppHost that starts your API, supporting resources (Redis, SQL), and the Angular frontend together — with service defaults for health, resilience, and OpenTelemetry — instead of hand-maintaining a brittle Compose file for every dependency.
+**.NET Aspire for ASP.NET Core and Angular** on this page is the AppHost, service defaults, and adding the API and the Angular app. The dashboard is [Aspire dashboard](/blog/dotnet-aspire-dashboard). Versus Compose is [Aspire vs Docker Compose](/blog/dotnet-aspire-vs-docker-compose).
 
 ```text
 AppHost (orchestrator)

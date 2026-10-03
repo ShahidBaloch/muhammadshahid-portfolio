@@ -1,6 +1,6 @@
 ---
-title: ".NET Interview Questions and Answers (C#, ASP.NET Core, .NET Core)"
-description: ".NET interview questions and answers for mid-to-senior roles — net interview questions, .NET Core interview questions, ASP.NET Core Web API, C# async, EF Core, and Angular scenarios with strong answers and red flags."
+title: ".NET Interview Questions and Answers: A Topic Map"
+description: ".NET interview questions and answers as a topic map. Use this page to pick a track, then open the linked post that actually holds the scenario answers."
 date: "2026-09-08"
 updated: "2026-09-14"
 category: "interview-questions"
@@ -38,7 +38,7 @@ faq:
     a: "This article is the bank and map. The [interview questions hub](/learning/interview-questions) only routes into async, ASP.NET Core, EF Core, and Angular tracks."
 ---
 
-Whether the job post says **.NET interview questions**, **net interview questions**, **.NET Core interview questions**, or **ASP.NET Core Web API**, hiring loops test the same thing: can you diagnose production failures and defend a fix?
+Whether the job post says **.NET interview questions**, **net interview questions**, or **.NET Core interview questions**, this page is the map of that loop, not the page that answers one stack.
 
 This guide is the question bank for that loop — topic tables, on-page sample answers with **strong answer / red flag**, and links to full scenario write-ups. It is not a 300-line MCQ dump.
 

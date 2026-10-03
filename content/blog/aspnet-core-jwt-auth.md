@@ -1,6 +1,6 @@
 ---
-title: "ASP.NET Core JWT Auth: A Practical Checklist"
-description: "Production ASP.NET Core JWT authentication checklist — token lifetimes, refresh rotation, authorization policies, Angular client habits, and go-live security review."
+title: "ASP.NET Core JWT Auth: Issuance, Validation, Lifetimes"
+description: "ASP.NET Core JWT checklist for issuance, validation, and token lifetimes only. Refresh rotation and the Angular interceptor each have their own post."
 date: "2026-06-12"
 updated: "2026-09-12"
 category: "authentication"
@@ -16,7 +16,7 @@ faq:
     a: "For a kiosk or a job that already has another session, maybe. For Angular users who should stay signed in, you need rotation or a BFF. Those are separate articles."
 ---
 
-**JWT authentication in ASP.NET Core** is a system — not a token endpoint — covering issuance, validation, lifetimes, refresh, policies, and how the SPA stores and sends credentials.
+**JWT authentication in ASP.NET Core** on this page is issuance, validation, and lifetimes. Refresh rotation is [refresh token rotation](/blog/aspnet-core-jwt-refresh-token-rotation). The Angular client is [JWT interceptors](/blog/angular-jwt-interceptors).
 
 ```text
 Login ──► access JWT (short) + refresh (long, server-tracked)

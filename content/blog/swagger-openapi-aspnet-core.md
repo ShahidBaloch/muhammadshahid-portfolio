@@ -1,6 +1,6 @@
 ---
-title: "Swagger vs OpenAPI in ASP.NET Core — Swashbuckle, NSwag, and Scalar"
-description: "Swagger vs OpenAPI in ASP.NET Core — Swashbuckle, built-in OpenAPI (.NET 9+), Scalar, NSwag, JWT in Swagger UI, FluentValidation envelopes, and Angular codegen."
+title: "Swagger vs OpenAPI: The UI Name vs the Document"
+description: "Swagger is the UI name; OpenAPI is the document. Say both on a README. Package choice lives at /blog/dotnet-9-openapi-vs-swashbuckle, not on this page."
 date: "2026-09-12"
 updated: "2026-09-13"
 category: "api-design"
@@ -43,7 +43,7 @@ faq:
 
 ## Definition
 
-**Swagger** and **OpenAPI** describe the same workflow with different words: your ASP.NET Core app exposes HTTP endpoints; a tool reflects them into an **OpenAPI document** (`openapi.json`); humans browse that document in **Swagger UI** or **Scalar**; Angular and partners consume the same file for typed clients. Since **.NET 9**, Microsoft generates the document with **`Microsoft.AspNetCore.OpenApi`** — **`Swashbuckle.AspNetCore`** is no longer in the template, but it is not deleted from NuGet.
+**Swagger** is the UI name people browse. **OpenAPI** is the document (`openapi.json`). Package choice lives on [which OpenAPI generator to install](/blog/dotnet-9-openapi-vs-swashbuckle).
 
 _Article sections — jump links for screen readers and keyboard users._
 

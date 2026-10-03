@@ -1,6 +1,6 @@
 ---
-title: "Deploy ASP.NET Core APIs to Azure App Service"
-description: "Lessons from shipping ASP.NET Core APIs to Azure App Service in healthcare and SaaS — configuration, deployment slots, secrets, health checks, and the failures that only show up after go-live."
+title: "Azure App Service Go-Live Checklist for ASP.NET Core"
+description: "Go-live checklist for ASP.NET Core on Azure App Service: deployment slots, secrets, health checks, and Data Protection keys. Not a zip-deploy tutorial."
 date: "2026-03-20"
 category: "azure"
 updated: "2026-09-07"

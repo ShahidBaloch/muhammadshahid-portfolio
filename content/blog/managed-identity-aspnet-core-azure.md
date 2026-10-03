@@ -272,4 +272,4 @@ Keep credential construction boring and centralized so every new Azure client do
 
 ## Related
 
-**Related:** [Azure App Service](/blog/azure-app-service-aspnet-core) · [Blob uploads](/blog/azure-blob-aspnet-core-uploads) · [Appsettings](/blog/aspnet-core-appsettings-localappsettings) · [Entra ID Angular](/blog/entra-id-angular-aspnet-core) · Key Vault config companion (W16 slug when published)
+**Related:** [Azure App Service](/blog/azure-app-service-aspnet-core) · [Blob uploads](/blog/azure-blob-aspnet-core-uploads) · [Appsettings](/blog/aspnet-core-appsettings-localappsettings) · [Entra ID Angular](/blog/entra-id-angular-aspnet-core) · [Key Vault Secrets](/blog/azure-key-vault-secrets-aspnet-core)

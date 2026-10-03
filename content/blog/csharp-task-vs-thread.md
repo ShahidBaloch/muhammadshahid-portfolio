@@ -200,8 +200,6 @@ Request-path checklist: [async and await in ASP.NET Core](/blog/csharp-async-awa
 
 ## If an interviewer asks
 
-Task vs Thread vs pool; async vs multithreading in 30 seconds; does await create a thread; does await block; I/O vs CPU; TAP; state machine; Sleep vs Delay; when sync is OK.
+**30-second answer:** A `Thread` is an actual OS execution thread with its own stack and kernel overhead. A `Task` represents an asynchronous operation (a promise of eventual completion) that usually runs on the CLR `ThreadPool`. Async/await uses tasks to yield threads during I/O without blocking.
 
-**Strong answer:** Task is a promise. Async frees workers during I/O. Threads are for CPU or dedicated listeners.
-
-”. That PR is usually reversed in an afternoon.
+**Strong answer:** Use `Task` and `async`/`await` by default for all I/O-bound operations (database, HTTP, disk) to free thread pool threads for incoming requests. Use `Task.Run` only for CPU-bound computation, and avoid creating raw OS threads (`new Thread`) on the ASP.NET Core request path. Wrapping `ToListAsync()` in `Task.Run` or calling `.Result` steals pool workers and is an immediate red flag in production code reviews.

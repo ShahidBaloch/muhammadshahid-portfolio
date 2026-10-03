@@ -1,6 +1,6 @@
 ---
-title: "C# Async and Await in ASP.NET Core: Stop Blocking Your API"
-description: "C# async/await on ASP.NET Core request paths — stop .Result blocking, pass CancellationToken, avoid WhenAll on one DbContext. Language primer: see the async learning hub."
+title: "C# Async Await and CancellationToken on ASP.NET Core"
+description: "Await on the ASP.NET Core request path and pass CancellationToken into SQL and HTTP. Blocking the thread pool is a separate article, not this one."
 date: "2026-08-12"
 updated: "2026-09-14"
 category: "async-concurrency"

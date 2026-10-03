@@ -1,6 +1,6 @@
 ---
-title: "ASP.NET Core RBAC: Policies Over Scattered Roles"
-description: "ASP.NET Core RBAC with named authorization policies — role claims at login, tenant resource handlers, permission claims, and why Angular UI hiding is not security."
+title: "ASP.NET Core RBAC: Named Role Policies and 403 vs 401"
+description: "ASP.NET Core RBAC with named role policies, and why a failed policy returns 403 rather than 401. Hiding a button in the UI is not enforcement."
 date: "2026-03-08"
 category: "authentication"
 tags: ["ASP.NET Core", "RBAC", "Security", "Healthcare"]

@@ -1,66 +1,145 @@
 ---
-title: "Git Checkout a Remote Branch: Local Tracking and Fetch"
-description: "How to check out a remote Git branch that does not exist locally yet: fetch, then create a local branch that tracks origin. A name by itself is not enough."
+title: "Git Checkout Remote Branch: Local Tracking, git switch, and Detached HEAD"
+description: "How to check out a remote Git branch: fetch refs, create local tracking branches with git switch, recover from detached HEAD states, and prune deleted branches."
 date: "2026-09-18"
-updated: "2026-09-18"
-category: "architecture"
-tags: ["Git", "Checkout", "Remote", ".NET"]
+updated: "2026-10-03"
+category: "devops"
+tags: ["Git", "Checkout", "Remote", "DevOps", "Workflow"]
 related:
   - git-merge-vs-rebase
   - docker-dotnet-angular-local
   - freelance-dotnet-project-checklist
 faq:
-  - q: "How do I check out a branch that exists only on the remote?"
-    a: "Fetch first so your machine knows the branch exists. Then git switch -c name origin/name, or git switch name if your Git version already matches the remote name to a tracking branch."
-  - q: "Why does git checkout feature fail when I can see the branch on GitHub?"
-    a: "Your local repo has not fetched it, or the local name does not match. GitHub showing the branch does not put it on your disk. git fetch origin, then switch."
-  - q: "What is a detached HEAD after checkout?"
-    a: "You checked out the remote ref itself, origin/feature, instead of a local branch. Commits you make there are easy to lose. Create a local branch before you commit."
+  - q: "What is the modern Git command to check out a remote branch?"
+    a: "Run 'git fetch origin' to download the latest remote refs, followed by 'git switch <branch-name>'. Modern Git automatically detects origin/<branch-name> and creates a matching local tracking branch."
+  - q: "Why does 'git checkout <branch>' say 'error: pathspec did not match any file'?"
+    a: "Your local Git repository index is unaware that the branch was created on the remote server (e.g. GitHub/GitLab). Run 'git fetch origin' first to update your local remote tracking references."
+  - q: "What causes a 'Detached HEAD' state and how do I fix it?"
+    a: "Detached HEAD occurs when you check out a commit SHA or a direct remote pointer ('git switch origin/feature') instead of a named local branch. Any commits created in detached HEAD can be lost. Fix it by running 'git switch -c <my-new-branch>' before switching away."
+  - q: "How do I remove local references to branches that were deleted on GitHub?"
+    a: "Run 'git fetch origin --prune' (or 'git remote prune origin'). This cleans up stale local tracking references (origin/old-feature) without deleting your unmerged local branches."
 ---
 
-The branch is on the server. Your laptop does not have it until you fetch. Checkout is the local name you then work on, tied to that remote branch so pull and push know where to go.
+**Checking out a remote Git branch** creates a local branch on your developer workstation that tracks a corresponding branch on the remote server (`origin`). Understanding the difference between remote tracking references (`origin/feature`), local branches (`feature`), and `HEAD` prevents accidental lost commits and detached HEAD states.
 
-This is not merge versus rebase. That choice is [git merge vs rebase](/blog/git-merge-vs-rebase). Hub: [Architecture](/learning/architecture).
+```text
+Remote Server (GitHub / GitLab):
+  └── origin/feature/payments ──(git fetch origin)──► Local Repo (.git/refs/remotes/origin/...)
+                                                            │
+                                                            ▼ (git switch feature/payments)
+                                                      Local Working Tree:
+                                                        └── feature/payments [tracks origin]
+```
+
+**New to this** → start with [The standard 2-step workflow](#the-standard-2-step-workflow). **Detached HEAD recovery** → [Fixing detached HEAD](#recovering-from-a-detached-head-state). **Merge vs Rebase** → [Git merge vs rebase guide](/blog/git-merge-vs-rebase). **Interview prep** → [If an interviewer asks](#if-an-interviewer-asks).
 
 ## Real-world analogy
 
-The office has a folder with today's drawings. You can read it over someone's shoulder, which is checking out `origin/feature` and ending up detached. Or you take a copy, put your name on it, and write on the copy. That copy is your local branch. Push sends your copy back. Reading over the shoulder and then writing in the margin is how a commit disappears the next time you switch away.
+Imagine a central company whiteboard (`GitHub`). A colleague writes down a new project plan under `origin/feature-auth`.
+- If you never look at the whiteboard (`git fetch`), your notebook won't know the project exists.
+- If you read the whiteboard and transcribe it directly into your personal notebook (`git switch feature-auth`), you have a local working copy you can safely edit and annotate.
+- If you try to write directly on the glass over your colleague's shoulder (`git checkout origin/feature-auth`), you enter a "Detached HEAD" state: the moment someone walks past and wipes the glass, your unstored notes are gone.
 
-## Worked example
+## The standard 2-step workflow
 
-A teammate pushes `feature/invoices`. You run `git checkout feature/invoices`. Git says the path does not match any file, or it offers to create a branch and then complains it cannot see a start point. `git branch -a` does not list `origin/feature/invoices`. The remote on GitHub is ahead of your last fetch. `git fetch origin` downloads the ref. `git switch -c feature/invoices origin/feature/invoices` creates your local branch at that commit and sets upstream to `origin/feature/invoices`. `git status` says "Your branch is up to date with 'origin/feature/invoices'." Now pull and push have a destination.
+Modern Git (version 2.23+) split the overloaded `git checkout` command into `git switch` (for branches) and `git restore` (for files).
 
-| Command | What you get |
-|---|---|
-| `git fetch origin` | The remote branch names, no local work branch yet |
-| `git switch feature/invoices` | Works when Git can match one remote branch of that name |
-| `git switch -c feature/invoices origin/feature/invoices` | A local branch you can commit on, tracking the remote |
-| `git switch origin/feature/invoices` | Detached HEAD. Do not commit here |
-
-## Code
+### Step 1: Fetch remote refs from origin
 
 ```bash
 git fetch origin
-git switch -c feature/invoices origin/feature/invoices
 ```
 
-If the branch was fetched before and Git already knows the name:
+This synchronizes your local repository's knowledge of all remote branches, tags, and commits without touching your current working directory or modifying your uncommitted local files.
+
+### Step 2: Switch to the branch
 
 ```bash
-git fetch origin
+# Modern syntax (Recommended):
 git switch feature/invoices
+
+# If you are using legacy Git (<2.23):
+git checkout feature/invoices
 ```
 
-Confirm the tracking link:
+If `feature/invoices` exists in exactly one remote (`origin/feature/invoices`) and does not exist locally yet, Git automatically:
+1. Creates a local branch named `feature/invoices`.
+2. Points it to the same commit as `origin/feature/invoices`.
+3. Sets up upstream tracking so `git pull` and `git push` work automatically.
+
+## Checking out with a custom local name or explicit upstream
+
+If you want your local branch to have a different name than the remote branch:
 
 ```bash
+# Creates local branch 'my-invoices' tracking 'origin/feature/invoices'
+git switch -c my-invoices --track origin/feature/invoices
+
+# Verify upstream tracking link
 git status -sb
+# Output: ## my-invoices...origin/feature/invoices
 ```
 
-You want `## feature/invoices...origin/feature/invoices`. If the second half is missing, the next push will ask you where to send it. Set it once:
+If a local branch already exists but lost its upstream tracking link:
 
 ```bash
 git branch -u origin/feature/invoices
 ```
 
-Do not commit while `git status` says "HEAD detached." Switch to a named branch first, then commit. The same fetch-then-switch is what you want before a container build that must use a review branch: [Docker with Angular](/blog/docker-dotnet-angular-local).
+## Recovering from a "Detached HEAD" state
+
+If you accidentally run:
+
+```bash
+git checkout origin/feature/invoices   # ❌ Enters Detached HEAD state
+```
+
+Git will warn: `You are in 'detached HEAD' state. You can look around, make experimental changes...`
+
+### If you made commits in Detached HEAD and want to save them:
+Do **not** switch back to `main` yet! Run:
+
+```bash
+# 1. Create a new branch pointing to your current detached commit
+git switch -c feature/saved-work
+
+# 2. Push to origin
+git push -u origin feature/saved-work
+```
+
+### If you already switched away and lost your commits:
+Retrieve the commit hash using the Git reference log (`git reflog`):
+
+```bash
+git reflog
+# Look for the commit: "e4a19b2 HEAD@{1}: commit: Added invoice calculations"
+
+# Restore into a new branch:
+git switch -c feature/recovered-work e4a19b2
+```
+
+## Pruning deleted remote branches
+
+When pull requests are merged and deleted on GitHub, your local machine still keeps stale `origin/feature` references. Clean them with:
+
+```bash
+git fetch --prune origin
+```
+
+To configure Git to prune deleted branches automatically on every fetch:
+
+```bash
+git config --global fetch.prune true
+```
+
+## Common mistakes and pitfalls
+
+- **Running `git checkout feature` without fetching first**: If a teammate pushed a new branch 5 minutes ago, local Git will return `error: pathspec 'feature' did not match any file(s) known to git`. Always run `git fetch origin` first.
+- **Committing directly in Detached HEAD**: Making commits while detached and then running `git checkout main` leaves those commits dangling without a branch reference, subjecting them to eventual Git garbage collection (`git gc`).
+- **Name collision between branch name and file path**: In legacy `git checkout`, if a folder is named `api` and a branch is named `api`, running `git checkout api` can restore files instead of switching branches. `git switch api` avoids this ambiguity completely.
+
+## If an interviewer asks
+
+**30-second answer:** To check out a remote branch, run `git fetch origin` to update local tracking references, followed by `git switch <branch-name>`. Modern Git automatically creates the local branch and configures upstream tracking. Never commit directly to `origin/<branch>` as it enters a detached HEAD state.
+
+**Strong answer:** In modern team workflows, we use `git switch` to separate branch management from file restoration. We configure `fetch.prune = true` globally so deleted remote branches are cleaned up automatically. When developers encounter detached HEAD states, we recover unreferenced commits using `git reflog` and bind them to a named branch using `git switch -c <branch> <commit-hash>`.

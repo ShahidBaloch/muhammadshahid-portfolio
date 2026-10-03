@@ -1,71 +1,192 @@
 ---
-title: "ASP.NET Core API Versioning for Angular Clients"
-description: "How to version an ASP.NET Core API that an Angular app calls: URL versus header, what to do with old clients, and how generated clients stay in sync."
+title: "ASP.NET Core API Versioning for Angular Clients: Asp.Versioning Guide"
+description: "Implement API versioning in ASP.NET Core with Asp.Versioning.Http, URL/Header strategies, OpenAPI multi-version Swagger docs, deprecation sunsets, and Angular client codegen."
 date: "2026-09-18"
-updated: "2026-09-18"
+updated: "2026-10-03"
 category: "api-design"
-tags: ["ASP.NET Core", "API Design", "Angular", "OpenAPI"]
+tags: ["ASP.NET Core", "API Design", "Angular", "OpenAPI", "Architecture", "REST"]
 related:
   - aspnet-core-minimal-apis
   - swagger-openapi-aspnet-core
   - angular-dotnet-integration
   - aspnet-core-api-validation
 faq:
-  - q: "How should I version an ASP.NET Core API used by Angular?"
-    a: "Pick one signal and document it. URL versioning (/api/v1) is the easiest for an Angular app and for generated clients. Header versioning is fine if every client, including the SPA, always sends it."
-  - q: "Do I need Microsoft.AspNetCore.Mvc.Versioning?"
-    a: "For Minimal APIs, a route prefix or an explicit group is enough. For controllers, the versioning package (or the newer Asp.Versioning.Http) keeps several versions on one route. Do not invent a custom header if a prefix already works."
-  - q: "How do I stop old Angular builds from breaking?"
-    a: "Keep the previous version deployed until the SPA is forced to update. Sunset it with a response header and a date, not a silent shape change on v1."
+  - q: "What is the best API versioning strategy for Angular applications?"
+    a: "URL segment versioning (e.g. /api/v1/orders, /api/v2/orders) is the most reliable strategy for Angular SPAs. It is transparent in proxy rules, integrates seamlessly with OpenAPI codegen tools (like ng-openapi-gen), and avoids header-dropping bugs across CDN caches or reverse proxies."
+  - q: "What package should I use for API versioning in modern .NET 8/9/10?"
+    a: "Use Asp.Versioning.Http (for Minimal APIs) and Asp.Versioning.Mvc.ApiExplorer. The legacy Microsoft.AspNetCore.Mvc.Versioning package has been superseded by the official .NET Foundation Asp.Versioning suite."
+  - q: "How do I communicate API deprecation and sunset to frontend teams?"
+    a: "Emit standard HTTP response headers: 'Deprecation: @<timestamp>' and 'Sunset: <date>', or configure ReportApiVersions = true to automatically return 'api-supported-versions' and 'api-deprecated-versions' headers on every response."
+  - q: "When should I increment an API major version?"
+    a: "Increment a major version only for breaking contract changes: removing a field, renaming a property, changing field data types, altering status codes, or adding mandatory request headers. Adding optional fields or new endpoints does not require a new version."
 ---
 
-Angular and the API ship on different cadences. Versioning is how a response shape can change without breaking a tab that has not refreshed.
+**API versioning in ASP.NET Core** decouples backend schema evolutions from frontend release cycles. Because Angular SPAs are cached in user browser tabs across shifts or days, an unversioned breaking change on the server immediately causes runtime JSON parsing failures or broken form submissions.
 
-Hub: [API design](/learning/api-design). Related: [Minimal APIs](/blog/aspnet-core-minimal-apis), [OpenAPI](/blog/swagger-openapi-aspnet-core), [Angular integration](/blog/angular-dotnet-integration).
+```text
+Angular Client (Cached in Tab v1.4) ──► GET /api/v1/orders ──► Returns { "total": 120.50 }
+                                                                 (Supported, returns 200)
+
+Angular Client (New Release v2.0)   ──► GET /api/v2/orders ──► Returns { "amount": 120.50, "currency": "USD" }
+                                                                 (New schema, returns 200)
+```
+
+**New to this** → start with [URL vs Header strategies](#versioning-strategies-url-vs-header-vs-query). **Minimal API setup** → [Asp.Versioning code example](#complete-aspversioning-setup-for-minimal-apis). **OpenAPI docs** → [Swagger/OpenAPI guide](/blog/swagger-openapi-aspnet-core). **Interview prep** → [If an interviewer asks](#if-an-interviewer-asks).
 
 ## Real-world analogy
 
-A restaurant reprints the menu. Tables that already have the old card still order the old dish. You do not walk over and scratch a line off their card. You leave v1 in their hands until those tables leave, and the new card is v2. A silent edit to v1 is a customer getting a different meal than the one they ordered.
+Imagine a restaurant menu: When the kitchen introduces an updated recipe (v2), they print a new menu card with the updated ingredients. They do not snatch the older menu (v1) out of the hands of diners who are already sitting at Table 4 placing their order. Table 4 receives what their card promised. When Table 4 leaves, the table is reset with the new menu card. A silent in-place schema change is serving an unannounced ingredient to a customer expecting the original recipe.
 
-## Worked example
+## Versioning strategies: URL vs Header vs Query
 
-The Angular app on production was built yesterday and calls `GET /api/v1/orders`. This morning the API renames `total` to `amount` on that same route. Anyone who has not refreshed gets a blank total and a console error. The fix is a new route group, `/api/v2/orders`, that returns `amount`. v1 keeps `total` until you have shipped the new bundle and watched the v1 calls drop. Then v1 returns 410, not a quietly different JSON.
+| Strategy | Example | Pros | Cons | Recommendation |
+|---|---|---|---|---|
+| **URL Path Segment** | `/api/v1/orders`<br>`/api/v2/orders` | Clear in logs, easy caching, trivial OpenAPI separation, works with all HTTP clients. | Violates pure REST URI purism (resource URI changes). | **Strongly Recommended for SPAs & Mobile** |
+| **Request Header** | `X-Api-Version: 2.0` | Clean URIs, easy default fallbacks. | Prone to being stripped by proxies; harder to share links in browser address bars. | Good for internal enterprise microservices. |
+| **Query Parameter** | `/api/orders?api-version=2.0` | Simple for ad-hoc browser testing. | Pollutes cache keys; easy for frontend developers to omit. | Avoid for core APIs. |
 
-## Pick one signal
+## Complete Asp.Versioning setup for Minimal APIs
 
-| Style | Angular call | When to use it |
-|---|---|---|
-| URL `/api/v1/orders` | Obvious in the generated client | Default for SPAs |
-| Header `api-version: 1.0` | Easy to forget in one interceptor | Several versions on one path |
-| Query `?api-version=1.0` | Cache keys get noisy | Avoid unless a client cannot set headers |
+Install `Asp.Versioning.Http` and `Asp.Versioning.Mvc.ApiExplorer`:
 
-Use the URL unless a gateway already requires a header. One signal. Not both.
-
-## URL groups
-
-```csharp
-var v1 = app.MapGroup("/api/v1/orders");
-v1.MapGet("/", ListOrdersV1);
-v1.MapGet("/{id:guid}", GetOrderV1);
-
-var v2 = app.MapGroup("/api/v2/orders");
-v2.MapGet("/", ListOrdersV2);
+```bash
+dotnet add package Asp.Versioning.Http
+dotnet add package Asp.Versioning.Mvc.ApiExplorer
 ```
 
-V2 can return `customerId` as a string and drop a field V1 still sends. Do not change V1 "because the Angular code on main already expects V2." Production still has yesterday's bundle.
+### 1. Registering versioning services in Program.cs
 
-## What belongs in a version
+```csharp
+// Program.cs
+using Asp.Versioning;
+using Asp.Versioning.Builder;
 
-Version a breaking change: removed field, renamed field, different enum, required body property. Do not version a new optional field. Old clients ignore it.
+var builder = WebApplication.CreateBuilder(args);
 
-## Angular
+// 1. Add API versioning services
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true; // Emits api-supported-versions headers
+    options.ApiVersionReader = ApiVersionReader.Combine(
+        new UrlSegmentApiVersionReader(),
+        new HeaderApiVersionReader("X-Api-Version")
+    );
+})
+.AddApiExplorer(options =>
+{
+    // Format version as "'v'major[.minor][-status]" (e.g. 'v1', 'v2.1')
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
 
-Point the OpenAPI generator at `/openapi/v1.json` and `/openapi/v2.json` if both exist. One generated folder per version. The interceptor should not guess the version from the URL if the generated client already embeds it.
+var app = builder.Build();
 
-A refresh-token interceptor must still run for every version. Versioning is not auth. See [JWT refresh](/blog/aspnet-core-jwt-refresh-token-rotation).
+// 2. Define an ApiVersionSet for route groups
+ApiVersionSet versionSet = app.NewApiVersionSet()
+    .HasApiVersion(new ApiVersion(1, 0))
+    .HasApiVersion(new ApiVersion(2, 0))
+    .HasDeprecatedApiVersion(new ApiVersion(1, 0)) // Marks v1 as deprecated
+    .ReportApiVersions()
+    .Build();
 
-## Sunset
+// 3. Map Versioned Minimal API Groups
+var v1Group = app.MapGroup("/api/v{version:apiVersion}/orders")
+    .WithApiVersionSet(versionSet)
+    .MapToApiVersion(new ApiVersion(1, 0));
 
-When V1 dies, return `Sunset` and `Deprecation` on V1 responses for a release, then 410. Do not 404 a route the SPA still calls. 410 tells the client the contract ended. Log the user-agent so you know which build is left.
+var v2Group = app.MapGroup("/api/v{version:apiVersion}/orders")
+    .WithApiVersionSet(versionSet)
+    .MapToApiVersion(new ApiVersion(2, 0));
 
-Ecom case that uses this kind of API boundary: [Ecom_NET10](/work/ecom-net10).
+// V1 Handler (Deprecated legacy schema)
+v1Group.MapGet("/", (CancellationToken ct) =>
+{
+    return Results.Ok(new[]
+    {
+        new { Id = Guid.NewGuid(), Total = 150.00m, Customer = "Alice" }
+    });
+});
+
+// V2 Handler (New enriched schema with ISO currency)
+v2Group.MapGet("/", (CancellationToken ct) =>
+{
+    return Results.Ok(new[]
+    {
+        new { Id = Guid.NewGuid(), Amount = 150.00m, Currency = "USD", CustomerName = "Alice" }
+    });
+});
+
+app.Run();
+```
+
+## Automating multi-version OpenAPI / Swagger documents
+
+To generate individual OpenAPI documents (`/openapi/v1.json`, `/openapi/v2.json`) for frontend client generation:
+
+```csharp
+// Infrastructure/Swagger/ConfigureSwaggerOptions.cs
+using Asp.Versioning.ApiExplorer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+
+public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
+{
+    private readonly IApiVersionDescriptionProvider _provider;
+
+    public ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider) =>
+        _provider = provider;
+
+    public void Configure(SwaggerGenOptions options)
+    {
+        foreach (var description in _provider.ApiVersionDescriptions)
+        {
+            options.SwaggerDoc(description.GroupName, new OpenApiInfo
+            {
+                Title = $"Portfolio API {description.ApiVersion}",
+                Version = description.ApiVersion.ToString(),
+                Description = description.IsDeprecated
+                    ? "⚠️ This API version has been deprecated."
+                    : "Active API version."
+            });
+        }
+    }
+}
+```
+
+## Deprecation, Sunsetting, and HTTP 410 Gone
+
+When retiring an older API version, adhere to standard HTTP lifecycle headers:
+
+1. **Step 1 (Deprecation warning)**: Return `Deprecation: @<timestamp>` header. The endpoint continues to return 200 OK.
+2. **Step 2 (Sunset date announced)**: Return `Sunset: Wed, 11 Nov 2026 00:00:00 GMT` header, notifying developers of the shutdown date.
+3. **Step 3 (Decommission)**: Return `410 Gone` with a ProblemDetails payload pointing to the v2 migration guide, rather than a generic 404.
+
+```csharp
+app.MapGet("/api/v0/legacy-orders", (HttpResponse response) =>
+{
+    response.Headers["Sunset"] = "Wed, 11 Nov 2026 00:00:00 GMT";
+    return Results.Problem(
+        statusCode: StatusCodes.Status410Gone,
+        title: "API Version Decommissioned",
+        detail: "API v0 has been sunset. Please update your client to call /api/v2/orders.",
+        instance: "/api/v0/legacy-orders"
+    );
+});
+```
+
+## Common mistakes and pitfalls
+
+- **Breaking v1 schema because "frontend already updated"**: Deploying a backend breaking change to `/api/v1` before all user browser sessions refresh will cause immediate JavaScript client errors.
+- **Versioning every minor internal refactor**: Creating `/api/v2` because you refactored a repository or added an optional field introduces version sprawl. Only version breaking contract changes.
+- **Neglecting OpenAPI version segregation**: Mixing all API versions into a single OpenAPI document creates duplicate method signatures in generated TypeScript client libraries.
+- **Hardcoding version numbers inside Angular components**: Instead of typing `/api/v1/` in individual services, configure versioned endpoints in OpenAPI codegen scripts or environment config.
+
+## If an interviewer asks
+
+**30-second answer:** API versioning manages breaking contract changes between client and server without disrupting active users. In ASP.NET Core, we use `Asp.Versioning.Http` with URL path segments (`/api/v1`, `/api/v2`), emit `api-supported-versions` and `Sunset` headers, and generate versioned OpenAPI specifications for typed Angular client generation.
+
+**Strong answer:** In production ASP.NET Core architectures, URL segment versioning is the gold standard for SPAs and mobile apps because it isolates caching layers and enables automated OpenAPI client generation per version. We group routes using `ApiVersionSet`, mark older versions with `HasDeprecatedApiVersion` so response headers warn consuming teams, and follow a phased deprecation policy (`Deprecation` → `Sunset` → `410 Gone`). Non-breaking additive changes (new optional fields or endpoints) remain in the current version to avoid version explosion.
