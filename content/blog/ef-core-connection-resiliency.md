@@ -1,6 +1,6 @@
 ---
-title: "EF Core Connection Resiliency: EnableRetryOnFailure & Execution Strategies"
-description: "Master EF Core connection resiliency in Azure SQL: EnableRetryOnFailure, handling user-initiated transactions with CreateExecutionStrategy, and preventing double-write bugs."
+title: "EF Core Connection Resiliency & EnableRetryOnFailure"
+description: "Master EF Core connection resiliency in Azure SQL: EnableRetryOnFailure, handling transactions with CreateExecutionStrategy, and idempotency."
 date: "2026-09-18"
 updated: "2026-10-03"
 category: "ef-core"

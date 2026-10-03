@@ -1,6 +1,6 @@
 ---
 title: "ASP.NET Core API Versioning for Angular Clients: Asp.Versioning Guide"
-description: "Implement API versioning in ASP.NET Core with Asp.Versioning.Http, URL/Header strategies, OpenAPI multi-version Swagger docs, deprecation sunsets, and Angular client codegen."
+description: "Implement API versioning in ASP.NET Core with Asp.Versioning.Http, URL/Header strategies, OpenAPI Swagger docs, and deprecation sunset headers."
 date: "2026-09-18"
 updated: "2026-10-03"
 category: "api-design"

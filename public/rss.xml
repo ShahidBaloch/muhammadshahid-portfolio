@@ -470,11 +470,11 @@
       <description><![CDATA[Git merge vs git rebase in enterprise teams: 3-way merge commits vs linear history, interactive squashing (git rebase -i), conflict resolution, and the golden rule of rebasing.]]></description>
     </item>
     <item>
-      <title><![CDATA[Git Checkout Remote Branch: Local Tracking, git switch, and Detached HEAD]]></title>
+      <title><![CDATA[Git Checkout Remote Branch: git switch and Tracking]]></title>
       <link>https://www.muhammadshahid.dev/blog/git-checkout-remote-branch</link>
       <guid>https://www.muhammadshahid.dev/blog/git-checkout-remote-branch</guid>
       <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[How to check out a remote Git branch: fetch refs, create local tracking branches with git switch, recover from detached HEAD states, and prune deleted branches.]]></description>
+      <description><![CDATA[How to check out a remote Git branch: fetch refs, create local tracking branches with git switch, recover from detached HEAD, and prune branches.]]></description>
     </item>
     <item>
       <title><![CDATA[Microsoft Entra ID for Angular and ASP.NET Core]]></title>
@@ -498,11 +498,11 @@
       <description><![CDATA[How to run EF Core migrations in production without a startup race: generate a SQL script, apply it once in the pipeline, and use expand and contract when the app is already live.]]></description>
     </item>
     <item>
-      <title><![CDATA[EF Core Connection Resiliency: EnableRetryOnFailure & Execution Strategies]]></title>
+      <title><![CDATA[EF Core Connection Resiliency & EnableRetryOnFailure]]></title>
       <link>https://www.muhammadshahid.dev/blog/ef-core-connection-resiliency</link>
       <guid>https://www.muhammadshahid.dev/blog/ef-core-connection-resiliency</guid>
       <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Master EF Core connection resiliency in Azure SQL: EnableRetryOnFailure, handling user-initiated transactions with CreateExecutionStrategy, and preventing double-write bugs.]]></description>
+      <description><![CDATA[Master EF Core connection resiliency in Azure SQL: EnableRetryOnFailure, handling transactions with CreateExecutionStrategy, and idempotency.]]></description>
     </item>
     <item>
       <title><![CDATA[.NET Framework vs .NET Core vs .NET 10]]></title>
@@ -533,18 +533,18 @@
       <description><![CDATA[C# OOP interview questions with scenario answers: abstract class vs interface, records, virtual and sealed, composition over inheritance, and what to say when the interviewer asks why.]]></description>
     </item>
     <item>
-      <title><![CDATA[C# Nullable Reference Types: Compiler Warnings, Attributes, and EF Core]]></title>
+      <title><![CDATA[C# Nullable Reference Types: Warnings and EF Core]]></title>
       <link>https://www.muhammadshahid.dev/blog/csharp-nullable-reference-types</link>
       <guid>https://www.muhammadshahid.dev/blog/csharp-nullable-reference-types</guid>
       <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Master C# Nullable Reference Types (NRT): compiler static analysis, null-forgiving operator hazards, C# attributes ([NotNullWhen], [MemberNotNull]), and EF Core entity mappings.]]></description>
+      <description><![CDATA[Master C# Nullable Reference Types (NRT): compiler static analysis, null attributes ([NotNullWhen]), C# required properties, and EF Core mappings.]]></description>
     </item>
     <item>
-      <title><![CDATA[ASP.NET Core Integration Tests with WebApplicationFactory & Testcontainers]]></title>
+      <title><![CDATA[ASP.NET Core Integration Tests with WebApplicationFactory]]></title>
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-webapplicationfactory</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-webapplicationfactory</guid>
       <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Master ASP.NET Core integration testing with WebApplicationFactory, Testcontainers SQL Server, custom Auth handlers, DbContext substitution, and Respawn test database isolation.]]></description>
+      <description><![CDATA[Master ASP.NET Core integration testing with WebApplicationFactory, Testcontainers SQL Server, synthetic Auth handlers, and Respawn isolation.]]></description>
     </item>
     <item>
       <title><![CDATA[Security Headers in ASP.NET Core: HSTS, CSP, and Clickjacking Defense]]></title>
@@ -586,7 +586,7 @@
       <link>https://www.muhammadshahid.dev/blog/aspnet-core-api-versioning</link>
       <guid>https://www.muhammadshahid.dev/blog/aspnet-core-api-versioning</guid>
       <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Implement API versioning in ASP.NET Core with Asp.Versioning.Http, URL/Header strategies, OpenAPI multi-version Swagger docs, deprecation sunsets, and Angular client codegen.]]></description>
+      <description><![CDATA[Implement API versioning in ASP.NET Core with Asp.Versioning.Http, URL/Header strategies, OpenAPI Swagger docs, and deprecation sunset headers.]]></description>
     </item>
     <item>
       <title><![CDATA[switchMap vs exhaustMap vs concatMap in Angular]]></title>
@@ -596,18 +596,18 @@
       <description><![CDATA[Which RxJS map to use when Angular calls an ASP.NET Core API: switchMap for search, exhaustMap for submit, concatMap when order matters. The wrong one drops or doubles the request.]]></description>
     </item>
     <item>
-      <title><![CDATA[Angular Standalone Components vs NgModules: A Production Migration Guide]]></title>
+      <title><![CDATA[Angular Standalone Components vs NgModules Guide]]></title>
       <link>https://www.muhammadshahid.dev/blog/angular-standalone-components</link>
       <guid>https://www.muhammadshahid.dev/blog/angular-standalone-components</guid>
       <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[How to bootstrap Angular apps with standalone components, replace NgModules with provideHttpClient and provideRouter, manage DI scoping, and avoid common migration pitfalls.]]></description>
+      <description><![CDATA[Bootstrap Angular apps with standalone components: replace NgModules with provideHttpClient, configure route lazy-loading, and manage DI scopes.]]></description>
     </item>
     <item>
-      <title><![CDATA[Angular OnPush Change Detection: Performance, Signals, and Immutability]]></title>
+      <title><![CDATA[Angular OnPush Change Detection: Performance & Signals]]></title>
       <link>https://www.muhammadshahid.dev/blog/angular-onpush-change-detection</link>
       <guid>https://www.muhammadshahid.dev/blog/angular-onpush-change-detection</guid>
       <pubDate>Fri, 18 Sep 2026 00:00:00 GMT</pubDate>
-      <description><![CDATA[Master Angular OnPush change detection: understand the component check cycle, immutable object updates, integration with Angular Signals, ChangeDetectorRef, and production debugging.]]></description>
+      <description><![CDATA[Master Angular OnPush change detection: input reference equality, Signals integration, ChangeDetectorRef methods, and immutable update patterns.]]></description>
     </item>
     <item>
       <title><![CDATA[Swagger vs OpenAPI: The UI Name vs the Document]]></title>

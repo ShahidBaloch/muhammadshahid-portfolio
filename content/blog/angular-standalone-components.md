@@ -1,6 +1,6 @@
 ---
-title: "Angular Standalone Components vs NgModules: A Production Migration Guide"
-description: "How to bootstrap Angular apps with standalone components, replace NgModules with provideHttpClient and provideRouter, manage DI scoping, and avoid common migration pitfalls."
+title: "Angular Standalone Components vs NgModules Guide"
+description: "Bootstrap Angular apps with standalone components: replace NgModules with provideHttpClient, configure route lazy-loading, and manage DI scopes."
 date: "2026-09-18"
 updated: "2026-10-03"
 category: "angular"

@@ -1,6 +1,6 @@
 ---
-title: "Git Checkout Remote Branch: Local Tracking, git switch, and Detached HEAD"
-description: "How to check out a remote Git branch: fetch refs, create local tracking branches with git switch, recover from detached HEAD states, and prune deleted branches."
+title: "Git Checkout Remote Branch: git switch and Tracking"
+description: "How to check out a remote Git branch: fetch refs, create local tracking branches with git switch, recover from detached HEAD, and prune branches."
 date: "2026-09-18"
 updated: "2026-10-03"
 category: "devops"

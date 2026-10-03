@@ -1,6 +1,6 @@
 ---
-title: "Angular OnPush Change Detection: Performance, Signals, and Immutability"
-description: "Master Angular OnPush change detection: understand the component check cycle, immutable object updates, integration with Angular Signals, ChangeDetectorRef, and production debugging."
+title: "Angular OnPush Change Detection: Performance & Signals"
+description: "Master Angular OnPush change detection: input reference equality, Signals integration, ChangeDetectorRef methods, and immutable update patterns."
 date: "2026-09-18"
 updated: "2026-10-03"
 category: "angular"

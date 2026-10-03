@@ -1,6 +1,6 @@
 ---
-title: "C# Nullable Reference Types: Compiler Warnings, Attributes, and EF Core"
-description: "Master C# Nullable Reference Types (NRT): compiler static analysis, null-forgiving operator hazards, C# attributes ([NotNullWhen], [MemberNotNull]), and EF Core entity mappings."
+title: "C# Nullable Reference Types: Warnings and EF Core"
+description: "Master C# Nullable Reference Types (NRT): compiler static analysis, null attributes ([NotNullWhen]), C# required properties, and EF Core mappings."
 date: "2026-09-18"
 updated: "2026-10-03"
 category: "architecture"

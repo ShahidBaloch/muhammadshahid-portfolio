@@ -1,6 +1,6 @@
 ---
-title: "ASP.NET Core Integration Tests with WebApplicationFactory & Testcontainers"
-description: "Master ASP.NET Core integration testing with WebApplicationFactory, Testcontainers SQL Server, custom Auth handlers, DbContext substitution, and Respawn test database isolation."
+title: "ASP.NET Core Integration Tests with WebApplicationFactory"
+description: "Master ASP.NET Core integration testing with WebApplicationFactory, Testcontainers SQL Server, synthetic Auth handlers, and Respawn isolation."
 date: "2026-09-18"
 updated: "2026-10-03"
 category: "testing"
