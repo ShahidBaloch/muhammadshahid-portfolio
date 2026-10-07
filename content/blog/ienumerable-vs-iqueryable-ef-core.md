@@ -77,3 +77,20 @@ public IEnumerable<Order> OpenOrders() =>
 - Keep filters, order, and paging on `IQueryable`.
 - Call `ToListAsync` once, at the boundary.
 - Do not `AsEnumerable` to call a C# method. Rewrite the predicate so SQL can do it, or filter a page you already bounded.
+
+## Common mistakes
+
+**Returning `IEnumerable` from a method that builds `IQueryable`** is the most frequent mistake. The calling code looks fine — it adds `Where` and `Take` — but those LINQ operators run on the in-memory sequence, not in SQL. Profile the query and you will see a full-table scan.
+
+**Iterating twice.** An `IQueryable` is not cached. Calling `Count()` then `ToList()` on the same variable fires two round-trips to SQL. Materialize with `ToListAsync()` once, or use `.CountAsync()` and `.ToListAsync()` explicitly when you need both a count and a page.
+
+**Calling a C# method inside `Where` on an `IQueryable`.** `db.Orders.Where(o => IsOpen(o))` cannot translate `IsOpen` to SQL. EF Core will throw a translation exception — or on older versions silently load the whole table and evaluate in memory. Inline the comparison instead.
+
+## If an interviewer asks
+
+**"What is the difference between IEnumerable and IQueryable in EF Core?"**  
+`IQueryable` is an unexecuted expression tree that EF Core can still translate to SQL. `IEnumerable` is an in-memory sequence — once you cross to it, every subsequent `Where`, `OrderBy`, and `Take` runs in the .NET process after loading rows.
+
+**30-second answer:** `IQueryable` builds SQL. `IEnumerable` runs in memory. Return `IReadOnlyList<T>` from a repository method, not `IEnumerable`, so callers cannot accidentally compose further after load.
+
+**Strong answer:** Explains the AsEnumerable boundary and that the declared return type controls which LINQ interface the compiler resolves — a repository method declared as `IEnumerable<Order>` that internally uses `IQueryable` materializes before the caller's `Where` runs. Also mentions that `ICollection` on navigation properties is already in memory, not a query provider, and that calling `First` / `Count` / `ToList` twice on the same `IQueryable` fires two round-trips.

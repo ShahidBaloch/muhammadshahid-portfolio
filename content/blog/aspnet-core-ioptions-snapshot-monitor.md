@@ -1,5 +1,5 @@
----
-title: "IOptions vs IOptionsSnapshot vs IOptionsMonitor in ASP.NET Core"
+﻿---
+title: "IOptions vs IOptionsSnapshot vs IOptionsMonitor in .NET"
 description: "Options pattern in C# — when to inject IOptions, IOptionsSnapshot, or IOptionsMonitor, AddOptions vs Configure, named options, and the production bugs I see when teams pick the wrong one."
 date: "2026-09-05"
 updated: "2026-09-12"

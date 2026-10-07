@@ -1,6 +1,6 @@
----
+﻿---
 title: "Azure Functions Isolated Worker for .NET API Workloads"
-description: "Run Azure Functions isolated worker for .NET beside an ASP.NET Core API — Program.cs DI, HTTP triggers, shared contracts, local Core Tools, and when Functions should not replace App Service."
+description: "Azure Functions isolated worker for .NET — Program.cs DI, HTTP triggers, shared contracts, local Core Tools, and when not to replace App Service."
 date: "2026-10-01"
 category: "azure"
 tags: ["Azure Functions", "ASP.NET Core", ".NET", "C#", "Serverless"]

@@ -1,5 +1,5 @@
----
-title: "MediatR and CQRS-Lite in ASP.NET Core — Ceremony vs Delivery"
+﻿---
+title: "MediatR and CQRS-Lite in ASP.NET Core"
 description: "MediatR in C# / ASP.NET Core — when CQRS-lite handlers and pipeline behaviors help a product team ship faster, and when extra folders slow healthcare and SaaS delivery down."
 date: "2026-04-28"
 updated: "2026-09-12"

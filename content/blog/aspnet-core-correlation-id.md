@@ -1,5 +1,5 @@
----
-title: "Correlation IDs in ASP.NET Core: End-to-End Tracing and Logging"
+﻿---
+title: "Correlation IDs in ASP.NET Core: End-to-End Tracing"
 description: "Implement end-to-end request tracing in ASP.NET Core with custom CorrelationIdMiddleware, ILogger scopes, W3C traceparent headers, and Angular HTTP interceptors."
 date: "2026-09-18"
 updated: "2026-10-03"

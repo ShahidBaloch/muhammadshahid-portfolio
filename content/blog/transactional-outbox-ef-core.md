@@ -23,6 +23,19 @@ faq:
 
 Hub: [EF Core](/learning/ef-core). The worker that drains the table: [BackgroundService](/blog/csharp-backgroundservice-hosted-service-async). When this becomes a module boundary: [modular monolith](/blog/modular-monolith-vs-microservices-dotnet).
 
+```text
+src/
+├── Clinic.Domain/
+│   └── Messaging/
+│       └── OutboxMessage.cs              # Id, Type, Payload, OccurredAt, ProcessedAt, LockedUntil
+├── Clinic.Data/
+│   └── AppDbContext.cs                   # DbSet<OutboxMessage> + HasIndex(m => m.ProcessedAt)
+└── Clinic.Worker/
+    └── OutboxWorker.cs                   # BackgroundService: poll → send → mark ProcessedAt
+```
+
+Three files. The domain entity owns the schema; the context maps it; the worker drains it. No application or web project code changes when you add the outbox to a new module.
+
 ## Real-world analogy
 
 You write the order in the ledger and, on the same line, a note that still says "tell the warehouse." Both go in the book before you close it. A runner later reads the notes and calls the warehouse. If you phone the warehouse before the book is closed, and the book then fails to close, the warehouse picks an order that does not exist. If you close the book and the phone is dead, the note is still there tomorrow.

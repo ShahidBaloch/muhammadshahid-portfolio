@@ -1,5 +1,5 @@
----
-title: "Security Headers in ASP.NET Core: HSTS, CSP, and Clickjacking Defense"
+﻿---
+title: "Security Headers in ASP.NET Core: HSTS, CSP, Clickjacking"
 description: "Configure production HTTP security headers in ASP.NET Core: X-Content-Type-Options, X-Frame-Options, Strict-Transport-Security (HSTS), Content-Security-Policy (CSP), and Permissions-Policy."
 date: "2026-09-18"
 updated: "2026-10-03"

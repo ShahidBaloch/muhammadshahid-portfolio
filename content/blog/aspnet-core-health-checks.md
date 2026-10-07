@@ -1,5 +1,5 @@
----
-title: "ASP.NET Core Health Checks: Liveness, Readiness, and Startup Probes"
+﻿---
+title: "ASP.NET Core Health Checks: Liveness, Readiness, Startup"
 description: "Configure production health checks in ASP.NET Core: isolate liveness from readiness, write custom IHealthCheck handlers, configure Kubernetes probes, and prevent restart storms."
 date: "2026-09-18"
 updated: "2026-10-03"

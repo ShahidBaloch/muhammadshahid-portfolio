@@ -1,8 +1,8 @@
----
+﻿---
 title: "Idempotency Keys for ASP.NET Core POST APIs"
-description: "Stop double submits from creating two ASP.NET Core orders. Store the Idempotency-Key with the response and replay it. An Angular exhaustMap only covers one browser session."
+description: "Stop duplicate orders with idempotency keys in ASP.NET Core — store the Idempotency-Key header with the response and replay safely for duplicate requests."
 date: "2026-09-18"
-updated: "2026-09-18"
+updated: "2026-10-07"
 category: "api-design"
 tags: ["ASP.NET Core", "API Design", "Idempotency", "Angular"]
 related:
@@ -22,6 +22,30 @@ faq:
 The user clicked Pay, the response timed out, they clicked again. You have two orders. The button spinner was never going to fix that. The POST has to be safe to retry.
 
 Hub: [API design](/learning/api-design). The Angular half of the double click: [exhaustMap vs switchMap](/blog/angular-switchmap-exhaustmap-concatmap).
+
+## When to use idempotency keys
+
+Add them when a **retry producing the same result twice causes real harm** — financial loss, duplicate records, conflicting state:
+
+- **Payment endpoints** — charging a card twice after a timeout is a support ticket and a chargeback
+- **Order creation** — duplicate orders mean duplicate fulfilment, warehouse pick, and shipping label
+- **Invoice generation** — two invoices for one service period breaks billing reconciliation
+- **Mobile apps with auto-retry** — unreliable connectivity means clients retry 5xx responses by design; you cannot assume one request means one attempt
+- **Any POST/PUT that triggers an external side effect** — sending an email, provisioning a cloud resource, initiating a bank transfer
+
+The common thread: the operation has a **side effect outside the database**. A unique constraint on the row alone does not save you if the downstream effect (the charge, the email) already fired.
+
+## When you do NOT need idempotency keys
+
+Do not add them reflexively to every endpoint. They cost a row per request and a key lookup on every call.
+
+- **GET, HEAD, OPTIONS** — inherently idempotent; no key needed
+- **Writes with natural deduplication** — if a unique constraint returns a 409 and that is fine with the caller, you already have idempotency
+- **Admin writes where retries are not expected** — an internal backoffice tool editing a config value under human supervision does not need key infrastructure
+- **Writes with compensating transactions** — if duplicates are cheap to detect and reverse (re-import that runs a deduplicate step), the operational cost of idempotency keys may exceed the cost of the compensating transaction
+- **Soft idempotency via status** — if the operation is "transition order to Shipped" and the row already has `Status = Shipped`, a 200 or 409 is enough; no stored key needed
+
+The test: **can a duplicate call cause harm the domain cannot easily detect and undo?** If yes, add the key. If no, a unique constraint or a status check is sufficient.
 
 ## Real-world analogy
 

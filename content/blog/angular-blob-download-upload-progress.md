@@ -1,5 +1,5 @@
----
-title: "Angular HttpClient Blob Download and Upload Progress with ASP.NET Core"
+﻿---
+title: "Angular Blob Download and Upload Progress with ASP.NET Core"
 description: "Download a file with Angular HttpClient as a blob from an ASP.NET Core API, and report upload progress, without parsing that file body as JSON."
 date: "2026-10-03"
 category: "api-design"

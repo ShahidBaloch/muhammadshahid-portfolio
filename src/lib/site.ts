@@ -242,7 +242,7 @@ export const learningTopics: LearningTopic[] = [
       {
         title: "Does async mean parallel?",
         content:
-          "**No.** Sequential `await`s are async without parallel. Independent I/O can run together — never two `ToListAsync` on one `DbContext`. Caps: [Task.WhenAll](/blog/csharp-task-whenall-vs-parallel-foreach).",
+          "**No.** Sequential `await`s are asynchronous but not parallel. Independent I/O can run together — never two `ToListAsync` on one `DbContext`. Caps: [Task.WhenAll](/blog/csharp-task-whenall-vs-parallel-foreach).",
       },
     ],
     matchTags: ["Asynchronous Programming", "Threading", "Concurrency"],
@@ -1102,7 +1102,7 @@ export const projects: Project[] = [
     caseNotes: [
       "The identity split was the decision that paid off. Buyer, seller, and ops surfaces needed one login without copying user tables into Auction and Search. IdentityServer sat behind the gateway as the token issuer; the other services validated JWTs and never saw passwords. That is the SSO shape I describe in the IdentityServer vs Identity article — not Identity bolted onto every microservice.",
       "Bidding and search change at different rates. Putting both in one ASP.NET Core host would have made a catalog index deploy wait on an auction bugfix. RabbitMQ carried bid events so Search could stay eventually consistent instead of joining live bids on every query. Docker made the four-process local story repeatable; the pain was redirect URIs and CORS across those hosts, not the container files.",
-      "If I rebuilt it today I would still keep identity off the SPA, but I would evaluate a BFF so browser tokens never sit in localStorage. The auction and search APIs would keep the same contracts. The GitHub repo is the architecture reference — not a live marketplace with real vehicles.",
+      "If I rebuilt it today, I would still keep identity off the SPA, but I would evaluate a BFF so browser tokens never sit in localStorage. The auction and search APIs would keep the same contracts. The GitHub repo is the architecture reference — not a live marketplace with real vehicles.",
     ],
     related: [
       {
@@ -1143,7 +1143,7 @@ export const projects: Project[] = [
     layers: ["Angular storefront", "ASP.NET Core APIs", "Domain · Application", "EF Core · SQL Server"],
     domain: "eCommerce platform",
     caseNotes: [
-      "The storefront is one Angular app and one API product. That is why I did not start with IdentityServer. ASP.NET Core Identity plus JWT and RBAC is the right default until a second app or a partner shows up. Catalog, cart, and orders share a user table; SSO ceremony would have been inventory I was not ready to operate.",
+      "The storefront is one Angular app and one API product. That is why I did not start with IdentityServer. ASP.NET Core Identity plus JWT and RBAC are the right default until a second app or a partner shows up. Catalog, cart, and orders share a user table; SSO ceremony would have been inventory I was not ready to operate.",
       "Catalog filters are where storefronts rot. Specification objects keep EF Core queries named and testable instead of stuffing every merchant rule into a controller. When the catalog grows, the failure is usually SQL — N+1, fat Includes, sniffed plans — not the Angular grid. The Clean Architecture folders only help if the query stays in Infrastructure and the UI gets a DTO, not an entity graph.",
       "The GitHub repo is a .NET 10-shaped foundation I use in conversations with eCommerce teams. It is not a hosted shop. If you are choosing Identity vs an authorization server for a single storefront, start with the IdentityServer article; if the product already 500s on a product-detail page, start with EF Core performance, not another layer.",
     ],

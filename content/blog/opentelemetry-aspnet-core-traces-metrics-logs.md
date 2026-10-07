@@ -1,6 +1,6 @@
----
+﻿---
 title: "OpenTelemetry in ASP.NET Core: Traces, Metrics, and Logs"
-description: "Add OpenTelemetry to ASP.NET Core — traces, metrics, logs, W3C traceparent vs correlation IDs, ActivitySource, meters, sampling, and OTLP export. Builds on correlation-id and Serilog posts; no vendor pricing."
+description: "OpenTelemetry in ASP.NET Core — traces, metrics, logs, ActivitySource, OTLP export, W3C traceparent, and sampling strategies."
 date: "2026-10-01"
 category: "architecture"
 tags: ["OpenTelemetry", "ASP.NET Core", "Observability", "Tracing", "C#"]

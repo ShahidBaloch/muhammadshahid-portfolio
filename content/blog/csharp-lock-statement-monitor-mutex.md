@@ -1,6 +1,6 @@
----
+﻿---
 title: "C# lock vs Monitor vs Mutex vs Semaphore"
-description: "lock protects a short in-memory critical section so two threads cannot corrupt shared data. lock is Monitor.Enter/Exit. You cannot await inside. Mutex is cross-process; async code uses SemaphoreSlim."
+description: "C# lock vs Monitor vs Mutex — when to use each synchronization primitive, reentrance rules, and cross-process locking patterns."
 date: "2026-09-07"
 updated: "2026-09-07"
 category: "async-concurrency"

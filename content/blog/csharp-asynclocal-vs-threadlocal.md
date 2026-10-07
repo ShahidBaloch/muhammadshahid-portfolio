@@ -1,6 +1,6 @@
----
+﻿---
 title: "C# AsyncLocal vs ThreadLocal: Context Across await"
-description: "ThreadLocal sticks to an OS thread; after await you are often on another ThreadPool worker. AsyncLocal flows with ExecutionContext. Prefer a tenantId parameter; ambient current-user is how clinic B saw clinic A."
+description: "AsyncLocal vs ThreadLocal in C# — how async context flows across awaits, when each is appropriate, and common misuse patterns."
 date: "2026-09-07"
 updated: "2026-09-07"
 category: "async-concurrency"

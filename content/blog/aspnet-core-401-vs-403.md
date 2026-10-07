@@ -1,5 +1,5 @@
----
-title: "ASP.NET Core 401 vs 403: Challenge vs Forbid for Angular APIs"
+﻿---
+title: "ASP.NET Core 401 vs 403: Challenge vs Forbid"
 description: "ASP.NET Core 401 Unauthorized vs 403 Forbidden — Challenge vs Forbid, JWT bearer mapping, Angular interceptor rules, and why logging out on 403 is wrong."
 date: "2026-09-07"
 category: "authentication"

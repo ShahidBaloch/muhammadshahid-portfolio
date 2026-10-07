@@ -1,6 +1,6 @@
----
+﻿---
 title: "C# TaskCompletionSource: Wrap Legacy Events as Tasks"
-description: "TaskCompletionSource creates a Task you complete yourself. Use it to wrap event-based APIs (EAP) into TAP: TrySetResult when Connected fires, then callers await instead of WaitOne."
+description: "TaskCompletionSource in C# — wrapping legacy event APIs, controlling Task completion, and bridging callback patterns with async/await."
 date: "2026-09-07"
 updated: "2026-09-07"
 category: "async-concurrency"
@@ -143,8 +143,9 @@ A stream of events is not a `Task`: [IAsyncEnumerable](/blog/csharp-iasyncenumer
 
 ## If an interviewer asks
 
-TAP; wrapping EAP; testing async code by completing a TCS in a fake.
+**"When would you use TaskCompletionSource?"**  
+When wrapping a legacy event-based API (EAP) into TAP so callers can `await` completion. Classic example: a vendor SDK that raises `Connected` / `Faulted` events instead of returning a `Task`.
 
-**Strong answer:** TrySet, RunContinuationsAsynchronously, unsubscribe, cancel aborts the SDK.
+**30-second answer:** Create a TCS, subscribe to the event, call `TrySetResult`/`TrySetException`/`TrySetCanceled` in the handler, and return `tcs.Task`. Always use `RunContinuationsAsynchronously` and `TrySet*` (not `Set*`).
 
-. Bring the event list. One-shot vs stream is the whole design.
+**Strong answer:** TrySet\* is race-safe when cancel and double-fire compete. RunContinuationsAsynchronously prevents your continuation from hijacking the vendor's event thread. Unsubscribe in the handler or you leak. Cancel registration should abort the SDK. Bring the event list. One-shot vs stream is the whole design decision — a stream of events belongs in a Channel, not a TCS.

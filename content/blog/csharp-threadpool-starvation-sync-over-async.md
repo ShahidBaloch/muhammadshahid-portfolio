@@ -1,5 +1,5 @@
----
-title: "C# ThreadPool Starvation: Sync-Over-Async .Result Causes 504s"
+﻿---
+title: "C# ThreadPool Starvation: Sync-Over-Async Causes 504s"
 description: "Thread pool starvation is queued work with no free workers. C# .Result and .Wait on ASP.NET Core cause idle-CPU 504s — diagnose with dotnet-counters, then make the call chain async."
 date: "2026-09-07"
 updated: "2026-09-07"

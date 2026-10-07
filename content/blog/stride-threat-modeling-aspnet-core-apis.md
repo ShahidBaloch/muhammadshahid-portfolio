@@ -1,6 +1,6 @@
----
+﻿---
 title: "STRIDE Threat Modeling for ASP.NET Core REST APIs"
-description: "Lightweight STRIDE threat modeling for ASP.NET Core REST APIs — walk Spoofing through Elevation on an Angular-facing clinic appointment endpoint, map mitigations to JWT, RBAC, validation, rate limits, and a reusable worksheet. Not enterprise GRC fluff."
+description: "STRIDE threat modeling for ASP.NET Core APIs — a 6-step walkthrough with Spoofing, Tampering, and Elevation of Privilege examples."
 date: "2026-10-01"
 category: "security"
 tags: ["ASP.NET Core", "STRIDE", "Threat Modeling", "API Security", "Angular"]

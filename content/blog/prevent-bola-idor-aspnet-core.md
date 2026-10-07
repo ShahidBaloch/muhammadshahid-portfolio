@@ -1,6 +1,6 @@
----
-title: "Prevent BOLA/IDOR in ASP.NET Core: Object-Level Authorization"
-description: "Prevent BOLA/IDOR in ASP.NET Core with object-level authorization — ownership checks, IAuthorizationService resource handlers, list-endpoint filters, and cross-tenant id defenses. Complements the RBAC policies guide; does not rewrite roles."
+﻿---
+title: "Prevent BOLA/IDOR in ASP.NET Core: Object-Level AuthZ"
+description: "Prevent BOLA/IDOR in ASP.NET Core with resource-based authorization handlers — the biggest API security vulnerability explained."
 date: "2026-10-01"
 category: "security"
 tags: ["ASP.NET Core", "BOLA", "IDOR", "Authorization", "Security"]

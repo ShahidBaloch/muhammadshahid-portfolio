@@ -71,3 +71,22 @@ Do not read `X-Forwarded-For` yourself with `Headers["X-Forwarded-For"]` and als
 Hit the health or any API URL through the public host. Log `Request.Scheme` and `Connection.RemoteIpAddress` for one request. Scheme must be `https`. The IP must not be the proxy. If both are still the internal values, the middleware is not first, or the proxy is not sending the headers.
 
 Container networking makes the same bug local: [Docker with Angular](/blog/docker-dotnet-angular-local).
+
+## Common failures in production
+
+**HTTPS redirect loop.** The most frequent symptom. `UseHttpsRedirection` sees `http` because `UseForwardedHeaders` either was not called or ran after the redirect middleware. Fix: move `UseForwardedHeaders` to the first middleware position.
+
+**Client IP is always the same address (the proxy).** `RemoteIpAddress` is the immediate TCP peer, not the browser. The real IP is only in `X-Forwarded-For` after the middleware trusts the proxy. If you are logging `RemoteIpAddress` for security audits without calling `UseForwardedHeaders`, every log entry shows the load balancer.
+
+**Rate limiting or geo-blocking hits all users.** Same root cause as the IP issue. A rate limiter keyed on `RemoteIpAddress` sees one address — the proxy — and throttles all traffic at once once it hits the limit.
+
+**Cookie `secure` flag mismatch.** Cookie middleware uses `Request.IsHttps` to decide whether to set the `Secure` attribute. If `Request.Scheme` is still `http` because forwarded headers were not applied, cookies are served without `Secure` and browsers may reject them on HTTPS origins.
+
+## If an interviewer asks
+
+**"Why does ASP.NET Core redirect to http behind a load balancer?"**  
+The reverse proxy terminates TLS and calls Kestrel on `http`. Without `UseForwardedHeaders`, `Request.Scheme` stays `http`, and `UseHttpsRedirection` issues a 307 to the HTTPS URL — which the browser sends to the proxy again, which calls Kestrel on `http` again. The fix is to apply forwarded headers (trusting the proxy) before the redirect middleware.
+
+**30-second answer:** Put `UseForwardedHeaders` first in middleware order, configure it to trust the proxy, and clear `KnownNetworks`/`KnownProxies` only when the platform (Azure App Service) guarantees it rewrites those headers before they reach you.
+
+**Strong answer:** Names the middleware order dependency, explains why the default loopback trust is intentionally safe (prevents IP spoofing from arbitrary callers), identifies the security risk of clearing networks when Kestrel has a public port, and mentions the downstream effects on rate limiting, cookies, and security logging when `RemoteIpAddress` is always the proxy.

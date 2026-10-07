@@ -1,5 +1,5 @@
----
-title: "C# BackgroundService in ASP.NET Core: Scopes and stoppingToken"
+﻿---
+title: "C# BackgroundService in ASP.NET Core: Scopes and Tokens"
 description: "A BackgroundService is a hosted worker the generic host starts and stops. Use stoppingToken, not RequestAborted. Create a DI scope per message. Task.Run after Ok() is not a worker."
 date: "2026-09-07"
 updated: "2026-09-07"

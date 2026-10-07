@@ -1,5 +1,5 @@
----
-title: "Hot Chocolate Authorization in ASP.NET Core for GraphQL Fields"
+﻿---
+title: "Hot Chocolate Authorization in ASP.NET Core for GraphQL"
 description: "Hot Chocolate authorization in ASP.NET Core for GraphQL fields: policies, the right Authorize attribute, validation versus BeforeResolver, and partial errors."
 date: "2026-10-03"
 category: "security"

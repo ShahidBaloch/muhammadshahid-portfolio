@@ -11,7 +11,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "audit:uniqueness": "node scripts/audit-content-uniqueness.mjs"
+    "audit:uniqueness": "node scripts/audit-content-uniqueness.mjs",
+    "indexnow": "node scripts/indexnow.mjs",
+    "indexnow:all": "node scripts/indexnow.mjs 365"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
@@ -39,5 +41,11 @@
     "typescript": "^5.8.0"
   },
   "author": "Muhammad Shahid",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "browserslist": [
+    "chrome >= 111",
+    "edge >= 111",
+    "firefox >= 111",
+    "safari >= 16.4"
+  ]
 }

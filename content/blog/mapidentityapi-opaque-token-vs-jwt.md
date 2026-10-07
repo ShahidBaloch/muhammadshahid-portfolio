@@ -1,6 +1,6 @@
----
+﻿---
 title: "MapIdentityApi Opaque Tokens vs JWT"
-description: "ASP.NET Core Identity’s MapIdentityApi issues opaque access tokens by default — not JWTs. When that is enough, when you still need JWT bearer auth for Angular, and how to stop mixing the two by accident."
+description: "MapIdentityApi opaque tokens vs JWT in ASP.NET Core — when to use each, cookie vs bearer, and the trade-offs with Angular SPAs."
 date: "2026-08-15"
 category: "identity"
 tags: ["ASP.NET Core", "ASP.NET Core Identity", "JWT", "Security", "Angular"]

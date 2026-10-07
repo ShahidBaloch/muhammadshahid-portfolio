@@ -1,6 +1,6 @@
----
+﻿---
 title: "Azure Key Vault Secrets in ASP.NET Core Configuration"
-description: "Wire Azure Key Vault into ASP.NET Core configuration — AddAzureKeyVault, secret name mapping, reload/sentinel patterns, leak-prevention with Serilog, Key Vault references vs App Settings, and rotation habits. Pairs with Managed Identity; not a full App Service deploy rewrite."
+description: "Load Azure Key Vault secrets into ASP.NET Core configuration — Managed Identity, IConfiguration provider, and secret refresh patterns."
 date: "2026-10-01"
 category: "azure"
 tags: ["ASP.NET Core", "Azure Key Vault", "Configuration", "Security", "C#"]

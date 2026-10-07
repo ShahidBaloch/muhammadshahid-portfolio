@@ -1,5 +1,5 @@
----
-title: "What Is an API? (Definition With REST and ASP.NET Core Examples)"
+﻿---
+title: "What Is an API? REST and ASP.NET Core Examples"
 description: "What is an API — definition, how REST APIs work, request/response flow, and a minimal ASP.NET Core example. Plain English before framework details."
 date: "2026-09-08"
 updated: "2026-09-08"

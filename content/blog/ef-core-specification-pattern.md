@@ -30,6 +30,22 @@ Without spec                          With VendorCatalogProductsSpec
 
 **New to this** → stay here. **Merging a PR** → [catalog spec](#a-catalog-spec-that-matches-real-angular-filters). **On-call / interview** → [when I do not use specifications](#when-i-do-not-use-specifications) · [if an interviewer asks](#if-an-interviewer-asks).
 
+```text
+src/
+├── Clinic.Application/
+│   └── Specifications/
+│       ├── ISpecification.cs             # Criteria, Includes, OrderBy, Skip, Take, IsSplitQuery
+│       ├── Specification.cs              # protected base with fluent builder methods
+│       └── Catalog/
+│           ├── VendorCatalogProductsSpec.cs
+│           └── ActiveProductsSpec.cs
+└── Clinic.Infrastructure/
+    └── Specifications/
+        └── SpecificationEvaluator.cs    # applies spec to IQueryable<T>
+```
+
+Specs live in Application (no EF dependency). The evaluator that applies them to `IQueryable` lives in Infrastructure. Concrete specs reference only the Application base class.
+
 **Terms used here:** **`ISpecification<T>`** = interface with criteria, includes, ordering, and paging expressions. **Evaluator** = infrastructure class that applies a spec to `IQueryable<T>`. **Criteria composition** = combining multiple `Where` predicates with `Expression.AndAlso`.
 
 The first version of a product catalog API is deceptively simple. `GET /products?category=shoes&minPrice=50` maps to a LINQ query in the controller. Ship it, move on.

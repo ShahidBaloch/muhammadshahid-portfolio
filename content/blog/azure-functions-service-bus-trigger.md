@@ -1,5 +1,5 @@
----
-title: "Azure Functions Service Bus Trigger for the .NET Isolated Worker"
+﻿---
+title: "Azure Functions Service Bus Trigger for .NET Isolated Worker"
 description: "Azure Functions Service Bus trigger on the .NET isolated worker: bind the queue and settle each message with complete, abandon, or dead-letter."
 date: "2026-10-03"
 category: "architecture"

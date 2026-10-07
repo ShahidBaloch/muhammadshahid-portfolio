@@ -1,6 +1,6 @@
----
+﻿---
 title: "Multi-Tenancy in ASP.NET Core Beyond Query Filters"
-description: "Implement multi-tenancy in ASP.NET Core and EF Core beyond HasQueryFilter — tenant resolution, ITenantContext, shared schema vs database-per-tenant, IgnoreQueryFilters risks, and Angular tenant switcher pitfalls."
+description: "Multi-tenancy in ASP.NET Core beyond EF Core query filters — connection-per-tenant, tenant resolution middleware, and resource-based auth."
 date: "2026-10-01"
 category: "architecture"
 tags: ["ASP.NET Core", "Multi-Tenancy", "EF Core", "SaaS", "C#"]
@@ -33,6 +33,32 @@ Request
 **New to this** → stay here. **Filter mechanics / soft delete** → [EF global query filters](/blog/ef-core-global-query-filters-soft-delete). **Roles/policies** → [RBAC](/blog/aspnet-core-rbac-guide).
 
 Search intent for **asp.net core multi tenancy ef core** is how-to architecture — not an Azure SaaS sales page.
+
+## Project layout
+
+Tenant infrastructure is cross-cutting but must not bleed into Domain. Keep the interface in Application; keep the implementation and middleware in Infrastructure.
+
+```text
+src/
+├── Clinic.Domain/
+│   └── Tenancy/
+│       └── ITenantEntity.cs               # interface for EF entities
+├── Clinic.Application/
+│   └── Tenancy/
+│       └── ITenantContext.cs              # only this crosses layer boundaries
+├── Clinic.Infrastructure/
+│   └── Tenancy/
+│       ├── TenantContext.cs               # scoped implementation
+│       ├── TenantResolutionMiddleware.cs  # claim → host → slug resolution
+│       └── TenantConnectionFactory.cs    # DB-per-tenant connection routing
+├── Clinic.Data/
+│   └── AppDbContext.cs                   # filters + SaveChanges enforcement
+└── Clinic.Web/
+    └── Authorization/
+        └── EncounterTenantHandler.cs     # BOLA defense — TenantId ownership check
+```
+
+The domain project references nothing from Infrastructure or Web. The only tenant type Application imports is `ITenantContext`.
 
 ## Multi-tenancy goals: isolation, cost, ops complexity
 

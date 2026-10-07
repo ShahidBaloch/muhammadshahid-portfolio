@@ -2,6 +2,7 @@
 title: "SQL Server TempDB Contention on .NET APIs"
 description: "PAGELATCH_UP on database id 2 is TempDB allocation contention. Multiple equal data files fix it. EF does not need a #temp table to cause this."
 date: "2026-09-07"
+updated: "2026-10-07"
 category: "ef-core"
 tags: ["SQL Server", "Performance", "Diagnostics", "EF Core"]
 related:
@@ -18,6 +19,8 @@ faq:
 ---
 
 **TempDB contention** means SQL Server threads queue on **PAGELATCH_UP** / **PAGELATCH_EX** while allocating pages in **database id 2** (TempDB). The API hangs while SQL CPU looks idle — this is a **file layout** problem, not a missing EF index.
+
+TempDB is a single shared database for every session on the SQL instance. When many concurrent threads need to allocate pages at the same time, they all queue on the same PFS (Page Free Space) or SGAM (Shared Global Allocation Map) bitmap pages. The more concurrent requests, the longer the queue. The symptom in an ASP.NET Core API is high latency with low CPU on the SQL server — the opposite of what you see with a bad query plan or an N+1.
 
 ```text
 One TempDB data file              Eight equal data files
@@ -57,14 +60,40 @@ Split TempDB so allocations round-robin:
 
 I do this on the VM or in the SQL configuration, not in `OnModelCreating`. Azure SQL and some managed offerings hide TempDB; if you cannot add files, you reduce spills (indexes, tighter date windows) and watch whether RCSI is worth the version-store traffic.
 
+## How to confirm it is TempDB contention
+
+Check wait stats before touching file layout:
+
+```sql
+SELECT wait_type, waiting_tasks_count, wait_time_ms
+FROM sys.dm_os_wait_stats
+WHERE wait_type IN ('PAGELATCH_UP', 'PAGELATCH_EX', 'PAGEIOLATCH_SH')
+ORDER BY wait_time_ms DESC;
+```
+
+Then check which database owns those latches:
+
+```sql
+SELECT session_id, wait_type, resource_description
+FROM sys.dm_exec_requests
+WHERE wait_type LIKE 'PAGELATCH%';
+```
+
+`resource_description` contains the database id. Database id 2 is always TempDB. If you see another database id, you have a different problem — an unindexed hot page or a very wide row under heavy writes.
+
+Do not look at `PAGEIOLATCH_SH` first. That points to disk I/O, not allocation contention. The two look similar in impact but have different fixes.
+
 ## What I measure after
 
-- `PAGELATCH_UP` on tempdb should collapse
+- `PAGELATCH_UP` wait counts on TempDB should drop immediately after adding equal files and bouncing the service
 - Version store size if RCSI is on — a fee import that versions every row will still pressure TempDB even with eight files if the disk is slow
-- I do not “fix TempDB” by adding `AsNoTracking` in C#. That does not create extra files.
+- I do not “fix TempDB” by adding `AsNoTracking` in C#. `AsNoTracking` removes change tracker overhead; it does not create extra TempDB files
 
 ## If an interviewer asks
 
-**30-second answer:** `PAGELATCH_UP` on database id 2 is TempDB allocation contention — add multiple **equal-sized** TempDB data files (often one per CPU up to eight). EF can trigger it via sorts, spills, and RCSI versions without explicit `#temp` tables.
+**”The API has high latency but SQL CPU is low. How do you diagnose it?”**  
+Check `sys.dm_os_wait_stats` for `PAGELATCH_UP` or `PAGELATCH_EX`. If `resource_description` shows database id 2, it is TempDB allocation contention. The fix is multiple equal-sized TempDB data files — not a missing index or a query rewrite.
 
-**Strong answer:** Distinguishes from parameter sniffing and deadlocks, mentions equal file size/growth, and warns RCSI increases version-store pressure in TempDB.
+**30-second answer:** `PAGELATCH_UP` on database id 2 is TempDB allocation contention — add multiple **equal-sized** TempDB data files (one per logical CPU, stop at eight). EF can trigger it via sorts, spills, and RCSI versions without explicit `#temp` tables.
+
+**Strong answer:** Distinguishes from parameter sniffing (high CPU/reads, wrong plan) and reader/writer deadlocks (two sessions blocking each other). Mentions equal file size and autogrowth as critical — an oversized file recreates the hotspot. Warns that RCSI increases version-store pressure in TempDB, so adding TempDB files and enabling RCSI together requires watching both allocation waits and version store size.

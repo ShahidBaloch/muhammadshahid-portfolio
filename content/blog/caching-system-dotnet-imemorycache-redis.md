@@ -1,6 +1,6 @@
----
-title: "Caching System in .NET: IMemoryCache, Redis, and Object Cache"
-description: "Caching system layers for .NET — object cache, in-memory vs distributed, IMemoryCache vs Redis on ASP.NET Core, mapped for Java developers. Cache-miss definition lives on its own page."
+﻿---
+title: "Caching in .NET: IMemoryCache, Redis, and Object Cache"
+description: "Caching layers for .NET — object cache, in-memory vs distributed, IMemoryCache vs Redis on ASP.NET Core. Includes cache-miss definition and layer mapping."
 date: "2026-09-08"
 updated: "2026-09-14"
 category: "caching"

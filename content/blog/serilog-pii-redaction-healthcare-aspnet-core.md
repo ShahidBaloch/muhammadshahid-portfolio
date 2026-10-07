@@ -1,6 +1,6 @@
----
+﻿---
 title: "Serilog PII Redaction for Healthcare ASP.NET Core APIs"
-description: "How I log ASP.NET Core healthcare APIs with Serilog without putting names, member ids, or raw X12 in Application Insights — destructuring, request logging, and what still belongs in an audit table."
+description: "Serilog PII redaction for healthcare ASP.NET Core APIs — HIPAA-safe logging, destructuring policies, and masking PHI in structured logs."
 date: "2026-08-17"
 category: "edi"
 tags: ["Serilog", "Logging", "Healthcare", "EDI", "ASP.NET Core"]

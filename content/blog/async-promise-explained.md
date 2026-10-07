@@ -1,5 +1,5 @@
----
-title: "What Is a Promise in Async Programming? (Task, Promise, Future)"
+﻿---
+title: "What Is a Promise in Async Programming?"
 description: "Promise meaning in async programming — how C# Task, JavaScript Promise, and futures represent work that will complete later, with ASP.NET Core examples and interview answers."
 date: "2026-09-08"
 updated: "2026-09-08"

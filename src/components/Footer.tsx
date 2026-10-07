@@ -21,32 +21,32 @@ export function Footer() {
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-300">Explore</p>
             <ul className="mt-4 space-y-2 text-sm text-slate-300">
               <li>
-                <Link href="/work" className="transition hover:text-link-bright">
+                <Link prefetch={false} href="/work" className="transition hover:text-link-bright">
                   Work
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="transition hover:text-link-bright">
+                <Link prefetch={false} href="/services" className="transition hover:text-link-bright">
                   Services
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="transition hover:text-link-bright">
+                <Link prefetch={false} href="/blog" className="transition hover:text-link-bright">
                   Blog
                 </Link>
               </li>
               <li>
-                <Link href="/blog#topics" className="transition hover:text-link-bright">
+                <Link prefetch={false} href="/blog#topics" className="transition hover:text-link-bright">
                   Blog topics
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="transition hover:text-link-bright">
+                <Link prefetch={false} href="/about" className="transition hover:text-link-bright">
                   About
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="transition hover:text-link-bright">
+                <Link prefetch={false} href="/contact" className="transition hover:text-link-bright">
                   Contact
                 </Link>
               </li>
@@ -103,19 +103,19 @@ export function Footer() {
             © {year} {siteConfig.name}. All rights reserved.
           </p>
           <nav aria-label="Legal" className="flex flex-wrap gap-x-4 gap-y-1 text-xs">
-            <Link href="/about" className="transition hover:text-link-bright">
+            <Link prefetch={false} href="/about" className="transition hover:text-link-bright">
               About
             </Link>
-            <Link href="/contact" className="transition hover:text-link-bright">
+            <Link prefetch={false} href="/contact" className="transition hover:text-link-bright">
               Contact
             </Link>
-            <Link href="/privacy" className="transition hover:text-link-bright">
+            <Link prefetch={false} href="/privacy" className="transition hover:text-link-bright">
               Privacy
             </Link>
-            <Link href="/terms" className="transition hover:text-link-bright">
+            <Link prefetch={false} href="/terms" className="transition hover:text-link-bright">
               Terms
             </Link>
-            <Link href="/disclaimer" className="transition hover:text-link-bright">
+            <Link prefetch={false} href="/disclaimer" className="transition hover:text-link-bright">
               Disclaimer
             </Link>
             <CookieSettingsLink className="transition hover:text-link-bright" />

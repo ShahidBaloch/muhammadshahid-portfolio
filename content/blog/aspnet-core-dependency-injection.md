@@ -1,5 +1,5 @@
----
-title: "Dependency Injection in C# and ASP.NET Core: Lifetimes Done Right"
+﻿---
+title: "Dependency Injection in ASP.NET Core: Lifetimes Done Right"
 description: "C# dependency injection in ASP.NET Core — AddTransient vs AddScoped vs AddSingleton, what a transient dependency is, captive dependencies, and habits that keep .NET APIs testable."
 date: "2026-07-31"
 updated: "2026-09-12"

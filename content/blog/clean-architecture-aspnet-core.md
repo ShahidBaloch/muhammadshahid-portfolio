@@ -1,5 +1,5 @@
----
-title: "Clean Architecture in C# and ASP.NET Core Without Over-Engineering"
+﻿---
+title: "Clean Architecture in ASP.NET Core Without Over-Engineering"
 description: "Pragmatic Clean Architecture in C# / ASP.NET Core — Onion vs Clean, domain boundaries, three-project layout, and when to skip ceremony on SaaS and eCommerce APIs."
 date: "2026-05-28"
 updated: "2026-09-12"

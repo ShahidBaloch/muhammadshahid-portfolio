@@ -1,6 +1,6 @@
----
-title: "Managed Identity for ASP.NET Core on Azure (SQL, Blob, Key Vault)"
-description: "Passwordless Managed Identity for ASP.NET Core on Azure — system vs user-assigned overview, EF Core + Azure SQL, BlobClient with DefaultAzureCredential, Key Vault RBAC, and local dual-mode config. Not a Blob upload UX rewrite."
+﻿---
+title: "Managed Identity for ASP.NET Core on Azure"
+description: "Use Managed Identity in ASP.NET Core on Azure — passwordless SQL, Blob, and Key Vault access using DefaultAzureCredential."
 date: "2026-10-01"
 category: "azure"
 tags: ["ASP.NET Core", "Azure", "Managed Identity", "Key Vault", "EF Core"]

@@ -1,5 +1,5 @@
----
-title: "Angular Build Budgets and CI Gates in a .NET + Angular Monorepo"
+﻿---
+title: "Angular Build Budgets and CI Gates in a .NET Monorepo"
 description: "Angular build budgets fail CI when a production bundle exceeds maximumError. The limit counts raw emitted bytes, not the gzip size on the wire."
 date: "2026-10-03"
 category: "architecture"

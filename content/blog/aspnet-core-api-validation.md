@@ -1,5 +1,5 @@
----
-title: "FluentValidation in ASP.NET Core: One Error Envelope for Angular"
+﻿---
+title: "FluentValidation in ASP.NET Core: One Error Envelope"
 description: "FluentValidation in ASP.NET Core without the deprecated AspNetCore package — one ProblemDetails envelope, field errors Angular forms can bind, and validation in ASP.NET APIs."
 date: "2026-08-17"
 updated: "2026-09-12"

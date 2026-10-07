@@ -2,6 +2,7 @@
 title: "EF Core SaveChanges Interceptors for Audit Logs"
 description: "EF Core SaveChanges interceptors for audit logs: ISaveChangesInterceptor stamps CreatedBy and ModifiedBy from the JWT. Why ExecuteUpdate bypasses it."
 date: "2026-09-07"
+updated: "2026-10-07"
 category: "ef-core"
 tags: ["EF Core", "Architecture", "Security", "ASP.NET Core"]
 related:
@@ -32,6 +33,21 @@ Tracked SaveChanges path              ExecuteUpdate path
 ```
 
 **New to this** → stay here. **Merging a PR** → [stamp auditable entities](#stamp-auditable-entities-in-savingchanges). **On-call / interview** → [what this interceptor will never see](#what-this-interceptor-will-never-see) · [if an interviewer asks](#if-an-interviewer-asks).
+
+```text
+src/
+├── Clinic.Domain/
+│   └── Shared/
+│       └── IAuditable.cs                  # interface — entity layer owns the contract
+├── Clinic.Application/
+│   └── Users/
+│       └── ICurrentUser.cs               # abstraction over JWT subject + "System" fallback
+├── Clinic.Infrastructure/
+│   └── Interceptors/
+│       └── AuditInterceptor.cs           # SaveChangesInterceptor registered as singleton
+└── Clinic.Data/
+    └── AppDbContext.cs                   # AddInterceptors(sp.GetRequiredService<AuditInterceptor>())
+```
 
 **Terms used here:** **`SaveChangesInterceptor`** = EF Core hook that runs before/after `SaveChanges`. **`ICurrentUser`** = abstraction that reads JWT subject in HTTP requests and returns `"System"` for hosted jobs. **Shadow property** = a column mapped without a CLR property (`entry.Property("ModifiedAt")`).
 
@@ -115,6 +131,34 @@ builder.Services.AddDbContext<AppDbContext>((sp, options) =>
 [`ExecuteUpdateAsync`](/blog/ef-core-bulk-update-executeupdate) does not call `SaveChanges`. Bulk close of a fee year must set `ModifiedAt` / `ModifiedBy` in `SetProperty` or you will ship an unaudited UPDATE.
 
 Soft-delete via `IsDeleted = true` **does** go through `SaveChanges` if you load and mutate. If you `ExecuteUpdate` the flag, stamp it there too.
+
+## Shadow properties as an alternative
+
+If you do not want `CreatedAt` / `ModifiedAt` on the domain entity interface, use **shadow properties**:
+
+```csharp
+private void Stamp(DbContext? context)
+{
+    if (context is null) return;
+
+    var userId = _user.UserId ?? "System";
+    var now = DateTime.UtcNow;
+
+    foreach (var entry in context.ChangeTracker.Entries()
+        .Where(e => e.State is EntityState.Added or EntityState.Modified))
+    {
+        if (entry.State == EntityState.Added)
+        {
+            entry.Property("CreatedAt").CurrentValue = now;
+            entry.Property("CreatedBy").CurrentValue = userId;
+        }
+        entry.Property("ModifiedAt").CurrentValue = now;
+        entry.Property("ModifiedBy").CurrentValue = userId;
+    }
+}
+```
+
+Register the shadow properties in `OnModelCreating` with `HasColumnName` and `HasDefaultValueSql` if needed. This keeps audit columns off your domain model while still stamping them before SQL. The trade-off is no compile-time safety — a typo in the property name throws at runtime, not build time. I prefer the interface approach on healthcare rows; shadow properties suit audit tables or log projections where the entity should stay clean.
 
 ## Do not log the graph
 

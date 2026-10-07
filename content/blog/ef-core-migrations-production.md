@@ -71,3 +71,12 @@ Adding a non-nullable column with a default can lock a large SQL Server table. A
 ## Seed and startup
 
 Do not seed reference data with `Migrate()` side effects. Seed in the same pipeline step, or in an explicit idempotent script, so a second instance does not insert duplicate lookup rows. Concurrency tokens are a separate problem: [optimistic concurrency](/blog/ef-core-optimistic-concurrency-token).
+
+## If an interviewer asks
+
+**"Should ASP.NET Core call Database.Migrate on startup in production?"**  
+No, once more than one instance starts. Each instance races to apply the same migration — one wins, others throw. Apply a SQL script once in the release pipeline before any new instance boots. Startup does nothing in production.
+
+**30-second answer:** Generate an idempotent script with `dotnet ef migrations script --idempotent`, apply it once in the pipeline, then deploy. Remove `Database.Migrate()` from `Program.cs`.
+
+**Strong answer:** Explains the startup race condition, the difference between `database update` (local only) and an idempotent script (production), the expand-and-contract pattern for zero-downtime column changes, and the risk of locking a large table when adding a non-nullable column with a default. Also mentions that `__EFMigrationsHistory` is the source of truth — never hand-edit it.

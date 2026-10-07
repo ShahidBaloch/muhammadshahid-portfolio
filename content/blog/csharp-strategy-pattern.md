@@ -1,5 +1,5 @@
----
-title: "Strategy Pattern in C#: Replace If-Else With Clean Behavior Swaps"
+﻿---
+title: "Strategy Pattern in C#: Replace If-Else With Behavior Swaps"
 description: "Strategy Pattern in C# for ASP.NET Core — swap pricing, validation, or export algorithms without giant if-else blocks, and register strategies with dependency injection."
 date: "2026-08-01"
 category: "design-patterns"

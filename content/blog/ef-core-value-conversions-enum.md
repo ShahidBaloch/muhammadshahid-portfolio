@@ -2,6 +2,7 @@
 title: "EF Core Value Conversions for Enums and VOs"
 description: "EF Core value conversions for enums and value objects: HasConversion maps EmailAddress or enum to one SQL column — and what LINQ cannot query inside a JSON blob."
 date: "2026-09-07"
+updated: "2026-10-07"
 category: "ef-core"
 tags: ["EF Core", "Architecture", "DDD", "C#"]
 related:
@@ -86,6 +87,28 @@ db.Users.Where(u => u.Settings.Theme == "Dark")
 EF sees a primitive. It cannot reach `.Theme`. If you must filter on pieces of the object, **do not** use a JSON `HasConversion`. Use `OwnsOne`, or EF Core’s JSON column mapping, so SQL Server sees properties. [ExecuteUpdate](/blog/ef-core-bulk-update-executeupdate) on a converted column sets the whole value, not an inner field.
 
 I do not serialize an entire `Patient` graph into a converted column to "stay DDD." That is a blob that cannot be indexed honestly. Keep the value object small: email, money, a code.
+
+## Testing value conversions
+
+An `EmailAddress` that rejects junk at construction will throw when EF Core materializes a legacy row with an invalid value. Test this deliberately:
+
+```csharp
+[Fact]
+public async Task Materializes_valid_email_from_database()
+{
+    // Use a real SQL Server via Testcontainers or the in-memory provider
+    var user = await db.Users.AsNoTracking().FirstAsync(u => u.Id == knownId, ct);
+    user.Email.Value.Should().Contain("@");
+}
+```
+
+For a migration window where old rows may contain blanks, add a fallback constructor or a migration that normalises the column first. Do not add a silent fallback permanently — that defeats the validation the type object was created for.
+
+## What to check when a migration adds a conversion
+
+A `HasConversion` change is **not schema-neutral**. If the column was `INT` (default enum) and you add `HasConversion<string>()`, EF Core generates an `ALTER COLUMN` from `INT` to `NVARCHAR`. Existing rows become `'0'`, `'1'`, `'2'` — not `'Submitted'`, `'Approved'`, `'Rejected'`. Review the generated migration SQL before applying it. In most cases you want a data migration that rewrites the values as well.
+
+Changing back from string to int is the same class of problem. Treat every `HasConversion` change as a data migration, not a config edit.
 
 ## If an interviewer asks
 

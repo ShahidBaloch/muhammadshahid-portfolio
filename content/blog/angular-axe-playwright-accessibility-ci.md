@@ -1,5 +1,5 @@
----
-title: "Accessibility CI with axe + Playwright on an Angular ASP.NET Core SPA"
+﻿---
+title: "Accessibility CI with axe and Playwright on Angular + .NET"
 description: "Angular axe and Playwright accessibility CI: host the SPA in ASP.NET Core, scan real routes, and fail on serious or critical violations. Same host as production."
 date: "2026-10-03"
 category: "testing"

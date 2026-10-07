@@ -1,6 +1,6 @@
----
+﻿---
 title: "gRPC vs REST in ASP.NET Core: When Each Wins"
-description: "Decision guide for gRPC vs REST in ASP.NET Core — Angular browser constraints, service-to-service wins, JSON transcoding, auth differences, HTTP/2 ops, and a recommendation matrix. Not a full gRPC tutorial or REST principles rewrite."
+description: "gRPC vs REST in ASP.NET Core — when Protobuf streaming beats JSON/HTTP, and when REST is still the right choice for APIs."
 date: "2026-10-01"
 category: "architecture"
 tags: ["gRPC", "REST", "ASP.NET Core", "API Design", "Angular"]

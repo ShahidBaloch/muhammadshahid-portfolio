@@ -1,6 +1,6 @@
----
+﻿---
 title: "C# Channel<T> Producer-Consumer vs BlockingCollection"
-description: "Producer-consumer means one part of the app enqueues work and another processes it. Channel<T> waits without parking a thread; BlockingCollection.Take does. Bounded backpressure vs a durable bus."
+description: "C# Channel producer-consumer pattern — bounded vs unbounded channels, backpressure, cancellation, and production use cases in ASP.NET Core."
 date: "2026-09-07"
 updated: "2026-09-07"
 category: "async-concurrency"

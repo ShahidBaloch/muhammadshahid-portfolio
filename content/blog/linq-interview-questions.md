@@ -73,4 +73,41 @@ var page = await open.OrderBy(o => o.Id).Take(20).ToListAsync(ct);
 
 **Answer:** `Single` means zero or one, and it throws if there are two. After a bad import there are two rows. `First` hides the data bug. Say which one you want: `Single` when the invariant is one row, `FirstOrDefault` when missing is normal. Do not use `Single` as a synonym for `First`.
 
-Related: [IEnumerable vs IQueryable](/blog/ienumerable-vs-iqueryable-ef-core).
+## Scenario 4: Select before Where
+
+**Prompt:** A colleague changes `orders.Where(...).Select(o => o.Id)` to `orders.Select(o => o.Id).Where(...)`. Same results. Does it change the SQL?
+
+**Answer:** No, EF Core's query translator reorders `Select` and `Where` into efficient SQL regardless of the C# call order. The generated SQL will have a `WHERE` clause before the projection in most cases. This is different from LINQ to Objects, where the order matters for performance because the sequence is evaluated eagerly. Understanding that EF Core works on expression trees (not enumerables) is what the interviewer is probing.
+
+## Scenario 5: DateTime.Now in a query
+
+**Prompt:** `db.Orders.Where(o => o.DueOn < DateTime.Now)` passes tests and works locally. In staging it returns wrong rows after deployment.
+
+**Answer:** EF Core evaluates `DateTime.Now` once at query-build time in some cases, or translates it to `GETDATE()` in SQL — depending on the provider version. The result is not deterministic across provider updates. Use `DateTime.UtcNow` and keep it outside the query: `var cutoff = DateTime.UtcNow; db.Orders.Where(o => o.DueOn < cutoff)`. This also makes the expression translatable, avoids clock skew between app server and SQL server, and is testable by injecting the cutoff as a parameter.
+
+## Short reference
+
+| Scenario | Root cause | Fix |
+|---|---|---|
+| Two database round-trips | Deferred execution, query used twice | Materialize once with `ToListAsync` |
+| Slow query that works in tests | LINQ to Objects vs LINQ to Entities | Inline the predicate so EF can translate it |
+| `SingleAsync` throwing after import | Duplicate rows, invariant broken | Fix data; use `Single` only when uniqueness is enforced |
+| Wrong rows after deploy | `DateTime.Now` captured or translated inconsistently | Capture `DateTime.UtcNow` before the query |
+| Full table loaded despite `Take` | `AsEnumerable` or `IEnumerable` return type before `Take` | Keep `IQueryable` until after paging |
+
+## If an interviewer asks
+
+**"Give me a LINQ query that compiles and runs but silently does the wrong thing in EF Core."**
+
+```csharp
+// Looks fine — compiles, returns results, but loads the whole table
+public IEnumerable<Order> GetOpenOrders() =>
+    db.Orders.Where(o => o.Status == OrderStatus.Open);
+
+// Caller:
+var page = GetOpenOrders().OrderBy(o => o.Id).Take(20).ToList();
+```
+
+The declared return type is `IEnumerable` — the caller's `OrderBy` and `Take` run in memory after the full table is loaded. Change the return type to `IQueryable<Order>` and materialize inside the method, or return `IReadOnlyList<Order>` from a named method that applies paging in SQL.
+
+Related: [IEnumerable vs IQueryable](/blog/ienumerable-vs-iqueryable-ef-core). Hub: [EF Core](/learning/ef-core).

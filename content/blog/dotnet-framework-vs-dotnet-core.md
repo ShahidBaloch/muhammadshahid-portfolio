@@ -1,6 +1,6 @@
----
+﻿---
 title: ".NET Framework vs .NET Core vs .NET 10"
-description: ".NET Framework, .NET Core, and current .NET are not three competing frameworks. What each name means, which versions still get patches, and which TargetFramework to pick in 2026."
+description: "The difference between .NET Framework, .NET Core, and modern .NET — what each name means and which TargetFramework to use in 2026."
 date: "2026-09-18"
 updated: "2026-09-18"
 category: "architecture"

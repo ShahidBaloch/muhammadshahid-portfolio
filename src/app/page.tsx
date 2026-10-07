@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     absolute: `${siteConfig.name} | ${siteConfig.title}`,
   },
   description:
-    "Senior .NET + Angular engineer. Original ASP.NET Core, identity server, EF Core, and C# interview articles from healthcare and SaaS production work.",
+    "Senior .NET + Angular engineer. Articles on ASP.NET Core, EF Core, system design, DDD, microservices, and C# interviews — from healthcare and SaaS work.",
   alternates: { canonical: "/" },
 };
 
@@ -61,10 +61,10 @@ export default function HomePage() {
             </p>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <Link href="/contact" className="btn-primary w-full sm:w-auto">
+              <Link prefetch={false} href="/contact" className="btn-primary w-full sm:w-auto">
                 {siteConfig.inquiryCta}
               </Link>
-              <Link href="/work" className="btn-secondary w-full sm:w-auto">
+              <Link prefetch={false} href="/work" className="btn-secondary w-full sm:w-auto">
                 See selected work
               </Link>
             </div>
@@ -80,11 +80,11 @@ export default function HomePage() {
                 <span className="sr-only"> (opens in a new tab)</span>
               </a>
               <span className="text-kicker" aria-hidden>·</span>
-              <Link href="/services" className="font-semibold link-underline">
+              <Link prefetch={false} href="/services" className="font-semibold link-underline">
                 What I take on
               </Link>
               <span className="text-kicker" aria-hidden>·</span>
-              <Link href="/blog" className="font-semibold link-underline">
+              <Link prefetch={false} href="/blog" className="font-semibold link-underline">
                 Read the blog
               </Link>
             </p>
@@ -122,7 +122,7 @@ export default function HomePage() {
                   Production systems with clear boundaries.
                 </h2>
               </div>
-              <Link href="/work" className="font-semibold link-underline">
+              <Link prefetch={false} href="/work" className="font-semibold link-underline">
                 Full case notes
                 <span aria-hidden> →</span>
               </Link>
@@ -137,7 +137,7 @@ export default function HomePage() {
                   <div>
                     <p className="eyebrow">{project.domain}</p>
                     <h3 className="heading-card mt-2 text-[clamp(1.25rem,2.5vw,1.65rem)] font-bold">
-                      <Link href={`/work/${project.slug}`} className="hover:text-link">
+                      <Link prefetch={false} href={`/work/${project.slug}`} className="hover:text-link">
                         {project.title}
                       </Link>
                     </h3>
@@ -175,33 +175,33 @@ export default function HomePage() {
                 </p>
               </div>
               <div className="flex flex-col gap-2 sm:items-end">
-                <Link
+                <Link prefetch={false}
                   href="/learning/interview-questions"
                   className="font-semibold link-underline"
                 >
                   Interview questions
                   <span aria-hidden> →</span>
                 </Link>
-                <Link
+                <Link prefetch={false}
                   href="/learning/async-concurrency"
                   className="font-semibold link-underline"
                 >
                   Async & Threading
                   <span aria-hidden> →</span>
                 </Link>
-                <Link href="/learning/ef-core" className="font-semibold link-underline">
+                <Link prefetch={false} href="/learning/ef-core" className="font-semibold link-underline">
                   EF Core
                 </Link>
-                <Link href="/learning/identity" className="font-semibold link-underline">
+                <Link prefetch={false} href="/learning/identity" className="font-semibold link-underline">
                   Identity
                 </Link>
-                <Link href="/learning/authentication" className="font-semibold link-underline">
+                <Link prefetch={false} href="/learning/authentication" className="font-semibold link-underline">
                   Authentication
                 </Link>
-                <Link href="/learning/api-design" className="font-semibold link-underline">
+                <Link prefetch={false} href="/learning/api-design" className="font-semibold link-underline">
                   API design
                 </Link>
-                <Link href="/blog" className="font-semibold link-underline">
+                <Link prefetch={false} href="/blog" className="font-semibold link-underline">
                   All articles
                   <span aria-hidden> →</span>
                 </Link>
@@ -214,7 +214,7 @@ export default function HomePage() {
               <article key={post.slug} className="py-4 sm:py-5">
                 <PostDate date={post.date} updated={post.updated} readingTime={post.readingTime} />
                 <h3 className="heading-subsection mt-2">
-                  <Link href={`/blog/${post.slug}`} className="hover:text-link">
+                  <Link prefetch={false} href={`/blog/${post.slug}`} className="hover:text-link">
                     {post.title}
                   </Link>
                 </h3>

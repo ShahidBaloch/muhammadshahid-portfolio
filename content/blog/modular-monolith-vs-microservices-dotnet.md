@@ -1,6 +1,6 @@
----
+﻿---
 title: "Modular Monolith vs Microservices in .NET"
-description: ".NET microservices vs modular monolith for ASP.NET Core — when to split C# services, module boundaries, data ownership, Angular contract stability, and migration path."
+description: "Modular monolith vs microservices for .NET — when to split C# services, module boundaries, data ownership, Angular contract stability, and migration path."
 date: "2026-08-02"
 updated: "2026-09-12"
 category: "architecture"

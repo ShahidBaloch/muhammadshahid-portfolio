@@ -1,6 +1,6 @@
----
+﻿---
 title: "GitHub Actions CI/CD for ASP.NET Core + Angular"
-description: "A portable GitHub Actions workflow for ASP.NET Core + Angular — restore/build/test caching, npm ci and budget gates, artifacts, environment protection, EF migration job pointers, and secrets you never put in YAML."
+description: "GitHub Actions CI/CD for ASP.NET Core and Angular — multi-stage build, test gate, Docker publish, and Azure App Service deployment."
 date: "2026-10-01"
 category: "devops"
 tags: ["GitHub Actions", "CI/CD", "ASP.NET Core", "Angular", "DevOps"]

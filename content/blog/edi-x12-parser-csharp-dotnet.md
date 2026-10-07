@@ -1,6 +1,6 @@
----
+﻿---
 title: "EDI X12 Parsers in C# and .NET"
-description: "Independent notes on parsing X12 in C# for healthcare and supply-chain APIs: envelope vs transaction, 837-shaped pipelines, what libraries actually do, and how ASP.NET Core should host this work."
+description: "Parsing X12 EDI in C# for healthcare APIs — envelope vs transaction sets, 837 pipelines, what libraries do, and how ASP.NET Core should host the work."
 date: "2026-08-15"
 category: "edi"
 tags: ["EDI", "X12", "ASP.NET Core", ".NET", "Healthcare"]

@@ -116,7 +116,7 @@ export function Header() {
         }`}
       >
       <div className="container-narrow flex h-14 items-center justify-between gap-3 px-4 sm:h-16 sm:gap-4 sm:px-8 lg:px-12">
-        <Link
+        <Link prefetch={false}
           href="/"
           aria-label="Muhammad Shahid, home"
           className="group flex min-w-0 items-center gap-2 font-display text-[0.95rem] font-semibold tracking-tight text-ink transition hover:text-link sm:gap-2.5 sm:text-lg"
@@ -130,7 +130,7 @@ export function Header() {
               if (link.href === "/blog") {
               return (
                 <div key={link.href} className="relative flex items-center" ref={blogRef}>
-                  <Link
+                  <Link prefetch={false}
                     href="/blog"
                     className={`nav-link hover:text-link ${
                       blogCluster ? "nav-link-active" : "text-ink-soft"
@@ -157,7 +157,7 @@ export function Header() {
                   {blogOpen ? (
                     <div id="blog-menu" role="menu" className="absolute left-0 top-full z-50 pt-2">
                       <div className="max-h-[min(24rem,70vh)] min-w-[230px] overflow-y-auto overscroll-contain rounded-xl border border-slate-line bg-surface-2 py-2 shadow-[0_12px_32px_rgba(15,23,42,0.12)]">
-                        <Link
+                        <Link prefetch={false}
                           href="/blog"
                           role="menuitem"
                           className="block px-4 py-2.5 text-sm text-ink-soft hover:bg-paper hover:text-link"
@@ -170,7 +170,7 @@ export function Header() {
                           Topics
                         </p>
                         {learningNavTopics.map((topic) => (
-                          <Link
+                          <Link prefetch={false}
                             key={topic.slug}
                             href={`/learning/${topic.slug}`}
                             role="menuitem"
@@ -189,7 +189,7 @@ export function Header() {
 
             const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
             return (
-              <Link
+              <Link prefetch={false}
                 key={link.href}
                 href={link.href}
                 aria-current={active ? "page" : undefined}
@@ -201,7 +201,7 @@ export function Header() {
               </Link>
             );
           })}
-          <Link href="/contact" className="btn-primary ml-2 !px-4 !py-2 !text-xs">
+          <Link prefetch={false} href="/contact" className="btn-primary ml-2 !px-4 !py-2 !text-xs">
             {siteConfig.inquiryCta}
           </Link>
         </nav>
@@ -249,7 +249,7 @@ export function Header() {
                 return (
                   <div key={link.href} className="border-b border-slate-line/70">
                     <div className="flex items-center gap-1">
-                      <Link
+                      <Link prefetch={false}
                         href="/blog"
                         aria-current={onBlog ? "page" : undefined}
                         className={`flex min-h-12 min-w-0 flex-1 items-center text-base font-medium hover:text-link ${
@@ -275,7 +275,7 @@ export function Header() {
                         className="mb-3 flex flex-col border-l border-slate-line pl-3"
                       >
                         {learningNavTopics.map((topic) => (
-                          <Link
+                          <Link prefetch={false}
                             key={topic.slug}
                             href={`/learning/${topic.slug}`}
                             className="flex min-h-11 items-center text-sm text-muted hover:text-link"
@@ -291,7 +291,7 @@ export function Header() {
 
               const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
               return (
-                <Link
+                <Link prefetch={false}
                   key={link.href}
                   href={link.href}
                   aria-current={active ? "page" : undefined}
@@ -303,7 +303,7 @@ export function Header() {
                 </Link>
               );
             })}
-            <Link href="/contact" className="btn-primary mt-4 w-full">
+            <Link prefetch={false} href="/contact" className="btn-primary mt-4 w-full">
               {siteConfig.inquiryCta}
             </Link>
           </nav>

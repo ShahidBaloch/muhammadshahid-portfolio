@@ -1,5 +1,5 @@
----
-title: "Application Insights for ASP.NET Core APIs (and Angular SPAs)"
+﻿---
+title: "Application Insights for ASP.NET Core APIs and Angular"
 description: "Application Insights for ASP.NET Core and Angular: call UseAzureMonitor, send traceparent from the SPA, and keep tokens and PII out of the portal."
 date: "2026-10-03"
 category: "azure"

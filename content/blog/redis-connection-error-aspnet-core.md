@@ -1,5 +1,5 @@
----
-title: "Error Establishing a Redis Connection in ASP.NET Core (Fix Guide)"
+﻿---
+title: "Error Establishing a Redis Connection in ASP.NET Core"
 description: "Fix 'error establishing a Redis connection' in ASP.NET Core — connection string, TLS, Azure Cache for Redis, Docker networking, timeout, and fail-open IDistributedCache patterns."
 date: "2026-09-08"
 updated: "2026-09-08"

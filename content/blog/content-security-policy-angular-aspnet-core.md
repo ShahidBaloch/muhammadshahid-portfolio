@@ -1,6 +1,6 @@
----
+﻿---
 title: "Content Security Policy for Angular Hosted by ASP.NET Core"
-description: "Ship a production Content Security Policy for Angular hosted by ASP.NET Core — nonce middleware for index.html, script/style directives, Material/chart breaks, Report-Only rollout, and debugging without disabling CSP. Deepens the security-headers post."
+description: "Configure Content Security Policy for Angular and ASP.NET Core — nonce-based middleware, inline script handling, and violation reporting."
 date: "2026-10-01"
 category: "security"
 tags: ["CSP", "Content Security Policy", "Angular", "ASP.NET Core", "Security"]

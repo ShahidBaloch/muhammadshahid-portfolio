@@ -1,6 +1,6 @@
----
+﻿---
 title: "C# Task.Yield: Keep WPF and MAUI UI Threads Responsive"
-description: "Skip this if you only write ASP.NET Core APIs. await Task.Yield() lets the WPF/MAUI message pump run, then continues on the UI thread. Prefer Task.Run for CPU. Yield is not a Core performance trick."
+description: "Task.Yield in C# — when it yields control back to the caller, why it matters on UI threads, and why it is almost never right in ASP.NET Core."
 date: "2026-09-07"
 updated: "2026-09-07"
 category: "async-concurrency"

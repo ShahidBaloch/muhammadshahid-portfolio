@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, Source_Sans_3 } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import Script from "next/script";
+import { AdSense } from "@/components/AdSense";
 import { Analytics } from "@/components/Analytics";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { ADSENSE_CLIENT_ID } from "@/lib/adsense";
 import { personJsonLd, websiteJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
@@ -14,14 +14,11 @@ const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 const display = Space_Grotesk({
   subsets: ["latin"],
+  weight: ["600", "700"],
   variable: "--font-space",
-  display: "swap",
-});
-
-const body = Source_Sans_3({
-  subsets: ["latin"],
-  variable: "--font-source",
-  display: "swap",
+  display: "optional",
+  preload: false,
+  adjustFontFallback: true,
 });
 
 export const viewport: Viewport = {
@@ -43,9 +40,9 @@ export const metadata: Metadata = {
     ".NET developer",
     "Angular developer",
     "ASP.NET Core",
-    "Full Stack Developer",
-    "freelance .NET",
-    "healthcare software",
+    "system design",
+    "DDD",
+    "microservices",
     "Azure",
   ],
   authors: [{ name: siteConfig.name, url: siteConfig.url }],
@@ -99,7 +96,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" className={`${display.variable} ${body.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={display.variable}>
       <body className="min-h-screen font-body">
         <Script id="consent-default" strategy="beforeInteractive">
           {`
@@ -132,14 +129,7 @@ export default function RootLayout({
         <Footer />
         <CookieConsent />
         <Analytics />
-        {ADSENSE_CLIENT_ID && (
-          <Script
-            id="adsense-loader"
-            strategy="afterInteractive"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
-            crossOrigin="anonymous"
-          />
-        )}
+        <AdSense />
       </body>
     </html>
   );

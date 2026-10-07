@@ -1,5 +1,5 @@
----
-title: "ASP.NET Core Minimal APIs: When to Use Them (and When Not To)"
+﻿---
+title: "ASP.NET Core Minimal APIs: When to Use Them"
 description: "ASP.NET Core Minimal APIs guide — MapGet, MapGroup, DI, validation, OpenAPI, JWT auth, and when controllers still win for Angular-backed products."
 date: "2026-08-10"
 updated: "2026-09-12"

@@ -1,6 +1,6 @@
----
-title: "NgRx vs Signals vs SignalStore for ASP.NET Core Enterprise SPAs"
-description: "Angular state management decision for ASP.NET Core backends — local Signals, SignalStore for entity CRUD, and when classic NgRx Effects still win. Complements the Signals how-to; does not rewrite it."
+﻿---
+title: "NgRx vs Signals vs SignalStore for Angular Enterprise SPAs"
+description: "NgRx vs Angular Signals vs SignalStore — when each state management approach is correct for enterprise SPAs backed by ASP.NET Core."
 date: "2026-10-01"
 category: "angular"
 tags: ["Angular", "NgRx", "Signals", "SignalStore", "ASP.NET Core"]

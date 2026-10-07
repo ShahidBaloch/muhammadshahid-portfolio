@@ -1,5 +1,5 @@
----
-title: "Azure Private Endpoints for ASP.NET Core Talking to SQL and Key Vault"
+﻿---
+title: "Azure Private Endpoints for ASP.NET Core and SQL Server"
 description: "Reach Azure SQL and Key Vault from ASP.NET Core over private endpoints and privatelink DNS, then disable public network access on both services."
 date: "2026-10-03"
 category: "architecture"

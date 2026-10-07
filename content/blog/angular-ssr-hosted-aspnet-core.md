@@ -1,6 +1,6 @@
----
-title: "Angular SSR Hosted by ASP.NET Core: Production Layout That Works"
-description: "Host Angular SSR or prerender with an ASP.NET Core API — process layout, cookies and TransferState, MapFallbackToFile vs API routes, App Service/container deploy sketch, and when SSR is not worth it for SaaS shells."
+﻿---
+title: "Angular SSR Hosted by ASP.NET Core: Production Layout"
+description: "Angular SSR hosted by ASP.NET Core — the production layout that actually works, with build config, proxy setup, and common SSR pitfalls."
 date: "2026-10-01"
 category: "angular"
 tags: ["Angular", "SSR", "ASP.NET Core", "Hosting", "SEO"]

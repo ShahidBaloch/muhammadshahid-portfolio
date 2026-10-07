@@ -1,6 +1,6 @@
----
-title: "Azure Service Bus with ASP.NET Core: Queues, Topics, and Sessions"
-description: "Use Azure Service Bus from ASP.NET Core — ServiceBusClient, processors in BackgroundService, queues vs topics vs sessions, JSON pitfalls, peek-lock, and where the transactional outbox fits. Not an outbox theory rewrite."
+﻿---
+title: "Azure Service Bus with ASP.NET Core: Queues and Topics"
+description: "Azure Service Bus with ASP.NET Core — queues, topics, sessions, message processor, and retry/DLQ patterns for production workloads."
 date: "2026-10-01"
 category: "azure"
 tags: ["Azure Service Bus", "ASP.NET Core", "Messaging", "C#", "BackgroundService"]
@@ -33,6 +33,22 @@ Dispatcher ──publish──► Service Bus queue/topic
 ```
 
 **New to this** → stay here. **Atomic publish with EF** → [transactional outbox](/blog/transactional-outbox-ef-core). **Hosted service patterns** → [BackgroundService](/blog/csharp-backgroundservice-hosted-service-async).
+
+```text
+src/
+├── Clinic.Application/
+│   └── Messaging/
+│       └── IServiceBusDispatcher.cs      # port: PublishAsync(message)
+├── Clinic.Infrastructure/
+│   └── Messaging/
+│       ├── ServiceBusDispatcher.cs       # singleton ServiceBusClient + sender
+│       ├── EncounterProcessor.cs         # BackgroundService wrapping ServiceBusProcessor
+│       └── ServiceBusExtensions.cs       # AddServiceBus() registration helper
+└── Clinic.Worker/                        # optional separate worker process
+    └── Program.cs                        # hosts processor(s) without the HTTP stack
+```
+
+Keep `ServiceBusClient` singleton — it manages connections internally. One client, multiple senders and processors.
 
 Search intent for **azure service bus asp.net core** is how-to clients/processors/sessions — not SKU marketing and not outbox theory alone.
 

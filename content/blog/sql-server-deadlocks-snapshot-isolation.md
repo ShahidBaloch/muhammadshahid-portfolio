@@ -2,6 +2,7 @@
 title: "SQL Server Deadlocks and Snapshot Isolation"
 description: "Readers blocking writers deadlock an ASP.NET Core API. READ_COMMITTED_SNAPSHOT (RCSI) uses row versions. It does not fix lost updates on the same row."
 date: "2026-09-07"
+updated: "2026-10-07"
 category: "ef-core"
 tags: ["SQL Server", "Performance", "Concurrency", "EF Core"]
 related:
@@ -63,8 +64,19 @@ Versions live in TempDB. Write-heavy fee imports plus RCSI plus one TempDB file 
 
 I do not enable RCSI on a misconfigured box as a Friday hero fix without watching `PAGELATCH_UP` on database id 2.
 
+## How to read the deadlock graph
+
+SQL Server's `system_health` extended event session captures deadlock XMLs. In SSMS you can open the `.xdl` file from the ring buffer and see both sessions, the resources they held, and which was chosen as the victim.
+
+Look at the `waitresource` on each edge. If one is `RID` or `KEY` on a data page and the other is an `S` lock on the same resource, RCSI likely fixes it. If both are `X` locks on the same key, you have a writer/writer conflict and RCSI will not help — add a `RowVersion` column and handle `DbUpdateConcurrencyException` in the application.
+
+Deadlocks that show `OBJECT` locks (table-level) from a missing index are a different problem: the scan locks many pages and creates broad conflict. Fix the index before adding snapshot isolation.
+
 ## If an interviewer asks
 
-**30-second answer:** Reader/writer deadlocks under default Read Committed — enable RCSI so readers use row versions. Two writers on the same row still need a concurrency token; RCSI does not fix last-write-wins.
+**"How do you diagnose and fix reader/writer deadlocks in SQL Server?"**  
+Read the deadlock graph from `system_health`. If one session holds a shared lock and the other needs an exclusive lock on the same resource, enable RCSI — readers use row versions in TempDB and no longer block writers. If both sessions are writers on the same row, the fix is an optimistic concurrency token (`RowVersion`) and retry logic in the application. RCSI does not fix last-write-wins.
 
-**Strong answer:** Names TempDB trade-off after RCSI, distinguishes RCSI from session `SNAPSHOT` isolation, and says when the deadlock graph shows two writers on the same key.
+**30-second answer:** `PAGELATCH_UP` → TempDB contention. Deadlock victim in `system_health` with one reader and one writer → enable RCSI. Two writers on the same row → add a `RowVersion` token.
+
+**Strong answer:** Distinguishes RCSI (database-level, changes the default isolation for all Read Committed connections) from session-level `SNAPSHOT` isolation (explicit `SET TRANSACTION ISOLATION LEVEL SNAPSHOT`, stricter versioning). Names the TempDB version store trade-off — RCSI increases version store pressure on write-heavy workloads, so misconfigured TempDB can swap deadlocks for `PAGELATCH_UP` contention. Also confirms Azure SQL has RCSI on by default, so enabling it on-prem is the meaningful action.

@@ -1,6 +1,6 @@
----
+﻿---
 title: "Asynchronous Class in C#: Writing Async Methods on a Type"
-description: "What an asynchronous class means in C# — async methods, Task return types, IAsyncDisposable, and ASP.NET Core service patterns. Plus how asynchronous class differs from online course terminology."
+description: "How to write an asynchronous class in C# — async methods, constructors, async factory pattern, and IAsyncDisposable for proper cleanup."
 date: "2026-09-08"
 updated: "2026-09-08"
 category: "async-concurrency"

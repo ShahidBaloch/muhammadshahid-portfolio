@@ -1,6 +1,6 @@
----
+﻿---
 title: "C# Interlocked CompareExchange: Lock-Free Counters"
-description: "Interlocked updates one variable in an uninterruptible CPU step so two threads cannot both read 5 and both write 6. Use Increment for counters; CompareExchange (CAS) for flags; a lock when two fields must change together."
+description: "Interlocked.CompareExchange in C# — lock-free atomic operations, CAS patterns, and when to use Interlocked over lock in .NET."
 date: "2026-09-07"
 updated: "2026-09-07"
 category: "async-concurrency"

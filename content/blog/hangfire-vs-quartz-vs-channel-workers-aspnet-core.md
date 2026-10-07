@@ -1,6 +1,6 @@
----
+﻿---
 title: "Hangfire vs Quartz.NET vs Channel Workers in ASP.NET Core"
-description: "Decision matrix for ASP.NET Core background work — Hangfire vs Quartz.NET vs Channel + BackgroundService. Fire-and-forget, recurring jobs, multi-instance pitfalls, and when in-process is enough. Not an Azure Functions deep dive."
+description: "Hangfire vs Quartz.NET vs Channel workers for ASP.NET Core background jobs — when each is the right choice for scheduling and queuing."
 date: "2026-10-01"
 category: "async-concurrency"
 tags: ["ASP.NET Core", "Hangfire", "Quartz.NET", "BackgroundService", "C#"]

@@ -1,5 +1,5 @@
----
-title: "What Is a Cache Miss? (Definition With ASP.NET Core Examples)"
+﻿---
+title: "What Is a Cache Miss? Definition With ASP.NET Core Examples"
 description: "What is a cache miss — definition, cache hit vs miss, why misses hurt performance, and how cache misses work with IMemoryCache and Redis on ASP.NET Core APIs."
 date: "2026-09-08"
 updated: "2026-09-08"

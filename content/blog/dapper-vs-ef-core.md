@@ -1,5 +1,5 @@
----
-title: "Dapper vs EF Core: Architecture, Performance, and Hybrid Patterns"
+﻿---
+title: "Dapper vs EF Core: Architecture and Hybrid Patterns"
 description: "Dapper vs EF Core in ASP.NET Core: performance realities, change tracking overhead, sharing transactions in hybrid architectures, and when to use each tool."
 date: "2026-09-18"
 updated: "2026-10-03"

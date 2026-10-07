@@ -1,6 +1,6 @@
----
+﻿---
 title: "RFC 9457 Problem Details Deep Dive for ASP.NET Core"
-description: "RFC 9457 Problem Details for ASP.NET Core — type URIs, extensions, IProblemDetailsService, validation vs exceptions, Minimal APIs, and Angular-consumable shapes. Deepens global-exception and validation posts without inventing a second error standard."
+description: "RFC 9457 ProblemDetails in ASP.NET Core — standard error responses, extension fields, Angular error parsing, and client-friendly formats."
 date: "2026-10-01"
 category: "api-design"
 tags: ["ASP.NET Core", "ProblemDetails", "RFC 9457", "API Design", "Angular"]

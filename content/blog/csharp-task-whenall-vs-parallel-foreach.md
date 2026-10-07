@@ -1,6 +1,6 @@
----
+﻿---
 title: "C# Task.WhenAll vs WaitAll vs Parallel.ForEachAsync"
-description: "Task.WhenAll waits for many I/O tasks without blocking a thread. WaitAll blocks the pool. Cap 10,000 HTTP calls, never WhenAll two queries on one DbContext, Parallel.ForEachAsync is for CPU or throttled I/O."
+description: "Task.WhenAll vs Parallel.ForEach in C# — parallel I/O vs CPU work, WhenAll with EF Core gotchas, and cancellation handling."
 date: "2026-09-07"
 updated: "2026-09-07"
 category: "async-concurrency"

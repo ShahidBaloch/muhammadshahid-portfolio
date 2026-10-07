@@ -1,6 +1,6 @@
----
-title: "Hot Chocolate GraphQL in ASP.NET Core: Schema, Queries, and Mutations"
-description: "Production Hot Chocolate GraphQL primer for ASP.NET Core — schema layout, queries, mutations, EF Core N+1 preview, field auth, and Angular client notes. Not a REST redesign and not a DataLoader deep dive."
+﻿---
+title: "Hot Chocolate GraphQL in ASP.NET Core: Queries and Mutations"
+description: "Hot Chocolate GraphQL in ASP.NET Core — schema definition, queries, mutations, subscriptions, and auth integration patterns."
 date: "2026-10-01"
 category: "api-design"
 tags: ["ASP.NET Core", "GraphQL", "Hot Chocolate", "Angular", "C#"]

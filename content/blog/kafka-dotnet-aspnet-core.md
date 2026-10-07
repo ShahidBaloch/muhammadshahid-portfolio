@@ -1,6 +1,6 @@
----
-title: "Apache Kafka with .NET: When ASP.NET Core Teams Should Adopt It"
-description: "Kafka on .NET for ASP.NET Core: adopt it for replay and many consumers, commit the outbox with the row, and commit offsets after the write. Not from the controller."
+﻿---
+title: "Apache Kafka with .NET: When to Adopt It"
+description: "Kafka on .NET for ASP.NET Core: adopt for replay and many consumers, commit the outbox with the row, and commit offsets after the write. Not from the controller."
 date: "2026-10-03"
 category: "architecture"
 tags: ["Kafka", "ASP.NET Core", ".NET", "Azure Service Bus", "C#"]

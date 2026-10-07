@@ -1,6 +1,6 @@
----
+﻿---
 title: "Unable to Resolve Service for Type in ASP.NET Core DI"
-description: "How to read ASP.NET Core’s Unable to resolve service for type exception — missing registration, IOptions vs T, hosted services, keyed services, and WebApplicationFactory — not a lifetimes essay."
+description: "Fix the ASP.NET Core 'Unable to resolve service' DI error — lifetime mismatches, missing registrations, and captive dependency traps."
 date: "2026-09-07"
 category: "dependency-injection"
 tags: ["Dependency Injection", "ASP.NET Core", ".NET", "IoC", "C#"]

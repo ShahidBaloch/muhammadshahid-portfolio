@@ -1,5 +1,5 @@
----
-title: "Azure Event Grid with ASP.NET Core: Handshake and Idempotent Ack"
+﻿---
+title: "Azure Event Grid with ASP.NET Core: Idempotent Ack"
 description: "Azure Event Grid with ASP.NET Core webhooks: the OPTIONS or validationResponse handshake, caller authentication, and a fast ack that stays safe on retry."
 date: "2026-10-03"
 category: "architecture"

@@ -1,6 +1,6 @@
----
-title: "Angular Reactive Forms Validation with ASP.NET Core ProblemDetails"
-description: "Map ASP.NET Core ProblemDetails and FluentValidation field errors onto Angular Reactive Forms — FormGroup patterns, setErrors, submit UX, interceptors, and tests. Not a FluentValidation server tutorial."
+﻿---
+title: "Angular Reactive Forms Validation with ProblemDetails"
+description: "Angular Reactive Forms validation bound to ASP.NET Core ProblemDetails — map field-level errors from the API envelope to form controls."
 date: "2026-10-01"
 category: "angular"
 tags: ["Angular", "Reactive Forms", "ProblemDetails", "ASP.NET Core", "Validation"]

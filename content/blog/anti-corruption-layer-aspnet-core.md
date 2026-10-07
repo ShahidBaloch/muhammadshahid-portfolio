@@ -53,6 +53,28 @@ You do not need one for your own `Order` entity mapped to your own `OrderDto` on
 
 You also do not need one as a second copy of a database you fully control. If both sides are yours and released together, a shared kernel or a simple DTO is cheaper. The layer pays for itself when the other side ships on a calendar you do not control.
 
+## Project layout
+
+The port lives in Application. The adapter and vendor DTO live in Infrastructure. The domain project must not reference either Infrastructure or the vendor package.
+
+```text
+src/
+├── Clinic.Domain/
+│   └── Patients/
+│       └── PatientId.cs
+├── Clinic.Application/
+│   └── Eligibility/
+│       └── IEligibilityReader.cs          # port — only type other layers import
+├── Clinic.Infrastructure/
+│   └── Payer/
+│       ├── PayerEligibilityAcl.cs         # HttpClient + Translate()
+│       └── PayerEligibilityDto.cs         # their JSON shape — never leaves this folder
+└── Clinic.Web/
+    └── Program.cs                          # AddHttpClient<IEligibilityReader, PayerEligibilityAcl>
+```
+
+A second payer becomes `Clinic.Infrastructure/Payer2/Payer2EligibilityAcl.cs` behind the same `IEligibilityReader`. The domain and application projects do not change.
+
 ## Shape the port so the domain never sees the partner
 
 > **Watch:** A method that deserializes the partner JSON straight into your entity is a client, not a translation. Their next rename becomes your migration.
