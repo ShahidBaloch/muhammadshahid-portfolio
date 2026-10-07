@@ -6,11 +6,12 @@
 
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const SITE = "https://www.muhammadshahid.dev";
 const KEY = "e9f7c3a8b2d14f6e5a0c9b7d3e2f1a8c";
 const KEY_LOCATION = `${SITE}/${KEY}.txt`;
-const BLOG_DIR = new URL("../content/blog", import.meta.url).pathname.replace(/^\/([A-Z]:)/, "$1");
+const BLOG_DIR = fileURLToPath(new URL("../content/blog", import.meta.url));
 
 /** Read all blog slugs from content/blog/ */
 async function getBlogSlugs() {
@@ -32,8 +33,8 @@ async function getPostDate(slug) {
   }
 }
 
-/** Submit URLs to IndexNow endpoint */
-async function submitToIndexNow(urls) {
+/** Submit URLs to a single IndexNow endpoint */
+async function submitToEndpoint(endpoint, urls) {
   const payload = {
     host: "www.muhammadshahid.dev",
     key: KEY,
@@ -41,13 +42,28 @@ async function submitToIndexNow(urls) {
     urlList: urls,
   };
 
-  const response = await fetch("https://api.indexnow.org/indexnow", {
+  const response = await fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=utf-8" },
     body: JSON.stringify(payload),
   });
 
   return response.status;
+}
+
+/** Submit URLs to all IndexNow endpoints */
+async function submitToIndexNow(urls) {
+  // Yandex is primary (confirmed working); api.indexnow.org covers other engines
+  const endpoints = [
+    "https://yandex.com/indexnow",
+    "https://api.indexnow.org/indexnow",
+  ];
+
+  for (const endpoint of endpoints) {
+    const host = new URL(endpoint).hostname;
+    const status = await submitToEndpoint(endpoint, urls);
+    console.log(`  [${host}] HTTP ${status}`);
+  }
 }
 
 async function main() {
@@ -86,12 +102,12 @@ async function main() {
   const CHUNK = 10000;
   for (let i = 0; i < urls.length; i += CHUNK) {
     const chunk = urls.slice(i, i + CHUNK);
-    const status = await submitToIndexNow(chunk);
-    console.log(`  Submitted ${chunk.length} URLs — HTTP ${status}`);
+    console.log(`Submitting ${chunk.length} URLs...`);
+    await submitToIndexNow(chunk);
   }
 
   console.log(`Done. ${urls.length} URL(s) submitted.`);
-  console.log("Bing/IndexNow typically crawls within 24-48 hours.");
+  console.log("Yandex/IndexNow typically crawls within 24-48 hours.");
 }
 
 main().catch((err) => {
