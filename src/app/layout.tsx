@@ -10,6 +10,9 @@ import { personJsonLd, websiteJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
 
+/** Deploy-time static pages — lower Vercel ISR usage (contact API stays dynamic). */
+export const dynamic = "force-static";
+
 const googleSiteVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 const display = Space_Grotesk({

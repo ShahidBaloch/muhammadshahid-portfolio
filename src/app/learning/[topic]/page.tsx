@@ -15,6 +15,7 @@ type PageProps = {
   params: Promise<{ topic: string }>;
 };
 
+export const dynamic = "force-static";
 export const dynamicParams = false;
 
 export function generateStaticParams() {

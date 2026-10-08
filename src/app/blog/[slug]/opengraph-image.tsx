@@ -1,6 +1,13 @@
 import { ImageResponse } from "next/og";
-import { getPostBySlug } from "@/lib/posts";
+import { getPostBySlug, getPostSlugs } from "@/lib/posts";
 import { siteConfig } from "@/lib/site";
+
+export const dynamic = "force-static";
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return getPostSlugs().map((slug) => ({ slug }));
+}
 
 export const alt = `${siteConfig.name} — article`;
 export const size = { width: 1200, height: 630 };

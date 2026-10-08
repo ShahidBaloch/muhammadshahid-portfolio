@@ -30,6 +30,29 @@ const nextConfig: NextConfig = {
       { source: "/feed", destination: "/rss.xml", permanent: true },
     ];
   },
+  async headers() {
+    const cacheableMeta =
+      "public, max-age=86400, stale-while-revalidate=604800";
+
+    return [
+      {
+        source: "/sitemap.xml",
+        headers: [{ key: "Cache-Control", value: cacheableMeta }],
+      },
+      {
+        source: "/robots.txt",
+        headers: [{ key: "Cache-Control", value: cacheableMeta }],
+      },
+      {
+        source: "/rss.xml",
+        headers: [{ key: "Cache-Control", value: cacheableMeta }],
+      },
+      {
+        source: "/:path(.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt|xml))",
+        headers: [{ key: "Cache-Control", value: cacheableMeta }],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

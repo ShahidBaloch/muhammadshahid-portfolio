@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/posts";
 import { siteConfig } from "@/lib/site";
 
+export const dynamic = "force-static";
+
 const SITE = siteConfig.url;
 
 const NOW = new Date().toISOString().slice(0, 10);

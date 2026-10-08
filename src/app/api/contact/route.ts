@@ -1,5 +1,7 @@
 import nodemailer from "nodemailer";
 
+export const dynamic = "force-dynamic";
+
 type ContactBody = {
   name?: string;
   email?: string;

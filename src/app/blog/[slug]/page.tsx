@@ -15,6 +15,7 @@ type PageProps = {
 };
 
 /** Unknown slugs must 404 at the edge — not 200 with not-found HTML (soft 404). */
+export const dynamic = "force-static";
 export const dynamicParams = false;
 
 export function generateStaticParams() {
