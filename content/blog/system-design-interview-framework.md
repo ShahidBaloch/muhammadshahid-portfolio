@@ -241,7 +241,7 @@ The honest answer involves identifying the first bottleneck and addressing it sp
 
 **"Why not just use a monolith for this?"**
 
-This is a great question. For early-stage URL shorteners, a well-structured monolith is probably the right answer. The separation of redirect servers from shortening servers makes sense because they have dramatically different scaling characteristics, not because microservices are inherently better. See my post on [modular monolith vs microservices](/blog/modular-monolith-vs-microservices) for when that trade-off is worth it.
+This is a great question. For early-stage URL shorteners, a well-structured monolith is probably the right answer. The separation of redirect servers from shortening servers makes sense because they have dramatically different scaling characteristics, not because microservices are inherently better. See my post on [modular monolith vs microservices](/blog/modular-monolith-vs-microservices-dotnet) for when that trade-off is worth it.
 
 **"How would you monitor this in production?"**
 

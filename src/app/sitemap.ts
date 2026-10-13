@@ -55,7 +55,14 @@ const staticRoutes: MetadataRoute.Sitemap = [
     changeFrequency: "yearly",
     priority: 0.3,
   },
+  {
+    url: `${SITE}/disclaimer`,
+    changeFrequency: "yearly",
+    priority: 0.2,
+  },
 ];
+
+const projectSlugs = ["carbazaar", "ecom-net10", "healthcare-saas"];
 
 const learningHubs = [
   "api-design",
@@ -93,5 +100,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...hubEntries, ...postEntries];
+  const workEntries: MetadataRoute.Sitemap = projectSlugs.map((slug) => ({
+    url: `${SITE}/work/${slug}`,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...workEntries, ...hubEntries, ...postEntries];
 }

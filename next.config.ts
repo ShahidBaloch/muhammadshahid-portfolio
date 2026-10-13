@@ -25,6 +25,12 @@ const nextConfig: NextConfig = {
       },
       // Topic directory lives on /blog#topics — do not keep a competing /learning index.
       { source: "/learning", destination: "/blog", permanent: true },
+      { source: "/home", destination: "/", permanent: true },
+      {
+        source: "/blog/modular-monolith-vs-microservices",
+        destination: "/blog/modular-monolith-vs-microservices-dotnet",
+        permanent: true,
+      },
       { source: "/sitemap", destination: "/sitemap.xml", permanent: true },
       { source: "/rss", destination: "/rss.xml", permanent: true },
       { source: "/feed", destination: "/rss.xml", permanent: true },

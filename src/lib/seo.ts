@@ -1,4 +1,4 @@
-import { getHomepagePosts } from "@/lib/posts";
+import { getAllPosts } from "@/lib/posts";
 import { services, siteConfig } from "@/lib/site";
 
 export const personId = `${siteConfig.url}/#person`;
@@ -133,7 +133,7 @@ export function pageSocial({
 }
 
 export function blogJsonLd() {
-  const featured = getHomepagePosts(3);
+  const posts = getAllPosts();
   return {
     "@context": "https://schema.org",
     "@type": "Blog",
@@ -144,7 +144,7 @@ export function blogJsonLd() {
     author: { "@id": personId },
     publisher: { "@id": personId },
     inLanguage: "en",
-    blogPost: featured.map((post) => ({
+    blogPost: posts.map((post) => ({
       "@type": "BlogPosting",
       headline: post.title,
       description: post.description,
