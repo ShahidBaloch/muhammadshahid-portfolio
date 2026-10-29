@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "node:path";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -13,6 +14,15 @@ const nextConfig: NextConfig = {
   // sitemap.xml and rss.xml are static files generated in prebuild.
   outputFileTracingIncludes: {
     "*": ["./content/blog/**/*", "./content/learning/**/*"],
+  },
+  // Every next/link import gets src/components/link.tsx (prefetch off by default) without touching
+  // each file. The "$" makes it exact, so the wrapper's own next/dist/client/link import is untouched.
+  webpack(config) {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "next/link$": path.join(process.cwd(), "src/components/link.tsx"),
+    };
+    return config;
   },
   async redirects() {
     return [
