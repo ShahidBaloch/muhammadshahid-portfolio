@@ -55,7 +55,7 @@ The connection string host stays `your-server.database.windows.net`. The vault U
 
 ## Route the private addresses
 
-![App Service resolves SQL and Key Vault hostnames through privatelink DNS zones to private endpoint addresses](/images/blog/azure-private-endpoints-aspnet-core.png)
+![App Service resolves SQL and Key Vault hostnames through privatelink DNS zones to private endpoint addresses](/images/blog/azure-private-endpoints-aspnet-core.webp)
 
 > **Watch:** Route-all does not fix DNS. Run nameresolver from the app, not from a laptop, and confirm the private IP before you disable public access.
 

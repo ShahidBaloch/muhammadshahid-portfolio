@@ -15,7 +15,7 @@ faq:
 
 **Kafka on .NET, from ASP.NET Core,** is a durable, partitioned log that many independent consumers can read at their own pace. It is not a request/response bus, and it is not automatically simpler than Azure Service Bus because a slide said "event driven."
 
-![One SQL transaction writes the order and the outbox; the worker produces; the consumer commits the Kafka offset only after ApplyAsync](/images/blog/kafka-dotnet-aspnet-core.png)
+![One SQL transaction writes the order and the outbox; the worker produces; the consumer commits the Kafka offset only after ApplyAsync](/images/blog/kafka-dotnet-aspnet-core.webp)
 
 **New to this** - stay here for the decision. **Outbox mechanics** - [transactional outbox](/blog/transactional-outbox-ef-core). **Service Bus client patterns** - [Azure Service Bus](/blog/azure-service-bus-aspnet-core). **In-process workers** - [background reports](/blog/background-report-signalr-aspnet-core).
 

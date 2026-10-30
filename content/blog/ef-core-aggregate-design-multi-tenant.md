@@ -15,7 +15,7 @@ faq:
 
 **EF Core aggregate design for a multi-tenant SaaS app** is the set of rows you must change in one transaction so a rule stays true for one tenant. The aggregate root is the only object your application service loads and saves. Tenant id is part of that boundary, not a column you remember at the end.
 
-![The appointment aggregate holds the root and its notes in one SaveChanges; the invoice aggregate stores only AppointmentId](/images/blog/ef-core-aggregate-design-multi-tenant.png)
+![The appointment aggregate holds the root and its notes in one SaveChanges; the invoice aggregate stores only AppointmentId](/images/blog/ef-core-aggregate-design-multi-tenant.webp)
 
 **New to this** - stay here for the model. **Filters** - [global query filters](/blog/ef-core-global-query-filters-soft-delete). **Tenant resolution and database layout** - [multi-tenancy beyond query filters](/blog/multi-tenancy-aspnet-core-beyond-query-filters). **Publishing the fact** - [transactional outbox](/blog/transactional-outbox-ef-core).
 

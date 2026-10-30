@@ -15,7 +15,7 @@ faq:
 
 **Application Insights for an ASP.NET Core API and an Angular SPA** means both processes export telemetry to Azure Monitor so a failed checkout shows the browser page view, the API request, and the SQL or HTTP dependency under one operation. For new APIs the exporter is the Azure Monitor OpenTelemetry distro, not a hand-rolled `TelemetryClient` in every controller.
 
-![The browser sends traceparent, and the API request span and its SQL dependency share one Application Insights operation](/images/blog/application-insights-aspnet-core.png)
+![The browser sends traceparent, and the API request span and its SQL dependency share one Application Insights operation](/images/blog/application-insights-aspnet-core.webp)
 
 **New to this** - stay here for Azure Monitor wiring. **Vendor-neutral traces** - [OpenTelemetry in ASP.NET Core](/blog/opentelemetry-aspnet-core-traces-metrics-logs). **Managed identity for Azure** - [managed identity](/blog/managed-identity-aspnet-core-azure).
 

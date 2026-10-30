@@ -15,7 +15,7 @@ faq:
 
 **Azure Key Vault access policy vs RBAC** is how the vault authorizes data-plane calls (get a secret, unwrap a key, get a certificate). It is not how your ASP.NET Core app constructs `SecretClient`. The client can stay the same while the wrong model returns 403.
 
-![Key Vault data plane is either an access policy get grant or the Key Vault Secrets User role, not both](/images/blog/azure-key-vault-access-policy-vs-rbac.png)
+![Key Vault data plane is either an access policy get grant or the Key Vault Secrets User role, not both](/images/blog/azure-key-vault-access-policy-vs-rbac.webp)
 
 **New to this** -> use this page to pick the model and to read a 403. **Related** -> [AKS workload identity](/blog/aks-workload-identity-aspnet-core) if the caller is a pod rather than an App Service. **Not this page** -> binding secrets into `IConfiguration`, rotation callbacks, or certificate loading samples.
 

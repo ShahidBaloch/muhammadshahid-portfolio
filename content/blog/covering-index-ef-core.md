@@ -51,7 +51,7 @@ Microsoft's guidance, which matches what you want with EF, is: key the columns y
 
 `varchar(max)`, `nvarchar(max)`, and similar LOB types do not belong in a key. They can be included on modern SQL Server and still make a covering index enormous. If a list endpoint "needs" a max column, the list endpoint is fetching too much. Project a summary. Do not INCLUDE a note body so a grid of 50 rows drags 50 documents into the leaf.
 
-![A leaf of TenantId and CreatedUtc still key-looks up Status and Total; INCLUDE keeps that lookup off the plan](/images/blog/covering-index-ef-core-leaf.png)
+![A leaf of TenantId and CreatedUtc still key-looks up Status and Total; INCLUDE keeps that lookup off the plan](/images/blog/covering-index-ef-core-leaf.webp)
 
 ## Project only the columns the index can cover
 

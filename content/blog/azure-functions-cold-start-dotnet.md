@@ -15,7 +15,7 @@ faq:
 
 **A .NET Azure Functions cold start** is the delay while Azure allocates an instance, starts the Functions host, and starts the .NET isolated worker, before your function method runs. The next call on that same instance is a warm start and should not pay that cost again until the instance is reclaimed.
 
-![Cold-start timeline: scale from zero, host and isolated worker, Program.cs, then the function method which is not startup](/images/blog/azure-functions-cold-start-dotnet.png)
+![Cold-start timeline: scale from zero, host and isolated worker, Program.cs, then the function method which is not startup](/images/blog/azure-functions-cold-start-dotnet.webp)
 
 **New to this** -> use this page to separate startup time from function time and to pick a hosting lever. **Related** -> [.NET 10 API highlights](/blog/dotnet-10-aspnet-core-api-highlights) will not change the Consumption scale-to-zero behavior by themselves. **Not this page** -> how to write your first isolated function, durable functions, or a full AKS migration.
 

@@ -4,6 +4,7 @@ import rehypeHighlight from "rehype-highlight";
 import remarkGfm from "remark-gfm";
 import "highlight.js/styles/vs2015.css";
 import { getContentHeadings, headingTextFromMarkdown, slugifyHeading } from "@/lib/headings";
+import blogImageSizes from "@/lib/blog-image-sizes.json";
 
 function childrenToText(node: ReactNode): string {
   if (typeof node === "string" || typeof node === "number") return String(node);
@@ -174,15 +175,16 @@ export function MarkdownContent({ content }: { content: string }) {
         img: ({ src, alt }) => {
           const url = typeof src === "string" ? src : "";
           if (!url) return null;
+          const size = (blogImageSizes as Record<string, number[]>)[url];
           return (
-            // width/height reserve space (CLS). next/image inside react-markdown
-            // broke the blog server bundle in this App Router setup.
-            // eslint-disable-next-line @next/next/no-img-element
+            // width/height are the file's real size so the browser reserves the right space (CLS).
             <img
               src={url}
               alt={alt?.trim() ? alt : ""}
-              width={1200}
-              height={675}
+              width={size?.[0] ?? 1200}
+              height={size?.[1] ?? 675}
+              loading="lazy"
+              decoding="async"
               className="h-auto w-full rounded-xl border border-slate-line bg-navy p-2"
             />
           );

@@ -164,7 +164,7 @@ Keep the policy name identical to the ASP.NET Core policy. A typo does not fail 
 
 > **Watch:** A validation-phase policy runs before arguments exist. Do not hit the database there, and do not succeed the requirement when the resource is missing.
 
-![Validation has no field arguments; BeforeResolver can see the id; AfterResolver has already run the resolver](/images/blog/hot-chocolate-authorization-aspnet-core-phases.png)
+![Validation has no field arguments; BeforeResolver can see the id; AfterResolver has already run the resolver](/images/blog/hot-chocolate-authorization-aspnet-core-phases.webp)
 
 From Hot Chocolate 13 onward, field authorization runs during document validation by default. That is the right default for role and claim checks: forbidden fields never reach a resolver, so a buggy resolver cannot touch SQL "just in case."
 

@@ -27,7 +27,7 @@ Same LINQ, different clinics, one cached plan
   SSMS ad-hoc         → new plan            → instant (misleading)
 ```
 
-![Two clinics sharing one sniffed SQL Server plan: small clinic 50ms, hub clinic 30s timeout](/images/blog/ef-core-parameter-sniffing.png)
+![Two clinics sharing one sniffed SQL Server plan: small clinic 50ms, hub clinic 30s timeout](/images/blog/ef-core-parameter-sniffing.webp)
 
 **New to this** → stay here. **Merging a PR** → [confirm in Query Store](#confirm-in-query-store-not-ssms). **On-call / interview** → [fixes I actually ship](#fixes-i-actually-ship) · [if an interviewer asks](#if-an-interviewer-asks).
 

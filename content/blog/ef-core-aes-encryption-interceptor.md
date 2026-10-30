@@ -147,7 +147,7 @@ Size the column. A short secret grows by the prefix, the nonce, the tag, and bas
 
 A value converter is the smaller tool when one or two properties need encryption: EF applies it at the database boundary and the snapshot can stay plaintext. Use a converter if that is all you need. An interceptor is justified when many entity types must pass through one cipher, or when you must coordinate a blind-index column with the ciphertext. The interceptor has a sharp edge: values you put on `CurrentValue` are the values the change tracker keeps. If you leave ciphertext there, the next line of the request and the next `SaveChanges` operate on ciphertext (and will encrypt it again).
 
-![SavingChanges writes enc:v1 ciphertext; SavedChanges must put plaintext back or the next save wraps it](/images/blog/ef-core-aes-encryption-interceptor-restore.png)
+![SavingChanges writes enc:v1 ciphertext; SavedChanges must put plaintext back or the next save wraps it](/images/blog/ef-core-aes-encryption-interceptor-restore.webp)
 
 The interceptor below only knows `Patient`. The lookup column is the HMAC, not a second copy of the secret.
 

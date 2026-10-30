@@ -31,7 +31,7 @@ N+1 (too many queries)              Include one reference (one JOIN)
   wrong fix →                         see the other post
 ```
 
-![EF Core N+1 vs Include: one list query plus a query per row, versus a single Include or projection](/images/blog/ef-core-nplus1-roundtrips.png)
+![EF Core N+1 vs Include: one list query plus a query per row, versus a single Include or projection](/images/blog/ef-core-nplus1-roundtrips.webp)
 
 **New to this** → stay here. **Merging a PR** → [how N+1 shows up](#how-n1-shows-up). **On-call / interview** → [quick map](#quick-map) · [if an interviewer asks](#if-an-interviewer-asks).
 

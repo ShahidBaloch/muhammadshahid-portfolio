@@ -15,7 +15,7 @@ faq:
 
 **EF Core connection pooling** is ADO.NET behavior: `Microsoft.Data.SqlClient` keeps physical SQL connections in a pool per connection string so `Open()` is often a checkout, not a new TCP handshake. EF Core borrows one of those connections for a command and returns it when the context disposes the connection. If you do not return it, the pool hits `Max Pool Size` and the next request waits until `Connect Timeout`, then fails.
 
-![AddDbContextPool reuses context objects; the SqlClient pool, keyed by the exact connection string, takes the session back on dispose](/images/blog/ef-core-connection-pooling.png)
+![AddDbContextPool reuses context objects; the SqlClient pool, keyed by the exact connection string, takes the session back on dispose](/images/blog/ef-core-connection-pooling.webp)
 
 **New to this** - stay here for pools. **Retries** - [EF Core SQL retry](/blog/ef-core-connection-resiliency). **Context lifetime and aggregates** - [aggregate design](/blog/ef-core-aggregate-design-multi-tenant). **Many databases** - [multi-tenancy](/blog/multi-tenancy-aspnet-core-beyond-query-filters).
 

@@ -33,7 +33,7 @@ Metaphor: the single-server output cache is a tray in one kitchen. Redis is a pa
 
 People say "backplane" because they remember SignalR. The output-cache feature is a **store**, not a pub/sub bus. There is no separate invalidation message you must implement if you use tag eviction on that store.
 
-![Instance A stores a catalog GET in Redis and instance B serves that body with no pub/sub backplane](/images/blog/aspnet-core-output-caching-redis.png)
+![Instance A stores a catalog GET in Redis and instance B serves that body with no pub/sub backplane](/images/blog/aspnet-core-output-caching-redis.webp)
 
 
 ## Register Redis as the output-cache store, not a backplane

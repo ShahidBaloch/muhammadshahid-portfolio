@@ -15,7 +15,7 @@ faq:
 
 **AKS workload identity for an ASP.NET Core pod** means the pod's Kubernetes service account is trusted by Microsoft Entra through a federated credential, so `DefaultAzureCredential` or `WorkloadIdentityCredential` can obtain an Azure access token without a stored client secret.
 
-![Workload identity match: service account token, AKS issuer, subject, client id, then a separate data-plane grant](/images/blog/aks-workload-identity-aspnet-core.png)
+![Workload identity match: service account token, AKS issuer, subject, client id, then a separate data-plane grant](/images/blog/aks-workload-identity-aspnet-core.webp)
 
 **New to this** -> follow the sequence from cluster features to the ASP.NET credential. **Related** -> [Key Vault access policies vs RBAC](/blog/azure-key-vault-access-policy-vs-rbac) for the grant after the token exists. **Not this page** -> App Service system-assigned identity, GitHub OIDC for CI, or the Aspire dashboard.
 

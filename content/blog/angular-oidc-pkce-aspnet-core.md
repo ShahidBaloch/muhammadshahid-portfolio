@@ -15,7 +15,7 @@ faq:
 
 **Angular OIDC code flow with PKCE** means the SPA redirects the browser to any OpenID Provider, comes back with a one-time authorization code, exchanges that code plus a secret only the browser knows (the PKCE verifier), and then calls ASP.NET Core with the access token as a bearer credential.
 
-![PKCE code flow: Angular authorizes with S256, redeems code_verifier with no client secret, then calls ASP.NET Core with a bearer token](/images/blog/angular-oidc-pkce-aspnet-core.png)
+![PKCE code flow: Angular authorizes with S256, redeems code_verifier with no client secret, then calls ASP.NET Core with a bearer token](/images/blog/angular-oidc-pkce-aspnet-core.webp)
 
 **New to this** -> read this page for the generic SPA PKCE path. **Related** -> [Blazor WASM and Identity](/blog/blazor-wasm-authentication-aspnet-core) if the client is Blazor rather than Angular. **Not this page** -> Microsoft Entra app-registration walkthroughs, and any BFF that never exposes tokens to JavaScript.
 

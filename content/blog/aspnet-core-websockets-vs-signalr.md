@@ -15,7 +15,7 @@ faq:
 
 **ASP.NET Core WebSockets vs SignalR** is a transport decision: SignalR is a realtime application framework that prefers WebSockets; raw WebSockets are the browser and server primitives with no groups, no hub methods, and no reconnect policy unless you write them.
 
-![SignalR hub with groups and IHubContext, beside a raw /ws endpoint that owns the frames](/images/blog/aspnet-core-websockets-vs-signalr.png)
+![SignalR hub with groups and IHubContext, beside a raw /ws endpoint that owns the frames](/images/blog/aspnet-core-websockets-vs-signalr.webp)
 
 **New to this** - stay here for the decision. **Shipping hubs** - [SignalR realtime patterns](/blog/signalr-aspnet-core-realtime). **Job progress on top of hubs** - [background reports with SignalR](/blog/background-report-signalr-aspnet-core).
 

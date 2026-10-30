@@ -15,7 +15,7 @@ faq:
 
 **Background report generation with SignalR in ASP.NET Core** means the HTTP request only records the job, a hosted worker produces the file, and the hub pushes progress to subscribers who are allowed to see that job. SignalR is the notifier, not the job store.
 
-![POST stores the job and returns 202; the worker writes blob storage and notifies group report:{jobId} only after Subscribe checks the tenant](/images/blog/background-report-signalr-aspnet-core.png)
+![POST stores the job and returns 202; the worker writes blob storage and notifies group report:{jobId} only after Subscribe checks the tenant](/images/blog/background-report-signalr-aspnet-core.webp)
 
 **New to this** - stay here for the composition. **Hubs and auth** - [SignalR patterns](/blog/signalr-aspnet-core-realtime). **Worker lifetime** - [BackgroundService](/blog/csharp-backgroundservice-hosted-service-async). **When a channel is not enough** - [Hangfire vs Quartz vs channels](/blog/hangfire-vs-quartz-vs-channel-workers-aspnet-core).
 
@@ -277,7 +277,7 @@ export class ReportPage {
 }
 ```
 
-![The worker can emit Ready before Angular subscribes; GET /api/reports/{id} is what still shows that status](/images/blog/background-report-signalr-missed-event.png)
+![The worker can emit Ready before Angular subscribes; GET /api/reports/{id} is what still shows that status](/images/blog/background-report-signalr-missed-event.webp)
 
 Always `refresh` after subscribe. Otherwise a job that finished between `POST` and `start` stays on screen as "Queued" because you missed the only `reportStatus` event.
 

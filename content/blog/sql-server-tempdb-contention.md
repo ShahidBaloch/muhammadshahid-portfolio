@@ -33,7 +33,7 @@ queue at latch                    latch waits drop
 
 **Terms used here:** **PFS/SGAM** = allocation bitmap pages in TempDB. **RCSI** = row versions also stored in TempDB. **Spill** = sort/hash workspace when memory is insufficient.
 
-![Many workers colliding on one TempDB PFS page versus allocations spread across eight equal files](/images/blog/sql-server-tempdb.png)
+![Many workers colliding on one TempDB PFS page versus allocations spread across eight equal files](/images/blog/sql-server-tempdb.webp)
 
 The API spiked to seconds of latency. CPU on SQL Server was quiet. Memory was fine. Wait stats showed **`PAGELATCH_UP`** on **database id 2**. That id is always **TempDB**. Threads were queuing to update the same PFS/SGAM allocation page.
 

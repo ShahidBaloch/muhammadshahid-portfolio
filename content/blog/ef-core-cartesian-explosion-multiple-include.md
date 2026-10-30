@@ -28,7 +28,7 @@ Claim with 8 lines, 6 events — one query, two collection Includes
   SSMS row count:     48  ← the signal
 ```
 
-![One EF Core query with two collection Includes multiplying 8 lines times 6 events into 48 SQL rows](/images/blog/ef-core-cartesian-explosion.png)
+![One EF Core query with two collection Includes multiplying 8 lines times 6 events into 48 SQL rows](/images/blog/ef-core-cartesian-explosion.webp)
 
 **New to this** → stay here. **Merging a PR** → [confirm in five minutes](#how-to-confirm-in-five-minutes). **On-call / interview** → [fixes in order](#fixes-in-the-order-i-try-them) · [if an interviewer asks](#if-an-interviewer-asks).
 

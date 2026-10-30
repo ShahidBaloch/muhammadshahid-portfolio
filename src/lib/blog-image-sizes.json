@@ -1,0 +1,102 @@
+{
+  "/images/blog/aks-workload-identity-aspnet-core.webp": [
+    720,
+    388
+  ],
+  "/images/blog/angular-i18n-routing-aspnet-core-builds.webp": [
+    720,
+    340
+  ],
+  "/images/blog/angular-oidc-pkce-aspnet-core.webp": [
+    720,
+    490
+  ],
+  "/images/blog/application-insights-aspnet-core.webp": [
+    720,
+    390
+  ],
+  "/images/blog/aspnet-core-output-caching-redis.webp": [
+    720,
+    340
+  ],
+  "/images/blog/aspnet-core-websockets-vs-signalr.webp": [
+    720,
+    392
+  ],
+  "/images/blog/azure-functions-cold-start-dotnet.webp": [
+    720,
+    190
+  ],
+  "/images/blog/azure-key-vault-access-policy-vs-rbac.webp": [
+    720,
+    304
+  ],
+  "/images/blog/azure-monitor-workbooks-aspnet-core-itemcount.webp": [
+    720,
+    300
+  ],
+  "/images/blog/azure-private-endpoints-aspnet-core.webp": [
+    720,
+    430
+  ],
+  "/images/blog/background-report-signalr-aspnet-core.webp": [
+    720,
+    520
+  ],
+  "/images/blog/background-report-signalr-missed-event.webp": [
+    720,
+    300
+  ],
+  "/images/blog/blazor-wasm-authentication-aspnet-core.webp": [
+    720,
+    296
+  ],
+  "/images/blog/capacity-planning-aspnet-core-ceiling.webp": [
+    720,
+    340
+  ],
+  "/images/blog/covering-index-ef-core-leaf.webp": [
+    720,
+    390
+  ],
+  "/images/blog/ef-core-aes-encryption-interceptor-restore.webp": [
+    720,
+    430
+  ],
+  "/images/blog/ef-core-aggregate-design-multi-tenant.webp": [
+    720,
+    460
+  ],
+  "/images/blog/ef-core-cartesian-explosion.webp": [
+    1280,
+    720
+  ],
+  "/images/blog/ef-core-connection-pooling.webp": [
+    720,
+    420
+  ],
+  "/images/blog/ef-core-nplus1-roundtrips.webp": [
+    1280,
+    720
+  ],
+  "/images/blog/ef-core-parameter-sniffing.webp": [
+    1280,
+    720
+  ],
+  "/images/blog/hot-chocolate-authorization-aspnet-core-phases.webp": [
+    720,
+    360
+  ],
+  "/images/blog/kafka-dotnet-aspnet-core.webp": [
+    720,
+    470
+  ],
+  "/images/blog/sql-server-deadlocks.webp": [
+    1280,
+    720
+  ],
+  "/images/blog/sql-server-tempdb.webp": [
+    1280,
+    720
+  ]
+}

@@ -65,7 +65,7 @@ Workspace-based Application Insights stores request telemetry in `requests`. Two
 - **`duration`** is documented as milliseconds (a real, not a timespan) on the Application Insights `requests` schema. Confirm with `requests | getschema` and one sample row in *your* workspace before you divide by 1000. A custom OpenTelemetry pipeline that exported microseconds into a different table will not match this assumption. The workbook should label the axis "ms" only after that check.
 - **`itemCount`** is the sampling weight. Adaptive sampling keeps a representative row and sets `itemCount` above 1. `count()` counts stored rows, not user calls. `sum(itemCount)` estimates calls. `sumif(itemCount, success == false)` estimates failures. If sampling is off, `itemCount` is 1 and the two queries match. Write the weighted form anyway so a later sampling change does not silently rewrite history.
 
-![One stored requests row with itemCount 5 is five calls; count() reports one](/images/blog/azure-monitor-workbooks-aspnet-core-itemcount.png)
+![One stored requests row with itemCount 5 is five calls; count() reports one](/images/blog/azure-monitor-workbooks-aspnet-core-itemcount.webp)
 
 `success` is the SDK's notion of success. A client abort can show up as a failed request depending on status code and version. Decide whether `resultCode` 499 (or your cancellation code) counts against the SLO. For an example user-facing availability SLI, exclude health probes and count 5xx plus explicit failed dependency timeouts, and document cancellations separately so a user refreshing a spinner does not burn the budget.
 

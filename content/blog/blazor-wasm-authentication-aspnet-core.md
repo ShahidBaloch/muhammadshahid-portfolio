@@ -15,7 +15,7 @@ faq:
 
 **Blazor WebAssembly authentication with ASP.NET Core Identity** means the user accounts live in Identity on the server, and the WASM UI learns who the user is without ever holding a connection string or calling `UserManager` in the browser.
 
-![Path A is a same-origin Blazor Web App cookie; Path B is standalone WASM with OIDC PKCE and JwtBearer](/images/blog/blazor-wasm-authentication-aspnet-core.png)
+![Path A is a same-origin Blazor Web App cookie; Path B is standalone WASM with OIDC PKCE and JwtBearer](/images/blog/blazor-wasm-authentication-aspnet-core.webp)
 
 **New to this** -> pick Path A or Path B and follow that path only. **Related** -> [Angular OIDC PKCE](/blog/angular-oidc-pkce-aspnet-core) if the UI is Angular, not Blazor. **Not this page** -> Entra app registrations, and the .NET 10 API checklist.
 

@@ -52,7 +52,7 @@ If you cannot fill the first two boxes, you are not ready to pick an SKU. Spend 
 
 Walk the request. The first saturated pool loses, and the API CPU graph may still look calm.
 
-![If latency is over budget, scale SQL or fix the thread pool instead of adding API instances](/images/blog/capacity-planning-aspnet-core-ceiling.png)
+![If latency is over budget, scale SQL or fix the thread pool instead of adding API instances](/images/blog/capacity-planning-aspnet-core-ceiling.webp)
 
 - [ ] **SQL.** CPU, data IO, log IO, lock waits, and the connection pool. EF's default SQL pool max is 100 connections per pool (per connection string, per process). Each extra API instance multiplies that. A pool waiting on connections looks like a slow API.
 - [ ] **Thread pool.** Synchronous IO, `.Result`, and blocking locks starve it. The symptom is growing request latency with idle CPU. Scaling out copies the bug.

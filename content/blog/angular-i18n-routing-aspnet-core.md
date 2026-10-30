@@ -48,7 +48,7 @@ Two models both produce a locale prefix. Mixing them is how base href and lazy c
 
 The rest of this guide implements the single-build model, then shows the fallback map for the multi-build model. Do not set `APP_BASE_HREF` to `/en/` in the single-build model. Lazy chunks would request `/en/chunk-*.js` and 404.
 
-![Single build keeps base href /; a per-locale build uses /en/ or /ur/ and its own index.html](/images/blog/angular-i18n-routing-aspnet-core-builds.png)
+![Single build keeps base href /; a per-locale build uses /en/ or /ur/ and its own index.html](/images/blog/angular-i18n-routing-aspnet-core-builds.webp)
 
 Supported locales in the examples are `en` and `ur`. Urdu is included because an Asia/Karachi audience actually needs an RTL locale, not because the technique is specific to it. Keep the allow-list short and explicit.
 

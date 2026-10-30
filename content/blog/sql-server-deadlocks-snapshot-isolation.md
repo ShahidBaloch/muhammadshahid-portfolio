@@ -32,7 +32,7 @@ Writer waits on reader           Writer does not wait on readers
 
 **Terms used here:** **RCSI** = `READ_COMMITTED_SNAPSHOT ON` at database level. **Version store** = row versions in TempDB. **RowVersion** = EF optimistic concurrency token for same-row writes.
 
-![Read committed locks blocking readers versus RCSI sending readers to a TempDB row version](/images/blog/sql-server-deadlocks.png)
+![Read committed locks blocking readers versus RCSI sending readers to a TempDB row version](/images/blog/sql-server-deadlocks.webp)
 
 The marketplace API threw `SqlException`: transaction was deadlocked and chosen as the victim. The deadlock graph was a **long reporting SELECT** holding shared locks against a **checkout UPDATE**. CPU looked fine. Throughput was not.
 
