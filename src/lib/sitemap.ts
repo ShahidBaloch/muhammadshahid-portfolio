@@ -10,7 +10,9 @@ type SitemapEntry = {
 
 const SITE = siteConfig.url;
 
-const NOW = new Date().toISOString().slice(0, 10);
+// Fixed date for the static pages: bump it when their content changes, not on every build,
+// so Google keeps trusting lastmod.
+const NOW = "2026-10-30";
 
 const staticRoutes: SitemapEntry[] = [
   {

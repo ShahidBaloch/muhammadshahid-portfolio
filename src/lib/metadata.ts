@@ -90,6 +90,8 @@ function googleBotContent(g: NonNullable<Robots["googleBot"]>): string {
 
 export function resolveHead(page: Metadata, opts: { notFound?: boolean } = {}): HeadTag[] {
   const m: Metadata = { ...siteMetadata, ...page };
+  // Keep the site-wide RSS link when a page only sets its canonical.
+  m.alternates = { ...page.alternates, types: { ...siteMetadata.alternates?.types, ...page.alternates?.types } };
   const tags: HeadTag[] = [];
   const meta = (attrs: Record<string, string>) => tags.push({ tag: "meta", attrs });
   const link = (attrs: Record<string, string>) => tags.push({ tag: "link", attrs });
@@ -147,7 +149,7 @@ export function resolveHead(page: Metadata, opts: { notFound?: boolean } = {}): 
   for (const img of tw.images ?? []) meta({ name: "twitter:image", content: abs(img) });
 
   link({ rel: "icon", href: "/icon?46cc6f221bcf3b5f", type: "image/png", sizes: "32x32" });
-  // The 404 page also carried Next.js's own robots tag.
-  if (opts.notFound) meta({ name: "robots", content: "noindex" });
+  // The 404 page also carried Next.js's own robots tag; skip it when the page already sets one.
+  if (opts.notFound && !page.robots) meta({ name: "robots", content: "noindex" });
   return tags;
 }

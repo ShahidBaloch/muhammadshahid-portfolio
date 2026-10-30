@@ -7,6 +7,15 @@ export const metadata: Metadata = {
   title: "Resume",
   description: `Resume for ${siteConfig.name} — senior .NET + Angular engineer.`,
   alternates: { canonical: "/resume" },
+  openGraph: {
+    title: `Resume | ${siteConfig.name}`,
+    description: `Resume for ${siteConfig.name} — senior .NET + Angular engineer.`,
+    url: "/resume",
+    siteName: siteConfig.name,
+    locale: siteConfig.locale,
+    type: "website",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: `${siteConfig.name} — ${siteConfig.title}` }],
+  },
   robots: { index: false, follow: true },
 };
 
