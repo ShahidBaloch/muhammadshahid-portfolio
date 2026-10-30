@@ -2,7 +2,7 @@ const CANONICAL_SITE_ORIGIN = "https://www.muhammadshahid.dev";
 
 /** Apex host 308s to www in next.config — sitemap/canonicals must use the same origin. */
 function resolveSiteUrl(): string {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL ?? CANONICAL_SITE_ORIGIN;
+  const raw = import.meta.env.NEXT_PUBLIC_SITE_URL ?? CANONICAL_SITE_ORIGIN;
   try {
     const url = new URL(raw);
     if (url.hostname === "muhammadshahid.dev") {

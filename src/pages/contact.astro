@@ -1,0 +1,11 @@
+---
+import Base from "@/layouts/Base.astro";
+import Page, { metadata } from "@/views/contact/page";
+import { ContactForm } from "@/components/ContactForm";
+---
+
+<Base meta={metadata}>
+  <Page>
+    <ContactForm slot="form" client:load />
+  </Page>
+</Base>

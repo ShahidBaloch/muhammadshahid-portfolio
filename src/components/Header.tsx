@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Link from "@/components/link";
 import { useEffect, useRef, useState } from "react";
 import { BrandMark } from "@/components/BrandMark";
 import { learningNavTopics, navLinks, siteConfig } from "@/lib/site";
 
-export function Header() {
-  const pathname = usePathname();
+/** Hydrated as an island; `pathname` is the page it was built for. */
+export function Header({ pathname }: { pathname: string }) {
   const [open, setOpen] = useState(false);
   const [blogOpen, setBlogOpen] = useState(false);
   const [topicsOpen, setTopicsOpen] = useState(false);

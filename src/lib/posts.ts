@@ -42,7 +42,21 @@ export function getPostSlugs(): string[] {
     .map((file) => file.replace(/\.mdx?$/, ""));
 }
 
+// Posts don't change during a production build, but every page asks for them (related posts,
+// schema, feeds), so parse each file once. Dev keeps re-reading so edits show up live.
+const cacheable = import.meta.env.PROD;
+const postCache = new Map<string, Post>();
+let allPostsCache: PostMeta[] | undefined;
+
 export function getPostBySlug(slug: string): Post {
+  const cached = cacheable ? postCache.get(slug) : undefined;
+  if (cached) return cached;
+  const post = readPost(slug);
+  if (cacheable) postCache.set(slug, post);
+  return post;
+}
+
+function readPost(slug: string): Post {
   const mdPath = path.join(postsDirectory, `${slug}.md`);
   const mdxPath = path.join(postsDirectory, `${slug}.mdx`);
   const fullPath = fs.existsSync(mdPath) ? mdPath : mdxPath;
@@ -78,6 +92,13 @@ function readFaq(value: unknown): PostFaq[] | undefined {
 }
 
 export function getAllPosts(): PostMeta[] {
+  if (cacheable && allPostsCache) return allPostsCache;
+  const posts = readAllPosts();
+  if (cacheable) allPostsCache = posts;
+  return posts;
+}
+
+function readAllPosts(): PostMeta[] {
   return getPostSlugs()
     .flatMap((slug) => {
       try {

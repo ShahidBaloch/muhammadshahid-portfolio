@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState, type FormEvent } from "react";
 import { inquiryBudgets, inquiryTimelines, siteConfig } from "@/lib/site";
 
 type Status = "idle" | "submitting" | "success" | "error";

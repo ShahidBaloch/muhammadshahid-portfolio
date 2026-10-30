@@ -1,0 +1,63 @@
+---
+/**
+ * Site shell: the <head> tags Next.js produced from layout + page metadata (see lib/metadata.ts),
+ * the site-wide JSON-LD, header and cookie banner (islands), and the small page scripts.
+ */
+import "@/styles/fonts.css";
+import "@/styles/globals.css";
+import { CookieConsent } from "@/components/CookieConsent";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { resolveHead, type Metadata } from "@/lib/metadata";
+import { personJsonLd, websiteJsonLd } from "@/lib/seo";
+
+interface Props {
+  meta: Metadata;
+  notFound?: boolean;
+}
+
+const { meta, notFound = false } = Astro.props;
+const pathname = Astro.url.pathname.replace(/\.html$/, "").replace(/\/index$/, "") || "/";
+const tags = resolveHead(meta, { notFound });
+---
+
+<!doctype html>
+<html lang="en" data-scroll-behavior="smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f8fafc" />
+    <meta name="color-scheme" content="light" />
+    {
+      tags.map((t) =>
+        t.tag === "title" ? <title>{t.text}</title> : t.tag === "meta" ? <meta {...t.attrs} /> : <link {...t.attrs} />,
+      )
+    }
+    <script is:inline id="consent-default">
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('consent', 'default', {
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        wait_for_update: 500
+      });
+    </script>
+  </head>
+  <body class="min-h-screen font-body">
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <script type="application/ld+json" set:html={JSON.stringify(personJsonLd())} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteJsonLd())} />
+    <Header client:load pathname={pathname} />
+    <main id="main-content" tabindex="-1" class="outline-none">
+      <slot />
+    </main>
+    <Footer />
+    <CookieConsent client:load />
+    <script>
+      import "@/scripts/site";
+      import "@/scripts/consent-scripts";
+    </script>
+  </body>
+</html>

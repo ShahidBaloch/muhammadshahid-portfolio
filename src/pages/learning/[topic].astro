@@ -1,0 +1,14 @@
+---
+import Base from "@/layouts/Base.astro";
+import Page, { generateMetadata, generateStaticParams } from "@/views/learning/[topic]/page";
+
+export function getStaticPaths() {
+  return generateStaticParams().map((params) => ({ params }));
+}
+
+const params = { topic: Astro.params.topic! };
+---
+
+<Base meta={generateMetadata({ params })}>
+  <Page params={params} />
+</Base>

@@ -39,3 +39,7 @@ next-env.d.ts
 
 # vercel
 .vercel
+
+# Astro
+dist
+.astro

@@ -1,0 +1,14 @@
+---
+import Base from "@/layouts/Base.astro";
+import Page, { generateMetadata, generateStaticParams } from "@/views/work/[slug]/page";
+
+export function getStaticPaths() {
+  return generateStaticParams().map((params) => ({ params }));
+}
+
+const params = { slug: Astro.params.slug! };
+---
+
+<Base meta={generateMetadata({ params })}>
+  <Page params={params} />
+</Base>

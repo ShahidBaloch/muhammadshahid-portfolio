@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/link";
 import { siteConfig } from "@/lib/site";
 
 type SectionHeadingProps = {

@@ -1,0 +1,11 @@
+---
+import Base from "@/layouts/Base.astro";
+import Page, { metadata } from "@/views/blog/page";
+---
+
+<Base meta={metadata}>
+  <Page />
+</Base>
+<script>
+  import "@/scripts/blog-feed";
+</script>

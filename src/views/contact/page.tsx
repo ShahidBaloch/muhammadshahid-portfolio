@@ -1,0 +1,86 @@
+import type { Metadata } from "@/lib/metadata";
+import { SectionHeading } from "@/components/SectionHeading";
+import { pageSocial } from "@/lib/seo";
+import { siteConfig } from "@/lib/site";
+
+const title = "Contact — .NET + Angular Project Inquiry";
+const description =
+  "Contact Muhammad Shahid for .NET + Angular freelance and contract work. Email, WhatsApp, LinkedIn, or project inquiry form.";
+
+export const metadata: Metadata = {
+  title: { absolute: `${title} | ${siteConfig.name}` },
+  description,
+  alternates: { canonical: "/contact" },
+  ...pageSocial({ title, description, path: "/contact" }),
+};
+
+/** `form` is the ContactForm island, passed in by the Astro route so it can hydrate. */
+export default function ContactPage({ form }: { form?: React.ReactNode }) {
+  return (
+    <section className="section-pad page-top">
+      <div className="container-narrow grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+        <div>
+          <SectionHeading
+            eyebrow="Contact"
+            title="Contact for .NET + Angular work"
+            description="Share the problem, constraints, and timeline. I typically reply within one business day with a clear next step."
+            level={1}
+          />
+
+          <ul className="mt-6 space-y-4 text-ink-soft">
+            <li>
+              <p className="eyebrow">Email</p>
+              <a
+                href={`mailto:${siteConfig.email}`}
+                className="mt-1 inline-block break-all font-medium link-underline"
+              >
+                {siteConfig.email}
+              </a>
+            </li>
+            <li>
+              <p className="eyebrow">WhatsApp</p>
+              <a
+                href={siteConfig.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 inline-block font-medium link-underline"
+              >
+                {siteConfig.phone}
+                <span className="sr-only"> (WhatsApp, opens in a new tab)</span>
+              </a>
+            </li>
+            <li>
+              <p className="eyebrow">LinkedIn</p>
+              <a
+                href={siteConfig.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 inline-block font-medium link-underline"
+              >
+                muhammad-shahid
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            </li>
+            <li>
+              <p className="eyebrow">Location</p>
+              <address className="mt-1 not-italic font-medium text-ink">{siteConfig.location}</address>
+            </li>
+          </ul>
+        </div>
+
+        <div className="surface rounded-xl p-6 sm:p-8">
+          <h2 id="project-inquiry" className="heading-subsection">
+            Project inquiry
+          </h2>
+          <p className="mt-2 text-sm text-muted">
+            Prefer email or WhatsApp? Use the contact options above — I typically reply within one
+            business day.
+          </p>
+          <div className="mt-6">
+            {form}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

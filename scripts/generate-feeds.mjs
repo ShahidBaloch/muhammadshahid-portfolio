@@ -1,5 +1,5 @@
 /**
- * Writes static public/sitemap.xml and public/rss.xml at build time.
+ * Writes static public/rss.xml at build time.
  * Vercel then serves them from the CDN instead of a serverless function that
  * can 500 when markdown is missing from the lambda trace.
  *
@@ -207,9 +207,9 @@ async function submitIndexNow(urlList) {
 const posts = readPosts();
 fs.mkdirSync(PUBLIC_DIR, { recursive: true });
 fs.writeFileSync(path.join(PUBLIC_DIR, `${INDEXNOW_KEY}.txt`), INDEXNOW_KEY);
-fs.writeFileSync(path.join(PUBLIC_DIR, "sitemap.xml"), buildSitemap(posts));
+// sitemap.xml is served by src/pages/sitemap.xml.ts (the same list the live site used).
 fs.writeFileSync(path.join(PUBLIC_DIR, "rss.xml"), buildRss(posts));
-console.log(`Wrote public/sitemap.xml and public/rss.xml (${posts.length} posts).`);
+console.log(`Wrote public/rss.xml (${posts.length} posts).`);
 
 // ---------------------------------------------------------------------------
 // IndexNow — submit every URL so Google re-crawls non-indexed / redirect pages.
