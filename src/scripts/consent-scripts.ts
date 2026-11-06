@@ -1,4 +1,4 @@
-// Loads Google Analytics and AdSense only after the visitor accepts cookies, and again whenever
+﻿// Loads Google Analytics and AdSense only after the visitor accepts cookies, and again whenever
 // the choice changes (CookieConsent fires "cookie-consent-change"). Replaces the Analytics and
 // AdSense components, which did the same with next/script.
 import { ADSENSE_CLIENT_ID } from "@/lib/adsense";
@@ -44,10 +44,68 @@ function loadAdSense() {
   else window.addEventListener("load", idle, { once: true });
 }
 
+let adsterraLoaded = false;
+
+// Adsterra units on blog posts. Each slot is filled only when it scrolls near the viewport,
+// after the page has loaded, so ads never block rendering or hurt Core Web Vitals.
+function fillAdsterraSlot(el: HTMLElement) {
+  const banner = el.dataset.adsterraBanner;
+  const native = el.dataset.adsterraNative;
+  if (banner) {
+    if (el.offsetParent === null) return; // hidden at this screen size
+    const w = el.dataset.w ?? "0";
+    const h = el.dataset.h ?? "0";
+    const frame = document.createElement("iframe");
+    frame.width = w;
+    frame.height = h;
+    frame.title = "Advertisement";
+    frame.style.border = "0";
+    frame.setAttribute("scrolling", "no");
+    frame.srcdoc = `<!doctype html><html><body style="margin:0"><script>atOptions={'key':'${banner}','format':'iframe','height':${h},'width':${w},'params':{}};<\/script><script src="https://bauval.org/22/${banner}"><\/script></body></html>`;
+    el.appendChild(frame);
+  } else if (native) {
+    const box = document.createElement("div");
+    box.id = `container-${native}`;
+    el.appendChild(box);
+    const s = document.createElement("script");
+    s.async = true;
+    s.setAttribute("data-cfasync", "false");
+    s.src = `https://bauval.org/21/${native}`;
+    el.appendChild(s);
+  }
+}
+
+function loadAdsterra() {
+  if (adsterraLoaded) return;
+  const slots = document.querySelectorAll<HTMLElement>("[data-adsterra-banner],[data-adsterra-native]");
+  if (slots.length === 0) return;
+  adsterraLoaded = true;
+  const start = () => {
+    if (!("IntersectionObserver" in window)) {
+      slots.forEach(fillAdsterraSlot);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          io.unobserve(e.target);
+          fillAdsterraSlot(e.target as HTMLElement);
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    slots.forEach((el) => io.observe(el));
+  };
+  if (document.readyState === "complete") start();
+  else window.addEventListener("load", start, { once: true });
+}
+
 function sync() {
   if (getStoredConsent() !== "accepted") return;
   loadAnalytics();
   loadAdSense();
+  loadAdsterra();
 }
 
 sync();
