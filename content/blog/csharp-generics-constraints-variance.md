@@ -47,14 +47,15 @@ Put the type parameter after the method name. The compiler usually figures out `
 ```csharp
 public static T MaxBy<T>(IEnumerable<T> items, Func<T, decimal> selector)
 {
-    T? best = default;
-    decimal bestValue = decimal.MinValue;
+    var found = false;
+    T best = default!;
+    decimal bestValue = 0;
     foreach (var item in items)
     {
         var value = selector(item);
-        if (value > bestValue) { best = item; bestValue = value; }
+        if (!found || value > bestValue) { best = item; bestValue = value; found = true; }
     }
-    return best ?? throw new InvalidOperationException("Sequence is empty.");
+    return found ? best : throw new InvalidOperationException("Sequence is empty.");
 }
 
 var topOrder = MaxBy(orders, o => o.Total); // T inferred as Order
@@ -107,7 +108,7 @@ A word of caution from experience: a generic repository on top of EF Core often 
 
 ## Another real example: Result<T>
 
-I use something like this in APIs to return either a value or an error without throwing:
+Many .NET APIs use a type like this to return either a value or an error without throwing:
 
 ```csharp
 public readonly record struct Result<T>(T? Value, string? Error)

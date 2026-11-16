@@ -42,7 +42,7 @@ Of all the SQL Server window functions, this is the one I write most often. Say 
 ```sql
 WITH Ranked AS (
     SELECT a.*,
-           ROW_NUMBER() OVER (PARTITION BY PatientId ORDER BY StartsAt DESC) AS rn
+           ROW_NUMBER() OVER (PARTITION BY PatientId ORDER BY StartsAt DESC, Id DESC) AS rn
     FROM dbo.Appointments a
 )
 SELECT *

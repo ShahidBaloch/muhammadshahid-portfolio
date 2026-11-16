@@ -12,7 +12,7 @@ faq:
   - q: "What does LINQ GroupBy return?"
     a: "A sequence of IGrouping<TKey, TElement>. Each group has a Key property and is itself a sequence of the items that share that key."
   - q: "Why does EF Core throw on my GroupBy query?"
-    a: "EF Core can translate GroupBy only when the result is the key plus aggregates like Count, Sum or Max. If you return the grouped items themselves, there's no SQL equivalent, so EF Core throws or you have to switch to client-side grouping."
+    a: "EF Core translates GroupBy to SQL GROUP BY when you select the key plus aggregates like Count, Sum or Max. Returning the groups themselves only works as the last operator (EF Core 7 and later) and loads every row. Other shapes that use the grouped items can fail to translate."
   - q: "How do I group by multiple columns in LINQ?"
     a: "Group by an anonymous type or a tuple: GroupBy(o => new { o.Year, o.Region }). Then use g.Key.Year and g.Key.Region in the Select."
 ---
@@ -95,7 +95,7 @@ GROUP BY a.ClinicId
 
 The rule: **select the key and aggregates** (`Count`, `Sum`, `Average`, `Min`, `Max`) and EF Core can translate it.
 
-## What doesn't translate
+## Returning the groups themselves
 
 This looks harmless:
 
@@ -104,7 +104,7 @@ This looks harmless:
 var groups = await db.Appointments.GroupBy(a => a.ClinicId).ToListAsync(ct);
 ```
 
-There's no SQL that returns "buckets of rows", so older EF Core versions threw an exception and newer ones may still fail or produce something you didn't intend. Three ways out, in the order I'd try them:
+There's no SQL that returns "buckets of rows". Older EF Core versions threw an exception here. Since EF Core 7, this exact shape works: EF Core sorts the rows by the key in SQL and builds the groups while reading them. But it still loads every matching row into memory, and more complex shapes after the `GroupBy` can still fail to translate. So treat it with care. Three better options, in the order I'd try them:
 
 1. **Ask for aggregates instead** if that's all the screen needs.
 2. **Get the top N per group with SQL** using `ROW_NUMBER`. I show that in [SQL Server window functions](/blog/sql-server-window-functions).

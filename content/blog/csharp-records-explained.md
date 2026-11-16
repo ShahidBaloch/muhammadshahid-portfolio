@@ -14,10 +14,10 @@ faq:
   - q: "Are C# records immutable?"
     a: "Positional records get init-only properties, so they are immutable after creation by default. But you can still declare settable properties on a record, and a record holding a List can have that list changed. Records make immutability easy, not guaranteed."
   - q: "Should I use records for EF Core entities?"
-    a: "Usually not. Entities have identity and change over time, and EF Core tracks them by reference. Records fit DTOs, API contracts, and value objects much better."
+    a: "Usually not. Entities have identity and change over time, while a record's equality and hash code follow its data. That clashes with change tracking and HashSet-based navigations. Records fit DTOs, API contracts, and value objects much better."
 ---
 
-C# records arrived in C# 9, and for a while every code review I did had someone turning classes into records "because they're modern". Some of those changes were great. A few caused bugs that took a day to find. This post covers what C# records actually do, so you can pick them for the right reasons.
+C# records arrived in C# 9, and many teams started turning classes into records "because they're modern". Some of those changes are great. A few cause bugs that are hard to track down. This post covers what C# records actually do, so you can pick them for the right reasons.
 
 ## What a record is
 
@@ -74,7 +74,7 @@ One warning: `with` makes a **shallow** copy. If the record holds a `List<string
 | Properties from positional syntax | – | `init` (immutable) | `set` (mutable!) |
 | Good for | Entities, services | DTOs, value objects, messages | Small, hot-path values |
 
-That last row surprises people. A positional `record struct` gives you **settable** properties. If you want an immutable one, write `readonly record struct`:
+The "positional syntax" row surprises people. A positional `record struct` gives you **settable** properties. If you want an immutable one, write `readonly record struct`:
 
 ```csharp
 public readonly record struct Point(int X, int Y);
@@ -91,7 +91,7 @@ In my projects, records earn their place in a few spots:
 
 ## Where they cause trouble
 
-**EF Core entities.** An entity has identity: patient #42 is still patient #42 after their phone number changes. Value equality breaks that idea. EF Core's change tracker keys entities by their primary key, but your own code using `==`, `HashSet` or `Distinct()` will start treating two different patients with the same data as one. Keep entities as classes.
+**EF Core entities.** An entity has identity: patient #42 is still patient #42 after their phone number changes. Value equality breaks that idea. A record's hash code changes whenever its data changes, and EF Core uses `HashSet<T>` for collection navigations by default, so an entity you just edited can get "lost" inside its own parent's collection. Your own `==` checks also start comparing data instead of identity. Keep entities as classes.
 
 **Records as dictionary keys or in HashSets, then mutated.** If you add settable properties to a record and change one after adding it to a `HashSet`, the hash code changes and the set can't find it anymore.
 

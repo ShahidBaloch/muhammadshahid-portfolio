@@ -68,7 +68,7 @@ app.Use(async (context, next) =>                                     // middlewa
 app.MapGet("/orders/{id:int}", (int id, AppDb db) => db.Orders.Find(id)); // route handler
 ```
 
-Three delegates in six lines. The middleware pipeline itself is a chain of `RequestDelegate` values, where each piece calls `next`. That's why [middleware order](/blog/aspnet-core-middleware-order) matters so much: you're building a chain of function calls.
+Three delegates in a handful of lines. The middleware pipeline itself is a chain of `RequestDelegate` values, where each piece calls `next`. That's why [middleware order](/blog/aspnet-core-middleware-order) matters so much: you're building a chain of function calls.
 
 LINQ works the same way:
 
@@ -135,7 +135,7 @@ A classic memory leak: a short-lived object subscribes to an event on a long-liv
 
 ## Mistakes I see in code reviews
 
-- **Capturing a loop variable** in old `for` loops and getting the last value in every lambda. `foreach` has been safe since C# 5, but `for (var i = 0; ...)` still captures the same `i`.
+- **Capturing a `for` loop variable** and getting its final value in every lambda. `foreach` gives each iteration its own variable (since C# 5), but `for (var i = 0; ...)` still shares one `i` across all iterations. Copy it into a local first.
 - **`async void` lambdas** passed to an `Action`. Exceptions inside them crash the process instead of reaching your `catch`. Use `Func<Task>` for async callbacks.
 - **Heavy work in a delegate that runs per item**, like database calls inside a LINQ `Select` over thousands of rows.
 
