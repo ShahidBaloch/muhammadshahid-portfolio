@@ -256,12 +256,6 @@ export default function BlogPostPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Adsterra banner: 728x90 on desktop, 320x50 on mobile. Space is reserved to avoid layout shift. */}
-        <div className="mt-8 flex justify-center" aria-hidden="true">
-          <div className="hidden md:block" style={{ width: 728, height: 90 }} data-adsterra-banner="e7d3fc22f1efd14ae0ffc060a52c53ad" data-w="728" data-h="90" />
-          <div className="md:hidden" style={{ width: 320, height: 50 }} data-adsterra-banner="89bab677a327de32f507e4ac3c3f3fab" data-w="320" data-h="50" />
-        </div>
-
         <aside className="card-panel mt-8 rounded-xl p-5 sm:p-6">
           <p className="eyebrow">About the author</p>
           <div className="mt-4 flex items-start gap-3 sm:gap-4">
@@ -315,9 +309,6 @@ export default function BlogPostPage({ params }: PageProps) {
             </ul>
           </aside>
         ) : null}
-
-        {/* Adsterra native banner, loaded lazily near the end of the page. */}
-        <div className="mt-8" data-adsterra-native="6cc1f57c78ab2a188865ea56c11ea56d" />
       </div>
     </article>
   );

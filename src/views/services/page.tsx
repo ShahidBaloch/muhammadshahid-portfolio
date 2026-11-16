@@ -4,9 +4,9 @@ import { CtaBand, SectionHeading } from "@/components/SectionHeading";
 import { pageSocial, servicesJsonLd } from "@/lib/seo";
 import { services } from "@/lib/site";
 
-const title = "Hire a Senior .NET + Angular Engineer";
+const title = ".NET, Angular and SQL Server Development Services";
 const description =
-  "Freelance and contract .NET + Angular engineering for healthcare, SaaS, and eCommerce teams — APIs, Angular SPAs, identity/SSO, Azure, and production delivery.";
+  "Freelance and contract services: ASP.NET Core APIs, Angular apps, SQL Server performance, login and SSO, and Azure delivery for healthcare, SaaS, and eCommerce teams.";
 
 export const metadata: Metadata = {
   title,
@@ -26,10 +26,18 @@ export default function ServicesPage() {
         <div className="container-narrow">
           <SectionHeading
             eyebrow="Services"
-            title="Hire a Senior .NET + Angular Engineer"
-            description="Freelance and contract engagements for product teams that need senior .NET + Angular ownership — healthcare, SaaS, and marketplace systems, remote-friendly from Lahore."
+            title=".NET, Angular and SQL Server development services"
+            description="Freelance and contract work for product teams that need one senior developer to own the API, the database and the Angular front end. Remote from Lahore."
             level={1}
           />
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <Link prefetch={false} href="/hire-dotnet-developer" className="btn-secondary">
+              Hire a .NET developer
+            </Link>
+            <Link prefetch={false} href="/hire-angular-developer" className="btn-secondary">
+              Hire an Angular developer
+            </Link>
+          </div>
 
           <h2 className="heading-section mt-8">What I take on</h2>
           <div className="mt-6 grid gap-6 sm:grid-cols-2">

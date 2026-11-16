@@ -3,9 +3,11 @@
 
 
 /*
-  Light professional palette — blue primary, teal accent, airy surfaces.
-  Legacy token names (teal, kicker) kept so existing Tailwind classes keep working.
-  teal = primary blue (CTAs, brand) · link = teal accent (links, highlights)
+  Palette — analogous blue + teal on cool slate neutrals.
+  Roles: blue (named "teal" for legacy reasons) = actions and brand (buttons, borders, focus).
+         link (deep teal) = links and the one highlighted phrase per page.
+         slate = text and surfaces. Every text color here passes WCAG AA (4.5:1) on #f8fafc.
+  Legacy token names (teal, kicker, cyan) are kept so existing Tailwind classes keep working.
 */
 @theme {
   --color-ink: #0f172a;
@@ -15,13 +17,14 @@
   --color-paper: #f8fafc;
   --color-surface-2: #ffffff;
   --color-slate-line: #e2e8f0;
-  --color-muted: #64748b;
-  --color-label: #64748b;
-  --color-kicker: #94a3b8;
-  --color-teal: #0369a1;
-  --color-teal-bright: #0284c7;
-  --color-link: #0d9488;
-  --color-link-bright: #14b8a6;
+  --color-muted: #475569; /* 7.2:1 — body copy */
+  --color-label: #64748b; /* 4.6:1 — small labels */
+  --color-kicker: #64748b; /* was #94a3b8 (2.4:1, failed AA) */
+  --color-teal: #0369a1; /* primary blue: white text on it = 5.9:1 */
+  --color-teal-bright: #075985; /* hover goes darker, so white text stays readable */
+  --color-link: #0f766e; /* was #0d9488 (3.6:1); now 5.2:1 */
+  --color-link-hover: #115e59;
+  --color-link-bright: #2dd4bf; /* only on the dark footer */
   --color-cyan: #94a3b8;
   --color-navy: #0f172a;
   --color-foam: #14b8a6;
@@ -288,7 +291,7 @@
   }
 
   .link-underline {
-    @apply text-link underline decoration-link/30 underline-offset-4 transition hover:text-link-bright hover:decoration-link/55;
+    @apply text-link underline decoration-link/30 underline-offset-4 transition hover:text-link-hover hover:decoration-link/55;
   }
 
   .btn-primary {
@@ -488,6 +491,10 @@
     @apply border-teal/40 bg-teal/8 text-teal;
   }
 
+  .topic-chip {
+    @apply inline-flex min-h-10 items-center rounded-full border border-slate-line bg-surface-2 px-4 text-sm font-semibold text-ink-soft transition hover:border-link/50 hover:bg-card-teal hover:text-link-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal;
+  }
+
 
   .nav-link {
     @apply relative inline-flex min-h-11 items-center rounded-lg px-2.5 text-sm transition;
@@ -505,10 +512,10 @@
   @media (prefers-reduced-motion: no-preference) {
     .reveal.reveal-pending {
       opacity: 0;
-      transform: translateY(12px);
+      transform: translateY(8px);
       transition:
-        opacity 0.5s ease,
-        transform 0.5s ease;
+        opacity 0.35s ease,
+        transform 0.35s ease;
     }
 
     .reveal.is-visible {
@@ -525,7 +532,7 @@
     animation-play-state: paused;
   }
   .prose-site {
-    @apply prose max-w-none min-w-0 prose-headings:font-display prose-p:my-4 prose-p:leading-relaxed prose-p:text-ink-soft prose-li:my-1.5 prose-li:text-ink-soft prose-a:text-link prose-a:underline prose-a:decoration-link/30 hover:prose-a:text-link-bright prose-strong:text-heading prose-code:text-ink prose-blockquote:my-5 prose-blockquote:border-link/40 prose-blockquote:text-ink-soft prose-hr:my-8 prose-hr:border-slate-line prose-th:text-heading prose-td:text-muted;
+    @apply prose max-w-none min-w-0 prose-headings:font-display prose-p:my-4 prose-p:leading-relaxed prose-p:text-ink-soft prose-li:my-1.5 prose-li:text-ink-soft prose-a:text-link prose-a:underline prose-a:decoration-link/30 hover:prose-a:text-link-hover prose-strong:text-heading prose-code:text-ink prose-blockquote:my-5 prose-blockquote:border-link/40 prose-blockquote:text-ink-soft prose-hr:my-8 prose-hr:border-slate-line prose-th:text-heading prose-td:text-muted;
     overflow-wrap: break-word;
   }
 

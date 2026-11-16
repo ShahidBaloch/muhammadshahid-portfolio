@@ -149,9 +149,18 @@ export function Header({ pathname }: { pathname: string }) {
                     aria-label="Blog topics"
                     onClick={() => setBlogOpen((value) => !value)}
                   >
-                    <span aria-hidden className="text-[10px]">
-                      ▾
-                    </span>
+                    <svg
+                      aria-hidden
+                      viewBox="0 0 12 12"
+                      className={`h-3 w-3 transition-transform ${blogOpen ? "rotate-180" : ""}`}
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.75"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M2.5 4.5 6 8l3.5-3.5" />
+                    </svg>
                   </button>
                   {blogOpen ? (
                     <div id="blog-menu" role="menu" className="absolute left-0 top-full z-50 pt-2">

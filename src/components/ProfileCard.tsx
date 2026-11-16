@@ -31,7 +31,7 @@ export function ProfileCard({ className = "" }: ProfileCardProps) {
         </div>
         <div className="min-w-0">
           <dt className="eyebrow">Stack</dt>
-          <dd className="mt-1 text-sm leading-snug text-ink-soft">.NET · Angular · Azure · Identity</dd>
+          <dd className="mt-1 text-sm leading-snug text-ink-soft">.NET · Angular · SQL Server · Azure</dd>
         </div>
         <div className="min-w-0">
           <dt className="eyebrow">Based in</dt>

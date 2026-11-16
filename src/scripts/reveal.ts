@@ -1,22 +1,28 @@
-// Fade-in on scroll for <Reveal> blocks (same thresholds and classes as the old React version).
+// Light fade-in for <Reveal> blocks. Content is never hidden for long: anything already on screen
+// stays visible, and blocks below start fading in ~200px before they scroll into view, so fast
+// scrolling never shows empty sections.
 const nodes = document.querySelectorAll<HTMLElement>(".reveal");
 const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 if (reduced || !("IntersectionObserver" in window)) {
   nodes.forEach((n) => n.classList.add("is-visible"));
 } else {
+  const fold = window.innerHeight;
   const observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
         entry.target.classList.add("is-visible");
-        entry.target.classList.remove("reveal-pending");
         observer.unobserve(entry.target);
       }
     },
-    { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
+    { threshold: 0, rootMargin: "0px 0px 200px 0px" },
   );
   nodes.forEach((n) => {
+    if (n.getBoundingClientRect().top < fold) {
+      n.classList.add("is-visible");
+      return;
+    }
     n.classList.add("reveal-pending");
     observer.observe(n);
   });

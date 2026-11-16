@@ -31,6 +31,16 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link prefetch={false} href="/hire-dotnet-developer" className="transition hover:text-link-bright">
+                  Hire a .NET developer
+                </Link>
+              </li>
+              <li>
+                <Link prefetch={false} href="/hire-angular-developer" className="transition hover:text-link-bright">
+                  Hire an Angular developer
+                </Link>
+              </li>
+              <li>
                 <Link prefetch={false} href="/blog" className="transition hover:text-link-bright">
                   Blog
                 </Link>

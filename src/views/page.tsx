@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     absolute: `${siteConfig.name} | ${siteConfig.title}`,
   },
   description:
-    "Senior .NET + Angular engineer. Articles on ASP.NET Core, EF Core, system design, DDD, microservices, and C# interviews — from healthcare and SaaS work.",
+    "Hire a senior .NET developer with Angular and SQL Server experience. ASP.NET Core APIs, Angular apps, and database work for healthcare, SaaS, and eCommerce. Remote.",
   alternates: { canonical: "/" },
 };
 
@@ -32,6 +32,16 @@ const engagementSteps = [
   },
 ] as const;
 
+const homeTopics = [
+  { href: "/learning/interview-questions", label: "Interview questions" },
+  { href: "/learning/ef-core", label: "EF Core & SQL" },
+  { href: "/learning/async-concurrency", label: "Async & threading" },
+  { href: "/learning/angular", label: "Angular" },
+  { href: "/learning/authentication", label: "Authentication" },
+  { href: "/learning/api-design", label: "API design" },
+  { href: "/learning/architecture", label: "Architecture" },
+] as const;
+
 const trustStats = [
   { label: "Shipping", value: "5+ years" },
   { label: "Domains", value: "Healthcare · SaaS" },
@@ -48,16 +58,16 @@ export default function HomePage() {
       <section className="hero-canvas relative" aria-labelledby="home-heading">
         <div className="container-narrow page-top grid items-start gap-6 px-5 pb-10 sm:px-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8 lg:px-12 lg:pb-12">
           <div>
-            <p className="eyebrow">{siteConfig.title}</p>
+            <p className="eyebrow">Freelance &amp; contract · Remote</p>
             <h1
               id="home-heading"
               className="heading-display mt-3"
             >
-              I design and ship production systems on{" "}
-              <span className="text-link">.NET + Angular</span>.
+              Senior <span className="text-link">.NET developer</span> for Angular and SQL Server apps.
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-              {siteConfig.tagline}
+              {siteConfig.tagline} I pick up messy codebases, fix what slows them down, and ship new
+              features without breaking the old ones.
             </p>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -162,51 +172,32 @@ export default function HomePage() {
           <Reveal>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="eyebrow">Blog</p>
+                <p className="eyebrow">Learn .NET, Angular and SQL Server</p>
                 <h2
                   id="home-blog-heading"
                   className="heading-section mt-2"
                 >
-                  Original .NET and Angular notes from production.
+                  Notes from real projects, written for developers.
                 </h2>
                 <p className="mt-3 max-w-2xl text-muted">
-                  Practical articles on ASP.NET Core, IdentityServer, EF Core, and C# interviews —
-                  written from healthcare, SaaS, and marketplace work.
+                  Plain-English guides on ASP.NET Core, EF Core, SQL Server, Angular, and C# interview
+                  prep. Each one comes from a problem I had to solve at work.
                 </p>
               </div>
-              <div className="flex flex-col gap-2 sm:items-end">
-                <Link prefetch={false}
-                  href="/learning/interview-questions"
-                  className="font-semibold link-underline"
-                >
-                  Interview questions
-                  <span aria-hidden> →</span>
-                </Link>
-                <Link prefetch={false}
-                  href="/learning/async-concurrency"
-                  className="font-semibold link-underline"
-                >
-                  Async & Threading
-                  <span aria-hidden> →</span>
-                </Link>
-                <Link prefetch={false} href="/learning/ef-core" className="font-semibold link-underline">
-                  EF Core
-                </Link>
-                <Link prefetch={false} href="/learning/identity" className="font-semibold link-underline">
-                  Identity
-                </Link>
-                <Link prefetch={false} href="/learning/authentication" className="font-semibold link-underline">
-                  Authentication
-                </Link>
-                <Link prefetch={false} href="/learning/api-design" className="font-semibold link-underline">
-                  API design
-                </Link>
-                <Link prefetch={false} href="/blog" className="font-semibold link-underline">
-                  All articles
-                  <span aria-hidden> →</span>
-                </Link>
-              </div>
+              <Link prefetch={false} href="/blog" className="shrink-0 font-semibold link-underline">
+                All articles
+                <span aria-hidden> →</span>
+              </Link>
             </div>
+            <ul className="mt-5 flex flex-wrap gap-2" aria-label="Popular topics">
+              {homeTopics.map((topic) => (
+                <li key={topic.href}>
+                  <Link prefetch={false} href={topic.href} className="topic-chip">
+                    {topic.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </Reveal>
 
           <div className="section-stack divide-y divide-slate-line border-y border-slate-line">

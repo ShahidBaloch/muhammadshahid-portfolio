@@ -53,6 +53,15 @@ const tags = resolveHead(meta, { notFound });
     <main id="main-content" tabindex="-1" class="outline-none">
       <slot />
     </main>
+    {
+      !notFound && (
+        <div class="container-narrow mx-auto my-8 flex flex-col items-center gap-6 px-4" aria-hidden="true">
+          <div class="hidden md:block" style="width:728px;height:90px" data-adsterra-banner="e7d3fc22f1efd14ae0ffc060a52c53ad" data-w="728" data-h="90"></div>
+          <div class="md:hidden" style="width:320px;height:50px" data-adsterra-banner="89bab677a327de32f507e4ac3c3f3fab" data-w="320" data-h="50"></div>
+          <div class="w-full" data-adsterra-native="6cc1f57c78ab2a188865ea56c11ea56d"></div>
+        </div>
+      )
+    }
     <Footer />
     <CookieConsent client:load />
     <script>

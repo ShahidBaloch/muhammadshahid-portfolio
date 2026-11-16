@@ -16,9 +16,9 @@ function resolveSiteUrl(): string {
 
 export const siteConfig = {
   name: "Muhammad Shahid",
-  title: "Senior Full Stack Engineer (.NET + Angular)",
+  title: "Senior .NET Developer (Angular, SQL Server)",
   description:
-    "Senior .NET + Angular engineer helping teams design and ship secure healthcare, SaaS, and eCommerce systems — APIs, SPAs, Azure, identity, and clean architecture.",
+    "Senior .NET developer for hire. I build ASP.NET Core APIs, Angular apps, and SQL Server databases for healthcare, SaaS, and eCommerce teams. Remote, freelance or contract.",
   url: resolveSiteUrl(),
   locale: "en_US",
   email: "info@muhammadshahid.dev",
@@ -30,7 +30,7 @@ export const siteConfig = {
   github: "https://github.com/ShahidBaloch",
   location: "Lahore, Pakistan · Remote-friendly",
   tagline:
-    "I design and ship production .NET + Angular systems for healthcare, SaaS, and eCommerce teams.",
+    "I build ASP.NET Core APIs, Angular apps, and SQL Server databases for healthcare, SaaS, and eCommerce teams.",
   availability: "Open for freelance & contract engagements",
   inquiryCta: "Hire me",
 } as const;

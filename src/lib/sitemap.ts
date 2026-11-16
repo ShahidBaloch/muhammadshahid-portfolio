@@ -17,7 +17,7 @@ const NOW = "2026-10-30";
 const staticRoutes: SitemapEntry[] = [
   {
     url: SITE,
-    lastModified: NOW,
+    lastModified: "2026-11-16",
     changeFrequency: "monthly",
     priority: 1.0,
   },
@@ -32,6 +32,18 @@ const staticRoutes: SitemapEntry[] = [
     lastModified: NOW,
     changeFrequency: "monthly",
     priority: 0.7,
+  },
+  {
+    url: `${SITE}/hire-dotnet-developer`,
+    lastModified: "2026-11-16",
+    changeFrequency: "monthly",
+    priority: 0.9,
+  },
+  {
+    url: `${SITE}/hire-angular-developer`,
+    lastModified: "2026-11-16",
+    changeFrequency: "monthly",
+    priority: 0.9,
   },
   {
     url: `${SITE}/about`,
