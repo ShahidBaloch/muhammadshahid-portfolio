@@ -52,9 +52,9 @@ This is what decides most temp table vs table variable debates on real data.
 
 A temp table has statistics, just like a normal table. When you join it to `dbo.Customers`, SQL Server knows roughly how many rows it holds and how the values are spread, so it can pick a hash join for 200,000 rows or a nested loop for 20.
 
-A table variable has no column statistics. Before SQL Server 2019, the optimizer assumed it held **one row**, whatever was actually in it. Load 500,000 rows into `@Orders`, join it to another big table, and SQL Server builds a plan for one row: nested loops, tiny memory grant, spills to TempDB. That's the two-minute report.
+A table variable has no column statistics. Before SQL Server 2019, the optimizer assumed it held **one row**, whatever was actually in it. Load 500,000 rows into `@Orders`, join it to another big table, and SQL Server builds a plan for one row: nested loops and a tiny memory grant, so any sort or hash later in the plan spills to TempDB. That's the two-minute report.
 
-SQL Server 2019 added **table variable deferred compilation** (on at database compatibility level 150 and above). Now the optimizer waits until the first time the statement runs and uses the real row count. That helps a lot, but it's still a count, not a distribution. The estimates on filters and joins can still be far off.
+SQL Server 2019 added **table variable deferred compilation** (on at database compatibility level 150 and above). Now the optimizer waits until the first time the statement runs and uses the real row count. That helps a lot, but the plan is then reused for later runs, so a first run with 10 rows can give a bad plan for a later run with 500,000 (much like parameter sniffing). And it's still a count, not a distribution. The estimates on filters and joins can still be far off.
 
 ```sql
 -- Check your compatibility level
@@ -113,7 +113,7 @@ Most EF Core apps never create either one directly. You'll meet them when callin
 CREATE TYPE dbo.IntList AS TABLE (Id int PRIMARY KEY);
 ```
 
-A TVP behaves like a table variable inside the procedure, including the row-estimate behaviour above. So if a procedure receives 50,000 IDs through a TVP and joins them to big tables, copying them into a `#temp` table first is often the fix.
+Inside the procedure, a TVP is read-only and, like a table variable, has no column statistics. So if a procedure receives 50,000 IDs through a TVP and joins them to big tables, copying them into a `#temp` table first is often the fix.
 
 ## Summary
 

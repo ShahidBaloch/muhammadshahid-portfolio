@@ -100,7 +100,7 @@ SELECT DeviceId, ReadAt, Value,
 FROM dbo.Readings;
 ```
 
-`LAG` looks back, `LEAD` looks forward. They replace the self-join on "previous row" that every older codebase seems to have. For the first row in each partition, `LAG` returns `NULL`, or a default you pass as the third argument.
+`LAG` looks back, `LEAD` looks forward. They replace the self-join on "previous row" that many older codebases still have. For the first row in each partition, `LAG` returns `NULL`, or a default you pass as the third argument.
 
 ## Paging and percentages
 
@@ -114,7 +114,7 @@ For deep paging on large tables, prefer keyset pagination over `OFFSET`. I compa
 
 ## Using window functions from EF Core
 
-Recent EF Core versions translate some window-style queries, but not all of them, and the SQL can be hard to predict. For anything beyond simple cases, I write the SQL and map it to a keyless type:
+LINQ has no window function operators, so EF Core can't generate `ROW_NUMBER() OVER (...)` for you on request. It uses window functions internally for a few query shapes, but you don't control that. When I need one, I write the SQL and map the result to a plain class:
 
 ```csharp
 public class LatestAppointment
