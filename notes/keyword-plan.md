@@ -30,18 +30,18 @@ Ordered by opportunity (volume vs difficulty vs fit with your experience).
 |---|---|---|---|---|
 | 1 | sql server performance tuning | 260 | 7 | DONE: /blog/sql-server-performance-tuning-checklist (density 0.53%) |
 | 2 | clustered vs nonclustered index | 390 | 26 | DONE: /blog/clustered-vs-nonclustered-index-sql-server (density 0.54%) |
-| 3 | c# records | 590 | 29 | When records help and when they bite (EF Core, equality) |
-| 4 | angular vs react | 2,400 | 34 | Honest comparison from someone who ships Angular |
-| 5 | c# delegates | 210 | 26 | Delegates, Func, Action, events in plain words |
-| 6 | sql server window functions | 140 | 23 | ROW_NUMBER, RANK, running totals |
-| 7 | temp table vs table variable | 70 | 22 | Which one, with plan and stats differences |
-| 8 | sql server vs postgresql | 210 | 28 | Choosing for a .NET app |
-| 9 | c# generics | 480 | 36 | Constraints, variance, real repository code |
-| 10 | linq group by | 210 | 34 | GroupBy in memory vs EF Core translation |
+| 3 | c# records | 590 | 29 | DONE: /blog/csharp-records-explained |
+| 4 | angular vs react | 2,400 | 34 | DONE: /blog/angular-vs-react-for-business-apps |
+| 5 | c# delegates | 210 | 26 | DONE: /blog/csharp-delegates-func-action-events |
+| 6 | sql server window functions | 140 | 23 | DONE: /blog/sql-server-window-functions |
+| 7 | temp table vs table variable | 70 | 22 | DONE: /blog/temp-table-vs-table-variable-sql-server |
+| 8 | sql server vs postgresql | 210 | 28 | DONE: /blog/sql-server-vs-postgresql-dotnet |
+| 9 | c# generics | 480 | 36 | DONE: /blog/csharp-generics-constraints-variance |
+| 10 | linq group by | 210 | 34 | DONE: /blog/linq-group-by-csharp-ef-core |
 | 11 | c# vs java | 880 | 35 | From a C# developer's seat |
 | 12 | angular routing | 480 | 42 | Routes, guards, resolvers, lazy routes |
-| 13 | angular lazy loading | 70 | 29 | loadComponent, loadChildren, @defer |
-| 14 | sql server cte | 480 | 51 | CTEs and recursive CTEs |
+| 13 | angular lazy loading | 70 | 29 | DONE: /blog/angular-lazy-loading-routes |
+| 14 | sql server cte | 480 | 51 | DONE: /blog/sql-server-cte-recursive |
 | 15 | sql server interview questions | 390 | 39 | Scenario-based, not trivia |
 | 16 | sql joins | 6,600 | 51 | Joins explained with one dataset |
 
