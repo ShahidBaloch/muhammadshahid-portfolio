@@ -10,7 +10,7 @@ export function personJsonLd() {
     "@id": personId,
     name: siteConfig.name,
     url: siteConfig.url,
-    image: `${siteConfig.url}/images/profile.png`,
+    image: `${siteConfig.url}/images/profile-192.webp`,
     jobTitle: siteConfig.title,
     email: `mailto:${siteConfig.email}`,
     address: {
@@ -93,8 +93,9 @@ export function pageSocial({
   };
 }
 
-export function blogJsonLd() {
-  const posts = getAllPosts();
+/** Cap JSON-LD size on /blog — full discovery lives in sitemap.xml and RSS. */
+export function blogJsonLd(featuredLimit = 20) {
+  const posts = getAllPosts().slice(0, featuredLimit);
   return {
     "@context": "https://schema.org",
     "@type": "Blog",
@@ -122,7 +123,7 @@ export function servicesJsonLd() {
     "@id": `${siteConfig.url}/services#professional-service`,
     name: "Freelance .NET and Angular engineering",
     url: `${siteConfig.url}/services`,
-    image: `${siteConfig.url}/images/profile.png`,
+    image: `${siteConfig.url}/images/profile-192.webp`,
     areaServed: ["Remote", "Lahore"],
     provider: { "@id": personId },
     hasOfferCatalog: {

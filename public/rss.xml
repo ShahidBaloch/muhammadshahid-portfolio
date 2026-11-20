@@ -8,6 +8,90 @@
     <atom:link href="https://www.muhammadshahid.dev/rss.xml" rel="self" type="application/rss+xml"/>
     
     <item>
+      <title><![CDATA[Temp Table vs Table Variable in SQL Server: Which One to Use]]></title>
+      <link>https://www.muhammadshahid.dev/blog/temp-table-vs-table-variable-sql-server</link>
+      <guid>https://www.muhammadshahid.dev/blog/temp-table-vs-table-variable-sql-server</guid>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Temp table vs table variable in SQL Server: statistics, indexes, row estimates, transactions, recompiles, and a simple rule for picking one in stored procedures.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[SQL Server Window Functions: ROW_NUMBER, RANK, and Running Totals]]></title>
+      <link>https://www.muhammadshahid.dev/blog/sql-server-window-functions</link>
+      <guid>https://www.muhammadshahid.dev/blog/sql-server-window-functions</guid>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[SQL Server window functions with real examples: ROW_NUMBER for latest-per-group, RANK vs DENSE_RANK, running totals, LAG and LEAD, and how to call them from EF Core.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[SQL Server vs PostgreSQL for .NET Apps: An Honest Comparison]]></title>
+      <link>https://www.muhammadshahid.dev/blog/sql-server-vs-postgresql-dotnet</link>
+      <guid>https://www.muhammadshahid.dev/blog/sql-server-vs-postgresql-dotnet</guid>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[SQL Server vs PostgreSQL for ASP.NET Core and EF Core apps: licensing cost, tooling, Azure hosting, JSON, concurrency, and when I'd pick each one.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[SQL Server Performance Tuning: A Checklist From Real .NET Apps]]></title>
+      <link>https://www.muhammadshahid.dev/blog/sql-server-performance-tuning-checklist</link>
+      <guid>https://www.muhammadshahid.dev/blog/sql-server-performance-tuning-checklist</guid>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[SQL Server performance tuning in the order I actually do it: wait stats, Query Store, execution plans, indexes, and the EF Core habits behind most slow queries.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[SQL Server CTE Explained: WITH Queries and Recursive CTEs]]></title>
+      <link>https://www.muhammadshahid.dev/blog/sql-server-cte-recursive</link>
+      <guid>https://www.muhammadshahid.dev/blog/sql-server-cte-recursive</guid>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[SQL Server CTE basics and beyond: readable WITH queries, deleting duplicates, recursive CTEs for hierarchies, MAXRECURSION, and CTE vs temp table performance.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[LINQ Group By in C#: GroupBy in Memory vs EF Core, With Examples]]></title>
+      <link>https://www.muhammadshahid.dev/blog/linq-group-by-csharp-ef-core</link>
+      <guid>https://www.muhammadshahid.dev/blog/linq-group-by-csharp-ef-core</guid>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[LINQ group by explained with examples: grouping in memory, multiple keys, counts and sums, and what EF Core can and can't translate to SQL GROUP BY.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# Records Explained: When to Use Them (and When Not To)]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-records-explained</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-records-explained</guid>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[C# records in plain English: value equality, with-expressions, record vs class vs record struct, and where records work well or cause trouble with EF Core.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# Generics Explained: Constraints, Variance, and Real Examples]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-generics-constraints-variance</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-generics-constraints-variance</guid>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[C# generics in plain English: generic classes and methods, where constraints, covariance and contravariance, and the generic repository and Result<T> patterns from real APIs.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[C# Delegates Explained: Func, Action, and Events in Plain English]]></title>
+      <link>https://www.muhammadshahid.dev/blog/csharp-delegates-func-action-events</link>
+      <guid>https://www.muhammadshahid.dev/blog/csharp-delegates-func-action-events</guid>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[C# delegates explained simply: what a delegate is, Func vs Action vs Predicate, lambdas, multicast delegates, events, and where you already use them in ASP.NET Core.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Clustered vs Nonclustered Index in SQL Server, Explained Simply]]></title>
+      <link>https://www.muhammadshahid.dev/blog/clustered-vs-nonclustered-index-sql-server</link>
+      <guid>https://www.muhammadshahid.dev/blog/clustered-vs-nonclustered-index-sql-server</guid>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Clustered vs nonclustered index in SQL Server: how each one stores rows, why a table gets only one clustered index, key lookups, and choosing keys for EF Core tables.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Angular vs React: Which to Choose for a Business App]]></title>
+      <link>https://www.muhammadshahid.dev/blog/angular-vs-react-for-business-apps</link>
+      <guid>https://www.muhammadshahid.dev/blog/angular-vs-react-for-business-apps</guid>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Angular vs React compared for real business apps: structure, learning curve, forms, state, hiring, and long-term upkeep, from a developer who builds Angular front ends on .NET.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Angular Lazy Loading: loadComponent, loadChildren, and Preloading]]></title>
+      <link>https://www.muhammadshahid.dev/blog/angular-lazy-loading-routes</link>
+      <guid>https://www.muhammadshahid.dev/blog/angular-lazy-loading-routes</guid>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Angular lazy loading for standalone apps: loadComponent and loadChildren routes, lazy route guards, preloading strategies, and how to check that your chunks really split.]]></description>
+    </item>
+    <item>
       <title><![CDATA[Value Objects in EF Core: OwnsOne and HasConversion]]></title>
       <link>https://www.muhammadshahid.dev/blog/value-objects-ef-core</link>
       <guid>https://www.muhammadshahid.dev/blog/value-objects-ef-core</guid>

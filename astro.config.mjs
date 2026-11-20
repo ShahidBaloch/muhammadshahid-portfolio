@@ -10,7 +10,8 @@ export default defineConfig({
   site: "https://www.muhammadshahid.dev",
   output: "static",
   trailingSlash: "never",
-  build: { format: "file", inlineStylesheets: "never" },
+  build: { format: "file", inlineStylesheets: "always" },
+  compressHTML: true,
   integrations: [preact({ compat: true })],
   vite: {
     plugins: [tailwindcss()],

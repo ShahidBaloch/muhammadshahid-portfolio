@@ -33,6 +33,8 @@ export type Metadata = {
   };
   twitter?: { card?: "summary_large_image"; title?: string; description?: string; images?: string[] };
   verification?: { google?: string };
+  /** Extra <link> tags (preload LCP image, fonts, etc.). */
+  links?: { rel: string; href: string; as?: string; type?: string; crossorigin?: "anonymous" }[];
 };
 
 export type HeadTag =
@@ -102,6 +104,16 @@ export function resolveHead(page: Metadata, opts: { notFound?: boolean } = {}): 
       ? `${t} | ${siteConfig.name}`
       : t?.absolute ?? ROOT_TITLE;
   tags.push({ tag: "title", text: title });
+  for (const l of page.links ?? []) {
+    const attrs: Record<string, string> = {
+      rel: l.rel,
+      href: l.href.startsWith("http") ? l.href : abs(l.href),
+    };
+    if (l.as) attrs.as = l.as;
+    if (l.type) attrs.type = l.type;
+    if (l.crossorigin) attrs.crossorigin = l.crossorigin;
+    link(attrs);
+  }
   if (m.description) meta({ name: "description", content: m.description });
   for (const a of m.authors ?? []) {
     if (a.url) link({ rel: "author", href: a.url });

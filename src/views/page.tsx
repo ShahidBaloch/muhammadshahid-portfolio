@@ -15,6 +15,16 @@ export const metadata: Metadata = {
   description:
     "Hire a senior .NET developer with Angular and SQL Server experience. ASP.NET Core APIs, Angular apps, and database work for healthcare, SaaS, and eCommerce. Remote.",
   alternates: { canonical: "/" },
+  links: [
+    { rel: "preload", href: "/images/profile-96.webp", as: "image", type: "image/webp" },
+    {
+      rel: "preload",
+      href: "/fonts/space-grotesk-latin.woff2",
+      as: "font",
+      type: "font/woff2",
+      crossorigin: "anonymous",
+    },
+  ],
 };
 
 const engagementSteps = [

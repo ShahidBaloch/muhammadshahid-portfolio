@@ -16,9 +16,9 @@ export function Portrait({ className = "", priority = false }: PortraitProps) {
       className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-full ring-2 ring-teal/30 sm:h-24 sm:w-24 ${className}`}
     >
       <img
-        src="/images/profile-192.webp"
+        src={priority ? "/images/profile-96.webp" : "/images/profile-192.webp"}
         srcSet="/images/profile-96.webp 96w, /images/profile-192.webp 192w"
-        sizes="96px"
+        sizes="(max-width: 640px) 80px, 96px"
         alt={siteConfig.name}
         width={192}
         height={192}

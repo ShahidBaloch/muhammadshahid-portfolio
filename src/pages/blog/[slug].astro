@@ -9,6 +9,6 @@ export function getStaticPaths() {
 const params = { slug: Astro.params.slug! };
 ---
 
-<Base meta={generateMetadata({ params })}>
+<Base meta={generateMetadata({ params })} showAds>
   <Page params={params} />
 </Base>

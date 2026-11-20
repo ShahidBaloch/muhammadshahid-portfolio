@@ -496,6 +496,26 @@
   }
 
 
+  .site-header.is-scrolled {
+    border-bottom-color: color-mix(in srgb, var(--color-slate-line) 80%, transparent);
+    background-color: color-mix(in srgb, var(--color-paper) 95%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-topics-details > summary::-webkit-details-marker,
+  .mobile-nav-details > summary::-webkit-details-marker,
+  .mobile-topics-details > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .nav-topics-details[open] .nav-chevron {
+    transform: rotate(180deg);
+  }
+
+  .nav-topics-details > summary {
+    list-style: none;
+  }
+
   .nav-link {
     @apply relative inline-flex min-h-11 items-center rounded-lg px-2.5 text-sm transition;
   }
